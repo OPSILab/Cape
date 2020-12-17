@@ -1,0 +1,223 @@
+
+
+/******** .btn-update and tooltip START ********/
+.btn-update.to-update .btn, .btn-update.to-update .btn:hover {
+  border: 3px solid #f79646 !important;
+}
+
+.btn-update:not(.to-update) .tooltip {
+  display: none;
+}
+.btn-update.to-update .tooltip {
+  display: block;
+}
+.btn-update .tooltip {
+  opacity: 1;
+  left: 50%;
+  margin-left: 80px;
+  margin-top: 3px;
+}
+
+@media only screen and (max-width: 575.98px) {
+  .btn-update .tooltip {
+    margin-top: -8px;
+  }
+}
+
+
+.btn-update .tooltip .tooltip-inner {
+  background: #f79646;
+}
+
+.btn-update .tooltip .arrow {
+  top: calc(50% - 0.4rem);
+  position: absolute;
+}
+
+.btn-update .tooltip .arrow:before {
+  position: absolute;
+  content: "";
+  border-color: transparent;
+  border-style: solid;
+  border-width: .4rem .4rem .4rem 0;
+  border-right-color: #f79646;
+  left: -6px;
+}
+/******** .btn-update and tooltip END ********/
+
+label.btn-primary {
+  background: #86a2a3;
+  border-color: #86a2a3;
+}
+
+/*label.btn-primary:not(:disabled):not(.disabled).active,
+label.btn-primary:not(:disabled):not(.disabled):active,
+.show>label.btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #467073;
+  border-color: #467073;
+}*/
+
+label.btn {
+  padding-top: 5px;
+  padding-bottom: 7px;
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: 12px;
+}
+
+/****   TABLE */
+/*table {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: table;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+table * {
+  box-sizing: border-box;
+  font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+table tr td, table tr th {
+  font-size: .875rem;
+  margin: 0;
+  padding: .5rem 1rem;
+  border: 1px solid #e9ebec;
+}*/
+
+
+/***********************/
+
+
+h4.modal-title {
+  color: #666666;
+}
+
+.modal-header {
+  padding-bottom: 0;
+}
+
+.modal-footer {
+  padding-top: 0;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: 0 0 -5px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  display: none;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #397173;
+  opacity: .65;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #397173;
+  opacity: 1;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #397173;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Scrolling Modal */
+.modal-header-scroll {
+  padding-bottom: 10px;
+}
+
+.modal-body-scroll {
+  max-height: 550px;
+  overflow-y: scroll;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.modal-footer-scroll {
+  padding-top: 15px;
+}
+
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

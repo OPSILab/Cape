@@ -1,0 +1,219 @@
+{
+    "publicServiceID" : "3",
+    "publicServiceName" : "kindergaten Registration",
+    "serviceUri" : "http://localhost:8080/IFE/M1876-ISCRIZIONE-NIDO-SIMPATICO_v0.3.html",
+    "serviceDescriptionVersion" : "0.0.1",
+    "publicServiceKeyword" : "service provider,Child",
+    "publicServiceSector" : [ 
+        "26473754"
+    ],
+    "publicServiceTypeProp" : [ 
+        "26473754"
+    ],
+    "publicServiceLanguage" : [ 
+        "IT_it", 
+        "EN_en"
+    ],
+    "publicServiceStatus" : "26473754",
+    "technicalDescriptionId" : "12dfsr34",
+    "humanReadableDescription" : [ 
+        {
+            "locale" : "EN_en",
+            "description" : "kindergaten Registration  web form provided by Trento Sportello Telematico"
+        }
+    ],
+    "publicServiceIsDescribedAt" : [ 
+        {
+            "title" : "User base data",
+            "serviceDataDescriptionUri" : "aURI",
+            "taxonomy" : "http://semantics.eng.it/ontologies/personaldata",
+            "issued" : "1453031943",
+            "modified" : "1453118343",
+            "publicServiceDatasetID" : "123456",
+            "serviceDataType" : "input",
+            "purpose" : [ 
+                "Research", 
+                "Service development", 
+                "Providing personalised service", 
+                "Creating personal health and fitness profiles"
+            ],
+            "dataStructureSpecification" : null,
+            "dataMapping" : [ 
+                {
+                    "property" : "AventeTitolo_Fax",
+                    "conceptId" : "fax_number_for_support",
+                    "name" : "Fax",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_EMail",
+                    "conceptId" : "personal_email",
+                    "name" : "Email",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_EMailPEC",
+                    "conceptId" : "personal_other_email",
+                    "name" : "Other Email",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_Telefono",
+                    "conceptId" : "phone_number",
+                    "name" : "Phone Number",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_EnteProvv",
+                    "conceptId" : "child_custodial_body",
+                    "name" : "Child Custodial Body",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_NumProt",
+                    "conceptId" : "child_custodial_protocol",
+                    "name" : "Child Custodial Protocol",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "AventeTitolo_Data",
+                    "conceptId" : "child_custodial_date",
+                    "name" : "Child Custodial Date",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_TipoLavoroPadre",
+                    "conceptId" : "work_industry",
+                    "name" : "Work Industry",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_AziendaLavoroPadre",
+                    "conceptId" : "work_company",
+                    "name" : "Work Company",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_ComuneAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_city",
+                    "name" : "Work City",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_ProvAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_province",
+                    "name" : "Work Province",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_IndirizzoAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_address",
+                    "name" : "Work Address",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_CivicoAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_street_number",
+                    "name" : "Work Post Code",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_CapAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_post_code",
+                    "name" : "Work Post Code",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_TelAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_phone",
+                    "name" : "Work Phone",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_EmailAziendaLavoroPadre",
+                    "conceptId" : "work_current_employer_email",
+                    "name" : "Work Email",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_AgenziaEntratePadre",
+                    "conceptId" : "work_current_employer_revenue_agency",
+                    "name" : "Work Revenue Agency",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_PIVAadre",
+                    "conceptId" : "work_current_employer_vat",
+                    "name" : "Work VAT",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_TipoLavoroMadre",
+                    "conceptId" : "work_industry",
+                    "name" : "Work Industry",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_AziendaLavoroMadre",
+                    "conceptId" : "work_company",
+                    "name" : "Work Company",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_ComuneAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_city",
+                    "name" : "Work City",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_ProvAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_province",
+                    "name" : "Work Province",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_IndirizzoAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_address",
+                    "name" : "Work Address",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_CivicoAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_street_number",
+                    "name" : "Work Post Code",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_CapAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_post_code",
+                    "name" : "Work Post Code",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_TelAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_phone",
+                    "name" : "Work Phone",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_EmailAziendaLavoroMadre",
+                    "conceptId" : "work_current_employer_email",
+                    "name" : "Work Email",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_AgenziaEntrateMadre",
+                    "conceptId" : "work_current_employer_revenue_agency",
+                    "name" : "Work Revenue Agency",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "Parametri_PIVAMadre",
+                    "conceptId" : "work_current_employer_vat",
+                    "name" : "Work VAT",
+                    "type" : "string"
+                }
+            ]
+        }
+    ]
+}

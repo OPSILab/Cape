@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>it.eng.opsi.cape</groupId>
+	<artifactId>cape</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>CaPe</name>
+	<description>Main modules of CaPe</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<modules>
+		<module>service-registry</module>
+		<module>account-manager</module>
+		<module>consent-manager</module>
+		<module>auditlog-manager</module>
+        <module>service-manager</module>
+  </modules>
+</project>

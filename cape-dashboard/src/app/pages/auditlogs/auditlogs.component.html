@@ -1,0 +1,171 @@
+<form [formGroup]="filtersForm" (ngSubmit)="onFilterSubmit()">
+  <nb-card>
+    <nb-card-header>{{'general.auditlogs.filters'|translate}}</nb-card-header>
+    <nb-card-body>
+      <div class="row justify-content-center">
+        <div class="mt-1 col-sm-auto d-flex justify-content-center">
+          <nb-select formControlName="legalBasis" #legalBasisSelect multiple placeholder="{{'general.auditlogs.filter_by_legal_basis'|translate}}">
+            <nb-option *ngFor="let key of legalBasisOptions" value="{{legalBasisEnum[key]}}">{{key}}</nb-option>
+          </nb-select>
+        </div>
+
+        <div class="mt-1 col-sm-auto d-flex justify-content-center">
+          <input nbInput formControlName="dateRange" class="size-medium" placeholder="{{'general.auditlogs.select_date_range'|translate}}" [nbDatepicker]="rangepicker">
+          <nb-rangepicker format="yyyy-MM-dd" #rangepicker></nb-rangepicker>
+        </div>
+
+        <div class="mt-1 col-sm-auto d-flex justify-content-center">
+          <nb-select formControlName="processingCategory" #processingSelect multiple placeholder="{{'general.auditlogs.filter_by_processing'|translate}}">
+            <nb-option *ngFor="let key of processingCategoryOptions" value="{{processingCategoryEnum[key]}}">{{key}}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row justify-content-center">
+        <div class="mr-1 col-xs-auto d-flex justify-content-center">
+          <button nbButton type="submit" shape="rectangle" size="medium" status="primary" class="button-filled-medium-padding button-filled-primary-focus-border-color">
+            {{'general.auditlogs.apply_button'|translate}}
+          </button>
+        </div>
+        <div class="ml-1 col-xs-auto d-flex justify-content-center">
+          <button nbButton shape="rectangle" size="medium" status="danger" class="button-filled-medium-padding button-filled-primary-focus-border-color"
+                  (click)="resetFilters()">
+            {{'general.auditlogs.reset_button'|translate}}
+          </button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</form>
+
+<div *ngIf="loading" class="loader"></div>
+<div *ngIf="!loading" id="forHiding">
+  <div class="row">
+    <div class="col-md-12">
+      <nb-card>
+        <nb-card-header>
+          {{'general.auditlogs.event_logs_timeline'|translate}}
+        </nb-card-header>
+        <nb-card-body>
+
+          <div class="container">
+            <div class="timeline" *ngFor="let eventLog of eventLogs; let idm = index">
+              <div class="timeline-month">
+                {{eventLog.month}}
+              </div>
+              <div class="timeline-section" *ngFor="let date of eventLog.days; let idd = index">
+                <div class="timeline-date">
+                  {{date.day}}
+                </div>
+                <div class="row" *ngFor="let event of date.events; let ide = index">
+                  <div class="col-sm-12">
+                    <nb-card>
+                      <nb-card-header><i>{{event.created.toLocaleString()}}:</i><b> {{event.type}} {{event.action}}</b>  </nb-card-header>
+                      <nb-card-body>
+
+                        <div class="col-sm-12" [ngSwitch]="event.context">
+                          <ng-container *ngSwitchDefault>
+                            <nb-accordion>
+                              <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                  <strong> {{'general.auditlogs.purpose'|translate}} </strong>: {{event.purpose.purposeName}} | {{'general.auditlogs.processing_category'|translate}} {{event.process}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                  <div class="col-sm-12">
+                                    <div class="box-item">
+                                      <strong> {{'general.auditlogs.purpose_id'|translate}} </strong>{{event.purpose.purposeId}}
+                                    </div>
+                                    <div class="box-item">
+                                      <strong> {{'general.auditlogs.data_source'|translate}} </strong>{{event.source}}
+                                    </div>
+
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_sink'|translate}} </strong>{{event.target}}
+                                    </div>
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_type'|translate}} </strong>
+                                    </div>
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_concepts'|translate}} </strong>
+                                      <div class="mx-1 p-2 badge badge-primary rounded" *ngFor="let concept of event.dataConcepts; let i = index" [attr.data-index]="i">	<i>{{concept.name}}</i>  </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row justify-content-center">
+                                      <button nbButton shape="semi-round" size="medium" status="success" (click)="openConsent(event.consent_id, event.message )"><i class="ion-android-checkmark-circle">&nbsp;{{'general.auditlogs.view_consent'|translate}}</i></button>
+                                    </div>
+                                  </div>
+
+                                </nb-accordion-item-body>
+                              </nb-accordion-item>
+                            </nb-accordion>
+                          </ng-container>
+
+                          <ng-container *ngSwitchCase="'ServiceLink'">
+                            <nb-accordion>
+                              <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                  {{'general.auditlogs.service_id'|translate}} {{event.serviceId}}| {{'general.auditlogs.service_name'|translate}}  {{event.serviceName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                  <div class="col-sm-12">
+                                    <div class="box-item">
+                                      <strong> {{'general.auditlogs.service_uri'|translate}} </strong>{{event.serviceUri}}
+                                    </div>
+                                    <hr>
+                                    <div class="row justify-content-center">
+                                      <button nbButton shape="semi-round" size="medium" status="success" (click)="openServiceLink(event.serviceId,event.serviceName  )"><i class="ion-information-circled">&nbsp;{{'general.auditlogs.view_service'|translate}}</i></button>
+                                    </div>
+
+                                  </div>
+
+                                </nb-accordion-item-body>
+                              </nb-accordion-item>
+                            </nb-accordion>
+                          </ng-container>
+
+                          <ng-container *ngSwitchCase="'DataProcessing'">
+                            <nb-accordion>
+                              <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                  {{'general.auditlogs.purpose'|translate}} {{event.purpose}}| {{'general.auditlogs.process'|translate}} {{event.process}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                  <div class="col-sm-12">
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_source'|translate}} </strong>{{event.source}}
+                                    </div>
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_sink'|translate}} </strong>{{event.target}}
+                                    </div>
+                                    <div class="box-item">
+                                      <strong>{{'general.auditlogs.data_type'|translate}} </strong>
+                                    </div>
+                                    <div class="mx-1 my-1 py-2 badge badge-primary border border-primary" *ngFor="let concept of event.dataConcepts; let i = index" [attr.data-index]="i">	<i>{{concept.name}}</i>  </div>
+
+                                    <hr>
+                                    <div class="row justify-content-center">
+                                      <button nbButton shape="semi-round" size="medium" status="success" (click)="openConsents(event.consent_id, event.message )"><i class="ion-android-checkmark-circle">{{'general.auditlogs.view_consent'|translate}}</i></button>
+                                    </div>
+                                  </div>
+                                </nb-accordion-item-body>
+                              </nb-accordion-item>
+                            </nb-accordion>
+                          </ng-container>
+                        </div>
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"> 
+	<title> BS607A </title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/base.css">	
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/estilos.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/jquery-ui-1.10.2.custom.css">
+
+	<script type="text/javascript">
+		var global_contextPath = '/formularios';
+	</script>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/SH-Xerator.css">
+	<!--<script type="text/javascript" src="./js/SH-Xerator.js"></script>  -->
+
+
+	<!-- SIMPATICO BEGIN -->
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/simpatico.css">
+	<script type="text/javascript">
+	  var simpaticoEservice = "BS607A"; // Eservice example
+	  var simpaticoMapping=["BS607A.Entidad.txtNombre","BS607A.Entidad.txtApel2","BS607A.Entidad.txtApel1","BS607A.Entidad.txtNifCif","BS607A.Entidad.txtDireccion","BS607A.Entidad.txtParroquia","BS607A.Entidad.txtLugar","BS607A.Entidad.txtCodigoPostal","BS607A.Entidad.txtLocalidad","BS607A.Entidad.txtPais","BS607A.Entidad.txtTelefono","BS607A.Entidad.txtMovil","BS607A.Entidad.txtEmail","BS607A.Declarante.txtNombre","BS607A.Declarante.txtApel2","BS607A.Declarante.txtApel1","BS607A.Declarante.txtNifCif"];
+	  var serviceName = "PROGRAMA BIENESTAR EN BALNEARIOS"; // Eservice example
+	  var serviceURL="http://localhost:8080/IFE/BS607A.html";
+	  var serviceDatasetId="Contacts";
+	  var servicePurposeId="share_1";
+	</script>
+
+	
+	<script src="js/cdv-ui-popup.js"></script>
+    <script src="js/cdv-core-popup.js"></script>
+
+	<script src="js/simpatico-ife.js"></script>
+	<script src="js/simpatico-auth.js"></script>
+
+	<!-- SIMPATICO END -->
+
+</head>
+
+<body>
+ <div id="simpatico_top"></div>
+
+	<div id="wrapper">
+		
+
+
+		<div id="menuPrincipal" class="fila"></div>
+		<div id="content-wrapper" class="fila">
+			<div class="col11col">
+				<div>
+					<script type="text/javascript" src="./js/avisoSesion.js"></script>
+					<div id="formularioCump">
+						<script type="text/javascript">
+							var migrado = '';
+							var esPresentacionPresencial = false;
+						</script>
+						<!-- ORIGINAL <form id="command" action="https://sede.xunta.gal/formularios/cumplimentacion/novo/PR013A?idioma=es" method="post"> -->
+						<form id="command" action="https://simpatico.morelab.deusto.es/replica/BS607A.html#" method="post">
+							<input id="codigoProcedimiento" name="codigoProcedimiento" type="hidden" value="">
+							<input id="idBorrador" name="idBorrador" type="hidden" value="">
+							<input id="codigoSeguridad" name="codigoSeguridad" type="hidden" value="">
+							<input id="registroMigrado" name="registroMigrado" type="hidden" value="">
+							<input id="verificado" name="verificado" type="hidden" value="">
+							<input id="pdfGenerado" name="pdfGenerado" type="hidden" value="">
+							<input id="idSolicitud" name="idSolicitud" type="hidden" value="">
+
+							
+							<div id="formularioCumplimentacion">
+								<div class="sede">
+
+									<!-- ******************** BLOQUE:Cabecera ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="table-responsive"> 
+												<table id="cabeceraProcedimiento"> 
+													<tbody> 
+														<tr> 
+															<td class="bordeDcho col1 titulo"> PROCEDIMIENTO </td> 
+															<td class="bordeDcho centrar col2 titulo"> </td> 
+															<td class="col3 titulo"></td> 
+														</tr> 
+														<tr> 
+															<td class="bordeDcho col1 contenido"> PROGRAMA BIENESTAR EN BALNEARIOS </td> 
+															<td class="bordeDcho centrar col2 codigoProc"></td> 
+															<td class="col3 centrar contenido">  </td> 
+														</tr> 
+													</tbody> 
+												</table> 
+											</div> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE:Cabecera ******************** --> 
+									<!-- ******************** BLOQUE:SolicitantePFPJ ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp; DATOS DE LA PERSONA SOLICITANTE &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.Entidad.txtNombre" class="control-label text-left"> NOMBRE / RAZÓN SOCIAL </label> 
+														<span id="BS607A.Entidad.txtNombre.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtNombre" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtNombre&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Entidad.txtApel1" class="control-label text-left"> PRIMER APELLIDO </label> 
+														<span id="BS607A.Entidad.txtApel1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtApel1" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtApel1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Entidad.txtApel2" class="control-label text-left"> SEGUNDO APELLIDO </label> 
+														<span id="BS607A.Entidad.txtApel2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtApel2" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtApel2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.txtNifCif" class="control-label text-left"> NIF / PASAPORTE </label> 
+														<span id="BS607A.Entidad.txtNifCif.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtNifCif" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtNifCif&#39;]" class="form-control input-sm" type="text" value="" maxlength="9" tipo="solicitante"> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.cmbTipoVia" class="control-label text-left"> TIPO DE VÍA </label> 
+														<span id="BS607A.Entidad.cmbTipoVia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.Entidad.cmbTipoVia" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/cmbTipoVia&#39;]" class="form-control input-sm" tipo="via"><option value="">Seleccione</option><option value="ACCES">ACCESO</option><option value="ALAM">ALAMEDA</option><option value="ALDEA">ALDEA</option><option value="ALTO">ALTO</option><option value="APTOS">APARTAMENTOS</option><option value="AUTO">AUTOESTRADA / AUTOPISTA</option><option value="AVIA">AUTOVÍA</option><option value="AVDA">AVENIDA</option><option value="BDA">BAIXADA / BAJADA</option><option value="BARRO">BARRIO</option><option value="ACERA">BEIRARRÚA / ACERA</option><option value="BLQUE">BLOQUE</option><option value="BULEV">BULEVAR</option><option value="CLLON">CALEXÓN / CALLEJON</option><option value="CZADA">CALZADA</option><option value="CAMI">CAMIÑO / CAMINO</option><option value="CRA">CARREIRA / CARRERA</option><option value="CRO">CARREIRO / CARRERO</option><option value="CTRA">CARRETERA</option><option value="CERRO">CERRO</option><option value="CINT">CINTURÓN</option><option value="CIRCU">CIRCUNVALACIÓN</option><option value="C.N.">CMNO NOVO / NUEVO</option><option value="C.V.">CMNO VELLO / VIEJO</option><option value="CRRDA">CORREDOIRA / CORREDERA</option><option value="COSTA">COSTA</option><option value="ENTD">ENTRADA</option><option value="ESCA">ESCALEIRA / ESCALERA</option><option value="ESTDA">ESTRADA</option><option value="EXPLA">EXPLANADA</option><option value="FINCA">FINCA</option><option value="GTA">GLORIETA</option><option value="LUGAR">LUGAR</option><option value="MALEC">MALECÓN</option><option value="MIRAD">MIRADOR</option><option value="MONTE">MONTE</option><option value="PQUE">PARQUE</option><option value="PASAI">PASAXE / PASAJE</option><option value="PASEO">PASEO</option><option value="PZTA">PLAZOLETA</option><option value="POLIG">POLÍGONO</option><option value="PNTE">PONTE / PUENTE</option><option value="PLAYA">PRAIA / PLAYA</option><option value="PLAZA">PRAZA / PLAZA</option><option value="RCON">RECANTO / RINCON</option><option value="RBRA">RIBEIRA / RIBERA</option><option value="RONDA">RONDA</option><option value="RTDA">ROTONDA</option><option value="CALLE">RÚA / CALLE</option><option value="SENDA">SENDA</option><option value="TRVA">TRAVESÍA</option><option value="URB">URBANIZACIÓN</option><option value="VALLE">VAL / VALLE</option><option value="VEGA">VEIGA / VEGA</option><option value="VIA">VÍA</option><option value="VCTO">VIADUCTO</option><option value="JDIN">XARDÍN / JARDÍN</option><option value="ZONA">ZONA</option></select> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.Entidad.txtDireccion" class="control-label text-left"> NOMBRE DE LA VÍA </label> 
+														<span id="BS607A.Entidad.txtDireccion.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtDireccion" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtDireccion&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.Entidad.txtNumero" class="control-label text-left"> NÚMERO </label> 
+														<span id="BS607A.Entidad.txtNumero.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtNumero" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtNumero&#39;]" class="form-control input-sm" type="text" value="" maxlength="6" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.Entidad.txtBloque" class="control-label text-left"> BLOQUE </label> 
+														<span id="BS607A.Entidad.txtBloque.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtBloque" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtBloque&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.Entidad.txtPiso" class="control-label text-left"> PISO </label> 
+														<span id="BS607A.Entidad.txtPiso.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtPiso" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtPiso&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.Entidad.txtPuerta" class="control-label text-left"> PUERTA </label> 
+														<span id="BS607A.Entidad.txtPuerta.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtPuerta" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtPuerta&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.Entidad.txtParroquia" class="control-label text-left"> PARROQUIA </label> 
+														<span id="BS607A.Entidad.txtParroquia.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtParroquia" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtParroquia&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.Entidad.txtLugar" class="control-label text-left"> LUGAR </label> 
+														<span id="BS607A.Entidad.txtLugar.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtLugar" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtLugar&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.txtCodigoPostal" class="control-label text-left"> CP </label> 
+														<span id="BS607A.Entidad.txtCodigoPostal.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtCodigoPostal" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtCodigoPostal&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.cmbProvincia" class="control-label text-left"> PROVINCIA </label> 
+														<span id="BS607A.Entidad.cmbProvincia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.Entidad.cmbProvincia" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/cmbProvincia&#39;]" class="form-control input-sm" tipo="provincia" idmunicipio="BS607A.Entidad.cmbAyuntamiento"><option value="">Seleccione</option><option value="15">Coruña (A)</option><option value="27">Lugo</option><option value="32">Ourense</option><option value="36">Pontevedra</option><option value="2">Albacete</option><option value="3">Alicante/Alacant</option><option value="4">Almería</option><option value="1">Araba/Álava</option><option value="33">Asturias</option><option value="6">Badajoz</option><option value="7">Balears, Illes</option><option value="8">Barcelona</option><option value="48">Bizkaia</option><option value="9">Burgos</option><option value="39">Cantabria</option><option value="12">Castellón/Castelló</option><option value="51">Ceuta</option><option value="13">Ciudad Real</option><option value="16">Cuenca</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="14">Córdoba</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="28">Madrid</option><option value="52">Melilla</option><option value="30">Murcia</option><option value="29">Málaga</option><option value="31">Navarra</option><option value="34">Palencia</option><option value="35">Palmas, Las</option><option value="26">Rioja, La</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia/València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="5">Ávila</option></select> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Entidad.cmbAyuntamiento" class="control-label text-left"> MUNICIPIO </label> 
+														<span id="BS607A.Entidad.cmbAyuntamiento.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.Entidad.cmbAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/cmbAyuntamiento&#39;]" class="form-control input-sm" tipo="municipio"> <option selected="selected" value="">Seleccione</option> </select> 
+														<input id="BS607A.Entidad.txtAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtAyuntamiento&#39;]" type="hidden" value=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Entidad.txtLocalidad" class="control-label text-left"> LOCALIDAD </label> 
+														<span id="BS607A.Entidad.txtLocalidad.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtLocalidad" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtLocalidad&#39;]" class="form-control input-sm" type="text" value="" maxlength="40" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.txtPais" class="control-label text-left"> PAÍS </label> 
+														<span id="BS607A.Entidad.txtPais.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtPais" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtPais&#39;]" class="form-control input-sm" type="text" value="" maxlength="25" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.txtTelefono" class="control-label text-left"> TELÉFONO </label> 
+														<span id="BS607A.Entidad.txtTelefono.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtTelefono" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtTelefono&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.Entidad.txtMovil" class="control-label text-left"> TELÉFONO MÓVIL </label> 
+														<span id="BS607A.Entidad.txtMovil.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtMovil" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtMovil&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-8 col-sm-8"> 
+														<label for="BS607A.Entidad.txtEmail" class="control-label text-left"> CORREO ELECTRÓNICO </label> 
+														<span id="BS607A.Entidad.txtEmail.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Entidad.txtEmail" name="campos[&#39;/ProcedimientoXunta/BS607A/Entidad/txtEmail&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE:entidad física jurídica ******************** --> 
+									<!-- ******************** BLOQUE:Representante ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp; Y, EN SU REPRESENTACIÓN (deberá acreditarse la representación fehaciente por cualquier medio válido en derecho) &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Declarante.txtNombre" class="control-label text-left"> NOMBRE </label> 
+														<span id="BS607A.Declarante.txtNombre.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Declarante.txtNombre" name="campos[&#39;/ProcedimientoXunta/BS607A/Declarante/txtNombre&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Declarante.txtApel1" class="control-label text-left"> PRIMER APELLIDO </label> 
+														<span id="BS607A.Declarante.txtApel1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Declarante.txtApel1" name="campos[&#39;/ProcedimientoXunta/BS607A/Declarante/txtApel1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Declarante.txtApel2" class="control-label text-left"> SEGUNDO APELLIDO </label> 
+														<span id="BS607A.Declarante.txtApel2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Declarante.txtApel2" name="campos[&#39;/ProcedimientoXunta/BS607A/Declarante/txtApel2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.Declarante.txtNifCif" class="control-label text-left"> NIF </label> 
+														<span id="BS607A.Declarante.txtNifCif.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.Declarante.txtNifCif" name="campos[&#39;/ProcedimientoXunta/BS607A/Declarante/txtNifCif&#39;]" class="form-control input-sm" type="text" value="" maxlength="9" tipo="representante"> 
+													</div> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE:declarante ******************** --> 
+									<!-- ******************** BLOQUE:Notificacion ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> ELECCIÓN DEL MEDIO DE NOTIFICACIÓN PREFERENTE </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="col-md-12 col-sm-12"> 
+													<input id="BS607A.Notificacion.rblModalidad.1" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/rblModalidad&#39;]" value="1" type="radio"> 
+													<label for="BS607A.Notificacion.rblModalidad.1" class="labelRadio"> <b>Electrónica</b> a través del Sistema de notificación electrónica de Galicia Notific@, https://notifica.xunta.es. </label> 
+												</div> 
+												<div style="float: left;"> 
+													<p> Notifíquese a:</p> 
+												</div> 
+												<div class="col-md-3 col-sm-3"> 
+													<input id="BS607A.Notificacion.rbNotificar.1" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/rbNotificar&#39;]" value="1" type="radio"> 
+													<label for="BS607A.Notificacion.rbNotificar.1" class="labelRadio"> Persona solicitante </label> 
+												</div> 
+												<div class="col-md-3 col-sm-3"> 
+													<input id="BS607A.Notificacion.rbNotificar.2" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/rbNotificar&#39;]" value="2" type="radio"> 
+													<label for="BS607A.Notificacion.rbNotificar.2" class="labelRadio"> Persona representante </label> 
+												</div> 
+												<p> <span id="BS607A.Notificacion.rblModalidad.error" class="errores" style="display: none"></span> </p> 
+												<div class="bloqueNotificacionOpcion"> 
+													<div style="float: left;"> 
+														<p><b> Sólo podrá acceder a la notificación con certificado electrónico asociado al NIF de la persona indicada. </b></p> 
+														<p> Al elegir esta modalidad de notificación usted autoriza el alta en el Sistema Notific@. </p> 
+														<p> Los avisos de la puesta a disposición de la notificación se enviarán al correo electrónico y/o teléfono móvil facilitados a continuación. </p> 
+													</div> 
+													<div class="form-group-sm col-md-12"> 
+														<div class="col-md-2 col-sm-2"> 
+															<label for="BS607A.Notificacion.txtTelefono" class="control-label text-left"> TELÉFONO MÓVIL </label> 
+															<span id="BS607A.Notificacion.txtTelefono.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtTelefono" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtTelefono&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+														</div> 
+														<div class="col-md-10 col-sm-10"> 
+															<label for="BS607A.Notificacion.Notificacion.txtEmail" class="control-label text-left"> CORREO ELECTRÓNICO </label> 
+															<span id="BS607A.Notificacion.txtEmail.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtEmail" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtEmail&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+														</div> 
+													</div> 
+												</div> 
+												<div> 
+													<div class="col-md-12 col-sm-12"> 
+														<input id="BS607A.Notificacion.rblModalidad.2" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/rblModalidad&#39;]" value="2" type="radio"> 
+														<label for="BS607A.Notificacion.rblModalidad.2" class="labelRadio"> <b>Postal</b> (cubrir la dirección postal sólo si es distinta de la indicada anteriormente) </label> 
+													</div> 
+													<div class="form-group-sm col-md-12"> 
+														<div class="col-md-2 col-sm-2"> 
+															<label for="BS607A.Notificacion.cmbTipoVia" class="control-label text-left"> TIPO DE VÍA </label> 
+															<span id="BS607A.Notificacion.cmbTipoVia.error" class="errores" style="display: none"></span> 
+															<select id="BS607A.Notificacion.cmbTipoVia" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/cmbTipoVia&#39;]" class="form-control input-sm" tipo="via"><option value="">Seleccione</option><option value="ACCES">ACCESO</option><option value="ALAM">ALAMEDA</option><option value="ALDEA">ALDEA</option><option value="ALTO">ALTO</option><option value="APTOS">APARTAMENTOS</option><option value="AUTO">AUTOESTRADA / AUTOPISTA</option><option value="AVIA">AUTOVÍA</option><option value="AVDA">AVENIDA</option><option value="BDA">BAIXADA / BAJADA</option><option value="BARRO">BARRIO</option><option value="ACERA">BEIRARRÚA / ACERA</option><option value="BLQUE">BLOQUE</option><option value="BULEV">BULEVAR</option><option value="CLLON">CALEXÓN / CALLEJON</option><option value="CZADA">CALZADA</option><option value="CAMI">CAMIÑO / CAMINO</option><option value="CRA">CARREIRA / CARRERA</option><option value="CRO">CARREIRO / CARRERO</option><option value="CTRA">CARRETERA</option><option value="CERRO">CERRO</option><option value="CINT">CINTURÓN</option><option value="CIRCU">CIRCUNVALACIÓN</option><option value="C.N.">CMNO NOVO / NUEVO</option><option value="C.V.">CMNO VELLO / VIEJO</option><option value="CRRDA">CORREDOIRA / CORREDERA</option><option value="COSTA">COSTA</option><option value="ENTD">ENTRADA</option><option value="ESCA">ESCALEIRA / ESCALERA</option><option value="ESTDA">ESTRADA</option><option value="EXPLA">EXPLANADA</option><option value="FINCA">FINCA</option><option value="GTA">GLORIETA</option><option value="LUGAR">LUGAR</option><option value="MALEC">MALECÓN</option><option value="MIRAD">MIRADOR</option><option value="MONTE">MONTE</option><option value="PQUE">PARQUE</option><option value="PASAI">PASAXE / PASAJE</option><option value="PASEO">PASEO</option><option value="PZTA">PLAZOLETA</option><option value="POLIG">POLÍGONO</option><option value="PNTE">PONTE / PUENTE</option><option value="PLAYA">PRAIA / PLAYA</option><option value="PLAZA">PRAZA / PLAZA</option><option value="RCON">RECANTO / RINCON</option><option value="RBRA">RIBEIRA / RIBERA</option><option value="RONDA">RONDA</option><option value="RTDA">ROTONDA</option><option value="CALLE">RÚA / CALLE</option><option value="SENDA">SENDA</option><option value="TRVA">TRAVESÍA</option><option value="URB">URBANIZACIÓN</option><option value="VALLE">VAL / VALLE</option><option value="VEGA">VEIGA / VEGA</option><option value="VIA">VÍA</option><option value="VCTO">VIADUCTO</option><option value="JDIN">XARDÍN / JARDÍN</option><option value="ZONA">ZONA</option></select> 
+														</div> 
+														<div class="col-md-6 col-sm-6"> 
+															<label for="BS607A.Notificacion.txtDireccion" class="control-label text-left"> NOMBRE DE LA VÍA </label> 
+															<span id="BS607A.Notificacion.txtDireccion.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtDireccion" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtDireccion&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+														</div> 
+														<div class="col-md-1 col-sm-1"> 
+															<label for="BS607A.Notificacion.Notificacion.txtNumero" class="control-label text-left"> NÚMERO </label> 
+															<span id="BS607A.Notificacion.txtNumero.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtNumero" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtNumero&#39;]" class="form-control input-sm" type="text" value="" maxlength="6" tipo=""> 
+														</div> 
+														<div class="col-md-1 col-sm-1"> 
+															<label for="BS607A.Notificacion.txtBloque" class="control-label text-left"> BLOQUE </label> 
+															<span id="BS607A.Notificacion.txtBloque.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtBloque" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtBloque&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+														</div> 
+														<div class="col-md-1 col-sm-1"> 
+															<label for="BS607A.Notificacion.txtPiso" class="control-label text-left"> PISO </label> 
+															<span id="BS607A.Notificacion.txtPiso.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtPiso" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtPiso&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+														</div> 
+														<div class="col-md-1 col-sm-1"> 
+															<label for="BS607A.Notificacion.txtPuerta" class="control-label text-left"> PUERTA </label> 
+															<span id="BS607A.Notificacion.txtPuerta.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtPuerta" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtPuerta&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+														</div> 
+													</div> 
+													<div class="form-group-sm col-md-12"> 
+														<div class="col-md-6 col-sm-6"> 
+															<label for="BS607A.Notificacion.txtParroquia" class="control-label text-left"> PARROQUIA </label> 
+															<span id="BS607A.Notificacion.txtParroquia.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtParroquia" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtParroquia&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+														</div> 
+														<div class="col-md-6 col-sm-6"> 
+															<label for="BS607A.Notificacion.txtLugar" class="control-label text-left"> LUGAR </label> 
+															<span id="BS607A.Notificacion.txtLugar.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtLugar" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtLugar&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+														</div> 
+													</div> 
+													<div class="form-group-sm col-md-12"> 
+														<div class="col-md-2 col-sm-2"> 
+															<label for="BS607A.Notificacion.txtCodigoPostal" class="control-label text-left"> CP </label> 
+															<span id="BS607A.Notificacion.txtCodigoPostal.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtCodigoPostal" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtCodigoPostal&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+														</div> 
+														<div class="col-md-2 col-sm-2"> 
+															<label for="BS607A.Notificacion.cmbProvincia" class="control-label text-left"> PROVINCIA </label> 
+															<span id="BS607A.Notificacion.cmbProvincia.error" class="errores" style="display: none"></span> 
+															<select id="BS607A.Notificacion.cmbProvincia" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/cmbProvincia&#39;]" class="form-control input-sm" tipo="provincia" idmunicipio="BS607A.Notificacion.cmbAyuntamiento"><option value="">Seleccione</option><option value="15">Coruña (A)</option><option value="27">Lugo</option><option value="32">Ourense</option><option value="36">Pontevedra</option><option value="2">Albacete</option><option value="3">Alicante/Alacant</option><option value="4">Almería</option><option value="1">Araba/Álava</option><option value="33">Asturias</option><option value="6">Badajoz</option><option value="7">Balears, Illes</option><option value="8">Barcelona</option><option value="48">Bizkaia</option><option value="9">Burgos</option><option value="39">Cantabria</option><option value="12">Castellón/Castelló</option><option value="51">Ceuta</option><option value="13">Ciudad Real</option><option value="16">Cuenca</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="14">Córdoba</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="28">Madrid</option><option value="52">Melilla</option><option value="30">Murcia</option><option value="29">Málaga</option><option value="31">Navarra</option><option value="34">Palencia</option><option value="35">Palmas, Las</option><option value="26">Rioja, La</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia/València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="5">Ávila</option></select> 
+														</div> 
+														<div class="col-md-4 col-sm-4"> 
+															<label for="BS607A.Notificacion.cmbAyuntamiento" class="control-label text-left"> MUNICIPIO </label> 
+															<span id="BS607A.Notificacion.cmbAyuntamiento.error" class="errores" style="display: none"></span> 
+															<select id="BS607A.Notificacion.cmbAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/cmbAyuntamiento&#39;]" class="form-control input-sm" tipo="municipio"> <option selected="selected" value="">Seleccione</option> </select> 
+															<input id="BS607A.Notificacion.txtAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtAyuntamiento&#39;]" type="hidden" value=""> 
+														</div> 
+														<div class="col-md-4 col-sm-4"> 
+															<label for="BS607A.Notificacion.txtLocalidad" class="control-label text-left"> LOCALIDAD </label> 
+															<span id="BS607A.Notificacion.txtLocalidad.error" class="errores" style="display: none"></span> 
+															<input id="BS607A.Notificacion.txtLocalidad" name="campos[&#39;/ProcedimientoXunta/BS607A/Notificacion/txtLocalidad&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+														</div> 
+													</div> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE:notificación opción ******************** --> 
+
+									<!-- ******************** BLOQUE:DatosHijoDiscap (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp;DATOS DEL/DE LA HIJO/HIJA CON DISCAPACIDAD &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.HijoDiscap.txtNombre" class="control-label text-left"> NOMBRE  </label> 
+														<span id="BS607A.HijoDiscap.txtNombre.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtNombre" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtNombre&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.HijoDiscap.txtApel1" class="control-label text-left"> PRIMER APELLIDO </label> 
+														<span id="BS607A.HijoDiscap.txtApel1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtApel1" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtApel1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.HijoDiscap.txtApel2" class="control-label text-left"> SEGUNDO APELLIDO </label> 
+														<span id="BS607A.HijoDiscap.txtApel2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtApel2" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtApel2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.HijoDiscap.txtNifCif" class="control-label text-left"> NIF / PASAPORTE </label> 
+														<span id="BS607A.HijoDiscap.txtNifCif.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtNifCif" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtNifCif&#39;]" class="form-control input-sm" type="text" value="" maxlength="9" tipo="solicitante"> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.HijoDiscap.txtFechaNac" class="control-label text-left"> FECHA DE NACIMIENTO </label> 
+														<span id="BS607A.HijoDiscap.txtFechaNac.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtFechaNac" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtFechaNac&#39;]" class="form-control input-sm" type="text" value="" maxlength="23" tipo=""> 
+													</div> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.HijoDiscap.txtNCartillaSanit" class="control-label text-left"> Nº DE CARTILLA SANITARIA </label> 
+														<span id="BS607A.HijoDiscap.txtNCartillaSanit.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtNCartillaSanit" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtNCartillaSanit&#39;]" class="form-control input-sm" type="text" value="" maxlength="23" tipo=""> 
+													</div> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.HijoDiscap.txtPorcentDiscap" class="control-label text-left"> PORCENTAJE DE DISCAPACIDAD </label> 
+														<span id="BS607A.HijoDiscap.txtPorcentDiscap.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.HijoDiscap.txtPorcentDiscap" name="campos[&#39;/ProcedimientoXunta/BS607A/HijoDiscap/txtPorcentDiscap&#39;]" class="form-control input-sm" type="text" value="" maxlength="30" tipo=""> 
+													</div> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: DatosHijoDiscap (UD) ******************** --> 
+
+									<!-- ******************** BLOQUE: PersonaAcomp (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp; DATOS DE LA PERSONA ACOMPAÑANTE (cónyuge, pareja de hecho o relación análoga a la conyugal)  &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.PersonaAcomp.txtNombre" class="control-label text-left"> NOMBRE </label> 
+														<span id="BS607A.PersonaAcomp.txtNombre.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtNombre" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtNombre&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaAcomp.txtApel1" class="control-label text-left"> PRIMER APELLIDO </label> 
+														<span id="BS607A.PersonaAcomp.txtApel1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtApel1" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtApel1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaAcomp.txtApel2" class="control-label text-left"> SEGUNDO APELLIDO </label> 
+														<span id="BS607A.PersonaAcomp.txtApel2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtApel2" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtApel2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.txtNifCif" class="control-label text-left"> NIF / PASAPORTE </label> 
+														<span id="BS607A.PersonaAcomp.txtNifCif.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtNifCif" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtNifCif&#39;]" class="form-control input-sm" type="text" value="" maxlength="9" tipo="solicitante"> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.cmbTipoVia" class="control-label text-left"> TIPO DE VÍA </label> 
+														<span id="BS607A.PersonaAcomp.cmbTipoVia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaAcomp.cmbTipoVia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/cmbTipoVia&#39;]" class="form-control input-sm" tipo="via"><option value="">Seleccione</option><option value="ACCES">ACCESO</option><option value="ALAM">ALAMEDA</option><option value="ALDEA">ALDEA</option><option value="ALTO">ALTO</option><option value="APTOS">APARTAMENTOS</option><option value="AUTO">AUTOESTRADA / AUTOPISTA</option><option value="AVIA">AUTOVÍA</option><option value="AVDA">AVENIDA</option><option value="BDA">BAIXADA / BAJADA</option><option value="BARRO">BARRIO</option><option value="ACERA">BEIRARRÚA / ACERA</option><option value="BLQUE">BLOQUE</option><option value="BULEV">BULEVAR</option><option value="CLLON">CALEXÓN / CALLEJON</option><option value="CZADA">CALZADA</option><option value="CAMI">CAMIÑO / CAMINO</option><option value="CRA">CARREIRA / CARRERA</option><option value="CRO">CARREIRO / CARRERO</option><option value="CTRA">CARRETERA</option><option value="CERRO">CERRO</option><option value="CINT">CINTURÓN</option><option value="CIRCU">CIRCUNVALACIÓN</option><option value="C.N.">CMNO NOVO / NUEVO</option><option value="C.V.">CMNO VELLO / VIEJO</option><option value="CRRDA">CORREDOIRA / CORREDERA</option><option value="COSTA">COSTA</option><option value="ENTD">ENTRADA</option><option value="ESCA">ESCALEIRA / ESCALERA</option><option value="ESTDA">ESTRADA</option><option value="EXPLA">EXPLANADA</option><option value="FINCA">FINCA</option><option value="GTA">GLORIETA</option><option value="LUGAR">LUGAR</option><option value="MALEC">MALECÓN</option><option value="MIRAD">MIRADOR</option><option value="MONTE">MONTE</option><option value="PQUE">PARQUE</option><option value="PASAI">PASAXE / PASAJE</option><option value="PASEO">PASEO</option><option value="PZTA">PLAZOLETA</option><option value="POLIG">POLÍGONO</option><option value="PNTE">PONTE / PUENTE</option><option value="PLAYA">PRAIA / PLAYA</option><option value="PLAZA">PRAZA / PLAZA</option><option value="RCON">RECANTO / RINCON</option><option value="RBRA">RIBEIRA / RIBERA</option><option value="RONDA">RONDA</option><option value="RTDA">ROTONDA</option><option value="CALLE">RÚA / CALLE</option><option value="SENDA">SENDA</option><option value="TRVA">TRAVESÍA</option><option value="URB">URBANIZACIÓN</option><option value="VALLE">VAL / VALLE</option><option value="VEGA">VEIGA / VEGA</option><option value="VIA">VÍA</option><option value="VCTO">VIADUCTO</option><option value="JDIN">XARDÍN / JARDÍN</option><option value="ZONA">ZONA</option></select> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaAcomp.txtDireccion" class="control-label text-left"> NOMBRE DE LA VÍA </label> 
+														<span id="BS607A.PersonaAcomp.txtDireccion.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtDireccion" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtDireccion&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaAcomp.txtNumero" class="control-label text-left"> NÚMERO </label> 
+														<span id="BS607A.PersonaAcomp.txtNumero.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtNumero" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtNumero&#39;]" class="form-control input-sm" type="text" value="" maxlength="6" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaAcomp.txtBloque" class="control-label text-left"> BLOQUE </label> 
+														<span id="BS607A.PersonaAcomp.txtBloque.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtBloque" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtBloque&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaAcomp.txtPiso" class="control-label text-left"> PISO </label> 
+														<span id="BS607A.PersonaAcomp.txtPiso.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtPiso" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtPiso&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaAcomp.txtPuerta" class="control-label text-left"> PUERTA </label> 
+														<span id="BS607A.PersonaAcomp.txtPuerta.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtPuerta" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtPuerta&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaAcomp.txtParroquia" class="control-label text-left"> PARROQUIA </label> 
+														<span id="BS607A.PersonaAcomp.txtParroquia.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtParroquia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtParroquia&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaAcomp.txtLugar" class="control-label text-left"> LUGAR </label> 
+														<span id="BS607A.PersonaAcomp.txtLugar.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtLugar" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtLugar&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.txtCodigoPostal" class="control-label text-left"> CP </label> 
+														<span id="BS607A.PersonaAcomp.txtCodigoPostal.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtCodigoPostal" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtCodigoPostal&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.cmbProvincia" class="control-label text-left"> PROVINCIA </label> 
+														<span id="BS607A.PersonaAcomp.cmbProvincia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaAcomp.cmbProvincia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/cmbProvincia&#39;]" class="form-control input-sm" tipo="provincia" idmunicipio="BS607A.PersonaAcomp.cmbAyuntamiento"><option value="">Seleccione</option><option value="15">Coruña (A)</option><option value="27">Lugo</option><option value="32">Ourense</option><option value="36">Pontevedra</option><option value="2">Albacete</option><option value="3">Alicante/Alacant</option><option value="4">Almería</option><option value="1">Araba/Álava</option><option value="33">Asturias</option><option value="6">Badajoz</option><option value="7">Balears, Illes</option><option value="8">Barcelona</option><option value="48">Bizkaia</option><option value="9">Burgos</option><option value="39">Cantabria</option><option value="12">Castellón/Castelló</option><option value="51">Ceuta</option><option value="13">Ciudad Real</option><option value="16">Cuenca</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="14">Córdoba</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="28">Madrid</option><option value="52">Melilla</option><option value="30">Murcia</option><option value="29">Málaga</option><option value="31">Navarra</option><option value="34">Palencia</option><option value="35">Palmas, Las</option><option value="26">Rioja, La</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia/València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="5">Ávila</option></select> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaAcomp.cmbAyuntamiento" class="control-label text-left"> MUNICIPIO </label> 
+														<span id="BS607A.PersonaAcomp.cmbAyuntamiento.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaAcomp.cmbAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/cmbAyuntamiento&#39;]" class="form-control input-sm" tipo="municipio"> <option selected="selected" value="">Seleccione</option> </select> 
+														<input id="BS607A.PersonaAcomp.txtAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtAyuntamiento&#39;]" type="hidden" value=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaAcomp.txtLocalidad" class="control-label text-left"> LOCALIDAD </label> 
+														<span id="BS607A.PersonaAcomp.txtLocalidad.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtLocalidad" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtLocalidad&#39;]" class="form-control input-sm" type="text" value="" maxlength="40" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.txtPais" class="control-label text-left"> PAÍS </label> 
+														<span id="BS607A.PersonaAcomp.txtPais.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtPais" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtPais&#39;]" class="form-control input-sm" type="text" value="" maxlength="25" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.txtTelefono" class="control-label text-left"> TELÉFONO </label> 
+														<span id="BS607A.PersonaAcomp.txtTelefono.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtTelefono" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtTelefono&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaAcomp.txtMovil" class="control-label text-left"> TELÉFONO MÓVIL </label> 
+														<span id="BS607A.PersonaAcomp.txtMovil.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtMovil" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtMovil&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-8 col-sm-8"> 
+														<label for="BS607A.PersonaAcomp.txtEmail" class="control-label text-left"> CORREO ELECTRÓNICO </label> 
+														<span id="BS607A.PersonaAcomp.txtEmail.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtEmail" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtEmail&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.PersonaAcomp.txtFechaNac" class="control-label text-left"> FECHA DE NACIMIENTO </label> 
+														<span id="BS607A.PersonaAcomp.txtFechaNac.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtFechaNac" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtFechaNac&#39;]" class="form-control input-sm" type="text" value="" maxlength="23" tipo=""> 
+													</div> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.PersonaAcomp.txtNCartillaSanit" class="control-label text-left"> Nº DE CARTILLA SANITARIA </label> 
+														<span id="BS607A.PersonaAcomp.txtNCartillaSanit.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtNCartillaSanit" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtNCartillaSanit&#39;]" class="form-control input-sm" type="text" value="" maxlength="23" tipo=""> 
+													</div> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.PersonaAcomp.txtPorcentDiscap" class="control-label text-left"> PORCENTAJE DE DISCAPACIDAD </label> 
+														<span id="BS607A.PersonaAcomp.txtPorcentDiscap.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaAcomp.txtPorcentDiscap" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaAcomp/txtPorcentDiscap&#39;]" class="form-control input-sm" type="text" value="" maxlength="30" tipo=""> 
+													</div> 
+												</div> 
+
+ 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: PersonaAcomp (UD)  ******************** --> 
+
+									<!-- ******************** BLOQUE: PersonaContact (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp; DATOS DE UNA PERSONA FAMILIAR O DE CONTACTO  &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.PersonaContact.txtNombre" class="control-label text-left"> NOMBRE </label> 
+														<span id="BS607A.PersonaContact.txtNombre.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtNombre" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtNombre&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaContact.txtApel1" class="control-label text-left"> PRIMER APELLIDO </label> 
+														<span id="BS607A.PersonaContact.txtApel1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtApel1" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtApel1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaContact.txtApel2" class="control-label text-left"> SEGUNDO APELLIDO </label> 
+														<span id="BS607A.PersonaContact.txtApel2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtApel2" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtApel2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtNifCif" class="control-label text-left"> NIF / PASAPORTE </label> 
+														<span id="BS607A.PersonaContact.txtNifCif.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtNifCif" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtNifCif&#39;]" class="form-control input-sm" type="text" value="" maxlength="9" tipo="solicitante"> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.cmbTipoVia" class="control-label text-left"> TIPO DE VÍA </label> 
+														<span id="BS607A.PersonaContact.cmbTipoVia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaContact.cmbTipoVia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/cmbTipoVia&#39;]" class="form-control input-sm" tipo="via"><option value="">Seleccione</option><option value="ACCES">ACCESO</option><option value="ALAM">ALAMEDA</option><option value="ALDEA">ALDEA</option><option value="ALTO">ALTO</option><option value="APTOS">APARTAMENTOS</option><option value="AUTO">AUTOESTRADA / AUTOPISTA</option><option value="AVIA">AUTOVÍA</option><option value="AVDA">AVENIDA</option><option value="BDA">BAIXADA / BAJADA</option><option value="BARRO">BARRIO</option><option value="ACERA">BEIRARRÚA / ACERA</option><option value="BLQUE">BLOQUE</option><option value="BULEV">BULEVAR</option><option value="CLLON">CALEXÓN / CALLEJON</option><option value="CZADA">CALZADA</option><option value="CAMI">CAMIÑO / CAMINO</option><option value="CRA">CARREIRA / CARRERA</option><option value="CRO">CARREIRO / CARRERO</option><option value="CTRA">CARRETERA</option><option value="CERRO">CERRO</option><option value="CINT">CINTURÓN</option><option value="CIRCU">CIRCUNVALACIÓN</option><option value="C.N.">CMNO NOVO / NUEVO</option><option value="C.V.">CMNO VELLO / VIEJO</option><option value="CRRDA">CORREDOIRA / CORREDERA</option><option value="COSTA">COSTA</option><option value="ENTD">ENTRADA</option><option value="ESCA">ESCALEIRA / ESCALERA</option><option value="ESTDA">ESTRADA</option><option value="EXPLA">EXPLANADA</option><option value="FINCA">FINCA</option><option value="GTA">GLORIETA</option><option value="LUGAR">LUGAR</option><option value="MALEC">MALECÓN</option><option value="MIRAD">MIRADOR</option><option value="MONTE">MONTE</option><option value="PQUE">PARQUE</option><option value="PASAI">PASAXE / PASAJE</option><option value="PASEO">PASEO</option><option value="PZTA">PLAZOLETA</option><option value="POLIG">POLÍGONO</option><option value="PNTE">PONTE / PUENTE</option><option value="PLAYA">PRAIA / PLAYA</option><option value="PLAZA">PRAZA / PLAZA</option><option value="RCON">RECANTO / RINCON</option><option value="RBRA">RIBEIRA / RIBERA</option><option value="RONDA">RONDA</option><option value="RTDA">ROTONDA</option><option value="CALLE">RÚA / CALLE</option><option value="SENDA">SENDA</option><option value="TRVA">TRAVESÍA</option><option value="URB">URBANIZACIÓN</option><option value="VALLE">VAL / VALLE</option><option value="VEGA">VEIGA / VEGA</option><option value="VIA">VÍA</option><option value="VCTO">VIADUCTO</option><option value="JDIN">XARDÍN / JARDÍN</option><option value="ZONA">ZONA</option></select> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaContact.txtDireccion" class="control-label text-left"> NOMBRE DE LA VÍA </label> 
+														<span id="BS607A.PersonaContact.txtDireccion.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtDireccion" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtDireccion&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaContact.txtNumero" class="control-label text-left"> NÚMERO </label> 
+														<span id="BS607A.PersonaContact.txtNumero.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtNumero" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtNumero&#39;]" class="form-control input-sm" type="text" value="" maxlength="6" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaContact.txtBloque" class="control-label text-left"> BLOQUE </label> 
+														<span id="BS607A.PersonaContact.txtBloque.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtBloque" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtBloque&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaContact.txtPiso" class="control-label text-left"> PISO </label> 
+														<span id="BS607A.PersonaContact.txtPiso.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtPiso" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtPiso&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<label for="BS607A.PersonaContact.txtPuerta" class="control-label text-left"> PUERTA </label> 
+														<span id="BS607A.PersonaContact.txtPuerta.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtPuerta" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtPuerta&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaContact.txtParroquia" class="control-label text-left"> PARROQUIA </label> 
+														<span id="BS607A.PersonaContact.txtParroquia.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtParroquia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtParroquia&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaContact.txtLugar" class="control-label text-left"> LUGAR </label> 
+														<span id="BS607A.PersonaContact.txtLugar.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtLugar" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtLugar&#39;]" class="form-control input-sm" type="text" value="" maxlength="75" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtCodigoPostal" class="control-label text-left"> CP </label> 
+														<span id="BS607A.PersonaContact.txtCodigoPostal.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtCodigoPostal" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtCodigoPostal&#39;]" class="form-control input-sm" type="text" value="" maxlength="5" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.cmbProvincia" class="control-label text-left"> PROVINCIA </label> 
+														<span id="BS607A.PersonaContact.cmbProvincia.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaContact.cmbProvincia" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/cmbProvincia&#39;]" class="form-control input-sm" tipo="provincia" idmunicipio="BS607A.PersonaContact.cmbAyuntamiento"><option value="">Seleccione</option><option value="15">Coruña (A)</option><option value="27">Lugo</option><option value="32">Ourense</option><option value="36">Pontevedra</option><option value="2">Albacete</option><option value="3">Alicante/Alacant</option><option value="4">Almería</option><option value="1">Araba/Álava</option><option value="33">Asturias</option><option value="6">Badajoz</option><option value="7">Balears, Illes</option><option value="8">Barcelona</option><option value="48">Bizkaia</option><option value="9">Burgos</option><option value="39">Cantabria</option><option value="12">Castellón/Castelló</option><option value="51">Ceuta</option><option value="13">Ciudad Real</option><option value="16">Cuenca</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="14">Córdoba</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="28">Madrid</option><option value="52">Melilla</option><option value="30">Murcia</option><option value="29">Málaga</option><option value="31">Navarra</option><option value="34">Palencia</option><option value="35">Palmas, Las</option><option value="26">Rioja, La</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia/València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="5">Ávila</option></select> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaContact.cmbAyuntamiento" class="control-label text-left"> MUNICIPIO </label> 
+														<span id="BS607A.PersonaContact.cmbAyuntamiento.error" class="errores" style="display: none"></span> 
+														<select id="BS607A.PersonaContact.cmbAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/cmbAyuntamiento&#39;]" class="form-control input-sm" tipo="municipio"> <option selected="selected" value="">Seleccione</option> </select> 
+														<input id="BS607A.PersonaContact.txtAyuntamiento" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtAyuntamiento&#39;]" type="hidden" value=""> 
+													</div> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.PersonaContact.txtLocalidad" class="control-label text-left"> LOCALIDAD </label> 
+														<span id="BS607A.PersonaContact.txtLocalidad.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtLocalidad" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtLocalidad&#39;]" class="form-control input-sm" type="text" value="" maxlength="40" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtPais" class="control-label text-left"> PAÍS </label> 
+														<span id="BS607A.PersonaContact.txtPais.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtPais" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtPais&#39;]" class="form-control input-sm" type="text" value="" maxlength="25" tipo=""> 
+													</div> 
+												</div> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtTelefono1" class="control-label text-left"> TELÉFONO 1</label> 
+														<span id="BS607A.PersonaContact.txtTelefono1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtTelefono1" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtTelefono1&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div>
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtTelefono2" class="control-label text-left"> TELÉFONO 2</label> 
+														<span id="BS607A.PersonaContact.txtTelefono2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtTelefono2" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtTelefono2&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.PersonaContact.txtMovil" class="control-label text-left"> TELÉFONO MÓVIL </label> 
+														<span id="BS607A.PersonaContact.txtMovil.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtMovil" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtMovil&#39;]" class="form-control input-sm" type="text" value="" maxlength="13" tipo=""> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.PersonaContact.txtEmail" class="control-label text-left"> CORREO ELECTRÓNICO </label> 
+														<span id="BS607A.PersonaContact.txtEmail.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.PersonaContact.txtEmail" name="campos[&#39;/ProcedimientoXunta/BS607A/PersonaContact/txtEmail&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: PersonaContact (UD)  ******************** --> 
+
+									<!-- ******************** BLOQUE: DestFechSolicit (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> &nbsp; DESTINOS Y FECHAS SOLICITADAS (ver la relación de destinos y fechas que se ofertan en el anexo IV e indicar hasta tres por orden de preferencia)  &nbsp; </p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-10 col-sm-10"> 
+														<label for="BS607A.DestFechSolicit.txtDestino1" class="control-label text-left"> 1er DESTINO </label> 
+														<span id="BS607A.DestFechSolicit.txtDestino1.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtDestino1" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtDestino1&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.DestFechSolicit.txtFechaDest" class="control-label text-left"> FECHA </label> 
+														<span id="BS607A.DestFechSolicit.txtFechaDest.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtFechaDest" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-10 col-sm-10"> 
+														<label for="BS607A.DestFechSolicit.txtDestino2" class="control-label text-left"> 2o DESTINO </label> 
+														<span id="BS607A.DestFechSolicit.txtDestino2.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtDestino2" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtDestino2&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.DestFechSolicit.txtFechaDest" class="control-label text-left"> FECHA </label> 
+														<span id="BS607A.DestFechSolicit.txtFechaDest.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtFechaDest" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-10 col-sm-10"> 
+														<label for="BS607A.DestFechSolicit.txtDestino3" class="control-label text-left"> 3er DESTINO </label> 
+														<span id="BS607A.DestFechSolicit.txtDestino3.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtDestino3" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtDestino3&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.DestFechSolicit.txtFechaDest" class="control-label text-left"> FECHA </label> 
+														<span id="BS607A.DestFechSolicit.txtFechaDest.error" class="errores" style="display: none"></span> 
+														<input id="BS607A.DestFechSolicit.txtFechaDest" name="campos[&#39;/ProcedimientoXunta/BS607A/DestFechSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: DestFechSolicit (UD)  ******************** --> 
+
+									<!-- ******************** BLOQUE: SaludSolicit ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title">&nbsp; DATOS DE SALUD DE LA PERSONA SOLICITANTE  &nbsp;</p> 
+													</div> 
+												</div> 
+											</div> 
+											<fieldset>
+												<div class="col-md-12 col-sm-12"> 
+													<div class="col-md-5 col-sm-5"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Se vale por sí misma para las actividades de la vida diaria </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.1" name="campos[&#01;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#01;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.1" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.2" name="campos[&#01;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#01;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.2" class="labelRadio"> NO </label> 
+													</div> 
+												</div>
+												<div class="col-md-12 col-sm-12"> 
+													<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Presenta: </label> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Enfermedad infecto-contagiosa en fase activa </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.3" name="campos[&#02;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#02;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.3" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.4" name="campos[&#02;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#02;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.4" class="labelRadio"> NO </label> 
+													</div> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Algún tipo de enfermedad o limitación para recibir tratamiento termal </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.5" name="campos[&#03;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#03;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.5" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.6" name="campos[&#03;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#03;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.6" class="labelRadio"> NO </label> 
+													</div> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-6 col-sm-6"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Alteraciones de comportamiento que dificulten la convivencia </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.7" name="campos[&#04;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#04;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.7" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.8" name="campos[&#04;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#04;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.8" class="labelRadio"> NO </label> 
+													</div> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-3 col-sm-3"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Otras enfermedades </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.9" name="campos[&#05;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#05;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.9" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.10" name="campos[&#05;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#05;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.10" class="labelRadio"> NO </label> 
+													</div>
+ 													<div class="col-md-4 col-sm-4"> 
+														<label for="BS607A.SaludSolicit.rbRadio.9" class="control-label text-left"> En caso afirmativo, indíquese cuáles: </label> 
+													</div>
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<input id="BS607A.SaludSolicit.txtOtrasEnferm" name="campos[&#39;/ProcedimientoXunta/BS607A/SaludSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+												</div>
+												<div class="col-md-12 col-sm-12"> 
+													<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Necesita algún tipo de: </label> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Tratamiento </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.11" name="campos[&#06;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#06;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.11" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.12" name="campos[&#06;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#06;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.12" class="labelRadio"> NO </label> 
+													</div> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Dieta </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.13" name="campos[&#07;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#07;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.13" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.14" name="campos[&#07;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#07;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.14" class="labelRadio"> NO </label> 
+													</div>
+ 													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.SaludSolicit.rbRadio.13" class="labelRadio"> Indíquese cuál: </label> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<input id="BS607A.SaludSolicit.txtOtrasEnferm" name="campos[&#39;/ProcedimientoXunta/BS607A/SaludSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.SaludSolicit.label" class="control-label text-left"> Apoyo </label> 
+													</div>
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.15" name="campos[&#08;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#08;]" " value="1" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.15" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.SaludSolicit.rbRadio.16" name="campos[&#08;/ProcedimientoXunta/BS607A/SaludSolicit/rbRadio&#08;]" " value="2" type="radio"> 
+														<label for="BS607A.SaludSolicit.rbRadio.16" class="labelRadio"> NO </label> 
+													</div>
+													<div class="col-md-2 col-sm-2"> 
+														<label for="BS607A.SaludSolicit.rbRadio.15" class="labelRadio"> Indíquese cuál: </label> 
+													</div> 
+													<div class="col-md-6 col-sm-6"> 
+														<input id="BS607A.SaludSolicit.txtOtrasEnferm" name="campos[&#08;/ProcedimientoXunta/BS607A/SaludSolicit/txtFechaDest&#08;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+													</div> 
+												</div>
+
+
+												<div class="form-group-sm  col-sm-12"> 
+													<label for="BS607A.SaludSolicit.txtOtrosDatosSalud" class="control-label text-left"> Otros datos que quiera hacer constar: </label> 
+													<span id="BS607A.SaludSolicit.txtOtrosDatosSalud.error" class="errores" style="display: none"></span> 
+													<textarea id="BS607A.SaludSolicit.txtOtrosDatosSalud" name="campos[&#39;/ProcedimientoXunta/BS607A/SaludSolicit/txtSaludSolicit&#39;]" rows="3" maxlength="1200" class="form-control input-sm textarea"></textarea> 
+												</div> 
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: SaludSolicit (UD) ******************** --> 
+
+									<!-- ******************** BLOQUE: DatEconomicos (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title">&nbsp; DATOS ECONÓMICOS &nbsp;</p> 
+													</div> 
+												</div> 
+											</div> 
+										<fieldset> 
+											<div class="form-group-sm  col-sm-12"> 
+												<label for="BS607A.DatEconomicos.txtCuantiaMensual" class="control-label text-left"> CUANTÍA MENSUAL LÍQUIDA (€)  </label> 
+											</div>
+											<div class="form-group-sm  col-sm-3 sm-"> 
+												<input id="BS607A.DatEconomicos.txtCuantiaMensual" name="campos[&#39;/ProcedimientoXunta/BS607A/SaludSolicit/txtFechaDest&#39;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+											</div> 
+											<div class="form-group-sm  col-sm-12"> 
+												<label class="control-label text-left"> PROCEDENTES DE  </label> 
+											</div> 
+
+											<div class="form-group-sm col-md-12"> 
+												<div class="col-md-2 col-sm-2">
+													<input id="BS607A.DatEconomicos.cvCasilla.1" name="campos[&#39;/ProcedimientoXunta/BS607A/DatEconomicos/cvCasilla1&#39;]" value="1" type="checkbox">
+													<label for="BS607A.DatEconomicos.cvCasilla.1" class="labelRadio"> PENSIONES </label> 
+												</div> 
+												<div class="col-md-2 col-sm-2">
+													<input id="BS607A.DatEconomicos.cvCasilla.2" name="campos[&#39;/ProcedimientoXunta/BS607A/DatEconomicos/cvCasilla1&#39;]" value="1" type="checkbox">
+ 													<label for="BS607A.DatEconomicos.cvCasilla.2" class="labelRadio"> OTROS </label> 
+												</div>
+												<div class="col-md-2 col-sm-2"> 
+													<label  for="BS607A.DatEconomicos.cvCasilla.2" class="labelRadio"> Indíquese cuáles: </label> 
+												</div> 
+												<div class="col-md-6 col-sm-6"> 
+													<input id="BS607A.DatEconomicos.txtOtras" name="campos[&#08;/ProcedimientoXunta/BS607A/SaludSolicit/txtFechaDest&#08;]" class="form-control input-sm" type="text" value="" maxlength="50" tipo=""> 
+												</div> 
+											</div>
+
+										</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: DatEconomicos (UD) ******************** --> 
+									
+									<!-- ******************** BLOQUE: Declaracion ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default">
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title">&nbsp; LA PERSONA SOLICITANTE O REPRESENTANTE DECLARA: &nbsp;</p> 
+													</div> 
+												</div> 
+											</div>  
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph">1. Que todos los datos contenidos en esta solicitud y en los documentos que se adjuntan son ciertos.  </p> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph">2. Que la documentación que se adjunta está vigente.  </p> 
+												</div> 
+												</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: Declaracion (UD) ******************** --> 
+										
+
+
+
+									<!-- ******************** BLOQUE:Documentacion (UD) ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<div class="panel-heading margin-bottom-xs"> 
+												<div class="row"> 
+													<div class="col-sm-12"> 
+														<p class="panel-title"> DOCUMENTACIÓN QUE SE PRESENTA </p>
+													</div> 
+												</div> 
+											</div> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12 table-responsive"> 
+													<table class="tabla-compacta"> 
+														<tbody>
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.1" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.1" class="labelRadio"> Copia del DNI o NIE de la persona solicitante, sólo en el caso de no autorizar su consulta </label></td> 
+															</tr> 
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.2" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.2" class="labelRadio"> Certificado de empadronamiento de la persona solicitante, sólo en el caso de no autorizar su consulta </label></td> 
+															</tr> 
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.3" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.3" class="labelRadio"> Certificado de empadronamiento del/de la hijo/a de la persona solicitante, sólo en el caso de no autorizar su consulta (anexo II) </label></td> 
+															</tr> 
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.4" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.4" class="labelRadio"> Certificado de empadronamiento de la persona acompañante, si procede y sólo en el caso de no autorizar su consulta (anexo III) </label></td> 
+															</tr> 
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.5" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.5" class="labelRadio"> Copia de la declaración del impuesto de la renta de las personas físicas correspondiente al último período en que se presente la solicitud, sólo en el caso de no autorizar su consulta </label></td> 
+															</tr> 
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.6" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.6" class="labelRadio"> Certificado de toda clase de pensiones percibidas por la persona solicitante o declaración jurada de no percibirlas, sólo en el caso de no autorizar su consulta </label></td> 
+															</tr>
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.7" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.7" class="labelRadio"> Copia del libro de familia de la persona solicitante, en el caso de que quiera acudir al programa acompañada de un/una hijo/a con discapacidad y sólo en el caso de denegar expresamente su consulta </label></td> 
+															</tr>
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.cvCasilla.8" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/cvCasilla1&#39;]" value="1" type="checkbox"> </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro1.error" class="errores" style="display: none"></span><label for="BS607A.DocComplementaria.cvCasilla.8" class="labelRadio"> Otra documentación que considere relevante: </label></td> 
+															</tr>
+															<tr> 
+																<td style="width:3%"> <span id="BS607A.DocComplementaria.cvCasilla1.error" class="errores" style="display: none"></span>  </td> 
+																<td td="" style="width:97%"> <span id="BS607A.DocComplementaria.txtCuadro4.error" class="errores" style="display: none"></span> <input id="BS607A.DocComplementaria.txtCuadro4" name="campos[&#39;/ProcedimientoXunta/BS607A_2/DocComplementaria/txtCuadro4&#39;]" class="form-control input-sm" type="text" value="" maxlength="150" tipo=""> </td> 
+															</tr> 
+														</tbody>
+													</table> 
+												</div> 
+											</fieldset> 
+										</div> 
+										<!-- ******************** FINBLOQUE:Documentacion (UD) ******************** --> 
+									
+									<!-- ******************** BLOQUE: Autorizacion1 ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph"> Autorizo a la Consellería de Política Social a consultar los datos de identidad de la persona solicitante en el Sistema de verificación de datos de identidad del Ministerio de Hacienda y Administraciones Públicas, de conformidad con el artículo 2 del Decreto 255/2008, de 23 de octubre, y la Orden de la Consellería de Presidencia, Administraciones Públicas y Justicia de 7 de julio de 2009 </p> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.Autorizacion1.rbRadio.1" name="campos[&#09;/ProcedimientoXunta/BS607A/Autorizacion1/rbRadio&#09;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion1.rbRadio.1" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-11 col-sm-11"> 
+														<input id="BS607A.Autorizacion1.rbRadio.2" name="campos[&#09;/ProcedimientoXunta/BS607A/Autorizacion1/rbRadio&#09;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion1.rbRadio.2" class="labelRadio"> NO (en este caso se adjuntará la documentación correspondiente)</label> 
+													</div>
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: Autorizacion1 (UD) ******************** --> 
+	
+									<!-- ******************** BLOQUE: Autorizacion2 ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph"> Autorizo a la Consellería de Política Social a consultar los datos de residencia de la persona solicitante en el Sistema de verificación de datos de residencia del Ministerio de Hacienda y Administraciones Públicas, de conformidad con el artículo 3 del Decreto 255/2008, de 23 de octubre, y la Orden de la Consellería de Presidencia, Administraciones Públicas y Justicia de 7 de julio de 2009.  </p> 
+												</div>
+
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.Autorizacion2.rbRadio.1" name="campos[&#10;/ProcedimientoXunta/BS607A/Autorizacion2/rbRadio&#10;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion2.rbRadio.1" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-11 col-sm-11"> 
+														<input id="BS607A.Autorizacion2.rbRadio.2" name="campos[&#10;/ProcedimientoXunta/BS607A/Autorizacion2/rbRadio&#10;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion2.rbRadio.2" class="labelRadio"> NO (en este caso se adjuntará la documentación correspondiente)</label> 
+													</div>
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: Autorizacion2 (UD) ******************** --> 									
+
+									<!-- ******************** BLOQUE: Autorizacion3 ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph"> Autorizo a la Consellería de Política Social a consultar los datos de los ingresos económicos de la persona solicitante que obran en poder de la Agencia Estatal de Administración Tributaria, de conformidad con el artículo 6.2.b) de la Ley 11/2007, de 22 de junio, de acceso electrónico de los ciudadanos a los servicios públicos. </p> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.Autorizacion3.rbRadio.1" name="campos[&#11;/ProcedimientoXunta/BS607A/Autorizacion3/rbRadio&#11;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion3.rbRadio.1" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-11 col-sm-11"> 
+														<input id="BS607A.Autorizacion3.rbRadio.2" name="campos[&#11;/ProcedimientoXunta/BS607A/Autorizacion3/rbRadio&#11;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion3.rbRadio.2" class="labelRadio"> NO (en este caso se adjuntará la documentación correspondiente)</label> 
+													</div>
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: Autorizacion3 (UD) ******************** --> 									
+
+									<!-- ******************** BLOQUE: Autorizacion4 ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph"> Autorizo a la Consellería de Política Social a consultar los datos de las pensiones de la persona solicitante que obran en poder del Instituto Nacional de la Seguridad Social, de conformidad con el artículo 6.2.b) de la Ley 11/2007, de 22 de junio, de acceso electrónico de los ciudadanos a los servicios públicos. </p> 
+												</div>
+												<div class="form-group-sm col-md-12"> 
+													<div class="col-md-1 col-sm-1"> 
+														<input id="BS607A.Autorizacion4.rbRadio.1" name="campos[&#12;/ProcedimientoXunta/BS607A/Autorizacion4/rbRadio&#12;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion4.rbRadio.1" class="labelRadio"> SI </label> 
+													</div> 
+													<div class="col-md-11 col-sm-11"> 
+														<input id="BS607A.Autorizacion4.rbRadio.2" name="campos[&#12;/ProcedimientoXunta/BS607A/Autorizacion4/rbRadio&#12;]" " value="1" type="radio"> 
+														<label for="BS607A.Autorizacion4.rbRadio.2" class="labelRadio"> NO (en este caso se adjuntará la documentación correspondiente)</label> 
+													</div>
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: Autorizacion4 (UD) ******************** --> 
+
+									<!-- ******************** BLOQUE: LOPD ******************** --> 
+									<div class="col-md-12"> 
+										<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+											<fieldset> 
+												<div class="form-group-sm col-md-12"> 
+													<p class="simp-text-paragraph">  En cumplimiento de lo dispuesto en el artículo 5 de la Ley orgánica 15/1999, de 13 de diciembre, de protección de datos de carácter personal, se le informa de que los datos personales que facilite en este formulario quedarán registrados en un fichero de titularidad de la Xunta de Galicia al objeto de gestionar el presente procedimiento. La persona interesada podrá ejercer los derechos de acceso, rectificación, cancelación y oposición ante la Secretaría General Técnica de la Consellería de Política Social, como responsable del fichero, solicitándolo mediante el envío de un correo electrónico a sxt.politicasocial@xunta.es.  </p> 
+												</div>
+											</fieldset> 
+										</div> 
+									</div> 
+									<!-- ******************** FINBLOQUE: LOPD (UD) ******************** --> 
+
+
+										<!-- ******************** BLOQUE:Legislacion ******************** --> 
+										<div class="col-md-12"> 
+											<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+												<div class="panel-heading margin-bottom-xs"> 
+													<div class="row"> 
+														<div class="col-sm-12"> 
+															<p class="panel-title"> LEGISLACIÓN APLICABLE </p> 
+														</div> 
+													</div> 
+												</div> 
+												<fieldset> 
+													<ul class="legislacion"> 
+														<li> <p class="simp-text-paragraph"> Orden de 10 de febrero de 2016 por la que se ofertan plazas para estancias y tratamiento termal dentro del programa de Bienestar en balnearios 2016 y se procede a su convocatoria.</p> </li> 
+													</ul> 
+												</fieldset> 
+											</div> 
+										</div> 
+										<!-- ******************** FINBLOQUE:legislacion ******************** --> 
+										
+
+										<!-- ******************** BLOQUE:Delegacion ******************** 
+										<div class="col-md-12"> 
+											<div class="background-color-grey margin-top-xs margin-bottom-xs panel panel-default"> 
+												<fieldset> 
+													<div class="form-group-sm col-md-12"> 
+														<div class="col-md-12 col-sm-12"> 
+															<span id="ProcedimientoXunta.BS607A_2.Delegacion.rbRadio.error" class="errores" style="display: none"></span> 
+														</div> 
+														<div class="col-md-12 col-sm-12"> 
+															<input id="ProcedimientoXunta.BS607A_2.Delegacion.rbRadio.1" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/rbRadio&#39;]" " value="1" type="radio"> 
+															<label for="ProcedimientoXunta.BS607A_2.Delegacion.rbRadio.1" class="labelRadio"> Secretaría General de la Presidencia </label> 
+														</div> 
+														<div class="col-md-5 col-sm-5"> 
+															<input id="ProcedimientoXunta.BS607A_2.Delegacion.rbRadio.2" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/rbRadio&#39;]" " value="2" type="radio"> 
+															<label for="ProcedimientoXunta.BS607A_2.Delegacion.rbRadio.2" class="labelRadio"> Secretaría General Técnica de la Consellería de </label> 
+														</div> 
+														<select id="ProcedimientoXunta.BS607A_2.Delegacion.cmbUnidad" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/cmbUnidad&#39;]" class="form-control input-sm bloqueDelegacion" onchange="func1()" type="text"> <option selected="selected" value="">Seleccione</option> <option value="PR111000">Presidencia, Admóns. Publicas y Justicia</option> <option value="FA111000">Hacienda</option> <option value="IV111000">Infraestructuras y Vivienda</option> <option value="EI111000">Economía, Empleo e Industria</option> <option value="ED111000">Cultura, Educación y Ordenación Universitaria</option> <option value="SA111000">Sanidad</option> <option value="PS111000">Política Social</option> <option value="MR111000">Medio Rural</option> <option value="CM111000">Mar</option> </select> 
+														<span id="ProcedimientoXunta.BS607A_2.Delegacion.cmbUnidad.error" class="errores" style="display: none"></span> 
+														<input name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/cmbDelegacion&#39;]" value="0" type="hidden"> 
+														<input name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/txtVersion&#39;]" value="1.0" type="hidden"> 
+														<input name="campos[&#39;/ProcedimientoXunta/BS607A_2/Delegacion/txtIdioma&#39;]" id="idioma" value="es" type="hidden"> 
+													</div> 
+												</fieldset> 
+											</div> 
+										</div> 
+										<!-- ******************** FINBLOQUE:delegacion******************** -->  
+										<!-- ******************** BLOQUE:Destinatario ********************  
+										<div class="col-md-12"> 
+
+											<div class="col-md-8 col-sm-2"> 
+												<span id="BS607A.Destinatario.cmbConselleria.error" class="errores" style="display: none"></span> 
+												<input id="BS607A.Destinatario.cmbConselleria" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Destinatario/cmbConselleria&#39;]" class="form-control input-sm" type="hidden" value="" maxlength=""> 
+											</div> 
+											<div class="col-md-2 col-sm-2"> 
+												<span id="BS607A.Destinatario.txtUnidad.error" class="errores" style="display: none"></span> 
+												<input id="BS607A.Destinatario.txtUnidad" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Destinatario/txtUnidad&#39;]" class="form-control input-sm" type="hidden" value="" maxlength=""> 
+											</div> 
+											<div class="col-md-2 col-sm-2"> 
+												<span id="BS607A.Destinatario.cmbUnidad.error" class="errores" style="display: none"></span> 
+												<input id="BS607A.Destinatario.cmbUnidad" name="campos[&#39;/ProcedimientoXunta/BS607A_2/Destinatario/cmbUnidad&#39;]" class="form-control input-sm" type="hidden" value="" maxlength=""> 
+											</div> 
+										</div>
+										<!-- ******************** FINBLOQUE:Destinatario ******************** -->
+
+									</div>
+								</div>
+							</div>
+
+							
+						</form>						
+					</div>
+				</div>				
+			</div>
+		</div>
+
+		
+		
+	</div>
+</body></html>

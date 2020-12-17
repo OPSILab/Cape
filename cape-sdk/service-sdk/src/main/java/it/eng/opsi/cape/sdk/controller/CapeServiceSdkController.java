@@ -1,0 +1,971 @@
+/*******************************************************************************
+ * CaPe - a Consent Based Personal Data Suite
+ *  Copyright (C) 2020 Engineering Ingegneria Informatica S.p.A.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ ******************************************************************************/
+package it.eng.opsi.cape.sdk.controller;
+
+import java.net.URI;
+import java.text.ParseException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
+import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.RSAKey;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.info.Info;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+import it.eng.opsi.cape.exception.CapeSdkManagerException;
+import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
+import it.eng.opsi.cape.exception.ConsentRecordNotValid;
+import it.eng.opsi.cape.exception.ConsentStatusNotValidException;
+import it.eng.opsi.cape.exception.ConsentStatusRecordNotValid;
+import it.eng.opsi.cape.exception.DataRequestNotValid;
+import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
+import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
+import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
+import it.eng.opsi.cape.exception.ServiceLinkStatusRecordNotValid;
+import it.eng.opsi.cape.exception.ServiceManagerException;
+import it.eng.opsi.cape.exception.ServiceSignKeyNotFoundException;
+import it.eng.opsi.cape.exception.SessionNotFoundException;
+import it.eng.opsi.cape.exception.SessionStateNotAllowedException;
+import it.eng.opsi.cape.exception.UserSurrogateIdLinkNotFoundException;
+import it.eng.opsi.cape.sdk.ApplicationProperties;
+import it.eng.opsi.cape.sdk.model.ServicePopKey;
+import it.eng.opsi.cape.sdk.model.ServiceSignKey;
+import it.eng.opsi.cape.sdk.model.OperatorDescription;
+import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
+import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
+import it.eng.opsi.cape.sdk.model.consenting.CommonPart;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordPayload;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordPayload;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.Dataset;
+import it.eng.opsi.cape.sdk.model.consenting.RSDescription;
+import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenPayload;
+import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenResponse;
+import it.eng.opsi.cape.sdk.model.datatransfer.DataRequestAuthorizationPayload;
+import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferRequest;
+import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferResponse;
+import it.eng.opsi.cape.sdk.model.linking.FinalLinkingResponse;
+import it.eng.opsi.cape.sdk.model.linking.LinkingSession;
+import it.eng.opsi.cape.sdk.model.linking.LinkingSessionStateEnum;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordAccountSigned;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordDoubleSigned;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusEnum;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordPayload;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordSigned;
+import it.eng.opsi.cape.sdk.model.linking.ServiceSignSlrRequest;
+import it.eng.opsi.cape.sdk.model.linking.ServiceSignSlrResponse;
+import it.eng.opsi.cape.sdk.model.linking.StartLinkingRequest;
+import it.eng.opsi.cape.sdk.model.linking.UserSurrogateIdLink;
+import it.eng.opsi.cape.sdk.repository.AuthorisationTokenRepository;
+import it.eng.opsi.cape.sdk.repository.ConsentRecordRepository;
+import it.eng.opsi.cape.sdk.repository.ServiceLinkRecordDoubleSignedRepository;
+import it.eng.opsi.cape.sdk.repository.UserSurrogateIdLinkRepository;
+import it.eng.opsi.cape.sdk.service.CapeServiceSdkManager;
+import it.eng.opsi.cape.sdk.service.ClientService;
+import it.eng.opsi.cape.sdk.service.CryptoService;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+
+@OpenAPIDefinition(security = { @SecurityRequirement(name = "bearer-key") }, tags = {
+		@Tag(name = "Service Linking", description = "Cape SDK APIs to handle Service Linking internal operations."),
+		@Tag(name = "Service Management", description = "Cape SDK APIs to handle Services managed by this SDK"),
+		@Tag(name = "Service Link Record", description = "Cape SDK APIs to manage Service Link Records."),
+		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations.") }, info = @Info(title = "SDK Service API", description = "SDK Service API for integration with cape", version = "2.0"))
+@RestController
+@RequestMapping("/api/v2")
+@Slf4j
+public class CapeServiceSdkController implements ICapeServiceSdkController {
+
+	@Autowired
+	private CapeServiceSdkManager sdkManager;
+
+	@Autowired
+	private ServiceLinkRecordDoubleSignedRepository slrRepo;
+
+	@Autowired
+	private UserSurrogateIdLinkRepository userSurrogateIdRepo;
+
+	@Autowired
+	ConsentRecordRepository consentRecordRepo;
+
+	@Autowired
+	AuthorisationTokenRepository authTokenRepo;
+
+	@Autowired
+	ServiceLinkRecordDoubleSignedRepository serviceLinkRecordRepo;
+
+	@Autowired
+	private ClientService clientService;
+
+	private final ApplicationProperties appProperty;
+
+	private final String businessId;
+
+	@Autowired
+	public CapeServiceSdkController(ApplicationProperties appProperty) {
+		this.appProperty = appProperty;
+		this.businessId = this.appProperty.getCape().getServiceSdk().getBusinessId();
+	}
+
+	@Operation(summary = "Get Operator Description for CaPe by Operator Id", tags = {
+			"Operator Description" }, responses = {
+					@ApiResponse(description = "Returns the requested Operator Description.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OperatorDescription.class))) })
+	@Override
+	@GetMapping(value = "/operatorDescriptions/{operatorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OperatorDescription> getOperatorDescription(@PathVariable("operatorId") String operatorId)
+			throws OperatorDescriptionNotFoundException, ServiceManagerException {
+
+		/*
+		 * Check if operator exists TODO user its linkingRedirectUri to return new SLR
+		 * to the appopriate URL (asynch push service?)
+		 */
+
+		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
+
+		return ResponseEntity.ok().body(operatorDescription);
+	}
+	
+	
+	@Operation(summary = "Get Linking code from Service Manager for automatic linking starting", tags = {
+	"Service Linking" }, responses = {
+			@ApiResponse(description = "Returns the requested linking code.", responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@Override
+	@GetMapping(value = "/slr/linking/code", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getLinkSessionCode(@RequestParam("serviceId") String serviceId,@RequestParam("userId") String userId, @RequestParam("surrogateId") String surrogateId, @RequestParam("returnUrl") String returnUrl)
+		throws  ServiceManagerException, SessionNotFoundException {
+	
+	String code = clientService.callGetLinkingCode(serviceId, userId, surrogateId, returnUrl);
+	
+	return ResponseEntity.ok(code);
+	}
+	
+		
+
+	/**
+	 * 
+	 * Initiate Service Linking (Operator/Service -> ServiceSDK)
+	 * 
+	 * @throws ServiceDescriptionNotFoundException
+	 * @throws SessionNotFoundException
+	 */
+
+	@Operation(summary = "Link Service Account to CaPe Account", description = "Initiate linking process", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the created Service Link Record and Service Link Status Record", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = FinalLinkingResponse.class))) })
+	@Override
+	@PostMapping(value = "/slr/linking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FinalLinkingResponse> startServiceLinking(@RequestBody @Valid StartLinkingRequest request)
+			throws ServiceManagerException, OperatorDescriptionNotFoundException, JOSEException,
+			ServiceDescriptionNotFoundException, SessionNotFoundException {
+
+		ServicePopKey popKey = null;
+		String code = request.getCode();
+		String operatorId = request.getOperatorId();
+		String serviceId = request.getServiceId();
+		String surrogateId = request.getSurrogateId();
+
+		/*
+		 * Check if operator exists TODO user its linkingRedirectUri to return new SLR
+		 * to the appopriate URL (asynch push service?)
+		 */
+
+		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
+
+		/*
+		 * Get session by input code and check its serviceId matches the ones in input
+		 */
+		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+
+		if (!session.getServiceId().equals(serviceId))
+			throw new SessionNotFoundException("The Session serviceId does not match with the one in input");
+
+		FinalLinkingResponse operatorLinkingResponse;
+		ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId, true);
+
+		// If the Service type is SINK (taken from Service Description)
+		if (serviceDescription.getRole().equals(ServiceEntry.Role.SINK)) {
+			popKey = sdkManager.getPopKey(operatorId, serviceId, request.getSurrogateId());
+			operatorLinkingResponse = clientService.callLinkSinkService(code, serviceId, surrogateId, popKey);
+			// else if Source
+		} else {
+			operatorLinkingResponse = clientService.callLinkSourceService(code, serviceId, surrogateId);
+		}
+
+		ServiceLinkRecordDoubleSigned slr = operatorLinkingResponse.getData().getSlr();
+		slr.setServiceLinkStatuses(Arrays.asList(operatorLinkingResponse.getData().getSsr()));
+		slrRepo.insert(slr);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(operatorLinkingResponse);
+	}
+
+	@Operation(summary = "Generate surrogate_id for given CaPe Account and Service Account.", description = "Generate surrogate_id", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the created surrogate_id ", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SurrogateIdResponse.class))) })
+	@Override
+	@GetMapping(value = "/slr/surrogate_id")
+	public ResponseEntity<SurrogateIdResponse> generateSurrogateId(@RequestParam(required = true) String operatorId,
+			@RequestParam(required = true) String userId) {
+
+		String surrogateId = sdkManager.generateSurrogateId(operatorId, userId);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(new SurrogateIdResponse(surrogateId));
+
+	}
+
+	@Operation(summary = "Register a Service existing in the Service Registry as managed by CaPe.", description = "Register the Service as managed by this SDK and create Service key pair and x509 Certificate", tags = {
+			"Service Management" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the Service Description containing generated Public X509 Certificate.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Override
+	@PostMapping(value = "/services/{serviceId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ServiceEntry> registerServiceToCape(@PathVariable String serviceId) throws JOSEException,
+			ServiceManagerException, JsonProcessingException, ServiceDescriptionNotFoundException {
+
+		ServiceEntry certificateFilledAndSignedDescription = sdkManager.registerServiceToCape(serviceId);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(certificateFilledAndSignedDescription);
+	}
+
+	@Operation(summary = "Unregister a Service managed by CaPe. Optionally delete also Service Description from Service Registry", description = "Delete Service Sign key pair (and PoP key if Sink) and cert from Service Description at Registry", tags = {
+			"Service Management" }, responses = {
+					@ApiResponse(description = "Returns 204 No Content", responseCode = "204"),
+					@ApiResponse(description = "Returns 404, no Service or Sign Key was found", responseCode = "404") })
+	@Override
+	@DeleteMapping(value = "/services/{serviceId}")
+	public ResponseEntity<Object> unregisterService(@PathVariable String serviceId,
+			@RequestParam(defaultValue = "false") Boolean deleteServiceDescription)
+			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException {
+
+		sdkManager.unregisterService(serviceId, deleteServiceDescription);
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@Operation(summary = "Get sign keys of services registered to Cape by this SDK", description = "Get registered services sign keys managed by this SDK", tags = {
+			"Service Management" }, responses = {
+					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceSignKey.class))) })
+	@Override
+	@GetMapping(value = "/services/signKeys")
+	public ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys() {
+
+		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getRegisteredServicesKeys());
+
+	}
+
+	@Operation(summary = "Get services (optionally only the ones registered to CaPe) managed by this SDK", description = "Get services managed by this SDK", tags = {
+			"Service Management" }, responses = {
+					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Override
+	@GetMapping(value = "/services")
+	public ResponseEntity<List<ServiceEntry>> getServices(@RequestParam(defaultValue = "false") Boolean onlyRegistered)
+			throws ServiceManagerException {
+
+		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getServices(onlyRegistered, businessId));
+	}
+
+	@Operation(summary = "Get service by ServiceId (optionally only the ones registered to CaPe) managed by this SDK", description = "Get service managed by this SDK", tags = {
+			"Service Management" }, responses = {
+					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Override
+	@GetMapping(value = "/services/{serviceId}")
+	public ResponseEntity<ServiceEntry> getService(@PathVariable String serviceId,
+			@RequestParam(defaultValue = "false") Boolean onlyRegistered)
+			throws ServiceManagerException, ServiceDescriptionNotFoundException {
+
+		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getService(serviceId, onlyRegistered));
+	}
+
+	@Operation(summary = "Sign the Service Link Record payload with Service key.", description = "Sign the Service Link Record payload with Service key after verifying Account signature", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the created Service Description containing generated Public X509 Certificate.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Override
+	@PostMapping(value = "/slr/slr", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ServiceSignSlrResponse> signServiceLinkRecordPayload(
+			@RequestBody @Valid ServiceSignSlrRequest request)
+			throws JsonProcessingException, JOSEException, ParseException, ServiceSignKeyNotFoundException,
+			SessionNotFoundException, ServiceManagerException, SessionStateNotAllowedException {
+
+		/*
+		 * Get session by input code, check if is in an allowed State and if its
+		 * accountId matches the ones in input
+		 */
+		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+		if (!session.getState().equals(LinkingSessionStateEnum.ACCOUNT_SIGNED_SLR))
+			throw new SessionStateNotAllowedException("The Linking Session should be in ACCOUNT_SIGNED_SLR state, "
+					+ session.getState() + " found instead");
+
+		ServiceLinkRecordAccountSigned accountSignedSlr = request.getAccountSignedSlr();
+		String inputServiceId = accountSignedSlr.getPayload().getServiceId();
+
+		if (!session.getServiceId().equals(inputServiceId))
+			throw new SessionNotFoundException(
+					"The Session Service Id does not match with the one in the Service Link Record payload");
+
+		ServiceLinkRecordDoubleSigned doubleSignedSlr = sdkManager
+				.verifyAndSignServiceLinkRecordPayload(accountSignedSlr);
+
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new ServiceSignSlrResponse(request.getCode(), doubleSignedSlr));
+	}
+
+	@Operation(summary = "Return all the Service Link Records", tags = { "Service Link Record" }, responses = {
+			@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
+	@Override
+	@GetMapping(value = "/slr")
+	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getAllServiceLinkRecords() {
+
+		List<ServiceLinkRecordDoubleSigned> result = slrRepo.findAll();
+
+		return ResponseEntity.ok(result);
+
+	}
+
+	@Operation(summary = "Return Service Link Records by Service Id", tags = { "Service Link Record" }, responses = {
+			@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
+	@Override
+	@GetMapping(value = "/services/{serviceId}/slr")
+	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getServiceLinkRecordsByServiceId(
+			@PathVariable String serviceId) {
+
+		List<ServiceLinkRecordDoubleSigned> result = slrRepo.findByPayload_ServiceId(serviceId);
+
+		return ResponseEntity.ok(result);
+	}
+
+	@Operation(summary = "Return Service Link Records by Slr Id", tags = { "Service Link Record" }, responses = {
+			@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
+	@Override
+	@GetMapping(value = "/slr/{slrId}")
+	public ResponseEntity<ServiceLinkRecordDoubleSigned> getServiceLinkRecordBySlrId(@PathVariable String slrId)
+			throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkRecordDoubleSigned result = slrRepo.findByPayload_SlrId(slrId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with slrId: " + slrId + " was found"));
+
+		return ResponseEntity.ok(result);
+	}
+
+	@Operation(summary = "Return Service Link Records by Surrogate Id", tags = { "Service Link Record" }, responses = {
+			@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
+	@Override
+	@GetMapping(value = "/slr/surrogate/{surrogateId}")
+	public ResponseEntity<ServiceLinkRecordDoubleSigned> getServiceLinkRecordBySurrogateId(
+			@PathVariable String surrogateId) throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkRecordDoubleSigned result = slrRepo.findByPayload_SurrogateId(surrogateId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with surrogateId: " + surrogateId + " was found"));
+
+		return ResponseEntity.ok(result);
+	}
+
+	@Operation(summary = "Return Service Link Records by Surrogate Id and Service Id", tags = {
+			"Service Link Record" }, responses = {
+					@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
+	@Override
+	@GetMapping(value = "/slr/surrogate/{surrogateId}/services/{serviceId}")
+	public ResponseEntity<ServiceLinkRecordDoubleSigned> getServiceLinkRecordBySurrogateIdAndServiceId(
+			@PathVariable String surrogateId, @PathVariable String serviceId)
+			throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkRecordDoubleSigned result = slrRepo
+				.findByPayload_SurrogateIdAndPayload_ServiceId(surrogateId, serviceId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException("No Service Link Record with surrogateId: "
+						+ surrogateId + " and serviceId: " + serviceId + " was found"));
+
+		return ResponseEntity.ok(result);
+	}
+
+	@Operation(summary = "Return the Last Service Link Record Status by Slr Id.", tags = {
+			"Service Link Record" }, responses = {
+					@ApiResponse(description = "Returns the Last Service Link Record Status.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Override
+	@GetMapping(value = "/slr/{slrId}/statuses/last")
+	public ResponseEntity<ServiceLinkStatusRecordSigned> getLastServiceLinkStatusRecord(@PathVariable String slrId)
+			throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkStatusRecordSigned result = slrRepo.getLastServiceLinkStatusRecordBySlrId(slrId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with slrId: " + slrId + " was found"));
+
+		return ResponseEntity.ok(result);
+	}
+
+	@Operation(summary = "Insert a new link between userId, surrogateId, serviceId and operatorId.", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the created UserSurrogateIdLink.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserSurrogateIdLink.class))) })
+	@Override
+	@PostMapping(value = "/userSurrogateIdLink", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserSurrogateIdLink> linkUserToSurrogateId(@RequestBody @Valid UserSurrogateIdLink entity) {
+
+		entity.setCreated(ZonedDateTime.now(ZoneId.of("UTC")));
+		UserSurrogateIdLink result = userSurrogateIdRepo.insert(entity);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
+	}
+
+	@Operation(summary = "Return the Last Service Link Record Status by Slr Id.", tags = {
+			"Service Link Record" }, responses = {
+					@ApiResponse(description = "Returns the Last Service Link Record Status.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Override
+	@GetMapping(value = "/userSurrogateIdLink")
+	public ResponseEntity<UserSurrogateIdLink> getUserSurrogateLinkByUserIdAndServiceIdAndOperatorId(
+			@RequestParam String userId, @RequestParam String serviceId, @RequestParam String operatorId)
+			throws UserSurrogateIdLinkNotFoundException {
+
+		UserSurrogateIdLink result = userSurrogateIdRepo
+				.findTopByUserIdAndServiceIdAndOperatorIdOrderByCreatedDesc(userId, serviceId, operatorId).orElseThrow(
+						() -> new UserSurrogateIdLinkNotFoundException("No user - surrogate link found for userId: "
+								+ userId + " , serviceId: " + serviceId + " and operatorId: " + operatorId));
+
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * Return changed Service Link Status Record, due to a status change request
+	 * started from Operator
+	 * 
+	 * @throws ParseException
+	 * @throws JOSEException
+	 * @throws JsonProcessingException
+	 * @throws ServiceLinkStatusRecordNotValid
+	 **/
+	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Override
+	@PostMapping(value = "/slr/{slrId}/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> notifyServiceLinkStatusChanged(@PathVariable String slrId,
+			@RequestBody @Valid ServiceLinkStatusRecordSigned ssr) throws ServiceLinkRecordNotFoundException,
+			JsonProcessingException, JOSEException, ParseException, ServiceLinkStatusRecordNotValid {
+
+		/*
+		 * Verify ServiceLink Status Record signature with the Account public key
+		 */
+		if (!sdkManager.verifyServiceLinkStatusRecord(ssr))
+			throw new ServiceLinkStatusRecordNotValid("The input ServiceLink Status Record signature is not valid");
+
+		if (slrId.equals(ssr.getPayload().getServiceLinkRecordId())) {
+
+			/*
+			 * Get existing Service Link Record associated to the input Service Link Status
+			 * Record
+			 */
+			ServiceLinkRecordDoubleSigned existingSlr = slrRepo.findByPayload_SlrId(slrId).orElseThrow(
+					() -> new ServiceLinkRecordNotFoundException("No Service Link Record found with slrId: " + slrId));
+
+			slrRepo.addStatusToSlr(slrId, ssr);
+		} else
+			throw new ServiceLinkRecordNotFoundException(
+					"The slrId in input does not match with the one contained in the SSR");
+
+		return ResponseEntity.ok().body(null);
+	}
+
+	/**
+	 * Enable an existing disabled Service Link, due to a status change request
+	 * started from Service
+	 * 
+	 * @throws ServiceLinkRecordNotFoundException
+	 **/
+	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Override
+	@PutMapping(value = "/slr/{slrId}/surrogate/{surrogateId}/services/{serviceId}")
+	public ResponseEntity<ServiceLinkStatusRecordSigned> enableServiceLink(@PathVariable String slrId,
+			@PathVariable String surrogateId, @PathVariable String serviceId)
+			throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkStatusRecordSigned createdSsr = clientService.callEnableServiceLink(surrogateId, serviceId, slrId);
+
+		if (slrId.equals(createdSsr.getPayload().getServiceLinkRecordId()))
+			slrRepo.addStatusToSlr(slrId, createdSsr);
+		else
+			throw new ServiceLinkRecordNotFoundException(
+					"The slrId in input does not match with the one contained in the SSR");
+
+		return ResponseEntity.ok(createdSsr);
+	}
+
+	/**
+	 * Disable an existing disabled Service Link, due to a status change request
+	 * started from Service
+	 * 
+	 * @throws ServiceLinkRecordNotFoundException
+	 **/
+	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Override
+	@DeleteMapping(value = "/slr/{slrId}/surrogate/{surrogateId}/services/{serviceId}")
+
+	public ResponseEntity<ServiceLinkStatusRecordSigned> disableServiceLink(@PathVariable String slrId,
+			@PathVariable String surrogateId, @PathVariable String serviceId)
+			throws ServiceLinkRecordNotFoundException {
+
+		ServiceLinkStatusRecordSigned createdSsr = clientService.callDisableServiceLink(surrogateId, serviceId, slrId);
+
+		if (slrId.equals(createdSsr.getPayload().getServiceLinkRecordId()))
+			slrRepo.addStatusToSlr(slrId, createdSsr);
+		else
+			throw new ServiceLinkRecordNotFoundException(
+					"The slrId in input does not match with the one contained in the SSR");
+
+		return ResponseEntity.ok(createdSsr);
+	}
+
+	/**
+	 * Fetch Consent Form from Consent Manager
+	 */
+	@Operation(summary = "Call Consent Manager to generate Consent Form for surrogateId, sinkId and sourceId (if any) in input.", tags = {
+			"Consenting" }, responses = {
+					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' mappings (3-party reuse) or from the datasets of the service (Within Service)", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
+	@GetMapping(value = "/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentForm> fetchConsentForm(@PathVariable String surrogateId,
+			@PathVariable String serviceId, @PathVariable String purposeId, @RequestParam String sourceDatasetId,
+			@RequestParam String sourceServiceId) throws ServiceManagerException, CapeSdkManagerException {
+
+		return clientService.callFetchConsentForm(surrogateId, serviceId, purposeId, sourceDatasetId, sourceServiceId);
+
+	}
+
+	/**
+	 * Verify and store a new Consent Record issued by the Consent Manager
+	 * 
+	 * @throws ServiceLinkRecordNotFoundException
+	 * @throws JOSEException
+	 * @throws ParseException
+	 * @throws JsonProcessingException
+	 * @throws ConsentRecordNotValid
+	 * @throws ConsentStatusRecordNotValid
+	 **/
+	@Operation(summary = "Verify and store a new Consent Record issued by the Operator.", tags = {
+			"Consenting" }, responses = {
+					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "text/plain")) })
+	@Override
+	@PostMapping(value = "/cr/cr_management", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> storeNewConsentRecord(@RequestBody @Valid ConsentRecordSigned consentRecord)
+			throws ServiceLinkRecordNotFoundException, JsonProcessingException, ParseException, JOSEException,
+			ConsentRecordNotValid, ConsentStatusRecordNotValid {
+
+		/*
+		 * Get Service Link Record associated to the input Consent Record
+		 */
+		String slrId = consentRecord.getPayload().getCommonPart().getSlrId();
+		ServiceLinkRecordDoubleSigned associatedSlr = serviceLinkRecordRepo.findByPayload_SlrId(slrId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with slrId: " + slrId + " was found"));
+
+		/*
+		 * Check if associated SLR is Active
+		 */
+		ServiceLinkStatusRecordPayload associatedSlrStatus = associatedSlr.getServiceLinkStatuses()
+				.get(associatedSlr.getServiceLinkStatuses().size() - 1).getPayload();
+
+		if (!associatedSlrStatus.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
+			throw new ServiceLinkRecordNotFoundException("No active Service Link Record found for SlrId: " + slrId);
+
+		/*
+		 * Verify input Consent Record and Consent Status Record signatures with Account
+		 * public key contained in the associated SLR
+		 */
+		RSAKey accountPublicKey = associatedSlr.getPayload().getCrKeys().get(0);
+		if (!sdkManager.verifyConsentRecordSigned(consentRecord, accountPublicKey))
+			throw new ConsentRecordNotValid("The signature of the input Consent Record is not valid");
+
+		ConsentStatusRecordSigned consentStatusRecord = consentRecord.getConsentStatusList()
+				.get(consentRecord.getConsentStatusList().size() - 1);
+		if (!sdkManager.verifyConsentStatusRecordSigned(consentStatusRecord, accountPublicKey))
+			throw new ConsentStatusRecordNotValid("The signature of the input Consent Status Record is not valid");
+
+		/*
+		 * Verify CSR chain is intact
+		 */
+		if (!sdkManager.verifyConsentStatusChain(consentRecord.getConsentStatusList().stream()
+				.map(ConsentStatusRecordSigned::getPayload).toArray(ConsentStatusRecordPayload[]::new)))
+			throw new ConsentStatusRecordNotValid(
+					"The input Consent Record does not have a valid Consent Statuses chain");
+
+		/*
+		 * Store Signed CR and CSR
+		 */
+		consentRecord.set_id(new ObjectId(consentRecord.getPayload().getCommonPart().getCrId()));
+		consentRecordRepo.insert(consentRecord);
+
+		CommonPart crCommonPart = consentRecord.getPayload().getCommonPart();
+		return ResponseEntity.created(UriComponentsBuilder
+				.fromHttpUrl(
+						appProperty.getCape().getServiceSdk().getHost() + "/api/v2/users/{surrogateId}/consents/{crId}")
+				.build(crCommonPart.getSurrogateId(), crCommonPart.getCrId())).body(crCommonPart.getCrId());
+	}
+
+	/**
+	 * Verify and store a new Consent Status Record issued by the Consent Manager
+	 * 
+	 * @throws ConsentStatusRecordNotValid
+	 * @throws ConsentRecordNotFoundException
+	 * @throws ServiceLinkRecordNotFoundException
+	 * @throws JOSEException
+	 * @throws ParseException
+	 * @throws JsonProcessingException
+	 * @throws ConsentRecordNotValid 
+	 **/
+	@Operation(summary = "Verify and update the Consent Record (along with new Csr as last one in the csr list) issued by the Consent Manager.", tags = {
+			"Consenting" }, responses = {
+					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "text/plain")) })
+	@Override
+	@PatchMapping(value = "/cr/cr_management", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> updateConsentRecordWithNewStatus(@RequestBody @Valid ConsentRecordSigned updatedCr)
+			throws ConsentStatusRecordNotValid, ConsentRecordNotFoundException, ServiceLinkRecordNotFoundException,
+			JsonProcessingException, ParseException, JOSEException, ConsentRecordNotValid {
+
+		String inputCrId = updatedCr.getPayload().getCommonPart().getCrId();
+		ConsentStatusRecordSigned updatedCsr = updatedCr.getConsentStatusList()
+				.get(updatedCr.getConsentStatusList().size() - 1);
+		/*
+		 * Get existing Consent Record matching to the input Consent Record id
+		 */
+		ConsentRecordSigned existingCr = consentRecordRepo.findByPayload_commonPart_crId(inputCrId).orElseThrow(
+				() -> new ConsentRecordNotFoundException("The Consent Record with id: " + inputCrId + "was not found"));
+		List<ConsentStatusRecordSigned> existingCsrList = existingCr.getConsentStatusList();
+
+		/*
+		 * Get Service Link Record associated to the input Consent Record
+		 */
+		String slrId = existingCr.getPayload().getCommonPart().getSlrId();
+		ServiceLinkRecordDoubleSigned associatedSlr = serviceLinkRecordRepo.findByPayload_SlrId(slrId)
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with slrId: " + slrId + " was found"));
+
+		/*
+		 * Verify input Consent Record signatures (Cr, Csr list and last Csr) with
+		 * Account public key contained in the associated SLR
+		 */
+		RSAKey accountPublicKey = associatedSlr.getPayload().getCrKeys().get(0);
+		if (!sdkManager.verifyConsentStatusRecordSigned(updatedCsr, accountPublicKey))
+			throw new ConsentStatusRecordNotValid("The signature of the input Consent Status Record is not valid");
+
+		if (!sdkManager.verifyConsentRecordSigned(updatedCr, accountPublicKey))
+			throw new ConsentRecordNotValid("The signature of the input Consent Record is not valid");
+
+		/*
+		 * Add input CSR to the existing CSR list and Verify CSR chain is intact
+		 */
+		existingCsrList.add(updatedCsr);
+
+		if (!sdkManager.verifyConsentStatusChain(existingCsrList.stream().map(ConsentStatusRecordSigned::getPayload)
+				.toArray(ConsentStatusRecordPayload[]::new)))
+			throw new ConsentStatusRecordNotValid(
+					"The input Consent Record does not have a valid Consent Statuses chain");
+
+		// Store the Cr updated with the new Csr
+		updatedCr.set_id(new ObjectId(updatedCr.getPayload().getCommonPart().getCrId()));
+		consentRecordRepo.save(updatedCr);
+
+		return ResponseEntity.ok().body(null);
+	}
+
+
+	/**
+	 * Give Consent from Consent Manager
+	 */
+	@Operation(summary = "Give the Consent for the input ConsentForm. Return Consent Record signed with the Acccount private key.", tags = {
+			"Consenting" }, responses = {
+					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
+	@PostMapping(value = "/users/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
+			@RequestBody @Valid ConsentForm consentForm) {
+		
+		ConsentRecordSigned createdCr = clientService.callGiveConsent(surrogateId, consentForm);
+		String crId = createdCr.getPayload().getCommonPart().getCrId();
+		
+		/*
+		 * Store Signed CR and CSR
+		 */
+		createdCr.set_id(new ObjectId(createdCr.getPayload().getCommonPart().getCrId()));
+		consentRecordRepo.insert(createdCr);
+
+		/*
+		 * Get and save the (serialized) authorisation Token from Consent Manager
+		 */
+		AuthorisationTokenResponse tokenResponse = clientService.callGetAuthorisationToken(crId);
+		authTokenRepo.save(tokenResponse);
+
+		CommonPart crCommonPart = createdCr.getPayload().getCommonPart();
+		return ResponseEntity.created(UriComponentsBuilder
+				.fromHttpUrl(
+						appProperty.getCape().getServiceSdk().getHost() + "/api/v2/users/{surrogateId}/consents/{crId}")
+				.build(crCommonPart.getSurrogateId(), crCommonPart.getCrId())).body(createdCr);
+
+	}
+
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateId(@PathVariable String surrogateId,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+
+		if (checkConsentAtOperator)
+			return clientService.callGetConsentRecordsBySurrogateId(surrogateId);
+		else
+			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId));
+	}
+
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id and Purpose Id", responseCode = "200") })
+	@GetMapping(value = "/users/{surrogateId}/purpose/{purposeId}/consent", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateIdAndPurposeId(
+			@PathVariable String surrogateId, @PathVariable String purposeId,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+
+		if (checkConsentAtOperator)
+			return clientService.callGetConsentRecordsBySurrogateIdAndPurposeId(surrogateId, purposeId);
+		else
+			return ResponseEntity.ok(consentRecordRepo
+					.findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
+							surrogateId, purposeId));
+	}
+
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users linked with the input ServiceId", responseCode = "200") })
+	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceId(@PathVariable String serviceId,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+
+		if (checkConsentAtOperator)
+			return clientService.callGetConsentRecordsByServiceId(serviceId);
+		else
+			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_subjectId(serviceId));
+	}
+
+	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
+	@GetMapping(value = "/services/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned[]> getConsentRecords(
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+
+		if (checkConsentAtOperator)
+			return clientService.callGetConsentRecordsByBusinessId(businessId);
+		else
+			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId));
+	}
+
+	@Operation(summary = "Call the Consent Manager to change status (from Service) of a Consent for the input SurrogateId, Slr Id and Cr Id.", tags = {
+			"Consenting" }, responses = {
+					@ApiResponse(description = "Returns 201 Created with the new Consent Status Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
+	@PostMapping(value = "/users/{surrogateId}/servicelinks/{slrId}/consents/{crId}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentStatusRecordSigned> changeConsentStatusFromService(@PathVariable String surrogateId,
+			@PathVariable String slrId, @PathVariable String crId, @RequestBody ChangeConsentStatusRequest request)
+			throws ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkRecordNotFoundException,
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException {
+
+		return clientService.callChangeConsentStatus(surrogateId, slrId, crId, request);
+	}
+
+	@Operation(summary = "End point that initialises Data Transfer flow.", tags = { "Data Request" }, responses = {
+			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
+	@PostMapping(value = "/dc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<DataTransferResponse> startDataTransfer(@RequestBody @Valid DataTransferRequest body,
+			@RequestParam Boolean checkConsentAtOperator, @RequestParam(value = "dataset_id") String datasetId)
+			throws ConsentRecordNotFoundException, JsonMappingException, JsonProcessingException, ParseException,
+			ConsentStatusNotValidException, CapeSdkManagerException, JOSEException, ServiceManagerException,
+			ServiceDescriptionNotFoundException {
+
+		/*
+		 * Consent Record introspection (sink)
+		 */
+		ConsentRecordSigned consentRecord;
+		consentRecord = checkConsentAtOperator
+				? clientService.callGetConsentRecordBySurrogateIdAndCrId(body.getSurrogateId(), body.getCrId())
+						.getBody()
+				: consentRecordRepo
+						.findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(body.getSurrogateId(),
+								body.getCrId())
+						.orElseThrow(() -> new ConsentRecordNotFoundException(
+								"The Consent Record with Cr Id: " + body.getCrId() + " was not found"));
+
+		/*
+		 * Check Consent Status (if Active)
+		 */
+		if (!consentRecord.getConsentStatusList().get(consentRecord.getConsentStatusList().size() - 1).getPayload()
+				.getConsentStatus().equals(ConsentRecordStatusEnum.Active))
+			throw new ConsentStatusNotValidException(
+					"The Consent Record with Cr Id:" + body.getCrId() + "is not Active");
+
+		/*
+		 * Get the Authorisation Token locally, if any and it is not expired, otherwise
+		 * call the Consent Manager to get a new one
+		 */
+
+		Optional<AuthorisationTokenResponse> optionalLocalToken = authTokenRepo.findById(body.getCrId());
+		AuthorisationTokenResponse tokenResponse = null;
+		AuthorisationTokenPayload authToken = null;
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+
+		if (optionalLocalToken.isPresent()) {
+			authToken = sdkManager.extractTokenPayloadFromSerializedToken(optionalLocalToken.get().getAuthToken());
+			if (now.isAfter(authToken.getExp())) {
+				tokenResponse = clientService.callGetAuthorisationToken(body.getCrId());
+				authTokenRepo.delete(optionalLocalToken.get());
+				authTokenRepo.save(tokenResponse);
+			} else {
+				tokenResponse = optionalLocalToken.get();
+			}
+		} else {
+			tokenResponse = clientService.callGetAuthorisationToken(body.getCrId());
+			authTokenRepo.save(tokenResponse);
+		}
+
+		/*
+		 * Construct the Data Request
+		 */
+		DataRequestAuthorizationPayload authPayload = new DataRequestAuthorizationPayload(tokenResponse.getAuthToken(),
+				now.toInstant().toEpochMilli());
+		body.setDatasetId(datasetId);
+
+		DataTransferResponse dataTransferResponse = clientService
+				.sendDataRequest(sdkManager.prepareDataRequest(authPayload, body));
+
+		return ResponseEntity.ok(dataTransferResponse);
+	}
+
+	@Operation(summary = "Final End point to get Data Transfer at the Source.", tags = { "Data Request" }, responses = {
+			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
+	@PostMapping(value = "/dc/send", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<DataTransferResponse> postDataTransfer(@RequestBody @Valid DataTransferRequest body,
+			@RequestParam(value = "dataset_id") String datasetId,
+			@RequestHeader("Authorization") String[] authorizationHeader)
+			throws ConsentRecordNotFoundException, JsonMappingException, JsonProcessingException, ParseException,
+			ServiceLinkRecordNotFoundException, ConsentStatusRecordNotValid, DatasetIdNotFoundException, JOSEException,
+			DataRequestNotValid, CapeSdkManagerException {
+
+		/*
+		 * Check if exists active paired Consent Record for input Cr Id
+		 */
+		ConsentRecordSignedPair consentPair = clientService
+				.callGetConsentRecordPairBySurrogateIdAndCrId(body.getSurrogateId(), body.getCrId()).getBody();
+		@NonNull
+		List<ConsentStatusRecordSigned> consentRecordStatusList = consentPair.getSource().getConsentStatusList();
+		if (!consentRecordStatusList.get(consentRecordStatusList.size() - 1).getPayload().getConsentStatus()
+				.equals(ConsentRecordStatusEnum.Active))
+			throw new ConsentStatusRecordNotValid(
+					"The paired Source Consent Status Record for Cr Id: " + body.getCrId() + " is not active");
+
+		// Get Service Link by input Surrogate Id, to get the ServiceId
+		ServiceLinkRecordDoubleSigned serviceLink = slrRepo.findByPayload_SurrogateId(body.getSurrogateId())
+				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
+						"No Service Link Record with surrogateId: " + body.getSurrogateId() + " was found"));
+
+		// Check if consent dataset matches with the Dataset id in input
+		List<Dataset> consentDatasets = consentRecordStatusList.size() > 1
+				? consentRecordStatusList.get(consentRecordStatusList.size() - 1).getPayload().getConsentResourceSet()
+						.getDatasets()
+				: consentPair.getSource().getPayload().getCommonPart().getRsDescription().getResourceSet()
+						.getDatasets();
+		if (!consentDatasets.get(consentDatasets.size() - 1).getId().equals(datasetId))
+			throw new DatasetIdNotFoundException(
+					"The dataset with id in input: " + datasetId + "was not found in the existing Consent Record");
+
+		/*
+		 * Check AuthorisationToken and Data Request signature
+		 */
+		String popHeader = null;
+		for (String header : authorizationHeader) {
+			if (header.startsWith("PoP "))
+				popHeader = header.split("PoP ")[1];
+		}
+		if (StringUtils.isBlank(popHeader))
+			throw new CapeSdkManagerException("The PoP Authorization of Data request is not present");
+
+		if (!sdkManager.verifyTokenAndDataRequest(popHeader, consentPair, body))
+			throw new DataRequestNotValid("The Data request signature is not valid");
+
+		// Depending on serviceId, call the relative API to get the data matching with
+		// dataset
+		String serviceId = serviceLink.getPayload().getServiceId();
+
+		// Mapping concepts with data????
+
+		// TODO Get Data depending on Specific Service implementation (use aud from
+		// token?)
+		return null;
+	}
+
+}

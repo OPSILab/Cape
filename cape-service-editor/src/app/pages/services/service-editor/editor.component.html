@@ -1,0 +1,41 @@
+
+
+  <nb-card>
+    <nb-card-header class="h3">
+      {{'general.menu.editorpage_title'|translate}}
+    </nb-card-header>
+    
+    <nb-card-body>
+
+
+    <ng-container
+      *ngIf="onEdit; then editButton; else createButton">
+    </ng-container>
+    
+    <ng-template #createButton>
+      <button  nbButton shape="rectangle" size="medium" status="primary" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="save()">Save</button>
+    </ng-template>
+    <ng-template #editButton>
+      <button nbButton shape="rectangle" size="medium" status="primary" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="update()">Update</button>
+    </ng-template> 
+       
+       
+        
+        <button nbButton shape="rectangle" size="medium" status="warning" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="saveAsFile()">Export</button>
+        <button nbButton shape="rectangle" size="medium" status="danger" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="importAsFile()">Import</button>
+        
+    </nb-card-body>
+    
+  </nb-card>
+  <nb-card>
+      <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success">
+          
+
+          <div class="form-group"> 
+            
+              
+              <div id="editor" ></div> 
+        </div>  
+     
+      </nb-card-body>
+    </nb-card>     

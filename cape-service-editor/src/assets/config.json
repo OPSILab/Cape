@@ -1,0 +1,26 @@
+{
+  "serviceRegistry": {
+    "host": "http://localhost:8088",
+    "servicesApiPath": "/service-registry/api/v2/services/"
+  },
+
+  "editorSchemaPath": "/assets/data/service-schema/service-entry2.json",
+  "assets_data": "/assets/data/",
+
+  "system": {
+    "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
+    "bypass_sdk":"true",
+    "dashHost": "http://localhost:4300",
+    "dashPath": "",
+    "serviceUrl": "http://localhost:4300",
+    "idmHost": "https://www.cape-suite.eu:8002",
+    "clientId": "391521d9-bc69-4fd4-adf7-10769fa6ddc4",
+    "loginPopupUrl": "/loginPopup",
+    "disable_auth": "false",
+    "logo_text": "CaPe",
+    "assetsDataDir": "/assets/data/"
+  },
+  "i18n": {
+    "locale": "it" 
+  }
+}

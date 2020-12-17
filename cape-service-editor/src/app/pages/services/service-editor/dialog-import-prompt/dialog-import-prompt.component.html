@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header>Enter file name</nb-card-header>
+  <nb-card-body>
+    <input
+    style="display: none"
+    type="file" (change)="onFileChanged($event)"
+    #fileInput>
+  <button nbButton status="danger" (click)="fileInput.click()">Select File</button>
+  <button nbButton status="success" (click)="onUpload()">Upload!</button>
+  
+  </nb-card-body>
+  <nb-card-footer>
+    <p *ngIf=	'selectedFile'><b>selected:</b> <i> {{selectedFile.name}}</i></p>
+  </nb-card-footer>
+</nb-card>

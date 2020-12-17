@@ -1,0 +1,1807 @@
+openapi: 3.0.1
+info:
+  title: Account Manager APIs
+  description: Technical specification of Account Manager APIs. This APis provide
+    functionalities for managing the Account Owner's account. In addition, they provide
+    functionalities for performing the linking process between a Service and the Account
+    Owner's account.
+  version: 0.0.1
+servers:
+- url: /CaPe/account-manager/api/v1
+security:
+- Oauth:
+  - write
+  - read
+tags:
+- name: Internal
+  description: 'The APIs for communications between CaPe internal components and its
+    frontend '
+- name: External
+  description: The APIs for CaPe interaction with external entities
+- name: Account Owner
+  description: APIs used by the CaPe Account Owner, enabling it to perform management
+    operations on its own Account and related Service Links
+- name: Service
+  description: APIs used by the Service or Service Provider, in order to manage and
+    retrieve information about the Service Links and Accounts in which its users are
+    involved
+paths:
+  /accounts:
+    post:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      - Service
+      summary: Create a new Account
+      description: Creates a new Account
+      operationId: createAccount
+      requestBody:
+        description: Object representing the Account to be created
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        409:
+          description: Conflict - Account already present with the same username
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+  /accounts/{accountId}:
+    get:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      - Service
+      summary: Get an existing Account
+      description: Gets an existing Account, with optionally all the related Personal
+        Data
+      operationId: getAccount
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account to be retrieved
+        required: true
+        schema:
+          type: string
+      - name: withPData
+        in: query
+        description: The flag (True/False) to retrieve the Personal Data related to
+          the requested account
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: Successful Response. Required Account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Internal
+      - Account Owner
+      - External
+      summary: Update an existing Account
+      description: Updates an existing Account
+      operationId: updateAccount
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Account was updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      - External
+      summary: Deletes an existing Account and all related Personal Data
+      description: Deletes an existing Account and all related Personal Data
+      operationId: deleteAccount
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Account was deleted successfully
+          content: {}
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/download:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      - External
+      summary: Download the dump file of an existing Account
+      description: Download the dump file of an existing Account with all the related
+        Personal Data, in JSON format
+      operationId: downloadAccountAndPData
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account to be retrieved
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response. Required Account dump file in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/telephones:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get all Telephones of an existing Account
+      description: Gets all the Telephones of an existing Account
+      operationId: getTelephones
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; Required Telephones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Telephone'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Telephones for the provided Account were not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Create a new Telephone for an existing Account
+      description: Creates a new Telephone for an existing Account
+      operationId: addTelephone
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Object representing the Telephone to be created
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Telephone'
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Telephone was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Telephone'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+  /accounts/{accountId}/telephones/{telephoneId}:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get a specific Telephone of an existing Account
+      description: Gets a specific Telephone of an existing Account
+      operationId: getTelephone
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: telephoneId
+        in: path
+        description: The unique identifier of the Telephone to be retrieved
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Telephone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Telephone'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Telephone for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Update an existing Telephone of an Account
+      description: Updates an existing Telephone of an existing Account
+      operationId: updateTelephone
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: telephoneId
+        in: path
+        description: The unique identifier of the Telephone to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Telephone was updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Telephone'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Telephone for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Delete an existing Telephone of an Account
+      description: Deletes an existing Telephone of an existing Account
+      operationId: deleteTelephone
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: telephoneId
+        in: path
+        description: The unique identifier of the Telephone to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Telephone was deleted successfully
+          content: {}
+        404:
+          description: Not Found - Telephone for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/contacts:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get all Contacts of an existing Account
+      description: Gets all the Contacts of an existing Account
+      operationId: getContacts
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; Required Contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Contacts for the provided Account were not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Create a new Contact for an existing Account
+      description: Creates a new Contact for an existing Account
+      operationId: addContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Object representing the Contact to be created
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Contact was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+  /accounts/{accountId}/contacts/{contactId}:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get a specific Contact of an existing Account
+      description: Gets a specific Contact of an existing Account
+      operationId: getContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: The unique identifier of the Contact to be retrieved
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Contact
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Contact for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Update an existing Contact of an existing Account
+      description: Updates an existing Contact of an existing Account
+      operationId: updateContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: The unique identifier of the Contact to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Contact was updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Contact for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Delete an existing Contact of an existing Account
+      description: Deletes an existing Contact of an existing Account
+      operationId: deleteContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: The unique identifier of the Contact to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Contact was deleted successfully
+          content: {}
+        404:
+          description: Not Found - Contact for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/emails:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get all Emails of an existing Account
+      description: Gets all the Emails of an existing Account
+      operationId: getEmails
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; Required Emails
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Email'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Contacts for the provided Account were not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Create a new Email for an existing Account
+      description: Creates a new Email for an existing Account
+      operationId: addEmail
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Object representing the Email to be created
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Email'
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Email was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+  /accounts/{accountId}/emails/{emailId}:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get a specific Email of an existing Account
+      description: Gets a specific Email of an existing Account
+      operationId: getEmail
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: emailId
+        in: path
+        description: The unique identifier of the Email to be retrieved
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Email for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Update an existing Email of an existing Account
+      description: Updates an existing Email of an existing Account
+      operationId: updateEmail
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: emailId
+        in: path
+        description: The unique identifier of the Email to be updated
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Email was updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Email'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Email for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Delete an existing Email of an existing Account
+      description: Deletes an existing Email of an existing Account
+      operationId: deleteEmail
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: emailId
+        in: path
+        description: The unique identifier of the Email to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Email was deleted successfully
+          content: {}
+        404:
+          description: Not Found - Email for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/particular:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Get the Particular of an existing Account
+      description: Gets the Particular of an existing Account
+      operationId: getParticular
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Particular
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Particular'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Particular for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Create a new Particular for an existing Account
+      description: Creates a new Particular for an existing Account, overwriting,
+        if any, the existing one.
+      operationId: addParticular
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Object representing the Particular to be created
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Particular'
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Particular was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Particular'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Deletes the Particular of an existing Account
+      description: Deletes the Particular of an existing Account
+      operationId: deleteParticular
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the Particular was deleted successfully
+          content: {}
+        404:
+          description: Not Found - Particular for the provided Account was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/serviceLinks:
+    get:
+      tags:
+      - External
+      - Internal
+      - Account Owner
+      summary: Gets the Service Link Records of an existing Account
+      description: Gets all the Service Link Records of an existing Account
+      operationId: getServiceLinkRecords
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; Required Service Link Record
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Service Link Records for the provided Account were
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Creates a new Service Link Record for an existing Account
+      description: Creates a new Service Link Record for an existing Account. It represents
+        the link between a Service and the Account Owner's account. It is the result
+        of the linkage process provided by CaPe (Account Manager itself). The goal
+        is to store and retrieve Account Owner's personal data through the properties
+        names required by the service.
+      operationId: createServiceLinkRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Object representing the Service Link Record to be created
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                serviceId:
+                  type: string
+                  description: Unique identifier of the service to be linked, it must
+                    be already registered in the CaPe (Service Manager) and must match
+                    with the one returned in the registration phase.
+                serviceURI:
+                  type: string
+                  description: The location at which the service is available
+                userId:
+                  type: string
+                  description: The user identifier registered in the service (surrogate
+                    Id)
+        required: true
+      responses:
+        201:
+          description: Successful Response; the Service Link Record was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Account with provided username was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: request
+  /accounts/{accountId}/services/{serviceId}/serviceLinks:
+    get:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Gets a specific Service Link Record of an existing Account and specific
+        Service
+      description: Gets a specific Service Link Record of an existing Account and
+        specific Service
+      operationId: getServiceLinkRecordByServiceId
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: serviceId
+        in: path
+        description: The unique identifier of the specific Service linked with the
+          Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Service Link Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/{surrogateId}/services/{serviceId}/serviceLink:
+    get:
+      tags:
+      - External
+      - Service
+      summary: Gets a specific Service Link Record of an existing Account and specific
+        Service
+      description: Gets a specific Service Link Record of an existing Account and
+        specific Service, starting from the existing user Id (surrogateId) in the
+        service.
+      operationId: getServiceLinkRecordBySurrogateIdAndServiceId
+      parameters:
+      - name: surrogateId
+        in: path
+        description: The unique identifier of the User at the Service
+        required: true
+        schema:
+          type: string
+      - name: serviceId
+        in: path
+        description: The unique identifier of the specific Service linked with the
+          Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Service Link Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - External
+      - Service
+      summary: Deletes a specific Service Link Record of an existing Account and specific
+        Service
+      description: Deletes a specific Service Link Record of an existing Account and
+        specific Service, starting from the existing user Id (surrogateId) in the
+        service.
+      operationId: deleteServiceLinkRecordBySurrogateIdAndServiceId
+      parameters:
+      - name: surrogateId
+        in: path
+        description: The unique identifier of the User at the Service
+        required: true
+        schema:
+          type: string
+      - name: serviceId
+        in: path
+        description: The unique identifier of the specific Service linked with the
+          Account
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; The Service Link Record was successfully
+            deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/{surrogateId}/serviceLink:
+    get:
+      tags:
+      - External
+      - Service
+      summary: Gets a specific Service Link Record of an existing Account and specific
+        Surrogate Id
+      description: Gets a Service Link Record of an existing Account, starting from
+        the existing user Id (surrogateId) in the service.
+      operationId: getServiceLinkRecordBySurrogateId
+      parameters:
+      - name: surrogateId
+        in: path
+        description: The unique identifier of the User at the Service
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Service Link Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Service Link Record for the provided Account and
+            surrogate Id was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accounts/{accountId}/serviceLinks/{slrId}:
+    get:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      summary: Get a specific Service Link Record of an existing Account
+      description: Gets a specific Service Link Record of an existing Account
+      operationId: getServiceLinkRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record to be retrieved
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; The Service Link Record was successfully
+            deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Disables a specific Service Link Record of an existing Account
+      description: Disables a specific Service Link Record of an existing Account.
+        This operation is different from deletion, because the Service Link is kept
+        and can be reactivated in a second moment, by using the createServiceLink
+        operation.
+      operationId: disableServiceLinkRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record to be disabled
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; The Service Link Record was successfully
+            disabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - Internal
+      - Account Owner
+      summary: Deletes a specific Service Link Record of an existing Account
+      description: Deletes a specific Service Link Record of an existing Account
+      operationId: deleteServiceLinkRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; the required Service Link Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkRecord'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /accounts/{accountId}/serviceLinks/{slrId}/statuses:
+    get:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      summary: Get the list of Service Link Status Records for a specific Service Link Record of an existing Account
+      description: Gets Service Link Status Records by SLR id and Account id
+      operationId: getServiceLinkStatusRecords
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; The list of Service Link Status Records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceLinkStatusRecord'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'        
+  /accounts/{accountId}/serviceLinks/{slrId}/statuses/last:
+    get:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      summary: Get the last Service Link Status Record for a specific Service Link Record of an existing Account
+      description: Get last Service Link Status Record by SLR id and Account id
+      operationId: getLastServiceLinkStatusRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful Response; The last Service Link Status Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkStatusRecord'
+        404:
+          description: Not Found - Service Link Record for the provided Account was
+            not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'      
+  /accounts/{accountId}/serviceLinks/{slrId}/statuses/{ssrId}}:
+    get:
+      tags:
+      - Internal
+      - External
+      - Account Owner
+      summary: Get a specific Service Link Status Record for a specific Service Link Record of an existing Account
+      description: Get Service Link Status Record by SSr id, SLR id and Account id
+      operationId: getServiceLinkStatusRecord
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique identifier of the Account
+        required: true
+        schema:
+          type: string
+      - name: slrId
+        in: path
+        description: The unique identifier of the Service Link Record
+        required: true
+        schema:
+          type: string
+      - name: ssrId
+        in: path
+        description: The unique identifier of the Service Link Status Record
+        required: true
+        schema:
+          type: string    
+      responses:
+        200:
+          description: Successful Response; The specific Service Link Status Record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLinkStatusRecord'
+        404:
+          description: Not Found - Service Link Status Record for the provided Account and Service Link Recors was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'                            
+                
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        username:
+          type: string
+          description: Username used as access credential for the Account Owner
+        password:
+          type: string
+          description: Password used as access credential for the Account Owner
+        activated:
+          type: boolean
+          description: The Account activation status
+        created:
+          type: string
+          description: Creation timestamp in ISO 8601 format. E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+        modified:
+          type: string
+          description: Last update timestamp in ISO 8601 format. E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+        telephones:
+          type: array
+          description: The list of Account Owner's telephones
+          items:
+            $ref: '#/components/schemas/Telephone'
+        emails:
+          type: array
+          description: The list of Account Owner's email addresses
+          items:
+            $ref: '#/components/schemas/Email'
+        contacts:
+          type: array
+          description: The list of Account Owner's contacts
+          items:
+            $ref: '#/components/schemas/Contact'
+        particular:
+          $ref: '#/components/schemas/Particular'
+        serviceLinkRecords:
+          type: array
+          description: The list of Account Owner's Service Link Records
+          items:
+            $ref: '#/components/schemas/ServiceLinkRecord'
+        pData:
+          type: array
+          description: The list of Account Owner's Personal Data stored in the CaPe
+          items:
+            $ref: '#/components/schemas/PData'
+      description: It contains all the information related to the Account Owner. It
+        also contains all the Service Link Records related to the Account.
+    Type:
+      type: string
+      enum:
+      - PERSONAL
+      - WORK
+      - SCHOOL
+      - OTHER
+    Email:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        email:
+          type: string
+          description: Email address. E.g. user@domain.com
+        Type:
+          $ref: '#/components/schemas/Type'
+        primary:
+          type: boolean
+          description: Indicates if the Email object is considered the primary one.
+      description: This entity represents the email address of the entity which belongs
+        to.
+    Contact:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        address1:
+          type: string
+          description: Primary address
+        address2:
+          type: string
+          description: Alternative address
+        postalCode:
+          type: string
+          description: Address Postal Code
+        city:
+          type: string
+          description: City
+        state:
+          type: string
+          description: State
+        country:
+          type: string
+          description: Country (same of State, if not in US)
+        type:
+          $ref: '#/components/schemas/Type'
+        primary:
+          type: boolean
+      description: This entity represents the detailed Contact information of the
+        entity which belongs to.
+    Particular:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        dateOfBirth:
+          type: string
+          description: Creation timestamp in ISO 8601 format. E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+        imgUrl:
+          type: string
+          description: Url to the profile image
+      description: This entity represents the additional information of the entity
+        which belongs to.
+    Telephone:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        tel:
+          type: string
+          description: Full phone number
+        type:
+          $ref: '#/components/schemas/Type'
+        primary:
+          type: boolean
+      description: This entity represents the telephone of the entity which belongs
+        to.
+    ServiceLinkRecord:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        serviceId:
+          type: string
+          description: Unique identifier of the linked service relative to this Service
+            Link Record
+        surrogateId:
+          type: string
+          description: The surrogate identifier of the Account Owner. It is a pseudonym
+            that associates Account Owner to his/her account at the service.
+        accountId:
+          type: string
+          description: The unique identifier of the Account, assigned by the Account
+            Manager, related to the surrogateId
+        created:
+          type: string
+          description: The creation timestamp in ISO 8601 format. E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+        serviceLinkStatusRecords:
+          type: array
+          description: The list of the statuses of this Service Link Record. It can
+            have more than one status, in order to track its life cycle.
+          items:
+            $ref: '#/components/schemas/ServiceLinkStatusRecord'
+      description: This entity represents the link between a Service and the Account
+        Owner's account. It is the result of the linkage process provided by CaPe
+        (Account Manager). The goal is to store and retrieve Account Owner's personal
+        data through the properties names required by the service.
+    ServiceLinkStatusRecord:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier assigned by Account Manager
+        serviceLinkStatus:
+          type: string
+        issuedAt:
+          type: string
+          description: The creation timestamp in ISO 8601 format. E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+      description: This entity represents the detailed status of a Service Link Record.
+    PData:
+      type: object
+      properties:
+        conceptId:
+          type: string
+          description: The identifier of the semantic concept related to Personal
+            Data
+        name:
+          type: string
+          description: The user-friendly name of the Personal Data
+        type:
+          type: string
+          description: The semantic type of the Personal Data value
+        values:
+          type: array
+          description: The array of multiple values of the Personal Data
+          items:
+            type: string
+        timestamp:
+          type: string
+          description: The last edit timestamp of Personal Data in ISO 8601 format.
+            E.g. 'yyyy-MM-ddTHH:mm:ssZ'
+          format: date-time
+      description: The Object representing an Account owner's Personal Data.
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          description: The HTTP status code
+        error:
+          type: string
+          description: The detailed runtime error
+        message:
+          type: string
+          description: The message related to runtime error
+      description: The Object representing the Error information
+  securitySchemes:
+    Oauth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://idm.opsilab.it/oauth2/token
+          scopes:
+            write: write scope
+            read: read scope

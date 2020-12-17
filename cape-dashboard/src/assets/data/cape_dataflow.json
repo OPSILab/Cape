@@ -1,0 +1,318 @@
+{
+  "id": 1,
+  "name": "c",
+  "type": "root",
+  "description": "User",
+  "children": [
+    {
+      "id": 29,
+      "name": "c",
+      "type": "data",
+      "description": "Phone",
+      "children": [
+        {
+          "id": 30,
+          "name": "c",
+          "type": "processor",
+          "description": "Kindergarten",
+          "children": [
+            {
+              "id": 31,
+              "name": "c",
+              "type": "purpose",
+              "description": "Sharing",
+              "children": [
+                {
+                  "id": 32,
+                  "name": "c",
+                  "type": "processing",
+                  "description": "Collect, Transfer",
+                  "children": [
+                    {
+                      "id": 33,
+                      "name": "c",
+                      "type": "storage",
+                      "description": "Controller Servers",
+                      "children": [
+                        {
+                          "id": 34,
+                          "name": "c",
+                          "type": "shared",
+                          "description": "Service Gateway",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+	
+	 {
+      "id": 35,
+      "name": "c",
+      "type": "data",
+      "description": "Fax",
+      "children": [
+        {
+          "id": 36,
+          "name": "c",
+          "type": "processor",
+          "description": "Kindergarten",
+          "children": [
+            {
+              "id": 37,
+              "name": "c",
+              "type": "purpose",
+              "description": "Sharing",
+              "children": [
+                {
+                  "id": 38,
+                  "name": "c",
+                  "type": "processing",
+                  "description": "Collect, Transfer",
+                  "children": [
+                    {
+                      "id": 39,
+                      "name": "c",
+                      "type": "storage",
+                      "description": "Controller Servers",
+                      "children": [
+                        {
+                          "id": 40,
+                          "name": "c",
+                          "type": "shared",
+                          "description": "Service Gateway",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+	 {
+      "id": 41,
+      "name": "c",
+      "type": "data",
+      "description": "Email",
+      "children": [
+        {
+          "id": 42,
+          "name": "c",
+          "type": "processor",
+          "description": "Kindergarten",
+          "children": [
+            {
+              "id": 43,
+              "name": "c",
+              "type": "purpose",
+              "description": "Sharing",
+              "children": [
+                {
+                  "id": 44,
+                  "name": "c",
+                  "type": "processing",
+                  "description": "Collect, Transfer",
+                  "children": [
+                    {
+                      "id": 45,
+                      "name": "c",
+                      "type": "storage",
+                      "description": "Controller Servers",
+                      "children": [
+                        {
+                          "id": 46,
+                          "name": "c",
+                          "type": "shared",
+                          "description": "Service Gateway",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+	,
+    {
+      "id": 2,
+      "name": "c",
+      "type": "data",
+      "description": "Blood Glucose",
+      "children": [
+        {
+          "id": 3,
+          "name": "e",
+          "type": "source",
+          "description": "My Sugar",
+          "children": [
+            {
+              "id": 4,
+              "name": "beh",
+              "type": "sink",
+              "description": "Health@Home",
+              "children": [
+                {
+                  "id": 5,
+                  "name": "suvvia",
+                  "type": "purpose",
+                  "description": "PhysicalActivity@Home",
+                  "children": [
+                    {
+                      "id": 6,
+                      "name": "c",
+                      "type": "processing",
+                      "description": "Analyse",
+                      "children": [
+                        {
+                          "id": 7,
+                          "name": "c",
+                          "type": "storage",
+                          "description": "Controller Servers",
+                          "children": [],
+                          "url": "/pages/consents;serviceId=M1876;serviceName=Kindergaten%20Registration"
+                        }
+                      ],
+                      "url": "http://www.google.com/"
+                    }
+                  ],
+                  "url": "http://www.google.com/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "so?",
+          "type": "source",
+          "description": "My Sugar",
+          "children": [
+            {
+              "id": 9,
+              "name": "c",
+              "type": "sink",
+              "description": "Health@Home",
+              "children": [
+                {
+                  "id": 10,
+                  "name": "c",
+                  "type": "purpose",
+                  "description": "Diet@Home",
+                  "children": [
+                    {
+                      "id": 11,
+                      "name": "c",
+                      "type": "processing",
+                      "description": "Analyse",
+                      "children": [
+                        {
+                          "id": 12,
+                          "name": "c",
+                          "type": "storage",
+                          "description": "Controller Servers",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Blood Pressure",
+      "type": "data",
+      "description": "Blood Pressure",
+      "children": [
+        {
+          "id": 14,
+          "name": "My Sugar",
+          "type": "source",
+          "description": "My Sugar",
+          "children": [
+            {
+              "id": 15,
+              "name": "Heath@Home",
+              "type": "sink",
+              "description": "Heath@Home",
+              "children": [
+                {
+                  "id": 16,
+                  "name": "PhisycalActivity@Home",
+                  "type": "purpose",
+                  "description": "PhisycalActivity@Home",
+                  "children": [
+                    {
+                      "id": 17,
+                      "name": "Analyze",
+                      "type": "processing",
+                      "description": "Analyze",
+                      "children": [
+                        {
+                          "id": 18,
+                          "name": "Contoller servers",
+                          "type": "storage",
+                          "description": "Contoller servers",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "My Sugar",
+          "type": "source",
+          "description": "My Sugar",
+          "children": [
+            {
+              "id": 36,
+              "name": "Heath@Home",
+              "type": "sink",
+              "description": "Heath@Home",
+              "children": [
+                {
+                  "id": 37,
+                  "name": "Diet@Home",
+                  "type": "purpose",
+                  "description": "Diet@Home",
+                  "children": [
+                    {
+                      "id": 38,
+                      "name": "Analyze",
+                      "type": "processing",
+                      "description": "Analyze",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

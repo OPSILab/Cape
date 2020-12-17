@@ -1,0 +1,35 @@
+{
+      "type": "string",
+    "title":"Business Event",
+    "format": "select2",
+	 		
+		"enum":[
+  "",
+  "other",
+  "1. Starting business",
+  "1.1 Registering a company",
+  "1.2Needing a licence, permit or certificate to start or continue an activity",
+  "1.3 Registering Intellectual Property",
+  "1.4 Registering a branch",
+  "1.5 Starting a new activity",
+  "1.6 Financing a company",
+  "1.7 Hiring an employee ",
+  "2. Starting cross-border business",
+  "2.1 Registering a cross-border business",
+  "2.2 Registering a branch",
+  "3. Doing business",
+  "3.1 Financing a company",
+  "3.2 Needing a licence, permit or certificate to start or continue an activity",
+  "3.3 Registering Intellectual Property",
+  "3.4 Hiring an employee",
+  "3.5 Participating in public procurement",
+  "3.6 Notifying and reporting to authorities",
+  "3.7 Starting a new activity",
+  "3.8 Registering a branch",
+  "3.9 Having problems in paying creditors",
+  "4. Closing business",
+  "4.1 Restructuring of a company",
+  "4.2 Dissolution of a company"
+]
+
+    }

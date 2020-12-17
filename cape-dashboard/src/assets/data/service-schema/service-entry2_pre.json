@@ -1,0 +1,555 @@
+{
+	"title": "ServiceEntry",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+
+	"format": "categories",
+
+	"properties": {
+
+		"serviceId": {
+			"type": "string",
+			"title": "Service ID",
+			"description":"Unique ID for the service"
+		},
+		"name": {
+			"type": "string",
+			"title": "Service Name"
+		},
+		"identifier": {
+			"type": "string",
+			"title": "Service Identifier",
+			
+			"format": "url",
+			"links": [{
+					"rel": "Open Service page",
+					"href": "{{self}}",
+					"target": "_blank",
+					"class": "comment-link open-in-modal primary-text"
+				}
+			],
+			"description":"If URI exist, otherwise the same of Service ID"
+
+		},
+		"issued": {
+			"type": "string",
+			"title": "Created"
+		},
+		"createdByUserId": {
+			"type": "string",
+			"title": "Creator"
+		},
+		"serviceDescriptionVersion": {
+			"type": "string",
+			"title": "Version"
+		},
+		"serviceIconUrl": {
+			"type": "string",
+			"title": "Service Icon URL",
+			"format": "url",
+			
+			"links": [
+			{
+			  "href": "{{self}}",
+			  "mediaType": "image"
+			}
+			]
+		},
+		"status": {
+			"type": "string",
+			"title": "Status",
+			"enum": ["Completed", "Deprecated", "UnderDevelopment", "WithDrawn"]
+		},
+
+		"supportedProfiles": {
+			"type": "array",
+			"title": "Service Profiles",
+			"format": "select",
+			"uniqueItems": true,
+			"items": {
+				"type": "string",
+				"format": "select",
+				"title": "Type",
+
+				"enum": ["contract", "consenting", "3rd party re-use", "notification", "objection"
+
+				]
+			}
+		},
+		"spatial": {
+			"$ref": "./spatials.json"
+
+		},
+
+		"lifeEvent": {
+			"$ref": "./life_event.json"
+
+		},
+		"businessEvent": {
+			"$ref": "./business_event.json"
+
+		},
+
+		"sector": {
+			"$ref": "./sectors.json"
+		},
+		"type": {
+			"$ref": "./types.json"
+
+		},
+		"thematicArea": {
+			"$ref": "./thematicarea.json"
+
+		},
+		"language": {
+			"$ref": "./locale.json"
+
+		},
+		"hasCompetentAuthority": {
+			"type": "object",
+			"title": "Public Organisation",
+
+			"properties": {
+				"prefLabel": {
+					"type": "string",
+					"title": "Preferred Label"
+				},
+				"spatial": {
+					"$ref": "./spatials.json"
+
+				}
+			}
+		},
+		"humanReadableDescription": {
+			"type": "array",
+			"title": "Description",
+			"format": "tabs",
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"title": "Locale",
+				"headerTemplate": "Locale ({{ self.locale }}) ",
+				"options": {
+					"collapsed": false
+				},
+				"properties": {
+					"locale": {
+						"type": "string",
+						"enumSource": "possible_langs",
+						"watch": {
+							"possible_langs": "root.language"
+						}
+					},
+					"description": {
+						"type": "string",
+						"format": "textarea"
+					},
+					"keyword": {
+						"type": "array",
+						"title": "Keywords",
+						"uniqueItems": true,
+						"format": "select",
+						"options": {
+							"tags": true
+						},
+						"items": {
+							"type": "string",
+							"title": "Tag",
+							"id": "arr_item"
+						}
+
+					}
+				},
+				"required": [
+					"locale",
+					"description"
+				]
+			}
+
+		},
+		"serviceInstance": {
+			"type": "object",
+			"title": "Service Instance",
+			"format": "categories",
+			"properties": {
+				"serviceProvider": {
+					"type": "object",
+					"title": "Service Provider",
+					"properties": {
+						"businessId": {
+							"type": "string",
+							"title": "Business ID"
+						},
+						"name": {
+							"type": "string",
+							"title": "Name"
+						},
+						"address1": {
+							"type": "string",
+							"title": "Address1"
+						},
+						"address2": {
+							"type": "string",
+							"title": "Address2"
+						},
+						"postalcode": {
+							"type": "string",
+							"title": "Postal Code"
+						},
+						"city": {
+							"type": "string",
+							"title": "City"
+						},
+						"state": {
+							"type": "string",
+							"title": "State"
+						},
+						"country": {
+							"type": "string",
+							"title": "Country"
+						},
+						"email": {
+							"type": "string",
+							"title": "Email"
+						},
+						"phone": {
+							"type": "string",
+							"title": "Phone"
+						},
+						"jurisdiction": {
+							"type": "string",
+							"title": "Jurisdiction"
+						}
+					}
+				},
+				"cert": {
+					"type": "object",
+					"title": "Service Certificate",
+					"properties": {
+						"x5u": {
+							"type": "string",
+							"title": "x5u",
+							"description": "URL pointing to service's x.509 certificate"
+						}
+					}
+
+				},
+				"serviceUrls": {
+					"type": "object",
+					"title": "Service URLs",
+					"description": "Object describing service URLs",
+					"properties": {
+						"domain": {
+							"type": "string",
+							"title": "Domain",
+							"description": "Service's domain (https://host:port)"
+						},
+						"libraryDomain": {
+							"type": "string",
+							"title": "Library Domain",
+							"description": "Service's integration library domain (https://host:port)"
+						},
+						"linkingUri": {
+							"type": "string",
+							"title": "Linking URI",
+							"description": "URIi for Service Linking"
+						},
+						"linkingRedirectUri": {
+							"type": "string",
+							"title": "Linking Redirect URI",
+							"description": "Redirect URI after service linking"
+						},
+						"objectionUri": {
+							"type": "string",
+							"title": "Objection URI",
+							"description": "URI for objection "
+						},
+						"notificationUri": {
+							"type": "string",
+							"title": "Notification URI",
+							"description": "URI for subscribing notifications"
+						}
+					}
+
+				}
+			}
+
+		},
+		"isDescribedAt": {
+			"type": "array",
+			"title": "Service Data Description",
+			"format": "tabs",
+			"items": {
+				"type": "object",
+				"title": "DataSet",
+				"options": {
+					"collapsed": false
+				},
+				"format": "categories",
+				"properties": {
+					"datasetId": {
+						"type": "string",
+						"title": "DataSet ID"
+					},
+					"description": {
+						"type": "array",
+						"title": "Description",
+						"format": "tabs",
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"title": "Locale",
+							"headerTemplate": "Locale ({{ self.locale }}) ",
+							"options": {
+								"collapsed": false
+							},
+							"properties": {
+								"locale": {
+									"type": "string",
+									"enumSource": "possible_langs",
+									"watch": {
+										"possible_langs": "root.language"
+									}
+								},
+								"description": {
+									"type": "string",
+									"format": "textarea"
+								},
+								"keyword": {
+									"type": "array",
+									"title": "Keywords",
+									"uniqueItems": true,
+									"format": "select",
+									"options": {
+										"tags": true
+									},
+									"items": {
+										"type": "string",
+										"title": "Tag",
+										"id": "arr_item"
+									}
+
+								}
+							},
+							"required": [
+								"locale",
+								"description"
+							]
+						}
+
+					},
+					"datasetSchema": {
+						"type": "object",
+						"title": "Dataset Schema",
+						"description": "Object describing dataset's schema",
+						"properties": {
+							"context": {
+								"type": "string",
+								"description": "JSON-LD context for the dataset",
+								"format": "textarea"
+
+							},
+							"type": {
+								"type": "string",
+								"description": "JSON-LD type for the dataset",
+								"format": "textarea"
+							},
+
+							"id": {
+								"type": "string",
+								"description": "JSON-LD id for the dataset"
+
+							}
+						}
+					},
+					"dataStructureSpecification": {
+						"type": "string",
+						"title": "Data Structure",
+						"description": "URL pointing to further description of the data, e.g to JSON schema",
+						"format": "url"
+					},
+					"distribution": {
+						"type": "object",
+						"title": "Distribution",
+						"format": "categories",
+						"description": "Distribution point",
+						"properties": {
+							"distributionId": {
+								"type": "string",
+								"title": "Distribution ID",
+								"description": "ID for distribution"
+							},
+							"accessUrl": {
+								"type": "string",
+								"title": "Acces URL",
+								"description": "URL where data is available. The resource at the access URL may contain information about how to get the Dataset"
+							},
+
+							"description": {
+								"type": "array",
+								"title": "Description",
+								"format": "tabs",
+								"uniqueItems": true,
+								"items": {
+									"type": "object",
+									"title": "Locale",
+									"headerTemplate": "Locale ({{ self.locale }}) ",
+									"options": {
+										"collapsed": false
+									},
+									"properties": {
+										"locale": {
+											"type": "string",
+											"enumSource": "possible_langs",
+											"watch": {
+												"possible_langs": "root.language"
+											}
+										},
+										"description": {
+											"type": "string",
+											"format": "textarea"
+										}
+									},
+									"required": [
+										"locale",
+										"description"
+									]
+								}
+
+							},
+							"format": {
+								"type": "string",
+								"title": "Format",
+								"description": "Format of data"
+
+							}
+						}
+					},
+					"dataMapping": {
+						"type": "array",
+						"format": "tabs",
+						"title": "Data Mapping",
+						"items": {
+							"type": "object",
+							"title": "Field",
+							"id": "arr_item",
+							"headerTemplate": "{{ self.name }}",
+							"properties": {
+								"property": {
+									"type": "string",
+									"title": "Property"
+								},
+
+								"conceptId": {
+									"$ref": "./concepts.json"
+
+								},
+								"name": {
+									"type": "string",
+									"options": {
+										"hidden": true
+									}
+								},
+								"type": {
+									"type": "string",
+									"title": "Type",
+									"options": {
+										"input_width": "85px"
+									},
+									"default": "string"
+								},
+								"required": {
+									"type": "number",
+									"title": "Required",
+									"enum": [1, 0],
+									"options": {
+										"enum_titles": ["True", "False"],
+										"input_width": "100px"
+									}
+								},
+								"sensitive": {
+									"type": "number",
+									"title": "Sensitive",
+									"enum": [1, 0],
+									"options": {
+										"enum_titles": ["True", "False"],
+
+										"input_width": "100px"
+									}
+								}
+							},
+							"required": [
+								"property",
+								"conceptId",
+								"name",
+								"type",
+								"required",
+								"sensitive"
+							]
+						}
+					}
+				},
+				"required": [
+					"datasetId",
+					"distribution",
+					"dataMapping"
+				]
+			}
+
+		},
+		"processingBases": {
+			"type": "object",
+			"title": "Processing",
+			"format": "categories",
+			"properties": {
+				"contract": {
+					"type": "array",
+					"title": "Contract",
+					"format":"tabs",
+					"items": {
+						"$ref": "./processing.json"
+					}
+				},
+				"consent": {
+					"type": "array",
+					"title": "Consent",
+					"format":"tabs",
+					"items": {
+						"$ref": "./processing.json"
+					}
+				},
+				"publicInterest": {
+					"type": "array",
+					"format":"tabs",
+					"title": "Public Interest",
+					"items": {
+						"$ref": "./processing.json"
+					}
+				},
+				"legitimateInterest": {
+					"type": "array",
+					"format":"tabs",
+					"title": "LegitimateInterest",
+					"items": {
+						"$ref": "./processing.json"
+					}
+				},
+				"vitalInterest": {
+					"type": "array",
+					"format":"tabs",
+					"title": "Vital Interest",
+					"items": {
+						"$ref": "./processing.json"
+					}
+				}
+			}
+		}
+	},
+	"required": [
+		"serviceId",
+		"name",
+		"identifier",
+		"serviceDescriptionVersion"
+		
+	]
+}

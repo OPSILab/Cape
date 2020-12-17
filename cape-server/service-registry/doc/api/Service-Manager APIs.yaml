@@ -1,0 +1,342 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Service Manager APIs
+  description: >-
+    Technical specification of Service Manager APIs. This APis provide
+    functionalities for managing the registration and mapping of eServices . 
+basePath: /service-manager/api/v1
+tags:
+  - name: Service
+    description: >-
+      APIs used by the Service or Service Provider, in order to manage and
+      retrieve information about the Service registration
+schemes:
+  - https
+paths:
+  /services:
+    post:
+      description: Stores a new Service Registration
+      summary: Stores a new Service Registration
+      operationId: postServiceDescription
+      tags:
+        - Service
+      produces:
+        - application/json
+      parameters:
+        - name: request
+          in: body
+          description: Object representing the Service Description
+          required: true
+          schema:
+            $ref: '#/definitions/Service'
+      responses:
+        '201':
+          description: Successful Response; the Service Description saved successfully
+          schema:
+            $ref: '#/definitions/Service'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    get:
+      description: get the list of registered services
+      summary: get the list of registered services
+      operationId: getServiceDescription
+      tags:
+        - Service
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: An array of service descriptions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'        
+  '/services/{serviceId}':
+    get:
+      description: 'Gets an existing Service Description'
+      summary: Get an existing Service Description
+      operationId: getService
+      tags:
+        - Service
+      produces:
+        - application/json
+      parameters:
+        - name: serviceId
+          in: path
+          description: The unique identifier of the Service to be retrieved
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful Response. Required Service
+          schema:
+            $ref: '#/definitions/Service'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Not Found - Service with provided id was not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    put:
+      description: Updates an existing Service Description
+      summary: Update an Service Description
+      operationId: updateService
+      tags:
+        - Service
+      produces:
+        - application/json
+      parameters:
+        - name: serviceId
+          in: path
+          description: The unique identifier of the Service to be updated
+          required: true
+          type: string
+        - name: request
+          in: body
+          description: Object representing the Service Description
+          required: true
+          schema:
+            $ref: '#/definitions/Service'  
+      responses:
+        '200':
+          description: Successful Response. Required Service
+          schema:
+            $ref: '#/definitions/Service'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Not Found - Service with provided id was not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      description: Deletes an existing Service Description
+      summary: Deletes an existing Service Description
+      operationId: deleteService
+      tags:
+        - Service
+      produces:
+        - application/json
+      parameters:
+        - name: serviceId
+          in: path
+          description: The unique identifier of the Service to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful Response; the Service was deleted successfully
+        '404':
+          description: Not Found - Service with provided id was not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+  '/services/{serviceId}/servicedatamapping':
+    get:
+      description: Provides the data mapping with personal data taxonomy.Each service data is mapped to a concept
+      summary: get service data mapping subsection
+      operationId: get ServiceData Mapping
+      tags:
+        - Service
+      produces:
+        - application/json
+      parameters:
+        - name: serviceId
+          in: path
+          description: The unique identifier of the Service to be retrieved
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful Response. Required Service map  in JSON format
+          schema:
+            $ref: '#/definitions/datamapping'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Not Found - Service with provided id was not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse' 
+            
+
+definitions:
+  
+  Service:
+    type: object
+    description: The Object representing the Service Description.It contains all the information related to a Service Description.
+    properties:
+      _id:
+        type: string
+        description: Unique identifier assigned by Service Manager
+      serviceId:
+        type: string
+        description: Application based id to identify the Service
+      serviceDescriptionTitle:
+        type: string
+        description: Service Title
+      serviceDescriptionVersion:
+        type: string
+        description: version of the service description
+      serviceIconURI:
+        type: string
+        description: service icon uri
+      keywords:
+        type: array
+        description: The list of keywords describing the service
+        items:
+          type: string
+      serviceProviderId: 
+        type: string
+        description: Service Provider identification
+      createdOnDate: 
+        type: number
+      modifiedOnDate: 
+        type: number
+      modifiedByUserId: 
+        type: string
+      createdByUserId: 
+        type: string
+      technicalDescriptionId: 
+        type: string
+      humanReadableDescription: 
+        type: array
+        items: 
+         type: object
+         properties: 
+          locale: 
+            type: string
+          description: 
+            type: string
+      serviceDataDescription:
+        type: object
+        properties: 
+          schemaId: 
+            type: string
+          description: 
+            type: string
+          title: 
+            type: string
+          serviceDataDescriptionUri: 
+            type: string
+          taxonomy: 
+            type: string
+          issued: 
+            type: number
+          modified: 
+            type: number
+          dataset:
+            type: object
+            properties: 
+              description: 
+                type: string
+              title: 
+                type: string
+              publisher: 
+                type: string
+              issued: 
+                type: number
+              modified: 
+                type: number
+              serviceDataType: 
+                type: string
+              keyword: 
+                type: array
+                items: 
+                  type: string
+              language: 
+                type: string
+              purpose: 
+                type: array
+                items: 
+                  type: string
+              datamapping: 
+                type: array
+                items: 
+                  type: object
+                  properties: 
+                    property: 
+                      type: string
+                    conceptId: 
+                      type: string
+                    name: 
+                      type: string
+                    type: 
+                      type: string    
+  
+  datamapping:
+    type: array
+    items: 
+      type: object
+      properties: 
+        property: 
+          type: string
+        conceptId: 
+          type: string
+        name: 
+          type: string
+        type: 
+          type: string 
+  
+  ErrorResponse:
+    type: object
+    description: The Object representing the Error information
+    properties:
+      statusCode:
+        type: string
+        description: The HTTP status code
+      error:
+        type: string
+        description: The detailed runtime error
+      message:
+        type: string
+        description: The message related to runtime error
+       
+securityDefinitions:
+  Oauth:
+    type: oauth2
+    tokenUrl: "https://simpatico.eng.it/CDV/account-manager/oauth/token"
+    flow: password
+    scopes:
+      write: write scope
+      read: read scope
+      
+security:
+  - Oauth:
+    - write
+    - read

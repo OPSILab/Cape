@@ -1,0 +1,20 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between">
+    <h5>{{'general.services.register_service'|translate}}</h5>
+    <button nbButton ghost shape="rectangle" size="tiny" (click)="cancel()">
+      <i class="material-icons">close</i>
+    </button>
+  </nb-card-header>
+  <nb-card-body class="p-5">{{ 'general.services.register_services_message'|translate }}</nb-card-body>
+  <nb-card-footer class="d-flex justify-content-center">
+    <button nbButton status="danger" size="small"
+            (click)="confirmRegisterService()">
+      {{'general.services.register'|translate}}
+    </button>
+    <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="cancel()">
+      {{'general.services.close' | translate}}
+    </button>
+  </nb-card-footer>
+</nb-card>
+
+

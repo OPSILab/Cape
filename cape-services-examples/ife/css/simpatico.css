@@ -1,0 +1,176 @@
+body {
+	margin-top: 60px;
+}
+
+#simp-bar {
+	z-index: 999;
+	position: fixed;
+	top:0;
+	width: 100%;
+	height: 52px;
+	background-color: #d3d3d6 !important;
+}
+
+#simp-bar img {
+    vertical-align: middle;
+}
+
+#simp-bar div, #simp-bar ul {
+	display: inline-block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+
+/************************* CaPe styles**********************************/
+    .ui-dialog {
+        position: fixed !important;
+		
+    } 
+	
+	.no-close .ui-dialog-titlebar-close {
+        display: none;
+    }
+	
+	.no-close .ui-dialog-titlebar {
+        display: none;
+    }
+	
+	/* Personalised style for active buttons cdv */
+    .simp-bar-btn-active-cdv {
+      background-color: #379E4C;
+      border: 1px solid #fff;
+    }
+	
+	.btn-primary {
+		color: #fff;
+		background-color: #379E4C;
+		border-color: #2e6da4;
+		border: none;
+   }	 
+	#cdv_toolbar_buttons {
+	    z-index: 999;
+	    position: fixed;
+	    left: 0px;
+	    top: 52px;
+	    width: auto;
+	    height: auto;
+	    padding: 0px;
+    }					 
+	/************************* **********************************/
+
+
+#simp-bar-container-left {
+	display: inline-block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#simp-bar-container-right {
+	display: inline-block;
+	margin-top: 0;
+	margin-bottom: 0;
+	float: right;
+}
+
+#simp-bar li {
+    border: 1px solid transparent;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.simp-bar-btn-inactive {
+	background-color: transparent;
+	border: 0px solid #fff;
+}
+
+.simp-bar-btn-inactive:hover {
+		background-color: #24BCDA;
+    border: 1px solid #fff;
+}
+
+.simp-bar-btn-active {
+	background-color: #24BCDA;
+	border: 1px solid #fff;
+}
+
+
+
+/*////////////////////////////////////////////////////////////////////////////*/
+.ui-widget-content .simpatico-label  {
+	background-color:#337ab7;
+	color:#ffffff;
+	padding-top: 0.1em;
+	padding-bottom: 0.1em;
+	padding-right: 0.3em;
+	padding-left: 0.3em;
+	border-radius: .25em
+}
+
+.ui-widget-content p {
+	line-height: 1.5em;
+}
+
+.main_form {
+	margin: 5px 25px 0 25px;
+}
+
+.test_content {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	width: 19cm;
+}
+
+.block_edited {
+	border: 3px rgba(0, 128, 255, 0.45) solid;
+	width: 19cm;
+	/* margin: 2px; */
+  padding: 2px;
+}
+
+.simpatico-cpd-questions {
+	background-color: #a9a7a7;
+	padding: 5px;
+	font-style: normal;
+	text-align: left;
+	font-weight: normal;	
+    font-size: 14px;
+}
+.simpatico-cpd-questions span {
+	text-transform: uppercase;
+}
+.simpatico-cpd-questions li {
+	list-style: none;
+	padding-bottom: 5px;
+}
+.simpatico-cpd-questions li a {
+	color: #000;
+}	
+
+.simpatico-cpd-questions li.new-question {
+    padding-top: 5px;
+    text-decoration: underline;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.2); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#spinner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}

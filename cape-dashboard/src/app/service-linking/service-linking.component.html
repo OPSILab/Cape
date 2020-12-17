@@ -1,0 +1,67 @@
+<nb-layout>
+  <nb-layout-header *ngIf="linkingFrom=='Service'" class="row h3 d-flex justify-content-center mt-3">
+    <div class="row m-2">
+      <img class="cape-logo" src="assets/images/app/cape-logo.png">
+    </div>
+    <div class="row m-2">
+      {{'general.welcome' | translate}}
+    </div>
+  </nb-layout-header>
+  <nb-layout-column *ngIf="linkingFrom=='Service'" class="d-inline-flex justify-content-center align-items-center">
+    <nb-card accent="primary">
+      <nb-card-header class="d-flex justify-content-center"><h5>{{'general.services.linkingTitle' | translate}}</h5></nb-card-header>
+      <nb-card-body>
+        <div class="row p-2 justify-content-center" [innerHTML]="'general.services.linkingMessage' | translate:{ 'serviceName' : serviceName }"></div>
+        <div class="mt-3 pl-5 pr-5 row justify-content-between">
+          <button nbButton shape="rectangle" status="success" (click)="startLinking(false)">{{'general.services.linkButton' | translate }}</button>
+          <button nbButton shape="rectangle" status="danger" class="button-filled-danger-focus-border-color" (click)="cancel()">{{'general.services.cancelButton' | translate}}</button>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+  <ng-template #linkedDialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header class="d-flex justify-content-between">
+        <h5 class="h5 mr-3">{{ 'general.services.linkingSuccessfulHeader' | translate}}</h5>
+        <button nbButton ghost shape="rectangle" size="small" (click)="close(data.message)">
+          <i class="material-icons">close</i>
+        </button>
+      </nb-card-header>
+      <nb-card-body class="m-3">
+        {{data.message}}
+      </nb-card-body>
+      <nb-card-footer class="d-flex justify-content-end">
+        <button nbButton ghost shape="rectangle" size="medium" (click)="close(data.message)">
+          {{ 'general.services.closeButton' | translate }}
+        </button>
+        <button nbButton ghost shape="rectangle" size="medium" (click)="closeAndReturnToService(data.message)">
+          {{ 'general.services.closeAndReturnToServiceButton' | translate }}
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
+  <ng-template #errorWithOptionDialog let-data let-ref="dialogRef">
+    <nb-card accent="danger" style=" max-width: 95vw; max-height: 95vh;">
+      <nb-card-header class="d-flex justify-content-between">
+        <h5>Error</h5>
+        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="router.navigate(['/']); ">
+          <i class="material-icons">close</i>
+        </button>
+      </nb-card-header>
+      <nb-card-body class="m-3">
+        <div class="row">{{data.error.error? data.error.error.message : data.error.message}}</div>
+        <div class="row mt-1 justify-content-center"><strong>Status: {{data.error.status}}</strong></div>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row justify-content-center">
+          <button nbButton appearance="outline" shape="rectangle" status="info" (click)="startLinking(true)">
+            {{ 'general.services.forceLinkingButton' | translate }}
+          </button>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+</nb-layout>

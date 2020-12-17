@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema targetNamespace="data.servicemanager.opsi.eng.it"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="data.servicemanager.opsi.eng.it"
+	elementFormDefault="qualified">
+
+	<!-- PDataField object -->
+	<xsd:element name="PDataField">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="id" type="xsd:string" />
+				<xsd:element name="name" type="xsd:string" />
+				<xsd:element name="category" type="xsd:string" />
+				<xsd:element name="description" type="xsd:string" />
+				<xsd:element name="privatePData" type="xsd:string" />
+				<xsd:element name="semanticType" type="xsd:string" />
+				<xsd:element name="uri" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+
+
+</xsd:schema>

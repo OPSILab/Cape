@@ -1,0 +1,180 @@
+version: "3.8"
+services:
+
+  account-manager:
+    image: account-manager
+    build: ./account-manager
+    ports:
+      - "8080:8080"
+    environment:
+      - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
+      - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
+      - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
+      - CAPE_CONSENT_MANAGER_URL=http://consent-manager:8083/consent-manager
+      - CAPE_ACCOUNT_MANAGER_MONGODB_HOST=account-manager-mongo
+      - CAPE_ACCOUNT_MANAGER_MONGODB_PORT=27017
+      - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
+      - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
+    networks:
+      - cape-network
+  account-manager-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: account-manager-volume
+        target: /data/db
+        volume:
+          nocopy: true  
+    networks:
+      - cape-network
+
+  auditlog-manager:
+    image: auditlog-manager
+    build: ./auditlog-manager
+    ports:
+      - "8081:8081"
+    environment:
+      - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
+      - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
+      - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
+      - CAPE_AUDITLOG_MANAGER_MONGODB_HOST=auditlog-manager-mongo
+      - CAPE_AUDITLOG_MANAGER_MONGODB_PORT=27017
+      - CAPE_AUDITLOG_MANAGER_MONGODB_USER=root
+      - CAPE_AUDITLOG_MANAGER_MONGODB_PWD=root
+    networks:
+      - cape-network
+
+  auditlog-manager-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: auditlog-manager-volume
+        target: /data/db
+        volume:
+          nocopy: true  
+    networks:
+      - cape-network
+
+  consent-manager:
+    image: consent-manager
+    build: ./consent-manager
+    ports:
+      - "8083:8083"
+    environment:
+      - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
+      - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
+      - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
+      - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
+      - CAPE_CONSENT_MANAGER_MONGODB_HOST=consent-manager-mongo
+      - CAPE_CONSENT_MANAGER_MONGODB_PORT=27017
+      - CAPE_CONSENT_MANAGER_MONGODB_USER=root
+      - CAPE_CONSENT_MANAGER_MONGODB_PWD=root
+    networks:
+      - cape-network
+
+  consent-manager-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27019:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: consent-manager-volume
+        target: /data/db
+        volume:
+          nocopy: true
+    networks:
+      - cape-network
+
+  service-manager:
+    image: service-manager
+    build: ./service-manager
+    ports:
+      - "8082:8082"
+    environment:
+      - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
+      - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
+      - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
+      - CAPE_CONSENT_MANAGER_URL=http://consent-manager:8083/consent-manager
+      - CAPE_SERVICE_MANAGER_MONGODB_HOST=service-manager-mongo
+      - CAPE_SERVICE_MANAGER_MONGODB_PORT=27017
+      - CAPE_SERVICE_MANAGER_MONGODB_USER=root
+      - CAPE_SERVICE_MANAGER_MONGODB_PWD=root
+    networks:
+      - cape-network
+
+  service-manager-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27020:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: service-manager-volume
+        target: /data/db
+        volume:
+          nocopy: true
+    networks:
+      - cape-network
+
+  service-registry:
+    image: service-registry
+    build: ./service-registry
+    ports:
+      - "8088:8088"
+    environment:
+      - CAPE_SERVICE_REGISTRY_MONGODB_HOST=service-registry-mongo
+      - CAPE_SERVICE_REGISTRY_MONGODB_PORT=27017
+      - CAPE_SERVICE_REGISTRY_MONGODB_USER=root
+      - CAPE_SERVICE_REGISTRY_MONGODB_PWD=root
+    networks:
+      - cape-network
+
+  service-registry-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27021:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: service-registry-volume
+        target: /data/db
+        volume:
+          nocopy: true
+    networks:
+      - cape-network
+
+volumes:
+  account-manager-volume:
+  auditlog-manager-volume:
+  consent-manager-volume:
+  service-manager-volume:
+  service-registry-volume:
+
+networks:
+ cape-network:
+   name: cape-server-network
+   driver: bridge
+   driver_opts:
+     com.docker.network.driver.mtu: 1400

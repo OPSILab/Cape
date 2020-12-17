@@ -1,0 +1,246 @@
+{
+	"type": "object",
+	"format": "categories",
+	"title": "Purpose",
+	"headerTemplate": "{{ self.purposeName }}",
+	"properties": {
+		"purposeId": {
+			"type": "string",
+			"title": "Purpose ID",
+			"description": " Purpose's ID, must be unique within the service description"
+		},
+		"purposeName": {
+			"type": "string",
+			"title": "Purpose Name",
+			"description": " Human readeable Purpose's Name, Short name that identifies the purpose"
+		},
+		"legalBasis":{
+			"type": "string",
+			"title": "Legal Basis",
+			"enum": [
+				"consent",
+				"contract",
+				"legalObligation",
+				"vitalInterest",
+				"publicInterest",
+				"legitimateInterest"
+			],
+			"options": {
+			"enum_titles":
+			["Consent", "Contract", "Legal Obligation", "Vital Interest", "Public Interest", "Legitimate Interest"]}
+		},
+		
+		"purposeCategory": {
+			"type": "string",
+			"title": "Purpose Category",
+			"enum": [
+				"1 - Core Function",
+				"2 - Contracted Service",
+				"3 - Delivery",
+				"4 - Contact Requested",
+				"5 - Personalized Experience",
+				"6 - Marketing",
+				"7 - Marketing Third Parties",
+				"8 - Use for Delivery",
+				"9 - Disclosure for Marketing",
+				"10 - 3rd Party Disclosure for Core Function",
+				"11 - Legally Required Data Retention",
+				"12 - Required by Law Enforcement or Government",
+				"13 - Protecting Your Health",
+				"14 - Protecting Our Interests",
+				"15 - Improve Performance"
+			]
+
+		},
+		"processingCategories": {
+			"type": "array",
+			"title": "Processing Categories",
+			"format": "table",
+			"uniqueItems": true,
+			"description": " Actions related to a specific purpose",
+			"items": {
+				"type": "string",
+				"title": "Action",
+				"enum": [
+					"Aggregate",
+					"Analyse",
+					"Anonymize",
+					"Collect",
+					"Copy",
+					"Derive",
+					"Move",
+					"Query",
+					"Transfer"
+				]
+			}
+		},
+		"description": {
+			"type": "array",
+			"title": "Description",
+			"format": "tabs",
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"title": "Locale",
+				"headerTemplate": "Locale ({{ self.locale }}) ",
+				"options": {
+					"collapsed": false
+				},
+				"properties": {
+					"locale": {
+						"type": "string",
+						"enumSource": "possible_langs",
+						"watch": {
+							"possible_langs": "root.language"
+						}
+					},
+					"title": {
+						"type": "string",
+						"title": "Title"
+					},
+					"description": {
+						"type": "string",
+						"format": "textarea"
+					},
+					"descriptionUrl": {
+						"type": "string",
+						"title": "Description URL",
+						"format": "link"
+					},
+					"iconUrl": {
+						"type": "string",
+						"title": "icon URL",
+						"format": "link"
+					}
+
+				},
+				"required": [
+					"locale",
+					"description"
+				]
+			}
+
+		},
+		"requiredDatasets": {
+			"type": "array",
+			"format": "tabs",
+			"uniqueItems": true,
+			"title": "Required Datasets",
+			"items": {
+				"type": "any",
+				"title": "Dataset",
+				"enumSource":
+				[{
+						"source": "possible_datasets",
+						"value": "{{item.datasetId}}"
+					} 
+				],
+				"watch": {
+					"possible_datasets": "root.isDescribedAt"
+				}
+			}
+
+		},
+		"storage": {
+			"type": "object",
+			"title": "Storage",
+			"description": " Where processed data will be stored and for which time frame",
+			"properties": {
+				"location": {
+					"type": "string",
+					"title": "Storage Category",
+					"enum": [
+						"Controller Servers",
+						"EU",
+						"Third Countries",
+						"Our Servers",
+						"Processor Servers",
+						"Third Party"
+					]
+				},
+				"duration": {
+					"type": "string",
+					"title": "Duration",
+					"enum": [
+						"Business Practices",
+						"Legal Requirement",
+						"Stated Purpose",
+						"Indefinitely"
+					]
+				}
+			}
+		},
+		"recipients": {
+			"type": "array",
+			"title": "Recipients",
+			"format": "table",
+			"uniqueItems": true,
+			"items": {
+				"type": "string",
+				"format": "select",
+				"title": "Recipient",
+				"enum": ["ours", "delivery", "same", "other-recipient", "unrelated", "public"
+				]
+			}
+
+		},
+		"shareWith": {
+			"type": "array",
+			"title": "Share with",
+			"format": "tabs",
+			"description": "'share with' defines with whom the consent permits to share data",
+			"items": {
+				"type": "object",
+				"title": "Organization",
+				"description": "organisation identifies the organisation with whom the data is permitted to share",
+				"properties": {
+					"orgName": {
+						"type": "string",
+						"title": "Name"
+					},
+					"businessType": {
+						"type": "string",
+						"title": "Business Type",
+
+						"enum": [
+							"Profit",
+							"No-Profit"
+						]
+					}
+				}
+
+			}
+
+		},
+		"obligations": {
+			"type": "array",
+			"title": "Obligations",
+			"format": "tabs",
+			"description": "Obligations are the actions to be performed when an event occures. Obligation defines the obligation related to consent, i.e. has an event and an activity and it defines what action to perform when an event related to consent occures. For example, when the consent expires (event), then re-solicit consent (activity) or when the consent is revoked (event) then stop processing (activity).",
+			"items": {
+				"type": "object",
+				"title": "Obligation",
+				"properties": {
+					"event": {
+						"type": "string",
+						"title": "Event",
+						"format": "link",
+						"description": " Event defines the event based on which an activity is required to do."
+					},
+					"activity": {
+						"type": "string",
+						"title": "Activity",
+						"format": "link",
+						"description": "Activity defines what activiy is required to do when an event occures."
+					}
+				}
+			}
+		},
+		"policyRef": {
+			"type": "string",
+			"title": "Policy Reference",
+			"format": "link",
+			"description": " Reference to related Privacy Policy"
+		}
+	}
+}

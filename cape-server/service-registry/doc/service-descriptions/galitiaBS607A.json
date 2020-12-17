@@ -1,0 +1,147 @@
+{
+    "publicServiceID" : "BS607A",
+    "publicServiceName" : "PROGRAMA BIENESTAR EN BALNEARIOS",
+    "serviceUri" : "http://localhost:8080/IFE/BS607A.html",
+    "serviceDescriptionVersion" : "0.0.2",
+    "publicServiceKeyword" : "service provider,health",
+    "publicServiceSector" : [ 
+        "26473754"
+    ],
+    "publicServiceTypeProp" : [ 
+        "26473754"
+    ],
+    "publicServiceLanguage" : [ 
+        "IT_it", 
+        "EN_en"
+    ],
+    "publicServiceStatus" : "26473754",
+    "technicalDescriptionId" : "12dfsr34",
+    "humanReadableDescription" : [ 
+        {
+            "locale" : "ES_es",
+            "description" : "Sede Electronica por el procedimiento programma bienestar en balnearios"
+        }
+    ],
+    "publicServiceIsDescribedAt" : [ 
+        {
+            "title" : "User base data",
+            "serviceDataDescriptionUri" : "aURI",
+            "taxonomy" : "http://semantics.eng.it/ontologies/personaldata",
+            "issued" : "1453031943",
+            "modified" : "1453118343",
+            "publicServiceDatasetID" : "123456",
+            "serviceDataType" : "input",
+            "purpose" : [ 
+                "Research", 
+                "Service development", 
+                "Providing personalised service", 
+                "personal health "
+            ],
+            "dataStructureSpecification" : null,
+            "dataMapping" : [ 
+                {
+                    "property" : "BS607A.Entidad.txtNombre",
+                    "conceptId" : "identity_first_name",
+                    "name" : "First Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtApel2",
+                    "conceptId" : "identity_last_name",
+                    "name" : "Last Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtApel1",
+                    "conceptId" : "preferred_middle_name",
+                    "name" : "Middle Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtNifCif",
+                    "conceptId" : "passport_number",
+                    "name" : "Passport Number",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtDireccion",
+                    "conceptId" : "previous_address_street",
+                    "name" : "Street Address",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtParroquia",
+                    "conceptId" : "home_neighborhood",
+                    "name" : "Neighborhood",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtLugar",
+                    "conceptId" : "place_detail_place_name",
+                    "name" : "Place Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtCodigoPostal",
+                    "conceptId" : "previous_address_zip_code",
+                    "name" : "Postal Code",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtLocalidad",
+                    "conceptId" : "previous_address_city",
+                    "name" : "City",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtPais",
+                    "conceptId" : "previous_address_country",
+                    "name" : "Country",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtTelefono",
+                    "conceptId" : "phone_number",
+                    "name" : "Phone Number",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtMovil",
+                    "conceptId" : "mobile_number",
+                    "name" : "Mobile Number",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Entidad.txtEmail",
+                    "conceptId" : "personal_email",
+                    "name" : "Email",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Declarante.txtNombre",
+                    "conceptId" : "identity_first_name",
+                    "name" : "First Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Declarante.txtApel2",
+                    "conceptId" : "identity_last_name",
+                    "name" : "Last Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Declarante.txtApel1",
+                    "conceptId" : "preferred_middle_name",
+                    "name" : "Middle Name",
+                    "type" : "string"
+                }, 
+                {
+                    "property" : "BS607A.Declarante.txtNifCif",
+                    "conceptId" : "passport_number",
+                    "name" : "Passport Number",
+                    "type" : "string"
+                }
+            ]
+        }
+    ]
+}

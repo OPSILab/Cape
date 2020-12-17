@@ -1,0 +1,377 @@
+
+
+#menuPrincipal {
+	background-color: #067fb6;
+	color: #FFF;
+	font-size: 1.2em;
+	font-weight: bold;
+	height: 34px;
+	margin-bottom: 6px;
+	position: relative;
+	z-index: 99;
+}
+
+#wrapper {
+    width:970px;
+    margin:0 auto;
+    background-color:#FFF;
+}
+
+body {
+    background-color:#E0EAF3;
+    background-image:url(./../images/principal.png);
+    background-position:0 0;
+    background-repeat:repeat;
+    color:#1A171B;
+    font:62.5% Arial,Helvetica,sans-serif;
+}
+
+
+span.code {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-weight: bold;
+  padding: 2pt;
+  background-color: #EEEEEE;
+}
+
+.mandatory {
+  border: 1pt solid #004080 ;
+  color: #004080;
+  background-color: #FCB014;
+}
+
+.valid {
+  background-color: #f3613c;
+}
+
+input[type='radio'].mandatory, input[type='checkbox'].mandatory {
+  background-color: #FCB014;
+  border: 0px;
+}
+
+.format {
+  border: 1pt dashed red;
+  background-color: #FDF337;
+}
+
+.consistency {
+    border: 1pt dotted red;
+    background-color: #FAC0C0;
+}
+
+#check {
+  position: fixed;
+  top: 10pt;
+  right: 10pt;
+}
+#background {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  margin: 0pt;
+
+  position: fixed;
+  top: 0pt;
+  left: 0pt;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+
+  z-index: 9;
+}
+#error-handler {
+  pd4ml-display: none;
+}
+#errors {
+
+  position: fixed;
+  width: 50%;
+  left: 25%;
+  right: 25%;
+  top: 10%;
+  height: 80%;
+  padding: 10pt;
+  background-color: white;
+  border: 1pt solid black;
+
+  z-index: 10;
+
+  overflow: auto;
+}
+
+.error-box-view {
+  display: none;
+}
+
+#error-text {
+  margin-bottom: 20px;
+}
+
+#wrapper {
+    width:970px;
+    margin:0 auto;
+    background-color:#FFF;
+}
+
+body {
+  z-index: 0;
+  /*width: 1024pt;*/
+/*   margin-left: 1cm;
+  margin-right: 1cm;
+  margin-top: 0.5cm;
+  margin-bottom: 0.5cm;
+ */
+   margin: 0; 
+   font-family: Arial, sans-serif;
+  font-size: 10pt;
+}
+
+h1.Modulo {
+  width: 100%;
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 9pt;
+  margin-bottom: 9pt;
+}
+
+h2.Modulo {
+  width: 100%;
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+
+h3.Modulo {
+  width: 100%;
+  font-size: 10pt;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+}
+
+p {
+  text-align: justify;
+  /*font-size: 10pt;*/
+  margin: 1pt;
+}
+
+p.Labeltabella {
+  font-weight: bold;
+}
+
+p.Labelcella {
+  font-size: 8pt;
+  font-weight: bold;
+}
+
+p.Contenutocella {
+  font-style: italic;
+}
+
+p.Modulo {
+  width: 100%;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+}
+
+p.NoteModulo {
+  width: 100%;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+  font-size: 10pt;
+  text-align: justify;
+}
+
+p.NoteModuloBold {
+  width: 100%;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+  font-size: 10pt;
+  font-weight: bold;
+}
+table.Modulo {
+  border-style: none outset outset none;
+  border-color: grey;
+  border-width: thin 2pt 2pt thin;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 3pt;
+}
+
+tr {
+  border: 1pt solid grey;
+  padding: 0cm 5.4pt;
+  height: 18pt;
+}
+
+tr.Header10 {
+  height: 1cm;
+}
+tr.Header25 {
+  height: 2.5cm;
+}
+tr.Header35 {
+  height: 3.5cm;
+}
+
+tr.Rigaintestazione {
+  border: 1pt solid grey;
+  padding: 0cm 5.4pt;
+  background: #EEEEEE none repeat scroll 0% 50%;
+  height: 12pt;
+}
+
+tr.Rigaintestazioneridotta {
+  border: 1pt solid grey;
+  padding: 0 4pt;
+  background: #EEEEEE none repeat scroll 0% 50%;
+  height: 8pt;
+}
+
+td {
+  border: 1pt solid #666666;
+  /*padding: 0cm 4pt;*/
+  vertical-align: middle;
+  padding-left: 2pt;
+  padding-right: 4pt;
+}
+
+span.NoteModulo {
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+  font-size: 10pt;
+  text-align: justify;
+}
+
+tr.RigaintestazioneRL {
+  border: 1pt solid grey;
+  padding: 0cm 5.4pt;
+  background: #ff9900 none repeat scroll 0% 50%;
+  height: 12pt;
+}
+
+tr.RigaintestazioneridottaRL {
+  border: 1pt solid grey;
+  padding: 0 4pt;
+  background: #ffcc99 none repeat scroll 0% 50%;
+  height: 8pt;
+}
+
+tr.RigaintestazioneRLGiallo{
+  border: 1pt solid grey;
+  padding: 0cm 5.4pt;
+  background: #ffff00 none repeat scroll 0% 50%;
+  height: 12pt;
+}
+
+tr.RigaintestazioneridottaRLGiallo {
+  border: 1pt solid grey;
+  padding: 0 4pt;
+  background: #ffff00 none repeat scroll 0% 50%;
+  height: 8pt;
+}
+
+.TitoloVerdeRL {
+  background-color: #99cc00;
+  border: 2pt solid #000000;
+}
+
+h1.ModuloRL {
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 9pt;
+  margin-bottom: 9pt;
+}
+
+h2.ModuloRL {
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+
+table.ModuloRL {
+  width: 19cm;
+}
+
+ul.Modulo {
+  width: 18cm;
+  margin: 0;
+  padding: 0 0 0 25pt;
+  text-align: justify;
+  font-size: 10pt;
+  list-style: outside;
+}
+
+li.Modulo {
+  width: 17.5cm;
+  margin: 0;
+  vertical-align: top;
+  text-align: justify;
+  font-size: 10pt;
+  list-style: outside;
+}
+
+button > img {
+  margin: 0pt;
+  padding: 0pt;
+  float: center;
+}
+
+button.recupero-dati {
+  float: right;
+  pd4ml-display: none;
+}
+
+input, select, textarea {
+  border: #004080 1pt solid;
+  color: #004080;
+  background-color: white
+}
+
+input[type='checkbox'], input[type='radio']{
+  border: 0px;
+  color: white;
+  background-color: white
+}
+
+textarea {
+  resize: none;
+  font-family: Arial, sans-serif;
+}
+
+
+.upload_process{
+  z-index:100;
+  display:none;
+  text-align:center;
+  margin:0px;
+  padding:0px;
+  background-color:#fff;
+  border:1px solid #ccc;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  -webkit-text-fill-color: #004080;
+}
+
+.img-loader {
+  left: 21cm;
+  width: 400px;
+  height: auto;
+  display: block;
+  position: fixed;
+  top: 2.5%;
+  z-index: 20;
+  border: 1px solid grey;
+  background: none repeat scroll 0 50% #eeeeee;
+  padding: 5px;
+}

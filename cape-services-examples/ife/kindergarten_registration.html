@@ -1,0 +1,4902 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+		<link rel="stylesheet" type="text/css"
+			href="./validator/css/moduli.css">
+			<script type="text/javascript"
+				src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"
+				integrity="sha256-De/cgZoAkgvqoxL9yJpJzPHyozUETFnSv7EQGfQWQ4o="
+				crossorigin="anonymous"></script>
+			<meta campi_firma="AventeTitolo_CodiceFiscale"
+				campi_firma_label="il dichiarante" classi_modulo="Tributi"
+				codice_modulo="M1876-ISCRIZIONE-NIDO-VAR"
+				contesto_procedurale="Iscrizione nido"
+				descrizione="ISCRIZIONE ALL'ASILO NIDO"
+				destinatario_amministrazione="" destinatario_ufficio="EBPGCM"
+				dinamico="SI" email_a="" ente_abilitato="TUTTI" filigrana="NO"
+				firmare="NO" istruzioni_compilazione="" istruzioni_invio="mail_pec"
+				metodo_invio="mail" name="GLOBO_modulo" procura="NO,,"
+				segnatura="AventeTitolo" tipo_modulo="principale"
+				urlhelp="DomandeRisposte/FAQ" verifica_pagamento="NO"
+				versione="1.0|06/04/2016">
+
+
+		    <!-- SIMPATICO BEGIN -->
+            <link rel="stylesheet" type="text/css" href="css/moduli.css" />
+            <link rel="stylesheet" type="text/css" href="css/simpatico.css" />
+						
+		    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+		    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+			
+		
+		    <script type="text/javascript">
+		      var simpaticoEservice = "M1876"; //  the id corresponding to the e-service
+		      var simpaticoForm = "main";
+		      var simpaticoCategory = "Infanzia"; // the general category of the e-service
+		      var simpaticoMapping=["AventeTitolo_Telefono","AventeTitolo_EMailPEC","AventeTitolo_Fax","AventeTitolo_EMail","AventeTitolo_EnteProvv","AventeTitolo_NumProt","AventeTitolo_Data","Parametri_TipoLavoroPadre","Parametri_AziendaLavoroPadre","Parametri_ProvAziendaLavoroPadre","Parametri_ComuneAziendaLavoroPadre","Parametri_IndirizzoAziendaLavoroPadre","Parametri_CivicoAziendaLavoroPadre","Parametri_CapAziendaLavoroPadre","Parametri_TelAziendaLavoroPadre","Parametri_EmailAziendaLavoroPadre","Parametri_AgenziaEntratePadre","Parametri_PIVAPadre","Parametri_ScuolaPadre","Parametri_TipoLavoroMadre","Parametri_AziendaLavoroMadre","Parametri_ProvAziendaLavoroMadre","Parametri_ComuneAziendaLavoroMadre","Parametri_IndirizzoAziendaLavoroMadre","Parametri_CivicoAziendaLavoroMadre","Parametri_CapAziendaLavoroMadre","Parametri_TelAziendaLavoroMadre","Parametri_EmailAziendaLavoroMadre","Parametri_AgenziaEntrateMadre","Parametri_PIVAMadre","Parametri_ScuolaMadre"];
+              var ERROR_LABELS = {
+                      'block1' : 'Manca il codice fiscale',
+                      'block2' : 'Selezione Ruolo',
+                      'block6' : 'Selezione Part-time / Full-time'                       
+                    }
+	    	  var serviceName = "M1876 ISCRIZIONE NIDO"; // Eservice example
+	          var serviceURL="http://localhost:8080/IFE/M1876-ISCRIZIONE-NIDO-SIMPATICO_v0.3.html";
+			  var serviceDatasetId="Contacts";
+			  var servicePurposeId="share_1";
+			  
+		    </script>
+		
+		   
+		
+		    <script src="js/cdv-ui-popup.js"></script>
+		    <script src="js/cdv-core-popup.js"></script>
+		
+		    
+		    <script src="https://github.com/google/wicked-good-xpath/releases/download/1.3.0/wgxpath.install.js"></script>
+		    <script>
+		        wgxpath.install();
+		    </script>
+		
+		    <script src="js/simpatico-ife.js"></script>
+			<script src="js/simpatico-auth.js"></script>
+		    
+		    <!-- SIMPATICO END -->
+
+				<title>Kindergarten Registration</title>
+</head>
+<body>
+
+<div id="simpatico_top" ></div>
+<div id="wrapper">
+	<form data-simpatico-workflow="http://simpatico.eu/M1876-ISCRIZIONE-NIDO-SIMPATICO_v0.3" id="modulo"
+		accept-charset="utf-8" method="post" onsubmit="return sendForm()"
+		autocomplete="off">
+
+
+		<input dynamic_value="#Ente.value()" id="Parametri_Comune"
+			name="Parametri_Comune" type="hidden" /><input
+			dynamic_value="'Iscrizione nido del bambino ' + #Bambino_CFBambino.value().toUpperCase()"
+			id="Oggetto" name="Oggetto" type="hidden">
+		<div type="intestazione_moduloprincipale_senzabollo">
+			<script>
+function get_ufficio_dest() {
+
+	var metas = document.getElementsByTagName('meta');
+	var ufficio = '';
+	var ufficio_default = '';
+	var mod_princ = '';
+	for (i=0; i<metas.length; i++) {
+		if (metas[i].getAttribute("name") == "GLOBO_modulo") {
+			ufficio_default = metas[i].getAttribute("destinatario_ufficio");
+			mod_princ = metas[i].getAttribute("codice_modulo");
+		}
+	}
+
+	ufficio = $('#Parametri_UfficioDestinatario').val();
+
+	if (ufficio == undefined || ufficio == '') {
+		ufficio = ufficio_default;
+	}
+
+	if (ufficio == 'UOPATRIMONIO') {
+		return 'Ufficio Patrimonio';
+	}
+
+	if (ufficio == 'UOPROTOCOLLO') {
+		return 'Ufficio Protocollo';
+	}
+
+	if (ufficio == 'UOPUBBLICASICUREZZA') {
+		return 'Ufficio Pubblica Sicurezza';
+	}
+
+	if (ufficio == 'UOSUAP') {
+		return 'Ufficio SUAP';
+	}
+
+	if (ufficio == 'UOSUE') {
+		return 'Ufficio SUE';
+	}
+
+	if (ufficio == 'UOSUEPRODUTTIVO') {
+		return 'Ufficio SUAP/SUE';
+	}
+
+	if (ufficio == 'UOTRIBUTI') {
+		return 'Ufficio Tributi';
+	}
+
+	if (ufficio == 'UOURBANISTICA') {
+		return 'Ufficio Urbanistica';
+	}
+
+	if (ufficio == 'UOSERVIZIDEMOGRAFICI') {
+		return 'Ufficio Servizi demografici';
+	}
+
+	if (ufficio == 'UOAMBIENTE') {
+		return 'Ufficio Ambiente';
+	}
+
+	<!-- Provincia di Foggia -->
+	if (ufficio == 'UOPAESAGGISTICA') {
+		return 'Ufficio Autorizzazioni paesaggistiche';
+	}
+
+	<!-- Provincia di Foggia -->
+	if (ufficio == 'UOSISMICA') {
+		return 'Ufficio Edilizia sismica';
+	}
+
+	<!-- Provincia di Foggia. attingimenti -->
+	if (ufficio == 'UORISORSEIDRICHEST04') {
+		return 'Ufficio Risorse idriche';
+	}
+
+	<!-- Provincia di Foggia, pozzi -->
+	if (ufficio == 'UORISORSEIDRICHEST05') {
+		return 'Ufficio Risorse idriche';
+	}
+
+	if (ufficio == 'UOPOLIZIALOCALE') {
+		return 'Ufficio Polizia Locale';
+	}
+
+	if (ufficio == 'UOPUBBLICAISTRUZIONE') {
+		return 'Ufficio Servizi scolastici e per l\'infanzia';
+	}
+
+	if (ufficio == 'UOSERVIZISOCIALI') {
+		return 'Ufficio Servizi sociali';
+	}
+
+	if (ufficio == 'UOHOUSINGSOCIALE') {
+		return 'Ufficio ERP e housing sociale';
+	}
+
+	if (ufficio == 'UOTRASPORTI') {
+		return 'Ufficio Trasporti';
+	}
+
+	if (ufficio == 'UOECOLOGIA') {
+		return 'Ufficio Ecologia';
+	}
+
+	if (ufficio == 'UOVINCOLISTICA') {
+		return 'Ufficio Vincolistica (SUE)';
+	}
+
+	if (ufficio == 'UOVINCOLISTICAPRODUTTIVA') {
+		return 'Ufficio Vincolistica (SUAP/SUE)';
+	}
+
+	if (ufficio == 'UOTOPONOMASTICA') {
+		return 'Ufficio Toponomastica e numerazione civica';
+	}
+
+	if (ufficio == 'UORIM') {
+		return 'Ufficio RIM';
+	}
+
+	if (ufficio == 'UOSEGNALAZIONI') {
+		return 'Ufficio Segnalazioni';
+	}
+
+	if (ufficio == 'UOLAVORIPUBBLICI') {
+		return 'Ufficio Lavori pubblici';
+	}
+
+	if (ufficio == 'UOSEGRETERIAGENERALE') {
+		return 'Ufficio Segreteria, economato e provveditorato';
+	}
+
+	if (ufficio == 'UOSERVIZICIMITERIALI') {
+		return 'Ufficio Servizi cimiteriali';
+	}
+
+	if (ufficio == 'UOCULTURAMUSEIBIBLIOTECHE') {
+		return 'Ufficio Cultura, musei e biblioteche';
+	}
+
+	if (ufficio == 'UOSPORTETEMPOLIBERO') {
+		return 'Ufficio Sport e tempo libero';
+	}
+
+	<!-- Città Metropolitana di Roma Capitale -->
+	if (ufficio == 'UOAMBIENTEDIFESASUOLO') {
+		return 'Ufficio Ambiente e Difesa del suolo';
+	}
+
+	<!-- Città Metropolitana di Roma Capitale -->
+	if (ufficio == 'UOTERRITORIOTUTELAAMBIENTALE') {
+		return 'Ufficio Territorio e Tutela ambienale';
+	}
+
+	if (ufficio == 'UOCENTRALEUNICADICOMMITTENZA') {
+		return 'Ufficio Centrale Unica di Committenza (CUC)';
+	}
+
+	return ufficio;
+
+}
+</script>
+			
+        <div id="menuPrincipal" class="fila"></div>
+		<h1 class="Modulo">
+			Richiesta di iscrizione al nido d'infanzia 
+			<h2 class="Modulo simpatico-text-paragraph">Ai sensi del regolamento per la disciplina
+				del sistema dei servizi socio educativi per la prima infanzia
+				</h2>
+		</h1>
+		<!-- visibility:visibility or display:none, cursor:pointer or default; visibility_mail: no_mail or mail_ordinaria or mail_pec, cf_obbligatorio: true or false -->
+		<!-- creare l'hidden <input id="AventeTitolo_DatiPersonaObbligatori" name="AventeTitolo_DatiPersonaObbligatori" type="hidden"/> -->
+		<!-- Creare l'hidden <input id="AventeTitolo_Titolo" 		name="AventeTitolo_Titolo" 		  type="hidden" value=""/> -->
+		<!-- Creare l'hidden <input id="AventeTitolo_Ruolo"  		name="AventeTitolo_Ruolo"  		  type="hidden" value=""/> -->
+		<div type="Anagrafica_persona_fisica">
+			<!-- simpatico start -->
+			<div class="simpatico-block simpatico-query-and-answer">
+				<!-- simpatico end -->
+				<table class="Modulo"
+					style="border: 1px solid grey; visibility: visibility">
+					<tbody>
+						<tr class="Rigaintestazione">
+							<td style="border-right: 0px">
+								<p class="Labeltabella" style="vertical-align: middle">ll
+									sottoscritto genitore/affidatario</p>
+							</td>
+							<td style="width: 38%; border-left: 0px; border-right: 0px">
+								<p class="Labeltabella"></p>
+							</td>
+							<td
+								style="width: 3%; cursor: pointer; border-left: 0px; border-right: 0px">
+								<span style="pd4ml-visibility: hidden; pd4ml-display: none;">
+
+
+									
+							</span>
+							</td>
+							<!--<td style="width:3%; border-left:0px; cursor:pointer">
+                    <span style="pd4ml-visibility: hidden; pd4ml-display: none;">
+						
+<img class="recupero-dati" alt="Carica dati da codice fiscale" style="visibility:visibility" title="Carica dati da codice fiscale" src="./appoggio/img/carica_campi.png" onclick="transcodificaCf( $('#AventeTitolo_CodiceFiscale').val(), 'AventeTitolo' )" />
+
+					</span>
+                </td>-->
+						</tr>
+					</tbody>
+					<div ws-name="getPersonaREST"
+						ws-param-in="codiceFiscale=AventeTitolo_CodiceFiscale"
+						ws-param-out="AventeTitolo_ProvinciaResidenza=provincia;AventeTitolo_ViaResidenza=indirizzo;AventeTitolo_CodiceComuneNascita=codiceComuneNascita;AventeTitolo_Cognome=cognome;AventeTitolo_CodiceFamiglia=codiceFamiglia;AventeTitolo_CodiceVia=codiceVia;AventeTitolo_CivicoResidenza=numeroCivico;AventeTitolo_MatricolaAnagrafe=matricola;AventeTitolo_Nazionalita=nazione;AventeTitolo_Nazione=nazione;AventeTitolo_Cittadinanza=stato;AventeTitolo_Sesso=sesso;AventeTitolo_ComuneResidenza=citta;AventeTitolo_CAPResidenza=cap;AventeTitolo_BarraResidenza=barra;AventeTitolo_LuogoNascita=comuneNascita;AventeTitolo_Nome=nome;AventeTitolo_DataNascita=datanascita"
+						ws-on="#AventeTitolo_CodiceFiscale:change"></div>
+
+				</table>
+				<table class="Modulo"
+					style="border: 1px solid grey; margin-top: -1px"
+					mandatory_enabled="#AventeTitolo_DatiPersonaObbligatori.checked()">
+					<tbody>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="2">
+								<p class="Labelcella">Cognome</p>
+							</td>
+							<td>
+								<p class="Labelcella">Nome</p>
+							</td>
+							<td>
+								<p class="Labelcella">Codice Fiscale</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" />
+							<input class="" id="AventeTitolo_Cognome"
+								name="AventeTitolo_Cognome" style="width: 100%" label="Cognome">
+							</td>
+							<td><input class="" id="AventeTitolo_Nome"
+								name="AventeTitolo_Nome" style="width: 100%" label="Nome"></td>
+
+							<td><input class="" id="AventeTitolo_CodiceFiscale"
+								name="AventeTitolo_CodiceFiscale" style="width: 100%"
+								format="cf" label="Il codice fiscale"></td>
+
+
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td style="width: 24%;">
+								<p class="Labelcella">Data di nascita</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Sesso (M/F)</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Cittadinanza</p>
+							</td>
+							<td style="width: 34%;">
+								<p class="Labelcella">Luogo di nascita</p>
+							</td>
+						</tr>
+						<tr>
+							<td><input class="" id="AventeTitolo_DataNascita"
+								name="AventeTitolo_DataNascita" style="width: 100%;"
+								format="date" label="Data di nascita"></td>
+							<td><select class="inputNormal" id="AventeTitolo_Sesso"
+								name="AventeTitolo_Sesso" style="width: 100%;" label="Sesso"><option
+										value=""></option>
+									<option value="M">M</option>
+									<option value="F">F</option></select></td>
+							<td><select id="AventeTitolo_Cittadinanza"
+								name="AventeTitolo_Cittadinanza" style="width: 100%"
+								label="Cittadinanza"><option value=""></option>
+									<optgroup label="Unione Europea">
+										<option value="ITALIA">ITALIA</option>
+										<option value="AUSTRIA">AUSTRIA</option>
+										<option value="BELGIO">Belgio</option>
+										<option value="BULGARIA">Bulgaria</option>
+										<option value="CIPRO">Cipro</option>
+										<option value="DANIMARCA">Danimarca</option>
+										<option value="EIRE">Eire</option>
+										<option value="ESTONIA">Estonia</option>
+										<option value="FINLANDIA">Finlandia</option>
+										<option value="FRANCIA">Francia</option>
+										<option value="GERMANIA">Germania</option>
+										<option value="GRECIA">Grecia</option>
+										<option value="LETTONIA">Lettonia</option>
+										<option value="LITUANIA">Lituania</option>
+										<option value="LUSSEMBURGO">Lussemburgo</option>
+										<option value="MALTA">Malta</option>
+										<option value="PAESI BASSI">Paesi Bassi</option>
+										<option value="POLONIA">Polonia</option>
+										<option value="PORTOGALLO">Portogallo</option>
+										<option value="REGNO UNITO">Regno Unito</option>
+										<option value="REPUBBLICA CECA">Repubblica Ceca</option>
+										<option value="ROMANIA">Romania</option>
+										<option value="SLOVACCHIA">Slovacchia</option>
+										<option value="SLOVENIA">Slovenia</option>
+										<option value="SPAGNA">Spagna</option>
+										<option value="SVEZIA">Svezia</option>
+										<option value="UNGHERIA">Ungheria</option>
+									</optgroup>
+									<optgroup label="NON Unione Europea">
+										<option value="AFGHANISTAN">Afghanistan</option>
+										<option value="ALBANIA">Albania</option>
+										<option value="ALGERIA">Algeria</option>
+									</optgroup></select></td>
+							<td><input class="" id="AventeTitolo_LuogoNascita"
+								name="AventeTitolo_LuogoNascita" style="width: 100%;"
+								label="Luogo di nascita"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="Modulo"
+					style="border: 1px solid grey; margin-top: -1px; visibility: visibility">
+					<tbody>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="6">
+								<p class="Labelcella">Residenza</p>
+							</td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td style="width: 9%;">
+								<p class="Labelcella">Provincia</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Comune</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Indirizzo</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Civico</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Barra</p>
+							</td>
+							<td style="width: 16%;">
+								<p class="Labelcella">CAP</p>
+							</td>
+						</tr>
+						<tr>
+							<td><select id="AventeTitolo_ProvinciaResidenza"
+								name="AventeTitolo_ProvinciaResidenza" style="width: 100%"
+								label="Provincia di residenza"><option value=""></option>
+									<option value="AG">AG</option>
+									<option value="AL">AL</option>
+									<option value="AN">AN</option>
+									<option value="AO">AO</option>
+									<option value="AP">AP</option>
+									<option value="AQ">AQ</option>
+									<option value="AR">AR</option>
+									<option value="AT">AT</option>
+									<option value="AV">AV</option>
+									<option value="BA">BA</option>
+									<option value="BG">BG</option>
+									<option value="BI">BI</option>
+									<option value="BL">BL</option>
+									<option value="BN">BN</option>
+									<option value="BO">BO</option>
+									<option value="BR">BR</option>
+									<option value="BS">BS</option>
+									<option value="BT">BT</option>
+									<option value="BZ">BZ</option>
+									<option value="CA">CA</option>
+									<option value="CB">CB</option>
+									<option value="CE">CE</option>
+									<option value="CH">CH</option>
+									<option value="CI">CI</option>
+									<option value="CL">CL</option>
+									<option value="CN">CN</option>
+									<option value="CO">CO</option>
+									<option value="CR">CR</option>
+									<option value="CS">CS</option>
+									<option value="CT">CT</option>
+									<option value="CZ">CZ</option>
+									<option value="EN">EN</option>
+									<option value="FC">FC</option>
+									<option value="FE">FE</option>
+									<option value="FG">FG</option>
+									<option value="FI">FI</option>
+									<option value="FM">FM</option>
+									<option value="FR">FR</option>
+									<option value="GE">GE</option>
+									<option value="GO">GO</option>
+									<option value="GR">GR</option>
+									<option value="IM">IM</option>
+									<option value="IS">IS</option>
+									<option value="KR">KR</option>
+									<option value="LC">LC</option>
+									<option value="LE">LE</option>
+									<option value="LI">LI</option>
+									<option value="LO">LO</option>
+									<option value="LT">LT</option>
+									<option value="LU">LU</option>
+									<option value="MB">MB</option>
+									<option value="MC">MC</option>
+									<option value="ME">ME</option>
+									<option value="MI">MI</option>
+									<option value="MN">MN</option>
+									<option value="MO">MO</option>
+									<option value="MS">MS</option>
+									<option value="MT">MT</option>
+									<option value="NA">NA</option>
+									<option value="NO">NO</option>
+									<option value="NU">NU</option>
+									<option value="OG">OG</option>
+									<option value="OR">OR</option>
+									<option value="OT">OT</option>
+									<option value="PA">PA</option>
+									<option value="PC">PC</option>
+									<option value="PD">PD</option>
+									<option value="PE">PE</option>
+									<option value="PG">PG</option>
+									<option value="PI">PI</option>
+									<option value="PN">PN</option>
+									<option value="PO">PO</option>
+									<option value="PR">PR</option>
+									<option value="PT">PT</option>
+									<option value="PU">PU</option>
+									<option value="PV">PV</option>
+									<option value="PZ">PZ</option>
+									<option value="RA">RA</option>
+									<option value="RC">RC</option>
+									<option value="RE">RE</option>
+									<option value="RG">RG</option>
+									<option value="RI">RI</option>
+									<option value="RM">RM</option>
+									<option value="RN">RN</option>
+									<option value="RO">RO</option>
+									<option value="SA">SA</option>
+									<option value="SI">SI</option>
+									<option value="SO">SO</option>
+									<option value="SP">SP</option>
+									<option value="SR">SR</option>
+									<option value="SS">SS</option>
+									<option value="SV">SV</option>
+									<option value="TA">TA</option>
+									<option value="TE">TE</option>
+									<option value="TN">TN</option>
+									<option value="TO">TO</option>
+									<option value="TP">TP</option>
+									<option value="TR">TR</option>
+									<option value="TS">TS</option>
+									<option value="TV">TV</option>
+									<option value="UD">UD</option>
+									<option value="VA">VA</option>
+									<option value="VB">VB</option>
+									<option value="VC">VC</option>
+									<option value="VE">VE</option>
+									<option value="VI">VI</option>
+									<option value="VR">VR</option>
+									<option value="VS">VS</option>
+									<option value="VT">VT</option>
+									<option value="VV">VV</option>
+									<option value="EE">EE</option></select></td>
+							<td><input class="" id="AventeTitolo_ComuneResidenza"
+								name="AventeTitolo_ComuneResidenza" style="width: 100%"
+								label="Comune di residenza"
+								mandatory_enabled="#AventeTitolo_DatiPersonaObbligatori.checked()"></td>
+							<td><input class="" id="AventeTitolo_ViaResidenza"
+								name="AventeTitolo_ViaResidenza" style="width: 100%;"
+								label="Via di residenza"
+								mandatory_enabled="#AventeTitolo_DatiPersonaObbligatori.checked()"></td>
+							<td><input class="" id="AventeTitolo_CivicoResidenza"
+								name="AventeTitolo_CivicoResidenza" style="width: 100%;"
+								label="Civico di residenza" maxlength="10"
+								mandatory_enabled="#AventeTitolo_DatiPersonaObbligatori.checked()"></td>
+							<td><input class="" id="AventeTitolo_BarraResidenza"
+								name="AventeTitolo_BarraResidenza" style="width: 100%;"
+								label="Barra di residenza" maxlength="5"></td>
+							<td><input class="" id="AventeTitolo_CAPResidenza"
+								name="AventeTitolo_CAPResidenza" style="width: 100%;"
+								format="cap" label="CAP di residenza"
+								enabled="#AventeTitolo_DatiPersonaObbligatori.checked()"
+								mandatory="#AventeTitolo_DatiPersonaObbligatori.checked() and #AventeTitolo_ProvinciaResidenza.value() != 'EE'"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="Modulo"
+					style="border: 1px solid grey; margin-top: -1px;"
+					mandatory_enabled="#AventeTitolo_DatiPersonaObbligatori.checked()">
+					<tbody>
+						<tr class="Rigaintestazioneridotta">
+							<td style="width: 16.5%;">
+								<p class="Labelcella">Numero cellulare</p>
+							</td>
+							<td style="width: 16.5%;">
+								<p class="Labelcella">Fax</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">
+									E-mail <i> (posta elettronica ordinaria) </i>
+								</p>
+							</td>
+							<td>
+								<p class="Labelcella">
+									E-mail PEC <i> (domicilio digitale) </i>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td><input class="inputNormal" id="AventeTitolo_Telefono"
+								label="Telefono" name="AventeTitolo_Telefono"
+								style="width: 100%"></td>
+
+
+							<td><input class="inputNormal" id="AventeTitolo_Fax"
+								label="Fax" mandatory="false" name="AventeTitolo_Fax"
+								style="width: 100%"></td>
+							<td><input class="inputNormal" format="email"
+								id="AventeTitolo_EMail" label="E-mail ordinaria"
+								mandatory="false" name="AventeTitolo_EMail" style="width: 100%;"></td>
+							<td><input class="inputNormal" format="pec"
+								id="AventeTitolo_EMailPEC" label="E-mail PEC del "
+								name="AventeTitolo_EMailPEC" style="width: 100%;"
+								mandatory="false"></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<input id="AventeTitolo_DatiPersonaObbligatori"
+				name="AventeTitolo_DatiPersonaObbligatori" dynamic_check="true"
+				type="hidden" /><input id="AventeTitolo_Titolo"
+				name="AventeTitolo_Titolo" type="hidden" value="" /><input
+				id="AventeTitolo_Ruolo" name="AventeTitolo_Ruolo" type="hidden"
+				value="" /><input type="hidden" id="AventeTitolo_CodiceFamiglia"
+				name="AventeTitolo_CodiceFamiglia" /><input type="hidden"
+				id="AventeTitolo_CodiceVia" name="AventeTitolo_CodiceVia" /><input
+				type="hidden" id="AventeTitolo_MatricolaAnagrafe"
+				name="AventeTitolo_MatricolaAnagrafe" /><input type="hidden"
+				id="AventeTitolo_Nazionalita" name="AventeTitolo_Nazionalita" /><input
+				type="hidden" id="AventeTitolo_Nazione" name="AventeTitolo_Nazione" /><input
+				type="hidden" id="AventeTitolo_CodiceComuneNascita"
+				name="AventeTitolo_CodiceComuneNascita"> <!-- simpatico start -->
+		</div>
+		<!--  simpatico end -->
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="3"><b>in qualità di</b></td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Ruolo</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3"><select class="inputNormal"
+						id="AventeTitolo_RuoloRichiedente"
+						name="AventeTitolo_RuoloRichiedente" style="width: 100%;"
+						mandatory_enabled="true" label="Ruolo del genitore/affidatario"><option
+								value=""></option>
+							<option value="padre">padre</option>
+							<option value="madre">madre</option>
+							<option value="tutore">tutore/tutrice</option>
+							<option value="affidatario">affidatario/a</option>
+							<option value="preadottivo">affidatario/a preadottivo/a</option></select></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Dati relativi al provvidimento di
+							affidamento o tutela (da compilare se il ruolo è tutore o
+							affidatario, anche preadottivo)</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Ente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Numero/Protocollo</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="AventeTitolo_EnteProvv"
+						name="AventeTitolo_EnteProvv" style="width: 100%;"
+						label="Ente che ha emanato il provvedimento di affidamento o tutela"
+						mandatory_enabled="#AventeTitolo_RuoloRichiedente.check_value([ 'tutore','affidatario','preadottivo'])"></td>
+					<td><input class="inputNormal" id="AventeTitolo_NumProt"
+						name="AventeTitolo_NumProt" style="width: 100%;"
+						label="Numero o protocollo del provvedimento di affidamento o tutela"
+						mandatory_enabled="#AventeTitolo_RuoloRichiedente.check_value([ 'tutore','affidatario','preadottivo'])"></td>
+					<td><input class="inputNormal" id="AventeTitolo_Data"
+						name="AventeTitolo_Data" format="date" style="width: 100%;"
+						label="Data del provvedimento di affidamento o tutela"
+						mandatory_enabled="#AventeTitolo_RuoloRichiedente.check_value([ 'tutore','affidatario','preadottivo'])"></td>
+				</tr>
+			</tbody>
+		</table>
+		<br /> <br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer"
+			style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p>
+							<b> del bambino/a </b>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_CF" name="Tassonomia_CF"
+							label="Codice fiscale bambino"></div> <input id="Tassonomia_CF1"
+						name="Tassonomia_CF" type="radio" value="1"
+						enabled="#AventeTitolo_RuoloRichiedente.check_value([ 'madre','padre'])">
+					</td>
+					<td>
+						<p>appartenente al mio nucleo famigliare</p>
+					</td>
+					<td colspan="4">
+
+						<div id="lista_famiglia" ws-name="getListaFamigliaREST"
+							ws-param-in="codiceFamiglia=AventeTitolo_CodiceFamiglia"
+							ws-param-out="Tassonomia_ListaFam1=listaCodiceFiscale"
+							ws-on="#AventeTitolo_CodiceFamiglia:change"></div> <select
+						enabled="#Tassonomia_CF1.checked()" class="inputNormal"
+						id="Tassonomia_ListaFam1" name="Tassonomia_ListaFam1"
+						style="width: 100%;" label="Scelta da lista familiari"></select>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_CF2" name="Tassonomia_CF" type="radio"
+						value="2">
+					</td>
+					<td>
+						<p>avente codice fiscale</p>
+					</td>
+					<td colspan="4" />
+					<input class="inputNormal" id="Parametri_CFBambino"
+						name="Parametri_CFBambino" format="cf"
+						label="Codice fiscale del bambino"
+						mandatory_enabled="#Tassonomia_CF2.checked()">
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_CF3" name="Tassonomia_CF" type="radio"
+						value="3">
+					</td>
+					<td colspan="5">
+						<p>non ancora in possesso di codice fiscale perchè in corso di
+							iscrizione all'anagrafe</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br /> <br />
+		<!-- visibility:visibility or display:none, cursor:pointer or default; visibility_mail: no_mail or mail_ordinaria or mail_pec, cf_obbligatorio: true or false -->
+		<!-- creare l'hidden <input id="Bambino_DatiPersonaObbligatori" name="Bambino_DatiPersonaObbligatori" type="hidden"/> -->
+		<!-- Creare l'hidden <input id="Bambino_Titolo"    name="Bambino_Titolo"      type="hidden" value=""/> -->
+		<!-- Creare l'hidden <input id="Bambino_Ruolo"     name="Bambino_Ruolo"       type="hidden" value=""/> -->
+
+
+		<!-- simpatico add start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!-- simpatico add end -->
+			<div type="Anagrafica_bambino">
+				<table class="Modulo"
+					style="border: 1px solid grey; visibility: visibility">
+					<tbody>
+						<tr class="Rigaintestazione">
+							<td style="border-right: 0px">
+								<p class="Labeltabella" style="vertical-align: middle">Anagrafica
+									del/la bambino/a</p>
+							</td>
+							<td style="width: 38%; border-left: 0px; border-right: 0px">
+								<p class="Labeltabella"></p>
+							</td>
+							<td
+								style="width: 3%; cursor: pointer; border-left: 0px; border-right: 0px">
+								<span style="pd4ml-visibility: hidden; pd4ml-display: none;">
+
+
+									<div ws-name="getPersonaREST"
+										ws-param-in="codiceFiscale=Parametri_CFBambino"
+										ws-param-out="Bambino_Nazionalita=nazione;Bambino_Nome=nome;Bambino_LuogoNascita=comuneNascita;Bambino_CFBambino=codiceFiscale;Bambino_Nazione=nazione;Bambino_Cittadinanza=stato;Bambino_ViaResidenza=indirizzo;Bambino_Sesso=sesso;Bambino_CodiceFamiglia=codiceFamiglia;Bambino_Cognome=cognome;Bambino_CodiceComuneNascita=codiceComuneNascita;Bambino_DataNascita=datanascita;Bambino_CivicoResidenza=numeroCivico;Bambino_CAPResidenza=cap;Bambino_ComuneResidenza=citta;Bambino_ProvinciaResidenza=provincia;Bambino_BarraResidenza=barra;Bambino_MatricolaAnagrafe=matricola;Bambino_CodiceVia=codiceVia"
+										ws-on="#Parametri_CFBambino:change"></div>
+
+
+									<div ws-name="getPersonaREST"
+										ws-param-in="codiceFiscale=Tassonomia_ListaFam1"
+										ws-param-out="Bambino_Nazionalita=nazione;Bambino_Nome=nome;Bambino_LuogoNascita=comuneNascita;Bambino_CFBambino=codiceFiscale;Bambino_Nazione=nazione;Bambino_Cittadinanza=stato;Bambino_ViaResidenza=indirizzo;Bambino_Sesso=sesso;Bambino_CodiceFamiglia=codiceFamiglia;Bambino_Cognome=cognome;Bambino_CodiceComuneNascita=codiceComuneNascita;Bambino_DataNascita=datanascita;Bambino_CivicoResidenza=numeroCivico;Bambino_CAPResidenza=cap;Bambino_ComuneResidenza=citta;Bambino_ProvinciaResidenza=provincia;Bambino_BarraResidenza=barra;Bambino_MatricolaAnagrafe=matricola;Bambino_CodiceVia=codiceVia"
+										ws-on="#Tassonomia_ListaFam1:change"></div>
+
+
+							</span>
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+				<table class="Modulo"
+					style="border: 1px solid grey; margin-top: -1px"
+					mandatory="#Bambino_DatiPersonaObbligatori.checked()">
+					<tbody>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="2">
+								<p class="Labelcella">Cognome</p>
+							</td>
+							<td colspan="2">
+								<p class="Labelcella">Nome</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" />
+							<input class="" id="Bambino_Cognome" name="Bambino_Cognome"
+								style="width: 100%" label="Cognome">
+							</td>
+							<td colspan="2" />
+							<input class="" id="Bambino_Nome" name="Bambino_Nome"
+								style="width: 100%" label="Nome">
+							</td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td style="width: 24%;">
+								<p class="Labelcella">Data di nascita</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Sesso (M/F)</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Cittadinanza</p>
+							</td>
+							<td style="width: 34%;">
+								<p class="Labelcella">Luogo di nascita</p>
+							</td>
+						</tr>
+						<tr>
+							<td><input class="" id="Bambino_DataNascita"
+								name="Bambino_DataNascita" style="width: 100%;" format="date"
+								label="Data di nascita"></td>
+							<td><select class="inputNormal" id="Bambino_Sesso"
+								name="Bambino_Sesso" style="width: 100%;" label="Sesso"><option
+										value=""></option>
+									<option value="M">M</option>
+									<option value="F">F</option></select></td>
+							<td><select id="Bambino_Cittadinanza"
+								name="Bambino_Cittadinanza" style="width: 100%"
+								label="Cittadinanza"><option value=""></option>
+									<optgroup label="Unione Europea">
+										<option value="ITALIA">ITALIA</option>
+										<option value="AUSTRIA">AUSTRIA</option>
+										<option value="BELGIO">Belgio</option>
+										<option value="BULGARIA">Bulgaria</option>
+										<option value="CIPRO">Cipro</option>
+										<option value="DANIMARCA">Danimarca</option>
+										<option value="EIRE">Eire</option>
+										<option value="ESTONIA">Estonia</option>
+										<option value="FINLANDIA">Finlandia</option>
+										<option value="FRANCIA">Francia</option>
+										<option value="GERMANIA">Germania</option>
+										<option value="GRECIA">Grecia</option>
+										<option value="LETTONIA">Lettonia</option>
+										<option value="LITUANIA">Lituania</option>
+										<option value="LUSSEMBURGO">Lussemburgo</option>
+										<option value="MALTA">Malta</option>
+										<option value="PAESI BASSI">Paesi Bassi</option>
+										<option value="POLONIA">Polonia</option>
+										<option value="PORTOGALLO">Portogallo</option>
+										<option value="REGNO UNITO">Regno Unito</option>
+										<option value="REPUBBLICA CECA">Repubblica Ceca</option>
+										<option value="ROMANIA">Romania</option>
+										<option value="SLOVACCHIA">Slovacchia</option>
+										<option value="SLOVENIA">Slovenia</option>
+										<option value="SPAGNA">Spagna</option>
+										<option value="SVEZIA">Svezia</option>
+										<option value="UNGHERIA">Ungheria</option>
+									</optgroup>
+									<optgroup label="NON Unione Europea">
+										<option value="AFGHANISTAN">Afghanistan</option>
+										<option value="ALBANIA">Albania</option>
+										<option value="ALGERIA">Algeria</option>
+									</optgroup></select></td>
+							<td><input class="" id="Bambino_LuogoNascita"
+								name="Bambino_LuogoNascita" style="width: 100%;"
+								label="Luogo di nascita"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="Modulo"
+					style="border: 1px solid grey; margin-top: -1px">
+					<tbody>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="6">
+								<p class="Labelcella">Residenza</p>
+							</td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td style="width: 9%;">
+								<p class="Labelcella">Provincia</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Comune</p>
+							</td>
+							<td style="width: 33%;">
+								<p class="Labelcella">Indirizzo</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Civico</p>
+							</td>
+							<td style="width: 9%;">
+								<p class="Labelcella">Barra</p>
+							</td>
+							<td style="width: 16%;">
+								<p class="Labelcella">CAP</p>
+							</td>
+						</tr>
+						<tr>
+							<td><select id="Bambino_ProvinciaResidenza"
+								name="Bambino_ProvinciaResidenza" style="width: 100%"
+								label="Provincia di residenza"><option value=""></option>
+									<option value="AG">AG</option>
+									<option value="AL">AL</option>
+									<option value="AN">AN</option>
+									<option value="AO">AO</option>
+									<option value="AP">AP</option>
+									<option value="AQ">AQ</option>
+									<option value="AR">AR</option>
+									<option value="AT">AT</option>
+									<option value="AV">AV</option>
+									<option value="BA">BA</option>
+									<option value="BG">BG</option>
+									<option value="BI">BI</option>
+									<option value="BL">BL</option>
+									<option value="BN">BN</option>
+									<option value="BO">BO</option>
+									<option value="BR">BR</option>
+									<option value="BS">BS</option>
+									<option value="BT">BT</option>
+									<option value="BZ">BZ</option>
+									<option value="CA">CA</option>
+									<option value="CB">CB</option>
+									<option value="CE">CE</option>
+									<option value="CH">CH</option>
+									<option value="CI">CI</option>
+									<option value="CL">CL</option>
+									<option value="CN">CN</option>
+									<option value="CO">CO</option>
+									<option value="CR">CR</option>
+									<option value="CS">CS</option>
+									<option value="CT">CT</option>
+									<option value="CZ">CZ</option>
+									<option value="EN">EN</option>
+									<option value="FC">FC</option>
+									<option value="FE">FE</option>
+									<option value="FG">FG</option>
+									<option value="FI">FI</option>
+									<option value="FM">FM</option>
+									<option value="FR">FR</option>
+									<option value="GE">GE</option>
+									<option value="GO">GO</option>
+									<option value="GR">GR</option>
+									<option value="IM">IM</option>
+									<option value="IS">IS</option>
+									<option value="KR">KR</option>
+									<option value="LC">LC</option>
+									<option value="LE">LE</option>
+									<option value="LI">LI</option>
+									<option value="LO">LO</option>
+									<option value="LT">LT</option>
+									<option value="LU">LU</option>
+									<option value="MB">MB</option>
+									<option value="MC">MC</option>
+									<option value="ME">ME</option>
+									<option value="MI">MI</option>
+									<option value="MN">MN</option>
+									<option value="MO">MO</option>
+									<option value="MS">MS</option>
+									<option value="MT">MT</option>
+									<option value="NA">NA</option>
+									<option value="NO">NO</option>
+									<option value="NU">NU</option>
+									<option value="OG">OG</option>
+									<option value="OR">OR</option>
+									<option value="OT">OT</option>
+									<option value="PA">PA</option>
+									<option value="PC">PC</option>
+									<option value="PD">PD</option>
+									<option value="PE">PE</option>
+									<option value="PG">PG</option>
+									<option value="PI">PI</option>
+									<option value="PN">PN</option>
+									<option value="PO">PO</option>
+									<option value="PR">PR</option>
+									<option value="PT">PT</option>
+									<option value="PU">PU</option>
+									<option value="PV">PV</option>
+									<option value="PZ">PZ</option>
+									<option value="RA">RA</option>
+									<option value="RC">RC</option>
+									<option value="RE">RE</option>
+									<option value="RG">RG</option>
+									<option value="RI">RI</option>
+									<option value="RM">RM</option>
+									<option value="RN">RN</option>
+									<option value="RO">RO</option>
+									<option value="SA">SA</option>
+									<option value="SI">SI</option>
+									<option value="SO">SO</option>
+									<option value="SP">SP</option>
+									<option value="SR">SR</option>
+									<option value="SS">SS</option>
+									<option value="SV">SV</option>
+									<option value="TA">TA</option>
+									<option value="TE">TE</option>
+									<option value="TN">TN</option>
+									<option value="TO">TO</option>
+									<option value="TP">TP</option>
+									<option value="TR">TR</option>
+									<option value="TS">TS</option>
+									<option value="TV">TV</option>
+									<option value="UD">UD</option>
+									<option value="VA">VA</option>
+									<option value="VB">VB</option>
+									<option value="VC">VC</option>
+									<option value="VE">VE</option>
+									<option value="VI">VI</option>
+									<option value="VR">VR</option>
+									<option value="VS">VS</option>
+									<option value="VT">VT</option>
+									<option value="VV">VV</option>
+									<option value="EE">EE</option></select></td>
+							<td><input class="inputNormal" id="Bambino_ComuneResidenza"
+								name="Bambino_ComuneResidenza"
+								mandatory="#Bambino_DatiPersonaObbligatori.checked()"
+								style="width: 100%" label="Comune di residenza"></td>
+							<td><input class="" id="Bambino_ViaResidenza"
+								name="Bambino_ViaResidenza"
+								mandatory="#Bambino_DatiPersonaObbligatori.checked()"
+								style="width: 100%;" label="Via di residenza"></td>
+							<td><input class="" id="Bambino_CivicoResidenza"
+								name="Bambino_CivicoResidenza"
+								mandatory="#Bambino_DatiPersonaObbligatori.checked()"
+								style="width: 100%;" label="Civico di residenza" maxlength="10"></td>
+							<td><input class="" id="Bambino_BarraResidenza"
+								name="Bambino_BarraResidenza" style="width: 100%;"
+								label="Barra di residenza" maxlength="5"></td>
+							<td><input class="" id="Bambino_CAPResidenza"
+								name="Bambino_CAPResidenza"
+								mandatory="#Bambino_DatiPersonaObbligatori.checked()"
+								style="width: 100%;" format="cap" label="CAP di residenza"></td>
+						</tr>
+					</tbody>
+				</table>
+				<input id="Bambino_DatiPersonaObbligatori"
+					name="Bambino_DatiPersonaObbligatori" dynamic_check="true"
+					type="hidden" /><input type="hidden" id="Bambino_CodiceFamiglia"
+					name="Bambino_CodiceFamiglia" /><input type="hidden"
+					id="Bambino_CodiceVia" name="Bambino_CodiceVia" /><input
+					type="hidden" id="Bambino_CFBambino" name="Bambino_CFBambino" /><input
+					type="hidden" id="Bambino_MatricolaAnagrafe"
+					name="Bambino_MatricolaAnagrafe" /><input type="hidden"
+					id="Bambino_Nazionalita" name="Bambino_Nazionalita" /><input
+					type="hidden" id="Bambino_Nazione" name="Bambino_Nazione" /><input
+					type="hidden" id="Bambino_CodiceComuneNascita"
+					name="Bambino_CodiceComuneNascita">
+			</div>
+			<input type="hidden" name="CodiceFamiglia" id="CodiceFamiglia"
+				dynamic_value="(#AventeTitolo_RuoloRichiedente.check_value([ 'affidatario','preadottivo']) ? #AventeTitolo_CodiceFamiglia.value() : 0) || (#AventeTitolo_RuoloRichiedente.check_value([ 'madre','padre','tutore']) ? #Bambino_CodiceFamiglia.value() : 0)"><br />
+			<table class="Modulo"
+				style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazione">
+						<td colspan="2"><b>Esito verifica età del bambino</b></td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input id="Modulo_Compilabile1" name="Modulo_Compilabile1"
+							dynamic_check="moment(#Data_PDF.value(), 'DD/MM/YYYY').diff(moment(#Bambino_DataNascita.value(), 'DD/MM/YYYY'), 'years') &lt; 3"
+							enabled="moment(#Data_PDF.value(), 'DD/MM/YYYY').diff(moment(#Bambino_DataNascita.value(), 'DD/MM/YYYY'), 'years') &lt; 3"
+							type="checkbox" label="Modulo compilabile" value="1">
+						</td>
+						<td>
+							<p>Il bambino rientra nei 3 anni di età, la domanda sarà
+								accolta</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input id="Modulo_Compilabile2" name="Modulo_Compilabile2"
+							dynamic_check="moment(#Data_PDF.value(), 'DD/MM/YYYY').diff(moment(#Bambino_DataNascita.value(), 'DD/MM/YYYY'), 'years') &gt;= 3"
+							enabled="moment(#Data_PDF.value(), 'DD/MM/YYYY').diff(moment(#Bambino_DataNascita.value(), 'DD/MM/YYYY'), 'years') &gt;= 3"
+							type="checkbox" value="2">
+						</td>
+						<td>
+							<p>Il bambino ha più di 3 anni di età, la domanda NON sarà
+								accolta</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<input class="inputNormal" id="Salva_Modulo" type="hidden"
+				name="Salva_Modulo"
+				label="Impossibile salvare il modulo per età bambino superiore ai 3 anni"
+				mandatory="#Modulo_Compilabile2.checked()"><br />
+			<table class="Modulo add-question-text-paragraph"
+				style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="6">
+							<p>
+								<b> Osservazioni anagrafica bambino/a: </b>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal" id="Parametri_OssAnaBambino"
+							name="Parametri_OssAnaBambino" style="width: 100%;"
+							label="Osservazioni anagrafica del bambino"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- simpatico add start -->
+		</div>
+		<!-- simpatico add end -->
+		<br /> <br /> <br />
+		<!-- simpatico add start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!-- simpatico add end -->
+			<h1 class="Modulo">CHIEDE</h1>
+			<p class="Modulo">di usufruire del servizio di ammissione al nido
+				di infanzia con frequenza</p>
+
+			<div id="Tassonomia_TipoServizioFP" name="Tassonomia_TipoServizioFP"
+				label="Scelta del tipo di frequenza" mandatory_enabled="true"></div>
+
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input group="Tassonomia_TipoServizioFP" id="Tassonomia_FullTime"
+							name="Tassonomia_FullTime" type="checkbox" value="FT">
+						</td>
+						<td>
+							<p>Tempo pieno</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input group="Tassonomia_TipoServizioFP" id="Tassonomia_PartTime"
+							name="Tassonomia_PartTime" type="checkbox" value="PT">
+						</td>
+						<td>
+							<p>Tempo parziale</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- simpatico add start -->
+		</div>
+		<!-- simpatico add end -->
+		<br /> <br />
+		<pd4ml:page.break />
+
+		<!-- simpatico add start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!-- simpatico add end -->
+			<h1 class="Modulo">Dati necessari alla domanda</h1>
+			<p class="Modulo">Per la presentazione della domanda è necessario
+				fornire una serie di dati.</p>
+			<p class="Modulo">Se è stato inserito il codice fiscale del
+				bambino la maggior parte vengono recuperati in automatico.</p>
+			<p class="Modulo">Si chiede di verificarli, inserendo eventuali
+				osservazioni nell'apposito spazio.</p>
+			<br />
+			<p class="Modulo">Se non è stato inserito il codice fiscale del
+				bambino i dati dovranno essere inseriti manualmente.</p>
+			<!-- simpatico add start -->
+		</div>
+		<!-- simpatico add end -->
+		<br /> <br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p>
+							<b> Componenti del nucleo familiare residenti con il bambino
+							</b> <i>(per ogni familiare indicare il grado di parentela)</i>
+						</p>
+					</td>
+				</tr>
+				<div id="Tassonomia_Familiari" name="Tassonomia_Familiari"
+					label="Familiari del bambino/a"></div>
+
+
+				<div id="listaFamiglia1" ws-name="getListaFamigliaREST"
+					ws-param-in="codiceFamiglia=AventeTitolo_CodiceFamiglia"
+					ws-param-out="Parametri_CFFam*=listaCodiceFiscale"
+					ws-on="#AventeTitolo_CodiceFamiglia:change"></div>
+
+
+
+
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam1"
+							ws-param-out="Parametri_CognomeFam1=cognome;Parametri_DataNas1=datanascita;Parametri_CodiceComuneNascitaFam1=codiceComuneNascita;Parametri_MatricolaAnagrafeFam1=matricola;Parametri_SessoFam1=sesso;Parametri_BarraResidenzaFam1=barra;Parametri_CodiceViaResidenzaFam1=codiceVia;Parametri_NumeroCivicoResidenzaFam1=numeroCivico;Parametri_NazioneFam1=nazione;Parametri_NomeFam1=nome;Parametri_CodiceFamigliaFam1=codiceFamiglia"
+							ws-on="#Parametri_CFFam1:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam1"
+						name="Parametri_CognomeFam1" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam1"
+						name="Parametri_NomeFam1" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam1"
+						name="Parametri_CFFam1" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam1"
+						name="Parametri_SessoFam1" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas1"
+						name="Parametri_DataNas1" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam1"
+						name="Parametri_GradoParFam1"
+						mandatory="#Parametri_CFFam1.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam1"
+					name="Parametri_MatricolaAnagrafeFam1" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam1"
+					name="Parametri_CodiceFamigliaFam1" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam1"
+					name="Parametri_CodiceComuneNascitaFam1" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam1"
+					name="Parametri_CodiceViaResidenzaFam1" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam1"
+					name="Parametri_NumeroCivicoResidenzaFam1" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam1"
+					name="Parametri_BarraResidenzaFam1" />
+				<input type="hidden" id="Parametri_NazioneFam1"
+					name="Parametri_NazioneFam1" />
+				<tr class="Rigaintestazioneridotta" />
+				<td colspan="6">
+					<p class="Labelcella">Anagrafica</p>
+
+
+					<div ws-name="getPersonaREST"
+						ws-param-in="codiceFiscale=Parametri_CFFam2"
+						ws-param-out="Parametri_DataNas2=datanascita;Parametri_CognomeFam2=cognome;Parametri_MatricolaAnagrafeFam2=matricola;Parametri_CodiceComuneNascitaFam2=codiceComuneNascita;Parametri_SessoFam2=sesso;Parametri_BarraResidenzaFam2=barra;Parametri_CodiceViaResidenzaFam2=codiceVia;Parametri_NazioneFam2=nazione;Parametri_NumeroCivicoResidenzaFam2=numeroCivico;Parametri_NomeFam2=nome;Parametri_CodiceFamigliaFam2=codiceFamiglia"
+						ws-on="#Parametri_CFFam2:change"></div>
+
+				</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam2"
+						name="Parametri_CognomeFam2" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam2"
+						name="Parametri_NomeFam2" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam2"
+						name="Parametri_CFFam2" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam2"
+						name="Parametri_SessoFam2" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas2"
+						name="Parametri_DataNas2" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam2"
+						name="Parametri_GradoParFam2"
+						mandatory="#Parametri_CFFam2.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam2"
+					name="Parametri_MatricolaAnagrafeFam2" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam2"
+					name="Parametri_CodiceFamigliaFam2" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam2"
+					name="Parametri_CodiceComuneNascitaFam2" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam2"
+					name="Parametri_CodiceViaResidenzaFam2" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam2"
+					name="Parametri_NumeroCivicoResidenzaFam2" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam2"
+					name="Parametri_BarraResidenzaFam2" />
+				<input type="hidden" id="Parametri_NazioneFam2"
+					name="Parametri_NazioneFam2">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam3"
+							ws-param-out="Parametri_DataNas3=datanascita;Parametri_CognomeFam3=cognome;Parametri_MatricolaAnagrafeFam3=matricola;Parametri_CodiceComuneNascitaFam3=codiceComuneNascita;Parametri_SessoFam3=sesso;Parametri_BarraResidenzaFam3=barra;Parametri_CodiceViaResidenzaFam3=codiceVia;Parametri_NazioneFam3=nazione;Parametri_NumeroCivicoResidenzaFam3=numeroCivico;Parametri_NomeFam3=nome;Parametri_CodiceFamigliaFam3=codiceFamiglia"
+							ws-on="#Parametri_CFFam3:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam3"
+						name="Parametri_CognomeFam3" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam3"
+						name="Parametri_NomeFam3" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam3"
+						name="Parametri_CFFam3" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam3"
+						name="Parametri_SessoFam3" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas3"
+						name="Parametri_DataNas3" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam3"
+						name="Parametri_GradoParFam3"
+						mandatory="#Parametri_CFFam3.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam3"
+					name="Parametri_MatricolaAnagrafeFam3" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam3"
+					name="Parametri_CodiceFamigliaFam3" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam3"
+					name="Parametri_CodiceComuneNascitaFam3" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam3"
+					name="Parametri_CodiceViaResidenzaFam3" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam3"
+					name="Parametri_NumeroCivicoResidenzaFam3" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam3"
+					name="Parametri_BarraResidenzaFam3" />
+				<input type="hidden" id="Parametri_NazioneFam3"
+					name="Parametri_NazioneFam3">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam4"
+							ws-param-out="Parametri_CognomeFam4=cognome;Parametri_DataNas4=datanascita;Parametri_CodiceComuneNascitaFam4=codiceComuneNascita;Parametri_MatricolaAnagrafeFam4=matricola;Parametri_BarraResidenzaFam4=barra;Parametri_SessoFam4=sesso;Parametri_NumeroCivicoResidenzaFam4=numeroCivico;Parametri_NazioneFam4=nazione;Parametri_CodiceViaResidenzaFam4=codiceVia;Parametri_CodiceFamigliaFam4=codiceFamiglia;Parametri_NomeFam4=nome"
+							ws-on="#Parametri_CFFam4:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam4"
+						name="Parametri_CognomeFam4" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam4"
+						name="Parametri_NomeFam4" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam4"
+						name="Parametri_CFFam4" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam4"
+						name="Parametri_SessoFam4" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas4"
+						name="Parametri_DataNas4" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam4"
+						name="Parametri_GradoParFam4"
+						mandatory="#Parametri_CFFam4.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam4"
+					name="Parametri_MatricolaAnagrafeFam4" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam4"
+					name="Parametri_CodiceFamigliaFam4" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam4"
+					name="Parametri_CodiceComuneNascitaFam4" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam4"
+					name="Parametri_CodiceViaResidenzaFam4" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam4"
+					name="Parametri_NumeroCivicoResidenzaFam4" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam4"
+					name="Parametri_BarraResidenzaFam4" />
+				<input type="hidden" id="Parametri_NazioneFam4"
+					name="Parametri_NazioneFam4">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam5"
+							ws-param-out="Parametri_CognomeFam5=cognome;Parametri_DataNas5=datanascita;Parametri_CodiceComuneNascitaFam5=codiceComuneNascita;Parametri_MatricolaAnagrafeFam5=matricola;Parametri_BarraResidenzaFam5=barra;Parametri_SessoFam5=sesso;Parametri_NumeroCivicoResidenzaFam5=numeroCivico;Parametri_NazioneFam5=nazione;Parametri_CodiceViaResidenzaFam5=codiceVia;Parametri_CodiceFamigliaFam5=codiceFamiglia;Parametri_NomeFam5=nome"
+							ws-on="#Parametri_CFFam5:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam5"
+						name="Parametri_CognomeFam5" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam5"
+						name="Parametri_NomeFam5" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam5"
+						name="Parametri_CFFam5" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam5"
+						name="Parametri_SessoFam5" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas5"
+						name="Parametri_DataNas5" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam5"
+						name="Parametri_GradoParFam5"
+						mandatory="#Parametri_CFFam5.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam5"
+					name="Parametri_MatricolaAnagrafeFam5" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam5"
+					name="Parametri_CodiceFamigliaFam5" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam5"
+					name="Parametri_CodiceComuneNascitaFam5" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam5"
+					name="Parametri_CodiceViaResidenzaFam5" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam5"
+					name="Parametri_NumeroCivicoResidenzaFam5" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam5"
+					name="Parametri_BarraResidenzaFam5" />
+				<input type="hidden" id="Parametri_NazioneFam5"
+					name="Parametri_NazioneFam5">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam6"
+							ws-param-out="Parametri_DataNas6=datanascita;Parametri_CognomeFam6=cognome;Parametri_MatricolaAnagrafeFam6=matricola;Parametri_CodiceComuneNascitaFam6=codiceComuneNascita;Parametri_BarraResidenzaFam6=barra;Parametri_SessoFam6=sesso;Parametri_NazioneFam6=nazione;Parametri_NumeroCivicoResidenzaFam6=numeroCivico;Parametri_CodiceViaResidenzaFam6=codiceVia;Parametri_CodiceFamigliaFam6=codiceFamiglia;Parametri_NomeFam6=nome"
+							ws-on="#Parametri_CFFam6:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam6"
+						name="Parametri_CognomeFam6" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam6"
+						name="Parametri_NomeFam6" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam6"
+						name="Parametri_CFFam6" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam6"
+						name="Parametri_SessoFam6" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas6"
+						name="Parametri_DataNas6" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam6"
+						name="Parametri_GradoParFam6"
+						mandatory="#Parametri_CFFam6.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam6"
+					name="Parametri_MatricolaAnagrafeFam6" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam6"
+					name="Parametri_CodiceFamigliaFam6" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam6"
+					name="Parametri_CodiceComuneNascitaFam6" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam6"
+					name="Parametri_CodiceViaResidenzaFam6" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam6"
+					name="Parametri_NumeroCivicoResidenzaFam6" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam6"
+					name="Parametri_BarraResidenzaFam6" />
+				<input type="hidden" id="Parametri_NazioneFam6"
+					name="Parametri_NazioneFam6">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam7"
+							ws-param-out="Parametri_DataNas7=datanascita;Parametri_CognomeFam7=cognome;Parametri_MatricolaAnagrafeFam7=matricola;Parametri_CodiceComuneNascitaFam7=codiceComuneNascita;Parametri_BarraResidenzaFam7=barra;Parametri_SessoFam7=sesso;Parametri_NazioneFam7=nazione;Parametri_NumeroCivicoResidenzaFam7=numeroCivico;Parametri_CodiceViaResidenzaFam7=codiceVia;Parametri_CodiceFamigliaFam7=codiceFamiglia;Parametri_NomeFam7=nome"
+							ws-on="#Parametri_CFFam7:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam7"
+						name="Parametri_CognomeFam7" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam7"
+						name="Parametri_NomeFam7" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam7"
+						name="Parametri_CFFam7" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam7"
+						name="Parametri_SessoFam7" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas7"
+						name="Parametri_DataNas7" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam7"
+						name="Parametri_GradoParFam7"
+						mandatory="#Parametri_CFFam7.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam7"
+					name="Parametri_MatricolaAnagrafeFam7" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam7"
+					name="Parametri_CodiceFamigliaFam7" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam7"
+					name="Parametri_CodiceComuneNascitaFam7" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam7"
+					name="Parametri_CodiceViaResidenzaFam7" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam7"
+					name="Parametri_NumeroCivicoResidenzaFam7" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam7"
+					name="Parametri_BarraResidenzaFam7" />
+				<input type="hidden" id="Parametri_NazioneFam7"
+					name="Parametri_NazioneFam7">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam8"
+							ws-param-out="Parametri_CodiceComuneNascitaFam8=codiceComuneNascita;Parametri_MatricolaAnagrafeFam8=matricola;Parametri_CognomeFam8=cognome;Parametri_DataNas8=datanascita;Parametri_SessoFam8=sesso;Parametri_BarraResidenzaFam8=barra;Parametri_CodiceViaResidenzaFam8=codiceVia;Parametri_NumeroCivicoResidenzaFam8=numeroCivico;Parametri_NazioneFam8=nazione;Parametri_NomeFam8=nome;Parametri_CodiceFamigliaFam8=codiceFamiglia"
+							ws-on="#Parametri_CFFam8:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam8"
+						name="Parametri_CognomeFam8" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam8"
+						name="Parametri_NomeFam8" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam8"
+						name="Parametri_CFFam8" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam8"
+						name="Parametri_SessoFam8" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas8"
+						name="Parametri_DataNas8" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam8"
+						name="Parametri_GradoParFam8"
+						mandatory="#Parametri_CFFam8.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam8"
+					name="Parametri_MatricolaAnagrafeFam8" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam8"
+					name="Parametri_CodiceFamigliaFam8" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam8"
+					name="Parametri_CodiceComuneNascitaFam8" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam8"
+					name="Parametri_CodiceViaResidenzaFam8" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam8"
+					name="Parametri_NumeroCivicoResidenzaFam8" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam8"
+					name="Parametri_BarraResidenzaFam8" />
+				<input type="hidden" id="Parametri_NazioneFam8"
+					name="Parametri_NazioneFam8">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam9"
+							ws-param-out="Parametri_CodiceComuneNascitaFam9=codiceComuneNascita;Parametri_MatricolaAnagrafeFam9=matricola;Parametri_CognomeFam9=cognome;Parametri_DataNas9=datanascita;Parametri_SessoFam9=sesso;Parametri_BarraResidenzaFam9=barra;Parametri_CodiceViaResidenzaFam9=codiceVia;Parametri_NumeroCivicoResidenzaFam9=numeroCivico;Parametri_NazioneFam9=nazione;Parametri_NomeFam9=nome;Parametri_CodiceFamigliaFam9=codiceFamiglia"
+							ws-on="#Parametri_CFFam9:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam9"
+						name="Parametri_CognomeFam9" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam9"
+						name="Parametri_NomeFam9" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam9"
+						name="Parametri_CFFam9" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam9"
+						name="Parametri_SessoFam9" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas9"
+						name="Parametri_DataNas9" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam9"
+						name="Parametri_GradoParFam9"
+						mandatory="#Parametri_CFFam9.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam9"
+					name="Parametri_MatricolaAnagrafeFam9" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam9"
+					name="Parametri_CodiceFamigliaFam9" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam9"
+					name="Parametri_CodiceComuneNascitaFam9" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam9"
+					name="Parametri_CodiceViaResidenzaFam9" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam9"
+					name="Parametri_NumeroCivicoResidenzaFam9" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam9"
+					name="Parametri_BarraResidenzaFam9" />
+				<input type="hidden" id="Parametri_NazioneFam9"
+					name="Parametri_NazioneFam9">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam10"
+							ws-param-out="Parametri_NumeroCivicoResidenzaFam10=numeroCivico;Parametri_CodiceFamigliaFam10=codiceFamiglia;Parametri_DataNas10=datanascita;Parametri_CodiceComuneNascitaFam10=codiceComuneNascita;Parametri_CodiceViaResidenzaFam10=codiceVia;Parametri_CognomeFam10=cognome;Parametri_NomeFam10=nome;Parametri_MatricolaAnagrafeFam10=matricola;Parametri_SessoFam10=sesso;Parametri_BarraResidenzaFam10=barra;Parametri_NazioneFam10=nazione"
+							ws-on="#Parametri_CFFam10:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam10"
+						name="Parametri_CognomeFam10" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam10"
+						name="Parametri_NomeFam10" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam10"
+						name="Parametri_CFFam10" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam10"
+						name="Parametri_SessoFam10" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas10"
+						name="Parametri_DataNas10" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam10"
+						name="Parametri_GradoParFam10"
+						mandatory="#Parametri_CFFam10.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam10"
+					name="Parametri_MatricolaAnagrafeFam10" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam10"
+					name="Parametri_CodiceFamigliaFam10" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam10"
+					name="Parametri_CodiceComuneNascitaFam10" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam10"
+					name="Parametri_CodiceViaResidenzaFam10" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam10"
+					name="Parametri_NumeroCivicoResidenzaFam10" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam10"
+					name="Parametri_BarraResidenzaFam10" />
+				<input type="hidden" id="Parametri_NazioneFam10"
+					name="Parametri_NazioneFam10">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam11"
+							ws-param-out="Parametri_NumeroCivicoResidenzaFam11=numeroCivico;Parametri_CodiceFamigliaFam11=codiceFamiglia;Parametri_DataNas11=datanascita;Parametri_CodiceComuneNascitaFam11=codiceComuneNascita;Parametri_CognomeFam11=cognome;Parametri_CodiceViaResidenzaFam11=codiceVia;Parametri_NomeFam11=nome;Parametri_MatricolaAnagrafeFam11=matricola;Parametri_SessoFam11=sesso;Parametri_BarraResidenzaFam11=barra;Parametri_NazioneFam11=nazione"
+							ws-on="#Parametri_CFFam11:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam11"
+						name="Parametri_CognomeFam11" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam11"
+						name="Parametri_NomeFam11" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam11"
+						name="Parametri_CFFam11" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam11"
+						name="Parametri_SessoFam11" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas11"
+						name="Parametri_DataNas11" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam11"
+						name="Parametri_GradoParFam11"
+						mandatory="#Parametri_CFFam11.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam11"
+					name="Parametri_MatricolaAnagrafeFam11" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam11"
+					name="Parametri_CodiceFamigliaFam11" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam11"
+					name="Parametri_CodiceComuneNascitaFam11" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam11"
+					name="Parametri_CodiceViaResidenzaFam11" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam11"
+					name="Parametri_NumeroCivicoResidenzaFam11" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam11"
+					name="Parametri_BarraResidenzaFam11" />
+				<input type="hidden" id="Parametri_NazioneFam11"
+					name="Parametri_NazioneFam11">
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Anagrafica</p>
+
+
+						<div ws-name="getPersonaREST"
+							ws-param-in="codiceFiscale=Parametri_CFFam12"
+							ws-param-out="Parametri_NumeroCivicoResidenzaFam12=numeroCivico;Parametri_CodiceFamigliaFam12=codiceFamiglia;Parametri_DataNas12=datanascita;Parametri_CodiceComuneNascitaFam12=codiceComuneNascita;Parametri_NomeFam12=nome;Parametri_CodiceViaResidenzaFam12=codiceVia;Parametri_CognomeFam12=cognome;Parametri_SessoFam12=sesso;Parametri_MatricolaAnagrafeFam12=matricola;Parametri_BarraResidenzaFam12=barra;Parametri_NazioneFam12=nazione"
+							ws-on="#Parametri_CFFam12:change"></div>
+
+					</td>
+
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Codice fiscale</p>
+					</td>
+					<td>
+						<p class="Labelcella">Sesso</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data nascita</p>
+					</td>
+					<td>
+						<p class="Labelcella">Grado parentela</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_CognomeFam12"
+						name="Parametri_CognomeFam12" style="width: 100%;"
+						label="Cognome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_NomeFam12"
+						name="Parametri_NomeFam12" style="width: 100%;"
+						label="Nome del familiare"></td>
+					<td><input class="inputNormal" id="Parametri_CFFam12"
+						name="Parametri_CFFam12" format="cf" style="width: 100%;"
+						label="Codice fiscale del familiare"></td>
+					<td><select class="inputNormal" id="Parametri_SessoFam12"
+						name="Parametri_SessoFam12" style="width: 100%;" label="Sesso"><option
+								value=""></option>
+							<option value="M">M</option>
+							<option value="F">F</option></select></td>
+					<td><input class="inputNormal" id="Parametri_DataNas12"
+						name="Parametri_DataNas12" format="date" style="width: 100%;"
+						label="Data di nascita del familiare"></td>
+					<td><select id="Parametri_GradoParFam12"
+						name="Parametri_GradoParFam12"
+						mandatory="#Parametri_CFFam12.value() != ''"><option
+								value=""></option>
+							<option value="M">Madre/convivente</option>
+							<option value="P">Padre/convivente</option>
+							<option value="F">Fratello/sorella</option>
+							<option value="I">Iscritto/a</option>
+							<option value="A">Altro</option></select></td>
+				</tr>
+				<input type="hidden" id="Parametri_MatricolaAnagrafeFam12"
+					name="Parametri_MatricolaAnagrafeFam12" />
+				<input type="hidden" id="Parametri_CodiceFamigliaFam12"
+					name="Parametri_CodiceFamigliaFam12" />
+				<input type="hidden" id="Parametri_CodiceComuneNascitaFam12"
+					name="Parametri_CodiceComuneNascitaFam12" />
+				<input type="hidden" id="Parametri_CodiceViaResidenzaFam12"
+					name="Parametri_CodiceViaResidenzaFam12" />
+				<input type="hidden" id="Parametri_NumeroCivicoResidenzaFam12"
+					name="Parametri_NumeroCivicoResidenzaFam12" />
+				<input type="hidden" id="Parametri_BarraResidenzaFam12"
+					name="Parametri_BarraResidenzaFam12" />
+				<input type="hidden" id="Parametri_NazioneFam12"
+					name="Parametri_NazioneFam12">
+			</tbody>
+		</table>
+		<br />
+		<!-- simpatico start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!-- simpatcio end -->
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p>
+								<b> Atri componenti del nucleo familiare non residenti
+									(padre/madre o fratelli/sorelle che non risiedono con il
+									bambino) </b>
+							</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p class="Labelcella">Anagrafica</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data nascita</p>
+						</td>
+						<td>
+							<p class="Labelcella">Grado parentela</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeAltroFam1" name="Parametri_CognomeAltroFam1"
+							style="width: 100%;" label="Cognome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_NomeAltroFam1"
+							name="Parametri_NomeAltroFam1" style="width: 100%;"
+							label="Nome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_CFAltroFam1"
+							name="Parametri_CFAltroFam1" format="cf" style="width: 100%;"
+							label="Codice fiscale del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_DataNasAltro1"
+							name="Parametri_DataNasAltro1" format="date" style="width: 100%;"
+							label="Data di nascita del familiare non residente"></td>
+						<td><select id="Parametri_GradoParAltroFam1"
+							name="Parametri_GradoParAltroFam1"
+							mandatory="#Parametri_CFAltroFam1.value() != ''"><option
+									value=""></option>
+								<option value="M">Madre/convivente</option>
+								<option value="P">Padre/convivente</option>
+								<option value="F">Fratello/sorella</option>
+								<option value="I">Iscritto/a</option>
+								<option value="A">Altro</option></select></td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p class="Labelcella">Anagrafica</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data nascita</p>
+						</td>
+						<td>
+							<p class="Labelcella">Grado parentela</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeAltroFam2" name="Parametri_CognomeAltroFam2"
+							style="width: 100%;" label="Cognome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_NomeAltroFam2"
+							name="Parametri_NomeAltroFam2" style="width: 100%;"
+							label="Nome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_CFAltroFam2"
+							name="Parametri_CFAltroFam2" format="cf" style="width: 100%;"
+							label="Codice fiscale del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_DataNasAltro2"
+							name="Parametri_DataNasAltro2" format="date" style="width: 100%;"
+							label="Data di nascita del familiare non residente"></td>
+						<td><select id="Parametri_GradoParAltroFam2"
+							name="Parametri_GradoParAltroFam2"
+							mandatory="#Parametri_CFAltroFam2.value() != ''"><option
+									value=""></option>
+								<option value="M">Madre/convivente</option>
+								<option value="P">Padre/convivente</option>
+								<option value="F">Fratello/sorella</option>
+								<option value="I">Iscritto/a</option>
+								<option value="A">Altro</option></select></td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p class="Labelcella">Anagrafica</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data nascita</p>
+						</td>
+						<td>
+							<p class="Labelcella">Grado parentela</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeAltroFam3" name="Parametri_CognomeAltroFam3"
+							style="width: 100%;" label="Cognome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_NomeAltroFam3"
+							name="Parametri_NomeAltroFam3" style="width: 100%;"
+							label="Nome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_CFAltroFam3"
+							name="Parametri_CFAltroFam3" format="cf" style="width: 100%;"
+							label="Codice fiscale del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_DataNasAltro3"
+							name="Parametri_DataNasAltro3" format="date" style="width: 100%;"
+							label="Data di nascita del familiare non residente"></td>
+						<td><select id="Parametri_GradoParAltroFam3"
+							name="Parametri_GradoParAltroFam3"
+							mandatory="#Parametri_CFAltroFam3.value() != ''"><option
+									value=""></option>
+								<option value="M">Madre/convivente</option>
+								<option value="P">Padre/convivente</option>
+								<option value="F">Fratello/sorella</option>
+								<option value="I">Iscritto/a</option>
+								<option value="A">Altro</option></select></td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p class="Labelcella">Anagrafica</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data nascita</p>
+						</td>
+						<td>
+							<p class="Labelcella">Grado parentela</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeAltroFam4" name="Parametri_CognomeAltroFam4"
+							style="width: 100%;" label="Cognome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_NomeAltroFam4"
+							name="Parametri_NomeAltroFam4" style="width: 100%;"
+							label="Nome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_CFAltroFam4"
+							name="Parametri_CFAltroFam4" format="cf" style="width: 100%;"
+							label="Codice fiscale del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_DataNasAltro4"
+							name="Parametri_DataNasAltro4" format="date" style="width: 100%;"
+							label="Data di nascita del familiare non residente"></td>
+						<td><select id="Parametri_GradoParAltroFam4"
+							name="Parametri_GradoParAltroFam4"
+							mandatory="#Parametri_CFAltroFam4.value() != ''"><option
+									value=""></option>
+								<option value="M">Madre/convivente</option>
+								<option value="P">Padre/convivente</option>
+								<option value="F">Fratello/sorella</option>
+								<option value="I">Iscritto/a</option>
+								<option value="A">Altro</option></select></td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="5">
+							<p class="Labelcella">Anagrafica</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data nascita</p>
+						</td>
+						<td>
+							<p class="Labelcella">Grado parentela</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeAltroFam5" name="Parametri_CognomeAltroFam5"
+							style="width: 100%;" label="Cognome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_NomeAltroFam5"
+							name="Parametri_NomeAltroFam5" style="width: 100%;"
+							label="Nome del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_CFAltroFam5"
+							name="Parametri_CFAltroFam5" format="cf" style="width: 100%;"
+							label="Codice fiscale del familiare non residente"></td>
+						<td><input class="inputNormal" id="Parametri_DataNasAltro5"
+							name="Parametri_DataNasAltro5" format="date" style="width: 100%;"
+							label="Data di nascita del familiare non residente"></td>
+						<td><select id="Parametri_GradoParAltroFam5"
+							name="Parametri_GradoParAltroFam5"
+							mandatory="#Parametri_CFAltroFam5.value() != ''"><option
+									value=""></option>
+								<option value="M">Madre/convivente</option>
+								<option value="P">Padre/convivente</option>
+								<option value="F">Fratello/sorella</option>
+								<option value="I">Iscritto/a</option>
+								<option value="A">Altro</option></select></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="6">
+							<p>
+								<b> Osservazioni componenti nucleo familiare: </b>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_OssComponentiFam" name="Parametri_OssComponentiFam"
+							style="width: 100%;"
+							label="Osservazioni componenti famiglia del bambino"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- simpatico start -->
+		</div>
+		<!-- simpatcio end -->
+		<br /> <br /> <br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="2"><b>In merito alla situazione
+							economico/patrimoniale del nucleo</b></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_ICEF" name="Tassonomia_ICEF" mandatory="true"
+							label="Dati attestazione ICEF"></div> <input
+						id="Tassonomia_ICEF1" name="Tassonomia_ICEF" type="radio"
+						value="1">
+					</td>
+					<td>
+						<p>vuole avvalersi dell'attestazione ICEF</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_ICEF2" name="Tassonomia_ICEF" type="radio"
+						value="2">
+					</td>
+					<td>
+						<p>non vuole avvalersi dell'attestazione ICEF</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<!-- simpatico start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!-- simpatcio end -->
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazione">
+						<td colspan="4"><b>Situazione ICEF</b></td>
+					</tr>
+					<div ws-name="getIcef"
+						ws-param-in="codiceFiscale=Bambino_CFBambino"
+						ws-param-out="Parametri_CoefficienteICEF=coefficienteIcef;Parametri_DataCalcolo=dataCalcolo;Parametri_CognomeDichiaranteICEF=cognomeRichiedente;Parametri_CFDichiaranteICEF=codiceFiscaleRichiedente;Parametri_NomeDichiaranteICEF=nomeRichiedente"
+						ws-on="#Tassonomia_ICEF1:change"></div>
+
+
+					<tr>
+						<td style="vertical-align: top; width: 4%;" rowspan="6" />
+						<input id="Tassonomia_RecuperoICEF1"
+							name="Tassonomia_RecuperoICEF1"
+							dynamic_check="#Parametri_CognomeDichiaranteICEF.value() != '' and #Tassonomia_ICEF1.checked()"
+							enabled="#Parametri_CognomeDichiaranteICEF.value() != '' and #Tassonomia_ICEF1.checked()"
+							type="checkbox" value="1">
+						</td>
+						<td colspan="3">
+							<p>Dati risultanti</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="2">
+							<p class="Labelcella">Coefficiente ICEF</p>
+						</td>
+						<td>
+							<p class="Labelcella">Data</p>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" />
+						<input class="inputNormal" id="Parametri_CoefficienteICEF"
+							name="Parametri_CoefficienteICEF" style="width: 100%;"
+							label="Coefficiente ICEF">
+						</td>
+						<td><input class="inputNormal" id="Parametri_DataCalcolo"
+							name="Parametri_DataCalcolo" style="width: 100%;"
+							label="Data attestazione ICEF"></td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Dichiarante</p>
+						</td>
+					</tr>
+					<tr class="Rigaintestazioneridotta">
+						<td>
+							<p class="Labelcella">Cognome</p>
+						</td>
+						<td>
+							<p class="Labelcella">Nome</p>
+						</td>
+						<td colspan="2">
+							<p class="Labelcella">Codice fiscale</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal"
+							id="Parametri_CognomeDichiaranteICEF"
+							name="Parametri_CognomeDichiaranteICEF" style="width: 100%;"
+							label="Cognome dichiarante ICEF"></td>
+						<td><input class="inputNormal"
+							id="Parametri_NomeDichiaranteICEF"
+							name="Parametri_NomeDichiaranteICEF" style="width: 100%;"
+							label="Nome dichiarante ICEF"></td>
+						<td><input class="inputNormal"
+							id="Parametri_CFDichiaranteICEF"
+							name="Parametri_CFDichiaranteICEF" style="width: 100%;"
+							label="Codice fiscale dichiarante ICEF"></td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input id="Tassonomia_RecuperoICEF2"
+							name="Tassonomia_RecuperoICEF2"
+							dynamic_check="#Parametri_CognomeDichiaranteICEF.value() == '' || #Tassonomia_ICEF2.checked()"
+							enabled="#Parametri_CognomeDichiaranteICEF.value() == ''  || #Tassonomia_ICEF2.checked()"
+							type="checkbox" value="2">
+						</td>
+						<td colspan="3">
+							<p>Non risultano situazioni ICEF relative al bambino</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr class="Rigaintestazioneridotta">
+						<td colspan="6">
+							<p>
+								<b> Osservazioni situazione ICEF: </b>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td><input class="inputNormal" id="Parametri_OssSitICEF"
+							name="Parametri_OssSitICEF" style="width: 100%;"
+							label="Osservazioni componenti famiglia del bambino"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- simpatico start -->
+		</div>
+		<!-- simpatcio end -->
+		<br /> <input type="hidden" name="TipoDomandaPartTime"
+			id="TipoDomandaPartTime" value="PT" /><input type="hidden"
+			name="TipoDomandaFullTime" id="TipoDomandaFullTime" value="FT">
+		<div ws-name="getDomandaAttiva"
+			ws-param-in="tipoServizio=TipoDomandaFullTime;codiceFiscale=Parametri_CFBambino"
+			ws-param-out="Parametri_RichDomValFT=richiedente;Parametri_DataDomValFT=dtDomanda;Parametri_TipoDomandaFT=tipoServizio;Parametri_NumeroDomandaValFT=idDomanda"
+			ws-on="#Parametri_CFBambino:change"></div>
+
+
+		<div ws-name="getDomandaAttiva"
+			ws-param-in="tipoServizio=TipoDomandaPartTime;codiceFiscale=Parametri_CFBambino"
+			ws-param-out="Parametri_RichDomValPT=richiedente;Parametri_DataDomValPT=dtDomanda;Parametri_NumeroDomandaValPT=idDomanda;Parametri_TipoDomandaPT=tipoServizio"
+			ws-on="#Parametri_CFBambino:change"></div>
+
+
+		<div ws-name="getDomandaAttiva"
+			ws-param-in="tipoServizio=TipoDomandaFullTime;codiceFiscale=Tassonomia_ListaFam1"
+			ws-param-out="Parametri_RichDomValFT=richiedente;Parametri_DataDomValFT=dtDomanda;Parametri_TipoDomandaFT=tipoServizio;Parametri_NumeroDomandaValFT=idDomanda"
+			ws-on="#Tassonomia_ListaFam1:change"></div>
+
+
+		<div ws-name="getDomandaAttiva"
+			ws-param-in="tipoServizio=TipoDomandaPartTime;codiceFiscale=Tassonomia_ListaFam1"
+			ws-param-out="Parametri_RichDomValPT=richiedente;Parametri_DataDomValPT=dtDomanda;Parametri_NumeroDomandaValPT=idDomanda;Parametri_TipoDomandaPT=tipoServizio"
+			ws-on="#Tassonomia_ListaFam1:change"></div>
+		<input type="hidden" id="Parametri_TipoDomandaFT"
+			name="Parametri_TipoDomandaFT" /><input type="hidden"
+			id="Parametri_NumeroDomandaValFT" name="Parametri_NumeroDomandaValFT" /><input
+			type="hidden" id="Parametri_RichDomValFT"
+			name="Parametri_RichDomValFT" /><input type="hidden"
+			id="Parametri_DataDomValFT" name="Parametri_DataDomValFT" /><input
+			type="hidden" id="Parametri_TipoDomandaPT"
+			name="Parametri_TipoDomandaPT" /><input type="hidden"
+			id="Parametri_NumeroDomandaValPT" name="Parametri_NumeroDomandaValPT" /><input
+			type="hidden" id="Parametri_RichDomValPT"
+			name="Parametri_RichDomValPT" /><input type="hidden"
+			id="Parametri_DataDomValPT" name="Parametri_DataDomValPT"><br />
+		<br />
+		<pd4ml:page.break />
+		<h1 class="Modulo">RICHIESTE SPECIFICHE</h1>
+
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="25" />
+					<input id="Tassonomia_TipoFrequenza1"
+						name="Tassonomia_TipoFrequenza1" type="checkbox" value="FT"
+						dynamic_check="#Tassonomia_FullTime.checked()">
+					</td>
+					<td colspan="3">
+						<p>Per la domanda a tempo pieno</p>
+					</td>
+				</tr>
+
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Si tratta di</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_TipoDomandaFT1"
+						name="Tassonomia_TipoDomandaFT1"
+						dynamic_check="#Parametri_NumeroDomandaValFT.value() == ''"
+						enabled="#Parametri_NumeroDomandaValFT.value() == '' and #Tassonomia_TipoFrequenza1.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="2">
+						<p>Nuova iscrizione</p>
+						<p style="font-size: 70%">
+							<i>(prima domanda di ammissione al nido d'infanzia)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3" />
+					<input id="Tassonomia_TipoDomandaFT2"
+						name="Tassonomia_TipoDomandaFT2"
+						dynamic_check="moment(#Parametri_DataDomValFT.value(), 'DD.MM.YYYY') &gt;= moment('2016-09-01')"
+						enabled="moment(#Parametri_DataDomValFT.value(), 'DD.MM.YYYY') &gt;= moment('2016-09-01') and #Tassonomia_TipoFrequenza1.checked()"
+						type="checkbox" value="2">
+					</td>
+					<td colspan="2">
+						<p>Variazione della domanda</p>
+						<p style="font-size: 70%">
+							<i>(modifica alla domanda di ammissione presentata entro la
+								scadenza di presentazione delle domande)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p class="Labelcella">Richiedente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data domanda</p>
+					</td>
+				</tr>
+				<tr enabled="#Tassonomia_TipoDomandaFT2.checked()">
+					<td><input class="inputNormal" readonly
+						id="Parametri_RichiedenteVarFT" name="Parametri_RichiedenteVarFT"
+						style="width: 100%;" label="Richiedente della domanda"
+						dynamic_value="#Parametri_RichDomValFT.value()"></td>
+					<td><input class="inputNormal" readonly
+						id="Parametri_DataVarFT" name="Parametri_DataVarFT"
+						style="width: 100%;" label="Data della domanda"
+						dynamic_value="#Parametri_DataDomValFT.value()"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3" />
+					<input id="Tassonomia_TipoDomandaFT3"
+						name="Tassonomia_TipoDomandaFT3"
+						dynamic_check="moment(#Parametri_DataDomValFT.value(), 'DD.MM.YYYY') &lt; moment('2016-09-01')"
+						enabled="moment(#Parametri_DataDomValFT.value(), 'DD.MM.YYYY') &lt; moment('2016-09-01') and #Tassonomia_TipoFrequenza1.checked()"
+						type="checkbox" value="3">
+					</td>
+					<td colspan="2">
+						<p>Aggiornamento della domanda</p>
+						<p style="font-size: 70%">
+							<i>(modifica alla domanda già in graduatoria annuale di
+								ammissione presentata entro la scadenza di presentazione delle
+								domande)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p class="Labelcella">Richiedente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data domanda</p>
+					</td>
+				</tr>
+				<tr enabled="#Tassonomia_TipoDomandaFT3.checked()">
+					<td><input class="inputNormal" readonly
+						id="Parametri_RichiedenteAggFT" name="Parametri_RichiedenteAggFT"
+						style="width: 100%;" label="Richiedente della domanda"
+						dynamic_value="#Parametri_RichDomValFT.value()"></td>
+					<td><input class="inputNormal" readonly
+						id="Parametri_DataAggFT" name="Parametri_DataAggFT"
+						style="width: 100%;" label="Data della domanda"
+						dynamic_value="#Parametri_DataDomValFT.value()"></td>
+				</tr>
+				<tr class="Rigaintestazione">
+					<td colspan="3">
+						<p class="Labelcella">
+							Scelta del nido d'infanzia <a
+								href="http://www.comune.trento.it/Aree-tematiche/Servizi-all-infanzia-e-istruzione/Servizi-prima-infanzia-0-3-anni/Mappa-nidi-d-infanzia"
+								target="_blank"> (mappa dei nidi con servizi)</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<p>Indicare la prima scelta (obbligatoria)</p>
+					</td>
+					<td><input type="hidden" name="empty" id="empty" value="" /><input
+						type="hidden" name="listaCompleta" id="listaCompleta" value="S">
+					<button type="button" id="RecuperaListaAsiliFT1">Recupera
+							Lista Asili</button>
+
+						<div ws-name="getListaNidiDisponibili"
+							ws-param-in="tipoServizio=Tassonomia_FullTime;numeroDomanda=empty;numeroCivico=Bambino_CivicoResidenza;listaCompleta=empty;codiceVia=Bambino_CodiceVia;barraCivico=empty"
+							ws-param-out="Tassonomia_NidoInfanziaFT1=listaNidiDisponibili3"
+							ws-on="#RecuperaListaAsiliFT1:click"></div></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+
+						<div ws-name="getListaNidiDisponibili"
+							ws-param-in="tipoServizio=Tassonomia_FullTime;numeroDomanda=empty;numeroCivico=Bambino_CivicoResidenza;listaCompleta=empty;codiceVia=Bambino_CodiceVia;barraCivico=empty"
+							ws-param-out="Tassonomia_NidoInfanziaFT1=listaNidiDisponibili3"
+							ws-on="#Tassonomia_FullTime:change"></div> <select
+						mandatory_enabled="#Tassonomia_FullTime.checked()"
+						class="inputNormal" id="Tassonomia_NidoInfanziaFT1"
+						name="Tassonomia_NidoInfanziaFT1" style="width: 100%;"
+						label="Scelta nido d'infanzia a tempo pieno"></select>
+					</td>
+				</tr>
+				<tr class="Rigaintestazione">
+					<td colspan="3">
+						<p class="Labelcella">Indicando se intende o meno utilizzare i
+							servizi opzionali ove previsto</p>
+					</td>
+				</tr>
+				<div id="Tassonomia_ServiziPrimoNidoFT"
+					name="Tassonomia_ServiziPrimoNidoFT"
+					label="Servizi primo nido scelto FT"
+					mandatory_enabled="#Tassonomia_FullTime.checked()"></div>
+
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_ServiziPrimoNidoFT"
+						id="Tassonomia_TipoSceltaServizioAsilo1FT0"
+						name="Tassonomia_TipoSceltaServizioAsilo1FT0"
+						enabled="#Tassonomia_FullTime.checked()" type="checkbox" value="0">
+					</td>
+					<td colspan="2">nessun servizio</td>
+
+				</tr>
+				<div id="listaServizi11" ws-name="getServiziNido"
+					ws-param-in="codiceNido=Tassonomia_NidoInfanziaFT1"
+					ws-param-out="Parametri_CodiceServizioNido1FT*=listaServiziDisponibili"
+					ws-on="#Tassonomia_NidoInfanziaFT1:change"></div>
+
+
+
+
+
+
+
+				<div ws-name="getDettaglioServizioNido"
+					ws-param-in="codiceServizio=Parametri_CodiceServizioNido1FT1;codiceNido=Tassonomia_NidoInfanziaFT1"
+					ws-param-out="Parametri_DettaglioServizio1FT1=descrizione"
+					ws-on="#Parametri_CodiceServizioNido1FT1:change"></div>
+
+
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_ServiziPrimoNidoFT"
+						id="Tassonomia_TipoSceltaServizioAsilo1FT1"
+						name="Tassonomia_TipoSceltaServizioAsilo1FT1"
+						enabled="#Tassonomia_FullTime.checked() and !#Parametri_DettaglioServizio1FT1.check_value(['']) and !#Tassonomia_TipoSceltaServizioAsilo1FT0.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_DettaglioServizio1FT1"
+						name="Parametri_DettaglioServizio1FT1" style="width: 100%;"
+						label="Tipo di servizio offerto">
+					</td>
+
+				</tr>
+				<input type="hidden" id="Parametri_CodiceServizioNido1FT1"
+					name="Parametri_CodiceServizioNido1FT1"><div
+						ws-name="getDettaglioServizioNido"
+						ws-param-in="codiceServizio=Parametri_CodiceServizioNido1FT2;codiceNido=Tassonomia_NidoInfanziaFT1"
+						ws-param-out="Parametri_DettaglioServizio1FT2=descrizione"
+						ws-on="#Parametri_CodiceServizioNido1FT2:change"></div>
+
+
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input group="Tassonomia_ServiziPrimoNidoFT"
+							id="Tassonomia_TipoSceltaServizioAsilo1FT2"
+							name="Tassonomia_TipoSceltaServizioAsilo1FT2"
+							enabled="#Tassonomia_FullTime.checked() and !#Parametri_DettaglioServizio1FT2.check_value(['']) and !#Tassonomia_TipoSceltaServizioAsilo1FT0.checked()"
+							type="checkbox" value="2">
+						</td>
+						<td colspan="2" />
+						<input class="inputNormal" id="Parametri_DettaglioServizio1FT2"
+							name="Parametri_DettaglioServizio1FT2" style="width: 100%;"
+							label="Tipo di servizio offerto">
+						</td>
+
+					</tr> <input type="hidden" id="Parametri_CodiceServizioNido1FT2"
+					name="Parametri_CodiceServizioNido1FT2"><tr
+							class="Rigaintestazione">
+							<td colspan="3">
+								<p class="Labelcella">Scelta del secondo nido d'infanzia
+									(non obbligatoria)</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="vertical-align: top; width: 4%;">
+								<div id="Tassonomia_SceltaSecondoFT"
+									name="Tassonomia_SceltaSecondoFT"
+									mandatory_enabled="#Tassonomia_FullTime.checked()"
+									label="Scelta secondo nido"></div> <input
+								id="Tassonomia_SceltaSecondoFT1"
+								name="Tassonomia_SceltaSecondoFT" type="radio" value="1">
+							</td>
+							<td colspan="2">
+								<p>non intende esprimere una seconda scelta</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input id="Tassonomia_SceltaSecondoFT2"
+								name="Tassonomia_SceltaSecondoFT" type="radio" value="2">
+							</td>
+							<td colspan="2">
+								<p>intende esprimere una seconda scelta</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<p>Indicare la seconda scelta</p>
+							</td>
+							<td><input type="hidden" name="empty2" id="empty2" value="" /><input
+								type="hidden" name="listaCompleta2" id="listaCompleta2"
+								value="S">
+							<button type="button" id="RecuperaListaAsiliFT2">Recupera
+									Lista Asili</button>
+
+
+								<div ws-name="getListaNidiDisponibili"
+									ws-param-in="tipoServizio=Tassonomia_FullTime;numeroDomanda=empty2;numeroCivico=Bambino_CivicoResidenza;listaCompleta=listaCompleta2;codiceVia=Bambino_CodiceVia;barraCivico=empty2"
+									ws-param-out="Tassonomia_NidoInfanziaFT2=listaNidiDisponibili3"
+									ws-on="#RecuperaListaAsiliFT2:click"></div>
+
+
+								<div ws-name="getListaNidiDisponibili"
+									ws-param-in="tipoServizio=Tassonomia_FullTime;numeroDomanda=empty2;numeroCivico=Bambino_CivicoResidenza;listaCompleta=listaCompleta2;codiceVia=Bambino_CodiceVia;barraCivico=empty2"
+									ws-param-out="Tassonomia_NidoInfanziaFT2=listaNidiDisponibili3"
+									ws-on="#Tassonomia_SceltaSecondoFT2:click"></div></td>
+						</tr>
+						<tr>
+							<td colspan="3"><select
+								mandatory_enabled="#Tassonomia_SceltaSecondoFT2.checked()"
+								class="inputNormal" id="Tassonomia_NidoInfanziaFT2"
+								name="Tassonomia_NidoInfanziaFT2" style="width: 100%;"
+								label="Scelta nido d'infanzia a tempo pieno"></select></td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="3">
+								<p class="Labelcella">Indicando se intende o meno utilizzare
+									i servizi opzionali per il secondo nido d'infanzia ove previsto</p>
+							</td>
+						</tr>
+						<div id="Tassonomia_ServiziSecondoNidoFT"
+							name="Tassonomia_ServiziSecondoNidoFT"
+							label="Servizi secondo nido scelto FT"
+							mandatory_enabled="#Tassonomia_SceltaSecondoFT2.checked()">
+						</div>
+
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input group="Tassonomia_ServiziSecondoNidoFT"
+								id="Tassonomia_TipoSceltaServizioAsilo2FT0"
+								name="Tassonomia_TipoSceltaServizioAsilo2FT0"
+								enabled="#Tassonomia_FullTime.checked() and #Tassonomia_SceltaSecondoFT2.checked()"
+								type="checkbox" value="0">
+							</td>
+							<td colspan="2">nessun servizio</td>
+
+						</tr>
+						<div id="listaServizi12" ws-name="getServiziNido"
+							ws-param-in="codiceNido=Tassonomia_NidoInfanziaFT2"
+							ws-param-out="Parametri_CodiceServizioNido2FT*=listaServiziDisponibili"
+							ws-on="#Tassonomia_NidoInfanziaFT2:change"></div>
+
+
+
+
+
+
+						<div ws-name="getDettaglioServizioNido"
+							ws-param-in="codiceServizio=Parametri_CodiceServizioNido2FT1;codiceNido=Tassonomia_NidoInfanziaFT2"
+							ws-param-out="Parametri_DettaglioServizio2FT1=descrizione"
+							ws-on="#Parametri_CodiceServizioNido2FT1:change"></div>
+
+
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input group="Tassonomia_ServiziSecondoNidoFT"
+								id="Tassonomia_TipoSceltaServizioAsilo2FT1"
+								name="Tassonomia_TipoSceltaServizioAsilo2FT1"
+								enabled="#Tassonomia_FullTime.checked() and #Tassonomia_SceltaSecondoFT2.checked() and !#Parametri_DettaglioServizio2FT1.check_value(['']) and !#Tassonomia_TipoSceltaServizioAsilo2FT0.checked()"
+								type="checkbox" value="1">
+							</td>
+							<td colspan="2" />
+							<input class="inputNormal" id="Parametri_DettaglioServizio2FT1"
+								name="Parametri_DettaglioServizio2FT1" style="width: 100%;"
+								label="Tipo di servizio offerto">
+							</td>
+
+						</tr> <input type="hidden" id="Parametri_CodiceServizioNido2FT1"
+						name="Parametri_CodiceServizioNido2FT1"><div
+								ws-name="getDettaglioServizioNido"
+								ws-param-in="codiceServizio=Parametri_CodiceServizioNido2FT2;codiceNido=Tassonomia_NidoInfanziaFT2"
+								ws-param-out="Parametri_DettaglioServizio2FT2=descrizione"
+								ws-on="#Parametri_CodiceServizioNido2FT2:change"></div>
+
+
+							<tr>
+								<td style="vertical-align: top; width: 4%;" />
+								<input group="Tassonomia_ServiziSecondoNidoFT"
+									id="Tassonomia_TipoSceltaServizioAsilo2FT2"
+									name="Tassonomia_TipoSceltaServizioAsilo2FT2"
+									enabled="#Tassonomia_FullTime.checked() and #Tassonomia_SceltaSecondoFT2.checked() and !#Parametri_DettaglioServizio2FT2.check_value(['']) and !#Tassonomia_TipoSceltaServizioAsilo2FT0.checked()"
+									type="checkbox" value="2">
+								</td>
+								<td colspan="2" />
+								<input class="inputNormal" id="Parametri_DettaglioServizio2FT2"
+									name="Parametri_DettaglioServizio2FT2" style="width: 100%;"
+									label="Tipo di servizio offerto">
+								</td>
+
+							</tr> <input type="hidden" id="Parametri_CodiceServizioNido2FT2"
+							name="Parametri_CodiceServizioNido2FT2">
+			</tbody>
+		</table>
+		<br /> <br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="25" />
+					<input id="Tassonomia_TipoFrequenza2"
+						name="Tassonomia_TipoFrequenza2" type="checkbox" value="PT"
+						dynamic_check="#Tassonomia_PartTime.checked()">
+					</td>
+					<td colspan="3">
+						<p>Per la domanda a tempo parziale</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Si tratta di</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_TipoDomandaPT1"
+						name="Tassonomia_TipoDomandaPT1"
+						dynamic_check="#Parametri_NumeroDomandaValPT.value() == ''"
+						enabled="#Parametri_NumeroDomandaValPT.value() == '' and #Tassonomia_TipoFrequenza2.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="2">
+						<p>Nuova iscrizione</p>
+						<p style="font-size: 70%">
+							<i>(prima domanda di ammissione al nido d'infanzia)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3" />
+					<input id="Tassonomia_TipoDomandaPT2"
+						name="Tassonomia_TipoDomandaPT2"
+						dynamic_check="moment(#Parametri_DataDomValPT.value(), 'DD.MM.YYYY') &gt;= moment('2016-09-01')"
+						enabled="moment(#Parametri_DataDomValPT.value(), 'DD.MM.YYYY') &gt;= moment('2016-09-01') and #Tassonomia_TipoFrequenza2.checked()"
+						type="checkbox" value="2">
+					</td>
+					<td colspan="2">
+						<p>Variazione della domanda</p>
+						<p style="font-size: 70%">
+							<i>(modifica alla domanda di ammissione presentata entro la
+								scadenza di presentazione delle domande)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p class="Labelcella">Richiedente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data domanda</p>
+					</td>
+				</tr>
+				<tr enabled="#Tassonomia_TipoDomandaPT2.checked()">
+					<td><input class="inputNormal" readonly
+						id="Parametri_RichiedenteVarPT" name="Parametri_RichiedenteVarPT"
+						style="width: 100%;" label="Richiedente della domanda"
+						dynamic_value="#Parametri_RichDomValPT.value()"></td>
+					<td><input class="inputNormal" readonly
+						id="Parametri_DataVarPT" name="Parametri_DataVarPT"
+						style="width: 100%;" label="Data della domanda"
+						dynamic_value="#Parametri_DataDomValPT.value()"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3" />
+					<input id="Tassonomia_TipoDomandaPT3"
+						name="Tassonomia_TipoDomandaPT3"
+						dynamic_check="moment(#Parametri_DataDomValPT.value(), 'DD.MM.YYYY') &lt; moment('2016-09-01')"
+						enabled="moment(#Parametri_DataDomValPT.value(), 'DD.MM.YYYY') &lt; moment('2016-09-01') and #Tassonomia_TipoFrequenza2.checked()"
+						type="checkbox" value="3">
+					</td>
+					<td colspan="2">
+						<p>Aggiornamento della domanda</p>
+						<p style="font-size: 70%">
+							<i>(modifica alla domanda già in graduatoria annuale di
+								ammissione presentata entro la scadenza di presentazione delle
+								domande)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p class="Labelcella">Richiedente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data domanda</p>
+					</td>
+				</tr>
+				<tr enabled="#Tassonomia_TipoDomandaPT3.checked()">
+					<td><input class="inputNormal" readonly
+						id="Parametri_RichiedenteAggPT" name="Parametri_RichiedenteAggPT"
+						style="width: 100%;" label="Richiedente della domanda"
+						dynamic_value="#Parametri_RichDomValPT.value()"></td>
+					<td><input class="inputNormal" readonly
+						id="Parametri_DataAggPT" name="Parametri_DataAggPT"
+						style="width: 100%;" label="Data della domanda"
+						dynamic_value="#Parametri_DataDomValPT.value()"></td>
+				</tr>
+				<tr class="Rigaintestazione">
+					<td colspan="3">
+						<p class="Labelcella">
+							Scelta del nido d'infanzia <a
+								href="http://www.comune.trento.it/Aree-tematiche/Servizi-all-infanzia-e-istruzione/Servizi-prima-infanzia-0-3-anni/Mappa-nidi-d-infanzia"
+								target="_blank"> (mappa dei nidi con servizi)</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<p>Indicare la prima scelta (obbligatoria)</p>
+					</td>
+					<td><input type="hidden" name="emptyPT" id="emptyPT" value="" /><input
+						type="hidden" name="listaCompletaPT" id="listaCompletaPT"
+						value="S">
+					<button type="button" id="RecuperaListaAsiliPT1">Recupera
+							Lista Asili</button>
+
+						<div ws-name="getListaNidiDisponibili"
+							ws-param-in="tipoServizio=Tassonomia_PartTime;numeroDomanda=emptyPT;numeroCivico=Bambino_CivicoResidenza;listaCompleta=emptyPT;codiceVia=Bambino_CodiceVia;barraCivico=emptyPT"
+							ws-param-out="Tassonomia_NidoInfanziaPT1=listaNidiDisponibili3"
+							ws-on="#RecuperaListaAsiliPT1:click"></div></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+
+						<div ws-name="getListaNidiDisponibili"
+							ws-param-in="tipoServizio=Tassonomia_PartTime;numeroDomanda=emptyPT;numeroCivico=Bambino_CivicoResidenza;listaCompleta=emptyPT;codiceVia=Bambino_CodiceVia;barraCivico=emptyPT"
+							ws-param-out="Tassonomia_NidoInfanziaPT1=listaNidiDisponibili3"
+							ws-on="#Tassonomia_PartTime:change"></div> <select
+						mandatory_enabled="#Tassonomia_PartTime.checked()"
+						class="inputNormal" id="Tassonomia_NidoInfanziaPT1"
+						name="Tassonomia_NidoInfanziaPT1" style="width: 100%;"
+						label="Scelta nido d'infanzia a tempo parziale"></select>
+					</td>
+				</tr>
+				<tr class="Rigaintestazione">
+					<td colspan="3">
+						<p class="Labelcella">Indicando se intende o meno utilizzare i
+							servizi opzionali ove previsto</p>
+					</td>
+				</tr>
+				<div id="Tassonomia_ServiziPrimoNidoPT"
+					name="Tassonomia_ServiziPrimoNidoPT"
+					label="Servizi primo nido scelto PT"
+					mandatory_enabled="#Tassonomia_PartTime.checked()"></div>
+
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_ServiziPrimoNidoPT"
+						id="Tassonomia_TipoSceltaServizioAsilo1PT0"
+						name="Tassonomia_TipoSceltaServizioAsilo1PT0"
+						enabled="#Tassonomia_PartTime.checked()" type="checkbox" value="0">
+					</td>
+					<td colspan="2">nessun servizio</td>
+
+				</tr>
+				<div id="listaServizi13" ws-name="getServiziNido"
+					ws-param-in="codiceNido=Tassonomia_NidoInfanziaPT1"
+					ws-param-out="Parametri_CodiceServizioNido1PT*=listaServiziDisponibili"
+					ws-on="#Tassonomia_NidoInfanziaPT1:change"></div>
+
+
+
+
+
+
+
+				<div ws-name="getDettaglioServizioNido"
+					ws-param-in="codiceServizio=Parametri_CodiceServizioNido1PT1;codiceNido=Tassonomia_NidoInfanziaPT1"
+					ws-param-out="Parametri_DettaglioServizio1PT1=descrizione"
+					ws-on="#Parametri_CodiceServizioNido1PT1:change"></div>
+
+
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_ServiziPrimoNidoPT"
+						id="Tassonomia_TipoSceltaServizioAsilo1PT1"
+						name="Tassonomia_TipoSceltaServizioAsilo1PT1"
+						enabled="#Tassonomia_PartTime.checked() and !#Parametri_DettaglioServizio1PT1.check_value([''])  and !#Tassonomia_TipoSceltaServizioAsilo1PT0.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_DettaglioServizio1PT1"
+						name="Parametri_DettaglioServizio1PT1" style="width: 100%;"
+						label="Tipo di servizio offerto">
+					</td>
+
+				</tr>
+				<input type="hidden" id="Parametri_CodiceServizioNido1PT1"
+					name="Parametri_CodiceServizioNido1PT1"><div
+						ws-name="getDettaglioServizioNido"
+						ws-param-in="codiceServizio=Parametri_CodiceServizioNido1PT2;codiceNido=Tassonomia_NidoInfanziaPT1"
+						ws-param-out="Parametri_DettaglioServizio1PT2=descrizione"
+						ws-on="#Parametri_CodiceServizioNido1PT2:change"></div>
+
+
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input group="Tassonomia_ServiziPrimoNidoPT"
+							id="Tassonomia_TipoSceltaServizioAsilo1PT2"
+							name="Tassonomia_TipoSceltaServizioAsilo1PT2"
+							enabled="#Tassonomia_PartTime.checked() and !#Parametri_DettaglioServizio1PT2.check_value([''])  and !#Tassonomia_TipoSceltaServizioAsilo1PT0.checked()"
+							type="checkbox" value="2">
+						</td>
+						<td colspan="2" />
+						<input class="inputNormal" id="Parametri_DettaglioServizio1PT2"
+							name="Parametri_DettaglioServizio1PT2" style="width: 100%;"
+							label="Tipo di servizio offerto">
+						</td>
+
+					</tr> <input type="hidden" id="Parametri_CodiceServizioNido1PT2"
+					name="Parametri_CodiceServizioNido1PT2"><tr
+							class="Rigaintestazione">
+							<td colspan="3">
+								<p class="Labelcella">Scelta del secondo nido d'infanzia
+									(non obbligatoria)</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="vertical-align: top; width: 4%;">
+								<div id="Tassonomia_SceltaSecondoPT"
+									name="Tassonomia_SceltaSecondoPT"
+									mandatory_enabled="#Tassonomia_PartTime.checked()"
+									label="Scelta secondo nido a tempo parziale"></div> <input
+								id="Tassonomia_SceltaSecondoPT1"
+								name="Tassonomia_SceltaSecondoPT" type="radio" value="1">
+							</td>
+							<td colspan="2">
+								<p>non intende esprimere una seconda scelta</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input id="Tassonomia_SceltaSecondoPT2"
+								name="Tassonomia_SceltaSecondoPT" type="radio" value="2">
+							</td>
+							<td colspan="2">
+								<p>intende esprimere una seconda scelta</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<p>Indicare la seconda scelta</p>
+							</td>
+							<td><input type="hidden" name="emptyPT2" id="emptyPT2"
+								value="" /><input type="hidden" name="listaCompletaPT2"
+								id="listaCompletaPT2" value="S">
+							<button type="button" id="RecuperaListaAsiliPT2">Recupera
+									Lista Asili</button>
+
+
+								<div ws-name="getListaNidiDisponibili"
+									ws-param-in="tipoServizio=Tassonomia_PartTime;numeroDomanda=emptyPT2;numeroCivico=Bambino_CivicoResidenza;listaCompleta=listaCompletaPT2;codiceVia=Bambino_CodiceVia;barraCivico=emptyPT2"
+									ws-param-out="Tassonomia_NidoInfanziaPT2=listaNidiDisponibili3"
+									ws-on="#RecuperaListaAsiliPT2:click"></div>
+
+								<div ws-name="getListaNidiDisponibili"
+									ws-param-in="tipoServizio=Tassonomia_PartTime;numeroDomanda=emptyPT2;numeroCivico=Bambino_CivicoResidenza;listaCompleta=listaCompletaPT2;codiceVia=Bambino_CodiceVia;barraCivico=emptyPT2"
+									ws-param-out="Tassonomia_NidoInfanziaPT2=listaNidiDisponibili3"
+									ws-on="#Tassonomia_SceltaSecondoPT2:click"></div></td>
+						</tr>
+						<tr>
+							<td colspan="3"><select
+								mandatory_enabled="#Tassonomia_SceltaSecondoPT2.checked()"
+								class="inputNormal" id="Tassonomia_NidoInfanziaPT2"
+								name="Tassonomia_NidoInfanziaPT2" style="width: 100%;"
+								label="Scelta nido d'infanzia a tempo parziale"></select></td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td colspan="3">
+								<p class="Labelcella">Indicando se intende o meno utilizzare
+									i servizi opzionali per il secondo nido d'infanzia ove previsto</p>
+							</td>
+						</tr>
+						<div id="Tassonomia_ServiziSecondoNidoPT"
+							name="Tassonomia_ServiziSecondoNidoPT"
+							label="Servizi secondo nido scelto PT"
+							mandatory_enabled="#Tassonomia_SceltaSecondoPT2.checked()">
+						</div>
+
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input group="Tassonomia_ServiziSecondoNidoPT"
+								id="Tassonomia_TipoSceltaServizioAsilo2PT0"
+								name="Tassonomia_TipoSceltaServizioAsilo2PT0"
+								enabled="#Tassonomia_PartTime.checked() and #Tassonomia_SceltaSecondoPT2.checked()"
+								type="checkbox" value="0">
+							</td>
+							<td colspan="2">nessun servizio</td>
+
+						</tr>
+						<div id="listaServizi14" ws-name="getServiziNido"
+							ws-param-in="codiceNido=Tassonomia_NidoInfanziaPT2"
+							ws-param-out="Parametri_CodiceServizioNido2PT*=listaServiziDisponibili"
+							ws-on="#Tassonomia_NidoInfanziaPT2:change"></div>
+
+
+
+
+
+
+						<div ws-name="getDettaglioServizioNido"
+							ws-param-in="codiceServizio=Parametri_CodiceServizioNido2PT1;codiceNido=Tassonomia_NidoInfanziaPT2"
+							ws-param-out="Parametri_DettaglioServizio2PT1=descrizione"
+							ws-on="#Parametri_CodiceServizioNido2PT1:change"></div>
+
+
+						<tr>
+							<td style="vertical-align: top; width: 4%;" />
+							<input group="Tassonomia_ServiziSecondoNidoPT"
+								id="Tassonomia_TipoSceltaServizioAsilo2PT1"
+								name="Tassonomia_TipoSceltaServizioAsilo2PT1"
+								enabled="#Tassonomia_PartTime.checked() and !#Parametri_DettaglioServizio2PT1.check_value([''])  and !#Tassonomia_TipoSceltaServizioAsilo2PT0.checked()"
+								type="checkbox" value="1">
+							</td>
+							<td colspan="2" />
+							<input class="inputNormal" id="Parametri_DettaglioServizio2PT1"
+								name="Parametri_DettaglioServizio2PT1" style="width: 100%;"
+								label="Tipo di servizio offerto">
+							</td>
+
+						</tr> <input type="hidden" id="Parametri_CodiceServizioNido2PT1"
+						name="Parametri_CodiceServizioNido2PT1"><div
+								ws-name="getDettaglioServizioNido"
+								ws-param-in="codiceServizio=Parametri_CodiceServizioNido2PT2;codiceNido=Tassonomia_NidoInfanziaPT2"
+								ws-param-out="Parametri_DettaglioServizio2PT2=descrizione"
+								ws-on="#Parametri_CodiceServizioNido2PT2:change"></div>
+
+
+							<tr>
+								<td style="vertical-align: top; width: 4%;" />
+								<input group="Tassonomia_ServiziSecondoNidoPT"
+									id="Tassonomia_TipoSceltaServizioAsilo2PT2"
+									name="Tassonomia_TipoSceltaServizioAsilo2PT2"
+									enabled="#Tassonomia_PartTime.checked() and !#Parametri_DettaglioServizio2PT2.check_value([''])  and !#Tassonomia_TipoSceltaServizioAsilo2PT0.checked()"
+									type="checkbox" value="2">
+								</td>
+								<td colspan="2" />
+								<input class="inputNormal" id="Parametri_DettaglioServizio2PT2"
+									name="Parametri_DettaglioServizio2PT2" style="width: 100%;"
+									label="Tipo di servizio offerto">
+								</td>
+
+							</tr> <input type="hidden" id="Parametri_CodiceServizioNido2PT2"
+							name="Parametri_CodiceServizioNido2PT2">
+			</tbody>
+		</table>
+		<br /> <br /> <br /> <br />
+		<h1 class="Modulo">CHIEDE INOLTRE</h1>
+		<br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="3"><b>in riferimento alla possibilità di
+							essere contattato per l'accettazione di un posto nei nidi scelti
+							eventualmente resosi disponibile nel corso dell'anno educativo
+							precedente quello per cui si presenta la domanda</b></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_ContattoAnnoPrec"
+							name="Tassonomia_ContattoAnnoPrec" mandatory="true"
+							label="Scelta contatto posto anno precedente"></div> <input
+						id="Tassonomia_ContattoAnnoPrec1"
+						name="Tassonomia_ContattoAnnoPrec" type="radio" value="1">
+					</td>
+					<td colspan="2">
+						<p>di essere contattato per le assegnazioni a partire dal mese
+							di</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto9" name="Tassonomia_MMContatto9"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2016-09-01'))"
+						type="checkbox" value="09/2016">
+					</td>
+					<td>
+						<p>settembre 2016</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto10" name="Tassonomia_MMContatto10"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2016-10-01'))"
+						type="checkbox" value="10/2016">
+					</td>
+					<td>
+						<p>ottobre 2016</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto11" name="Tassonomia_MMContatto11"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2016-11-01'))"
+						type="checkbox" value="11/2016">
+					</td>
+					<td>
+						<p>novembre 2016</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto12" name="Tassonomia_MMContatto12"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2016-12-01'))"
+						type="checkbox" value="12/2016">
+					</td>
+					<td>
+						<p>dicembre 2016</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto01" name="Tassonomia_MMContatto01"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2017-01-01'))"
+						type="checkbox" value="01/2017">
+					</td>
+					<td>
+						<p>gennaio 2017</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto02" name="Tassonomia_MMContatto02"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2017-02-28'))"
+						type="checkbox" value="02/2016">
+					</td>
+					<td>
+						<p>febbraio 2017</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto03" name="Tassonomia_MMContatto03"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2017-03-31'))"
+						type="checkbox" value="03/2017">
+					</td>
+					<td>
+						<p>marzo 2017</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto04" name="Tassonomia_MMContatto04"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2017-04-30'))"
+						type="checkbox" value="04/2017">
+					</td>
+					<td>
+						<p>aprile 2017</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_MMContatto05" name="Tassonomia_MMContatto05"
+						enabled="#Tassonomia_ContattoAnnoPrec1.checked() and #Tassonomia_TipoFrequenza2.checked() and (moment() &lt; moment('2017-05-31'))"
+						type="checkbox" value="05/2017">
+					</td>
+					<td>
+						<p>maggio 2017</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_ContattoAnnoPrec2"
+						name="Tassonomia_ContattoAnnoPrec" type="radio" value="2">
+					</td>
+					<td colspan="2">
+						<p>di non essere contattato</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="2"><b>in riferimento alla possibilità di
+							essere contattato per l'accettazione di posti eventualmente
+							rimasti liberi, in qualsiasi nido a tempo pieno del territorio
+							comunale, dopo le assegnazioni sulla graduatoria annuale</b></td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="2">
+						<p class="Labelcella">Per il servizio a tempo pieno</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_ContattoAnno" name="Tassonomia_ContattoAnno"
+							mandatory_enabled="#Tassonomia_FullTime.checked()"
+							label="Scelta contatto posto annuale a tempo pieno"></div> <input
+						id="Tassonomia_ContattoAnno1" name="Tassonomia_ContattoAnno"
+						type="radio" value="1">
+					</td>
+					<td>
+						<p>di essere contattato</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_ContattoAnno2" name="Tassonomia_ContattoAnno"
+						type="radio" value="2">
+					</td>
+					<td>
+						<p>di non essere contattato</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="2">
+						<p class="Labelcella">Per il servizio a tempo parziale</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_ContattoAnnoPT"
+							name="Tassonomia_ContattoAnnoPT"
+							mandatory_enabled="#Tassonomia_PartTime.checked()"
+							label="Scelta contatto posto annuale a tempo parziale"></div> <input
+						id="Tassonomia_ContattoAnnoPT1" name="Tassonomia_ContattoAnnoPT"
+						type="radio" value="1">
+					</td>
+					<td>
+						<p>di essere contattato</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_ContattoAnnoPT2"
+						name="Tassonomia_ContattoAnnoPT" type="radio" value="2">
+					</td>
+					<td>
+						<p>di non essere contattato</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="3"><b>di ricevere tutte le comunicazioni
+							inerenti la domanda con la seguente modalità (in base alla scelta
+							verrà riportata l'informazione inserita nei dati personali)</b></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_TipoContatto"
+							name="Tassonomia_TipoContattoAnno" mandatory="true"
+							label="Scelta tipo contatto comunicazioni"></div> <input
+						id="Tassonomia_TipoContatto1" name="Tassonomia_TipoContatto"
+						type="radio" value="1">
+					</td>
+					<td>
+						<p>e-mail</p>
+					</td>
+					<td><input class="inputNormal" id="Parametri_ContattoEmail"
+						name="Parametri_ContattoEmail" format="email" style="width: 100%;"
+						label="Email per comunicazioni"
+						mandatory_enabled="#Tassonomia_TipoContatto1.checked()"
+						dynamic_value="#AventeTitolo_EMail.value()"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_TipoContatto2" name="Tassonomia_TipoContatto"
+						type="radio" value="2">
+					</td>
+					<td>
+						<p>e-mail PEC</p>
+					</td>
+					<td><input class="inputNormal" id="Parametri_ContattoEmailPEC"
+						name="Parametri_ContattoEmailPEC" format="email"
+						style="width: 100%;" label="Email PEC per comunicazioni"
+						mandatory_enabled="#Tassonomia_TipoContatto2.checked()"
+						dynamic_value="#AventeTitolo_EMailPEC.value()"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_TipoContatto3" name="Tassonomia_TipoContatto"
+						type="radio" value="3">
+					</td>
+					<td>
+						<p>telefono</p>
+					</td>
+					<td><input class="inputNormal" id="Parametri_ContattoTelefono"
+						name="Parametri_ContattoTelefono" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoContatto3.checked()"
+						label="Telefono per contatti"
+						dynamic_value="#AventeTitolo_Telefono.value()"></td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<table class="Modulo  simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="3"><b>di autorizzare il Comune di Trento ad
+							inviare via SMS eventuali informazioni di "cortesia"</b></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_AutorizzaSMS" name="Tassonomia_AutorizzaSMS"
+							mandatory="true"
+							label="Autorizzazione all'invio di SMS con informazioni di cortesia">
+						</div> <input id="Tassonomia_AutorizzaSMS1"
+						name="Tassonomia_AutorizzaSMS" type="radio" value="1">
+					</td>
+					<td>
+						<p>autorizza l'invio di SMS al seguente numero</p>
+					</td>
+					<td><input class="inputNormal" id="Parametri_TelefonoSMS"
+						name="Parametri_TelefonoSMS" style="width: 100%;"
+						label="Telefono per l'invio di SMS informativi"
+						mandatory_enabled="#Tassonomia_AutorizzaSMS1.checked()"
+						dynamic_value="#AventeTitolo_Telefono.value()"></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_AutorizzaSMS2" name="Tassonomia_AutorizzaSMS"
+						type="radio" value="2">
+					</td>
+					<td colspan="2">
+						<p>non autorizza</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<pd4ml:page.break />
+		<br /> <br /> <br />
+		<!--  simpatico start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!--  simpatico end -->
+			<p class="Modulo">Valendosi della facoltà prevista dagli articoli
+				46 e 47 del Decreto del Presidente della Repubblica 28/12/2000, n.
+				445, consapevole delle sanzioni penali previste dall'articolo 76 del
+				Decreto del Presidente della Repubblica 28/12/2000, n. 445 e
+				dell'articolo 483 del Codice Penale nel caso di dichiarazioni non
+				veritiere e di falsità in atti</p>
+			<br />
+			<h1 class="Modulo">DICHIARA</h1>
+
+			<br />
+			<h1 class="Modulo">Situazione del bambino e/o del nucleo
+				familiare</h1>
+
+
+			<p class="Modulo">che il bambino e/o il nucleo familiare presenta
+				le seguenti situazioni già in essere al momento della presentazione
+				della domanda che danno diritto all'attribuzione di punteggio per
+				l'inserimento in graduatoria</p>
+
+			<!--  simpatico start -->
+		</div>
+		<!--  simpatico end -->
+
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="4">
+						<p class="Labelcella">Servizi sociali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_ServiziSociali"
+							name="Tassonomia_ServiziSociali" mandatory="true"
+							label="Servizi sociali"></div> <input
+						id="Tassonomia_ServiziSociali1" name="Tassonomia_ServiziSociali"
+						type="radio" value="1">
+					</td>
+					<td colspan="3">
+						<p>il nucleo non è seguito dai servizi sociali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="4" />
+					<input id="Tassonomia_ServiziSociali2"
+						name="Tassonomia_ServiziSociali" type="radio" value="2">
+					</td>
+					<td colspan="3">
+						<p>il nucleo è seguito dai servizi sociali</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Assitente sociale di riferimento</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Ente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Cognome</p>
+					</td>
+					<td>
+						<p class="Labelcella">Nome</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_ASEnte"
+						name="Parametri_ASEnte" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_ServiziSociali2.checked()"
+						label="Ente assistente sociale di riferimento"></td>
+					<td><input class="inputNormal" id="Parametri_ASCognome"
+						name="Parametri_ASCognome" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_ServiziSociali2.checked()"
+						label="Cognome assistente sociale di riferimento"></td>
+					<td><input class="inputNormal" id="Parametri_ASNome"
+						name="Parametri_ASNome" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_ServiziSociali2.checked()"
+						label="Nome assistente sociale di riferimento"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo  simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="4">
+						<p class="Labelcella">Disabilità certificata del bambino/a</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_Disabilita" name="Tassonomia_Disabilita"
+							mandatory="true" label="Certificazione di disabilità del bambino">
+						</div> <input id="Tassonomia_Disabilita1" name="Tassonomia_Disabilita"
+						type="radio" value="1">
+					</td>
+					<td colspan="3">
+						<p>il bambino/a non presenta una situazione di disabilità
+							certificata</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="4" />
+					<input id="Tassonomia_Disabilita2" name="Tassonomia_Disabilita"
+						type="radio" value="2">
+					</td>
+					<td colspan="3">
+						<p>il bambino/a presenta una situazione di disabilità
+							certificata</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Verbale di disabilità</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Ente</p>
+					</td>
+					<td>
+						<p class="Labelcella">Numero/Protocollo</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_DisEnte"
+						name="Parametri_DisEnte" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_Disabilita2.checked()"
+						label="Ente certificato di disabilità del bambino"></td>
+					<td><input class="inputNormal" id="Parametri_DisNumero"
+						name="Parametri_DisNumero" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_Disabilita2.checked()"
+						label="Numero/protocollo certificato di disabilità del bambino"></td>
+					<td><input class="inputNormal" id="Parametri_DisData"
+						name="Parametri_DisData" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_Disabilita2.checked()"
+						format="date" label="Data certificato di disabilità del bambino"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Nucleo familiare</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_TipoNucleo" name="Tassonomia_TipoNucleo"
+							mandatory="true" label="Nucleo monoparentale"></div> <input
+						id="Tassonomia_TipoNucleo1" name="Tassonomia_TipoNucleo"
+						type="radio" value="1">
+					</td>
+					<td colspan="4">
+						<p>il nucleo familiare non è monoparentale</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="10" />
+					<input id="Tassonomia_TipoNucleo2" name="Tassonomia_TipoNucleo"
+						type="radio" value="2">
+					</td>
+					<td colspan="4">
+						<p>il nucleo familiare è monoparentale per</p>
+						<p style="font-size: 70%">
+							<i>(per "nucleo monoparentale" si intende il nucleo in cui il
+								bambino risiede con un unico genitore o soggetto esercente la
+								patria potestà)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_TipoProvvedimento"
+							name="Tassonomia_TipoProvvedimento"
+							mandatory_enabled="#Tassonomia_TipoNucleo2.checked()"
+							label="Tipologia di nucleo monoparentale"></div> <input
+						group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento1"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="1">
+					</td>
+					<td colspan="3">
+						<p>mancato riconoscimento del bambino/a da parte di uno dei
+							genitori</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento2"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="2">
+					</td>
+					<td colspan="3">
+						<p>vedovanza</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento3"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="3">
+					</td>
+					<td colspan="3">
+						<p>separazione legale</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento4"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="4">
+					</td>
+					<td colspan="3">
+						<p>divorzio</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento5"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="5">
+					</td>
+					<td colspan="3">
+						<p>abbandono del coniuge accertato in sede giurisdizionale</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento6"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="6">
+					</td>
+					<td colspan="3">
+						<p>esclusione di uno dei coniugi dalla potestà sui figli</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TipoProvvedimento"
+						id="Tassonomia_TipoProvvedimento7"
+						name="Tassonomia_TipoProvvedimento" type="radio" value="7">
+					</td>
+					<td colspan="3">
+						<p>provvedimento di allontanamento dalla residenza familiare</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td></td>
+					<td>
+						<p class="Labelcella">Ente Provvedimento</p>
+					</td>
+					<td>
+						<p class="Labelcella">Numero/Protocollo</p>
+					</td>
+					<td>
+						<p class="Labelcella">Data</p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input class="inputNormal" id="Parametri_ProvvEnte"
+						name="Parametri_ProvvEnte" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoProvvedimento3.checked() || #Tassonomia_TipoProvvedimento4.checked()  || #Tassonomia_TipoProvvedimento5.checked() || #Tassonomia_TipoProvvedimento6.checked() || #Tassonomia_TipoProvvedimento7.checked()"
+						label="Ente che ha emanato il provvedimento (nucleo monoparentale)"></td>
+					<td><input class="inputNormal" id="Parametri_ProvvNumero"
+						name="Parametri_ProvvNumero" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoProvvedimento3.checked() || #Tassonomia_TipoProvvedimento4.checked()  || #Tassonomia_TipoProvvedimento5.checked() || #Tassonomia_TipoProvvedimento6.checked() || #Tassonomia_TipoProvvedimento7.checked()"
+						label="Numero/protocollo del provvedimento (nucleo monoparentale)"></td>
+					<td><input class="inputNormal" id="Parametri_ProvvData"
+						name="Parametri_ProvvData" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoProvvedimento3.checked() || #Tassonomia_TipoProvvedimento4.checked()  || #Tassonomia_TipoProvvedimento5.checked() || #Tassonomia_TipoProvvedimento6.checked() || #Tassonomia_TipoProvvedimento7.checked()"
+						format="date"
+						label="Data del provvedimento (nucleo monoparentale)"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo  simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="4">
+						<p class="Labelcella">Disabilità certificata dei famigliari</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_DisabilitaFam" name="Tassonomia_DisabilitaFam"
+							mandatory="true"
+							label="Certificazione di disabilità dei famigliari"></div> <input
+						id="Tassonomia_DisabilitaFam1" name="Tassonomia_DisabilitaFam"
+						type="radio" value="1">
+					</td>
+					<td colspan="3">
+						<p>nel nucleo non sono presenti componenti in situazione di
+							disabilità certificata</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="8" />
+					<input id="Tassonomia_DisabilitaFam2"
+						name="Tassonomia_DisabilitaFam" type="radio" value="2">
+					</td>
+					<td colspan="3">
+						<p>nel nucleo sono presenti uno o più componenti in situazione
+							di disabilità certificata</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Percentuale di invalidità</p>
+					</td>
+					<td>
+						<p class="Labelcella">Familiare</p>
+					</td>
+					<td>
+						<p class="Labelcella">Verbale</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_PercFam1"
+						name="Parametri_PercFam1" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Percentuale di invalidità del famigliare"></td>
+					<td>
+
+
+						<div id="listaFam1" ws-name="getListaFamigliaREST"
+							ws-param-in="codiceFamiglia=AventeTitolo_CodiceFamiglia"
+							ws-param-out="Tassonomia_FamDisabile1=listaCodiceFiscale"
+							ws-on="#AventeTitolo_CodiceFamiglia:change"></div> <select
+						mandatory_enabled="#Tassonomia_DisabilitaFam2.checked()"
+						class="inputNormal" id="Tassonomia_FamDisabile1"
+						name="Tassonomia_FamDisabile1" style="width: 100%;"
+						label="Scelta da lista familiari"></select>
+					</td>
+
+					<td><input class="inputNormal" id="Parametri_VerbaleFam1"
+						name="Parametri_VerbaleFam1" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Riferimenti verbale disabilità del famigliare"></td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_PercFam2"
+						name="Parametri_PercFam2" style="width: 100%;"
+						enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Percentuale di invalidità del famigliare"></td>
+					<td>
+
+
+						<div id="listaFam2" ws-name="getListaFamigliaREST"
+							ws-param-in="codiceFamiglia=AventeTitolo_CodiceFamiglia"
+							ws-param-out="Tassonomia_FamDisabile2=listaCodiceFiscale"
+							ws-on="#AventeTitolo_CodiceFamiglia:change"></div> <select
+						enabled="#Tassonomia_DisabilitaFam2.checked()" class="inputNormal"
+						id="Tassonomia_FamDisabile2" name="Tassonomia_FamDisabile2"
+						style="width: 100%;" label="Scelta da lista familiari"></select>
+					</td>
+
+					<td><input class="inputNormal" id="Parametri_VerbaleFam2"
+						name="Parametri_VerbaleFam2" style="width: 100%;"
+						enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Riferimenti verbale disabilità del famigliare"></td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal" id="Parametri_PercFam3"
+						name="Parametri_PercFam3" style="width: 100%;"
+						enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Percentuale di invalidità del famigliare"></td>
+					<td>
+
+
+						<div id="listaFam3" ws-name="getListaFamigliaREST"
+							ws-param-in="codiceFamiglia=AventeTitolo_CodiceFamiglia"
+							ws-param-out="Tassonomia_FamDisabile3=listaCodiceFiscale"
+							ws-on="#AventeTitolo_CodiceFamiglia:change"></div> <select
+						enabled="#Tassonomia_DisabilitaFam2.checked()" class="inputNormal"
+						id="Tassonomia_FamDisabile3" name="Tassonomia_FamDisabile3"
+						style="width: 100%;" label="Scelta da lista familiari"></select>
+					</td>
+
+					<td><input class="inputNormal" id="Parametri_VerbaleFam3"
+						name="Parametri_VerbaleFam3" style="width: 100%;"
+						enabled="#Tassonomia_DisabilitaFam2.checked()"
+						label="Riferimenti verbale disabilità del famigliare"></td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<pd4ml:page.break />
+		<!--  simpatico start -->
+		<div class=" simpatico-block simpatico-query-and-answer">
+			<!--  simpatico end -->
+			<h1 class="Modulo">Situazione lavorativa del padre o del
+				convivente</h1>
+
+			<p class="Modulo">che la condizione lavorativa del padre o
+				convivente presente nel nucleo è (si considerano sia i contratti a
+				tempo indeterminato che a tempo determinato o atipici in essere al
+				momento dell'iscrizione)</p>
+			<!--  simpatico start -->
+		</div>
+		<!--  simpatico end -->
+
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="7">
+						<p class="Labelcella">Condizione di lavoro del padre o
+							convivente</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_NoPadre" name="Tassonomia_NoPadre"
+						dynamic_check="#AventeTitolo_RuoloRichiedente.check_value(['madre']) and #Tassonomia_TipoNucleo2.checked()"
+						enabled="#AventeTitolo_RuoloRichiedente.check_value(['madre']) and #Tassonomia_TipoNucleo2.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="6">
+						<p>nessuna informazione (perchè il nucleo è monoparentale)</p>
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="23">
+						<div id="Tassonomia_TipoLavoroPadre"
+							name="Tassonomia_TipoLavoroPadre"
+							mandatory_enabled="(#Tassonomia_TipoNucleo1.checked()) || (#AventeTitolo_RuoloRichiedente.check_value(['padre','tutore/tutrice','affidatario/a','affidatario/a preadottivo/a']) and #Tassonomia_TipoNucleo2.checked())"
+							label="Condizione di lavoro del padre o convivente"></div> <input
+						id="Tassonomia_TipoLavoroPadre3" name="Tassonomia_TipoLavoroPadre"
+						type="radio" value="3">
+					</td>
+					<td colspan="6">
+						<p>lavoratore</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="11">
+						<div id="Tassonomia_LavoroPadre" name="Tassonomia_LavoroPadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroPadre3.checked()"
+							label="Scegliere se lavoratore dipendente o autonomo"></div> <input
+						id="Tassonomia_LavoroPadre1" name="Tassonomia_LavoroPadre"
+						type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>dipendente (o assimilato)</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Tipo di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" />
+					<input class="inputNormal" id="Parametri_TipoLavoroPadre"
+						name="Parametri_TipoLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Descrizione lavoro del padre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Azienda</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Denominazione/Ragione sociale</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" />
+					<input class="inputNormal" id="Parametri_AziendaLavoroPadre"
+						name="Parametri_AziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Denominazione azienda ove lavora il padre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Sede legale</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Provincia</p>
+					</td>
+					<td>
+						<p class="Labelcella">Comune</p>
+					</td>
+					<td>
+						<p class="Labelcella">Indirizzo</p>
+					</td>
+					<td style="vertical-align: top; width: 10%;">
+						<p class="Labelcella">Civico</p>
+					</td>
+					<td style="vertical-align: top; width: 10%;">
+						<p class="Labelcella">CAP</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal"
+						id="Parametri_ProvAziendaLavoroPadre"
+						name="Parametri_ProvAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Provincia dell'azienda ove lavora il padre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_ComuneAziendaLavoroPadre"
+						name="Parametri_ComuneAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Comune dell'azienda ove lavora il padre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_IndirizzoAziendaLavoroPadre"
+						name="Parametri_IndirizzoAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Indirizzo dell'azienda ove lavora il padre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_CivicoAziendaLavoroPadre"
+						name="Parametri_CivicoAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Numero civico dell'azienda ove lavora il padre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_CapAziendaLavoroPadre"
+						name="Parametri_CapAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="CAP dell'azienda ove lavora il padre"></td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="2">
+						<p class="Labelcella">Telefono</p>
+					</td>
+					<td colspan="3">
+						<p class="Labelcella">E-mail</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_TelAziendaLavoroPadre"
+						name="Parametri_TelAziendaLavoroPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre1.checked()"
+						label="Telefono dell'azienda ove lavora il padre">
+					</td>
+					<td colspan="3" />
+					<input class="inputNormal" id="Parametri_EmailAziendaLavoroPadre"
+						name="Parametri_EmailAziendaLavoroPadre" style="width: 100%;"
+						format="email" label="E-mail dell'azienda ove lavora il padre">
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3  " />
+					<input id="Tassonomia_LavoroPadre2" name="Tassonomia_LavoroPadre"
+						type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>autonomo o non dipendente</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Agenzia delle entrate di</p>
+					</td>
+					<td colspan="2">
+						<p class="Labelcella">Partita IVA</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" />
+					<input class="inputNormal" id="Parametri_AgenziaEntratePadre"
+						name="Parametri_AgenziaEntratePadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre2.checked()"
+						label="Agenzia delle Entrate di riferimento per il lavoro del padre">
+					</td>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_PIVAPadre"
+						name="Parametri_PIVAPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroPadre2.checked()"
+						label="Numero di partita IVA del padre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Tipo di occupazione lavorativa</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_TempoDiLavoroPadre"
+							name="Tassonomia_TempoDiLavoroPadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroPadre3.checked()"
+							label="Tipo di occupazione del padre"></div> <input
+						group="Tassonomia_TempoDiLavoroPadre"
+						id="Tassonomia_TempoDiLavoroPadre1"
+						name="Tassonomia_TempoDiLavoroPadre" type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>oltre 30 ore settimanali</p>
+						<p style="font-size: 70%">
+							<i>(l'orario degli insegnanti a tempo pieno è fissato
+								convenzionalmente in 36 ore settimanali)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroPadre"
+						id="Tassonomia_TempoDiLavoroPadre2"
+						name="Tassonomia_TempoDiLavoroPadre" type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>oltre le 18 ore e fino a 30 ore settimanali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroPadre"
+						id="Tassonomia_TempoDiLavoroPadre3"
+						name="Tassonomia_TempoDiLavoroPadre" type="radio" value="3">
+					</td>
+					<td colspan="5">
+						<p>fino a 18 ore settimanali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroPadre"
+						id="Tassonomia_TempoDiLavoroPadre4"
+						name="Tassonomia_TempoDiLavoroPadre" type="radio" value="4">
+					</td>
+					<td colspan="5">
+						<p>occupazione saltuaria per minimo 4 mesi all'anno</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroPadre"
+						id="Tassonomia_TempoDiLavoroPadre5"
+						name="Tassonomia_TempoDiLavoroPadre" type="radio" value="5">
+					</td>
+					<td colspan="5">
+						<p>lavoratore stagionale per minimo 4 mesi all'anno</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Disagi di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_DisagiLavoroPadre"
+							name="Tassonomia_DisagiLavoroPadre"
+							enabled="#Tassonomia_TipoLavoroPadre3.checked()"
+							label="Disagi legati al tipo di lavoro del padre"></div> <input
+						group="Tassonomia_DisagiLavoroPadre"
+						id="Tassonomia_DisagiLavoroPadre1"
+						name="Tassonomia_DisagiLavoroPadre1" type="checkbox" value="1">
+					</td>
+					<td colspan="5">
+						<p>assente (giorno e notte) per un periodo di almento 180
+							giorni all'anno, continuativi o cumulabili, per motivi di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="5" />
+					<input id="Tassonomia_TipoLavoroPadre2"
+						name="Tassonomia_TipoLavoroPadre" type="radio" value="2">
+					</td>
+					<td colspan="6">
+						<p>studente regolarmente iscritto</p>
+						<p style="font-size: 70%">
+							<i>(se all'Università, in regola con gli esami o al massimo
+								due anni fuori corso, sempreché non vi sia stato di occupazione
+								o iscrizione al Centro per l'Impiego)</i>
+						</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Scuola o università o ente di formazione</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" />
+					<input class="inputNormal" id="Parametri_ScuolaPadre"
+						name="Parametri_ScuolaPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoLavoroPadre2.checked()"
+						label="Descrizione scuola/università/ente di formazione del padre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Disagi di studio</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_DisagiStudioPadre"
+							name="Tassonomia_DisagiStudioPadre"
+							enabled="#Tassonomia_TipoLavoroPadre2.checked()"
+							label="Disagi legati al tipo di studio del padre"></div> <input
+						group="Tassonomia_DisagiStudioPadre"
+						id="Tassonomia_DisagiStudioPadre1"
+						name="Tassonomia_DisagiStudioPadre1" type="checkbox" value="1">
+					</td>
+					<td colspan="5">
+						<p>assente (giorno e notte) per un periodo di almento 180
+							giorni all'anno, continuativi o cumulabili, per motivi di studio
+							con obbligo di frequenza</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="6" />
+					<input id="Tassonomia_TipoLavoroPadre1"
+						name="Tassonomia_TipoLavoroPadre" type="radio" value="1">
+					</td>
+					<td colspan="6">
+						<p>non lavoratore né studente</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_CentroImpiegoPadre"
+							name="Tassonomia_CentroImpiegoPadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroPadre1.checked()"
+							label="Iscrizione al centro per l'impiego del padre"></div> <input
+						group="Tassonomia_CentroImpiegoPadre"
+						id="Tassonomia_CentroImpiegoPadre1"
+						name="Tassonomia_CentroImpiegoPadre" type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>non iscritto ad un centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_CentroImpiegoPadre"
+						id="Tassonomia_CentroImpiegoPadre2"
+						name="Tassonomia_CentroImpiegoPadre" type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>iscritto ad un centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Descrizione del centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" />
+					<input class="inputNormal" id="Parametri_DesCentroImpiegoPadre"
+						name="Parametri_DesCentroImpiegoPadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_CentroImpiegoPadre2.checked()"
+						label="Descrizione centro impiego del padre">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<pd4ml:page.break />
+		<!--  simpatico start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!--  simpatico end -->
+			<h1 class="Modulo">Situazione lavorativa della madre o della
+				convivente</h1>
+
+			<p class="Modulo">che la condizione lavorativa della madre o
+				convivente presente nel nucleo è (si considerano sia i contratti a
+				tempo indeterminato che a tempo determinato o atipici in essere al
+				momento dell'iscrizione)</p>
+			<!--  simpatico start -->
+		</div>
+		<!--  simpatico end -->
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="7">
+						<p class="Labelcella">Condizione di lavoro della madre o
+							convivente</p>
+					</td>
+				</tr>
+				<tr>
+
+					<td style="vertical-align: top; width: 4%;" />
+					<input id="Tassonomia_NoMadre" name="Tassonomia_NoMadre"
+						dynamic_check="#AventeTitolo_RuoloRichiedente.check_value(['padre']) and #Tassonomia_TipoNucleo2.checked()"
+						enabled="#AventeTitolo_RuoloRichiedente.check_value(['padre']) and #Tassonomia_TipoNucleo2.checked()"
+						type="checkbox" value="1">
+					</td>
+					<td colspan="6">
+						<p>nessuna informazione (perchè il nucleo è monoparentale)</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="Modulo simpatico-block simpatico-query-and-answer" style="border: 1px solid grey">
+			<tbody>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="23" />
+					<input id="Tassonomia_TipoLavoroMadre3"
+						name="Tassonomia_TipoLavoroMadre" type="radio" value="3">
+					</td>
+					<td colspan="6">
+						<p>lavoratrice</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="11">
+						<div id="Tassonomia_LavoroMadre" name="Tassonomia_LavoroMadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroMadre3.checked()"
+							label="Scegliere se madre lavoratore dipendente o autonomo">
+						</div> <input id="Tassonomia_LavoroMadre1" name="Tassonomia_LavoroMadre"
+						type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>dipendente (o assimilato)</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Tipo di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" />
+					<input class="inputNormal" id="Parametri_TipoLavoroMadre"
+						name="Parametri_TipoLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Descrizione lavoro della madre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Azienda</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Denominazione/Ragione sociale</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" />
+					<input class="inputNormal" id="Parametri_AziendaLavoroMadre"
+						name="Parametri_AziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Denominazione azienda ove lavora la madre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="5">
+						<p class="Labelcella">Sede legale</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella">Provincia</p>
+					</td>
+					<td>
+						<p class="Labelcella">Comune</p>
+					</td>
+					<td>
+						<p class="Labelcella">Indirizzo</p>
+					</td>
+					<td style="vertical-align: top; width: 10%;">
+						<p class="Labelcella">Civico</p>
+					</td>
+					<td style="vertical-align: top; width: 10%;">
+						<p class="Labelcella">CAP</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal"
+						id="Parametri_ProvAziendaLavoroMadre"
+						name="Parametri_ProvAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Provincia dell'azienda ove lavora la madre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_ComuneAziendaLavoroMadre"
+						name="Parametri_ComuneAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Comune dell'azienda ove lavora la madre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_IndirizzoAziendaLavoroMadre"
+						name="Parametri_IndirizzoAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Indirizzo dell'azienda ove lavora la madre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_CivicoAziendaLavoroMadre"
+						name="Parametri_CivicoAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Numero civico dell'azienda ove lavora ll madre"></td>
+					<td><input class="inputNormal"
+						id="Parametri_CapAziendaLavoroMadre"
+						name="Parametri_CapAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="CAP dell'azienda ove lavora la madre"></td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="2">
+						<p class="Labelcella">Telefono</p>
+					</td>
+					<td colspan="3">
+						<p class="Labelcella">E-mail</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_TelAziendaLavoroMadre"
+						name="Parametri_TelAziendaLavoroMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre1.checked()"
+						label="Telefono dell'azienda ove lavora la madre">
+					</td>
+					<td colspan="3" />
+					<input class="inputNormal" id="Parametri_EmailAziendaLavoroMadre"
+						name="Parametri_EmailAziendaLavoroMadre" style="width: 100%;"
+						format="email" label="E-mail dell'azienda ove lavora la madre">
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="3" />
+					<input id="Tassonomia_LavoroMadre2" name="Tassonomia_LavoroMadre"
+						type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>autonoma o non dipendente</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="3">
+						<p class="Labelcella">Agenzia delle entrate di</p>
+					</td>
+					<td colspan="2">
+						<p class="Labelcella">Partita IVA</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" />
+					<input class="inputNormal" id="Parametri_AgenziaEntrateMadre"
+						name="Parametri_AgenziaEntrateMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre2.checked()"
+						label="Agenzia delle Entrate di riferimento per il lavoro della madre">
+					</td>
+					<td colspan="2" />
+					<input class="inputNormal" id="Parametri_PIVAMadre"
+						name="Parametri_PIVAMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_LavoroMadre2.checked()"
+						label="Numero di partita IVA della madre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Tipo di occupazione lavorativa</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_TempoDiLavoroMadre"
+							name="Tassonomia_TempoDiLavoroMadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroMadre3.checked()"
+							label="Tipo di occupazione della madre"></div> <input
+						group="Tassonomia_TempoDiLavoroMadre"
+						id="Tassonomia_TempoDiLavoroMadre1"
+						name="Tassonomia_TempoDiLavoroMadre" type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>oltre 30 ore settimanali</p>
+						<p style="font-size: 70%">
+							<i>(l'orario degli insegnanti a tempo pieno è fissato
+								convenzionalmente in 36 ore settimanali)</i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroMadre"
+						id="Tassonomia_TempoDiLavoroMadre2"
+						name="Tassonomia_TempoDiLavoroMadre" type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>oltre le 18 ore e fino a 30 ore settimanali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroMadre"
+						id="Tassonomia_TempoDiLavoroMadre3"
+						name="Tassonomia_TempoDiLavoroMadre" type="radio" value="3">
+					</td>
+					<td colspan="5">
+						<p>fino a 18 ore settimanali</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroMadre"
+						id="Tassonomia_TempoDiLavoroMadre4"
+						name="Tassonomia_TempoDiLavoroMadre" type="radio" value="4">
+					</td>
+					<td colspan="5">
+						<p>occupazione saltuaria per minimo 4 mesi all'anno</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_TempoDiLavoroMadre"
+						id="Tassonomia_TempoDiLavoroMadre5"
+						name="Tassonomia_TempoDiLavoroMadre" type="radio" value="5">
+					</td>
+					<td colspan="5">
+						<p>lavoratrice stagionale per minimo 4 mesi all'anno</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Disagi di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_DisagiLavoroMadre"
+							name="Tassonomia_DisagiLavoroMadre"
+							enabled="#Tassonomia_TipoLavoroMadre3.checked()"
+							label="Disagi legati al tipo di lavoro della madre"></div> <input
+						group="Tassonomia_DisagiLavoroMadre"
+						id="Tassonomia_DisagiLavoroMadre1"
+						name="Tassonomia_DisagiLavoroMadre1" type="checkbox" value="1">
+					</td>
+					<td colspan="5">
+						<p>assente (giorno e notte) per un periodo di almento 180
+							giorni all'anno, continuativi o cumulabili, per motivi di lavoro</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="5" />
+					<input id="Tassonomia_TipoLavoroMadre2"
+						name="Tassonomia_TipoLavoroMadre" type="radio" value="2">
+					</td>
+					<td colspan="6">
+						<p>studentessa regolarmente iscritta</p>
+						<p style="font-size: 70%">
+							<i>(se all'Università, in regola con gli esami o al massimo
+								due anni fuori corso, sempreché non vi sia stato di occupazione
+								o iscrizione al Centro per l'Impiego)</i>
+						</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Scuola o università o ente di formazione</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" />
+					<input class="inputNormal" id="Parametri_ScuolaMadre"
+						name="Parametri_ScuolaMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_TipoLavoroMadre2.checked()"
+						label="Descrizione scuola/università/ente di formazione della madre">
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Disagi di studio</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_DisagiStudioMadre"
+							name="Tassonomia_DisagiStudioMadre"
+							enabled="#Tassonomia_TipoLavoroMadre2.checked()"
+							label="Disagi legati al tipo di studio della madre"></div> <input
+						group="Tassonomia_DisagiStudioMadre"
+						id="Tassonomia_DisagiStudioMadre1"
+						name="Tassonomia_DisagiStudioMadre1" type="checkbox" value="1">
+					</td>
+					<td colspan="5">
+						<p>assente (giorno e notte) per un periodo di almento 180
+							giorni all'anno, continuativi o cumulabili, per motivi di studio
+							con obbligo di frequenza</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" rowspan="6">
+						<div id="Tassonomia_TipoLavoroMadre"
+							name="Tassonomia_TipoLavoroMadre"
+							mandatory_enabled="(#Tassonomia_TipoNucleo1.checked()) || (#AventeTitolo_RuoloRichiedente.check_value(['madre','tutore/tutrice','affidatario/a','affidatario/a preadottivo/a']) and #Tassonomia_TipoNucleo2.checked())"
+							label="Condizione di lavoro della madre o convivente"></div> <input
+						id="Tassonomia_TipoLavoroMadre1" name="Tassonomia_TipoLavoroMadre"
+						type="radio" value="1">
+					</td>
+					<td colspan="6">
+						<p>non lavoratrice né studentessa</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;">
+						<div id="Tassonomia_CentroImpiegoMadre"
+							name="Tassonomia_CentroImpiegoMadre"
+							mandatory_enabled="#Tassonomia_TipoLavoroMadre1.checked()"
+							label="Iscrizione al centro per l'impiego della madre"></div> <input
+						group="Tassonomia_CentroImpiegoMadre"
+						id="Tassonomia_CentroImpiegoMadre1"
+						name="Tassonomia_CentroImpiegoMadre" type="radio" value="1">
+					</td>
+					<td colspan="5">
+						<p>non iscritta ad un centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4%;" />
+					<input group="Tassonomia_CentroImpiegoMadre"
+						id="Tassonomia_CentroImpiegoMadre2"
+						name="Tassonomia_CentroImpiegoMadre" type="radio" value="2">
+					</td>
+					<td colspan="5">
+						<p>iscritta ad un centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td colspan="6">
+						<p class="Labelcella">Descrizione del centro per l'impiego</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" />
+					<input class="inputNormal" id="Parametri_DesCentroImpiegoMadre"
+						name="Parametri_DesCentroImpiegoMadre" style="width: 100%;"
+						mandatory_enabled="#Tassonomia_CentroImpiegoMadre2.checked()"
+						label="Descrizione centro impiego della madre">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<pd4ml:page.break />
+		<br /> <br />
+		<!--  simpatico start -->
+		<div class="simpatico-block simpatico-query-and-answer">
+			<!--  simpatico end -->
+			<h1 class="Modulo">DICHIARA INOLTRE</h1>
+
+			<table class="Modulo" style="border: 1px solid grey">
+				<tbody>
+					<tr>
+						<td style="vertical-align: top; width: 4%;">
+							<div id="Tassonomia_Dichiarazioni"
+								name="Tassonomia_Dichiarazioni" label="Dichiarazioni finali"></div>
+							<input id="Tassonomia_Dichiarazioni1"
+							name="Tassonomia_Dichiarazioni1" dynamic_check="true"
+							type="checkbox" value="1">
+						</td>
+						<td>
+							<p>di essere a conoscenza che tutti i requisiti che danno
+								luogo a punteggio utile ai fini della formazione della
+								graduatoria devono essere posseduti all'atto della domanda e
+								trovare conferma al momento della chiusura dei termini.
+								Pertanto, ogni variazione intervenuta successivamente alla
+								domanda di ammissione, sia in relazione alla situazione del
+								nucleo (familiare e lavorativa) che rispetto alle varie opzioni
+								espresse, deve essere comunicata entro il 30 aprile all'ufficio
+								competente ai fini dell'adeguamento degli elementi utili per
+								l'inserimento in graduatoria</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input id="Tassonomia_Dichiarazioni2"
+							name="Tassonomia_Dichiarazioni2" dynamic_check="true"
+							type="checkbox" value="1">
+						</td>
+						<td>
+							<p>di essere consapevole della sua piena responsabilità circa
+								l'esattezza dei dati forniti e di impegnarsi a comunicare
+								tempestivamente con le stesse modalità di presentazione della
+								domanda gli eventuali cambiamenti di indirizzo, e-mail, fax o
+								numero telefonico avvenuti successivamente alla presentazione
+								della domanda</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; width: 4%;" />
+						<input id="Tassonomia_Dichiarazioni3"
+							name="Tassonomia_Dichiarazioni3" dynamic_check="true"
+							type="checkbox" value="1">
+						</td>
+						<td>
+							<p>di essere a conoscenza che l'Amministrazione si riserva di
+								operare controlli sulle dichiarazioni rese</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--  simpatico start -->
+		</div>
+		<!--  simpatico end -->
+
+		<!--  simpatico start -->
+		<!--  
+		<br /> <br /> <br />
+		<table class="Modulo" name="Allegati" style="border: 1px solid grey">
+			<tbody>
+				<tr class="Rigaintestazione">
+					<td colspan="2">
+						<p style="text-align: center;">
+							<b> Elenco degli allegati </b> <br /> <span
+								style="font-size: 70%"> <i>(barrare tutti gli
+									allegati richiesti in fase di presentazione della pratica ed
+									elencati sul portale)</i>
+							</span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 3%"/><input id="DAE-CDI"
+						name="DAE-CDI" type="checkbox" enabled="false"
+						value="OBBLIGATORIO"></td>
+					<td style="background-color: #eeeeee;">
+						<p>
+							copia del documento d'identità <br /> <span
+								style="font-size: 70%"> <i> (da non allegare se
+									l'istanza è presentata in modalità telematica o se la firma
+									autografa è apposta di fronte a un pubblico ufficiale) </i>
+							</span>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+-->
+		<!--  simpatico end -->
+		<br /> <br />
+		<pd4ml:page.footer areaheight="150" scope="9">
+			<div type="firma" class="simpatico-block simpatico-query-and-answer">
+				<table class="Modulo" name="Firme"
+					style="border: 1px solid grey; margin-left: 28pt; display: none; pd4ml-display: inline">
+					<tbody>
+						<tr>
+							<td style="width: 33%; text-align: center;" />
+							<input class="" id="Luogo_PDF" name="Luogo_PDF"
+								style="width: 80%;" type="text">
+							</td>
+							<td style="width: 33%; text-align: center;" />
+							<input class="" id="Data_PDF" name="Data_PDF" style="width: 50%;"
+								type="text">
+							</td>
+							<td style="width: 34%; text-align: center; height: 1.5cm;"></td>
+						</tr>
+						<tr class="Rigaintestazioneridotta">
+							<td>
+								<p class="Labelcella" style="text-align: center">Luogo</p>
+							</td>
+							<td>
+								<p class="Labelcella" style="text-align: center">Data</p>
+							</td>
+							<td>
+								<p class="Labelcella" style="text-align: center">Il
+									dichiarante</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<p>
+									<span style="font-size: 70%"><i>I dati acquisiti
+											saranno trattati in conformità alla normativa vigente sulla
+											Privacy (Decreto Legislativo 30/06/2003, n. 196).</i></span>
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</pd4ml:page.footer>
+		<br />
+		<table class="Modulo" id="firme" name="Firme"
+			style="border: 1px solid grey; pd4ml-display: none;">
+			<tbody>
+				<tr>
+					<td style="width: 33%; text-align: center;" />
+					<input class="" id="Luogo" label="Luogo" mandatory="true"
+						name="Luogo" style="width: 80%;" type="text">
+					</td>
+					<td style="width: 33%; text-align: center;" />
+					<input class="" format="date" id="Data" label="Data"
+						mandatory="true" name="Data" style="width: 50%;" type="text">
+					</td>
+					<td style="width: 34%; text-align: center; height: 1.5cm;"></td>
+				</tr>
+				<tr class="Rigaintestazioneridotta">
+					<td>
+						<p class="Labelcella" style="text-align: center">Luogo</p>
+					</td>
+					<td>
+						<p class="Labelcella" style="text-align: center">Data</p>
+					</td>
+					<td>
+						<p class="Labelcella" style="text-align: center">Il
+							dichiarante</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<p>
+							<span style="font-size: 70%"><i>I dati acquisiti
+									saranno trattati in conformità alla normativa vigente sulla
+									Privacy (Decreto Legislativo 30/06/2003, n. 196).</i></span>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br /> <br />
+		<p class="Modulo">
+			<input id="SalvaModulo" name="SalvaModulo"
+				style="height: 30px; width: 120px;"
+				title="Verifica la corretta compilazione dei campi e salva il modulo nel faldone virtuale dell'istanza."
+				type="submit" value="Salva modulo">
+		</p>
+
+		<input destinatario_amministrazione="getParameter('Ente')"
+			id="GLOBO_modulo_cM1876-ISCRIZIONE-NIDO-VAR"
+			name="GLOBO_modulo_cM1876-ISCRIZIONE-NIDO-VAR" type="hidden" value="" /><input
+			id="GLOBO_id_padre" name="GLOBO_id_padre" type="hidden" /><input
+			id="GLOBO_recupera_dati" name="GLOBO_recupera_dati" type="hidden" /><input
+			id="GLOBO_codice_modulo" name="GLOBO_codice_modulo" type="hidden"
+			value="M1876-ISCRIZIONE-NIDO-VAR" /><input id="GLOBO_MyJobIsDone"
+			name="GLOBO_MyJobIsDone" type="hidden" value="" /><input
+			id="GLOBO_IsReadyToSend" name="GLOBO_IsReadyToSend" type="hidden"
+			value="" /><input type="hidden" id="Parametri_UfficioDestinatario"
+			name="Parametri_UfficioDestinatario" value="">
+	</form>
+	</div>
+	<div id="background" class="error-box-view"></div>
+	<div id="errors" class="error-box-view">
+		<div id="error-text"></div>
+		<button id="close" class="btn-error" onclick="close_error()">Chiudi</button>
+	</div>
+
+</body>
+<!-- script src="./validator/js/jquery-1.9.1.js" type="text/javascript"></script-->
+<script src="./validator/js/placeholders.jquery.min.js"
+	type="text/javascript"></script>
+<script src="./validator/js/jquery.json-2.3.min.js"
+	type="text/javascript"></script>
+<script src="./validator/js/validator.js" type="text/javascript"></script>
+<script src="./validator/js/moduli-driver.js" type="text/javascript"></script>
+<!-- Dinamic include -->
+<!--<script id="loader" type="text/javascript">
+         $(document).ready(function(){
+             validator.tree_builder();
+			 $('#UfficioDestinatario').val(get_ufficio_dest());
+                loadForm( ["AventeTitolo", "Bambino"] ); //autoload prefix.
+
+            
+         });
+    </script>-->
+	
+	
+	
+</html>
+

@@ -1,0 +1,310 @@
+[
+  {
+    "servicename": "Kindergarten Registration",
+    "source": "-",
+    "userId": "c7dc97fd-73ce-44f4-982b-2cb153d0d954",
+    "role_specific_part": {
+      "usage_rules": [
+        {
+          "purposeId": "share_1",
+          "purposeCategory": "5 - Personalized Experience",
+          "legalBasis": "Consent",
+          "purposeName": "Sharing across services",
+          "processingCategories": [
+            "Collect",
+            "Transfer"
+          ],
+          "policyRef": "http://localhost:8080/ife/policy",
+          "storage": {
+            "location": "EU",
+            "duration": "Business Practices"
+          },
+          "recipients": [],
+          "shareWith": [
+            {
+              "orgName": "ACME 1",
+              "orgUrl": "https://",
+              "businessType": "Profit",
+              "required": true
+            },
+            {
+              "orgName": "ACME 2",
+              "orgUrl": "https://",
+              "businessType": "Profit",
+              "required": false
+            }
+          ],
+          "obligations": [],
+          "collectionMethod": "",
+          "termination": "",
+          "operator":""
+        }
+      ],
+      "source_cr_id": "5e55550fbc576e5507eb01b5"
+    },
+    "common_part": {
+      "version": "2.0",
+      "cr_id": "5e55550fbc576e5507eb01b4",
+      "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+      "rs_description": {
+        "resource_set": {
+          "rs_id": "5e5554e5bc576e5507eb01b3",
+          "datasets": [
+            {
+              "id": "Contacts",
+              "purposeId": "share_1",
+              "status": true,
+              "dataMappings": [
+                {
+                  "property": "AventeTitolo_Fax",
+                  "conceptId": "fax_number_for_support",
+                  "name": "Fax Number",
+                  "type": "text",
+                  "required": 0,
+                  "sensitive": 0
+                },
+                {
+                  "property": "AventeTitolo_EMailPEC",
+                  "conceptId": "personal_other_email",
+                  "name": "Other Email",
+                  "type": "text",
+                  "required": 0,
+                  "sensitive": 0
+                }
+              ],
+              "created": "2020-02-25T17:09:57Z"
+            }
+          ]
+        }
+      },
+      "slr_id": "5e4e750802304a32d31e5c6a",
+      "iat": "2020-02-25T17:10:39.076Z",
+      "nbf": "",
+      "exp": "",
+      "operator": "_cape",
+      "subject_id": "M1876",
+      "jurisdiction": "",
+      "dataController": {
+        "piiController": "Controller Name",
+        "onBehalf": false,
+        "org": "PA NAme",
+        "contact": "contact Name",
+        "address": "address 123",
+        "email": "mail@pa.it",
+        "phone": "123"
+      },
+      "serviceDescriptionDigest": "",
+      "serviceDescriptionVersion": "v0.3",
+      "role": "sink"
+    },
+    "consentStatusList": [
+      {
+        "record_id": "5e55550fbc576e5507eb01b6",
+        "version": "",
+        "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+        "cr_id": "5e55550fbc576e5507eb01b4",
+        "consent_status": "ACTIVE",
+        "iat": "2020-02-25T17:10:39Z"
+      }
+    ],
+    "consentSignedToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlX3NwZWNpZmljX3BhcnQiOnsidXNhZ2VSdWxlcyI6W3sicHVycG9zZUlkIjoic2hhcmVfMSIsInB1cnBvc2VDYXRlZ29yeSI6IjUgLSBQZXJzb25hbGl6ZWQgRXhwZXJpZW5jZSIsImxlZ2FsQmFzaXMiOiJDb25zZW50IiwicHVycG9zZU5hbWUiOiJTaGFyaW5nIGFjcm9zcyBzZXJ2aWNlcyIsInByb2Nlc3NpbmdDYXRlZ29yaWVzIjpbIkNvbGxlY3QiLCJUcmFuc2ZlciJdLCJwb2xpY3lSZWYiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvaWZlL3BvbGljeSIsInN0b3JhZ2UiOnsibG9jYXRpb24iOiJFVSIsImR1cmF0aW9uIjoiQnVzaW5lc3MgUHJhY3RpY2VzIn0sInJlY2lwaWVudHMiOltdLCJzaGFyZVdpdGgiOlt7Im9yZ05hbWUiOiJBQ01FIDEiLCJvcmdVcmwiOiJodHRwczovLyIsImJ1c2luZXNzVHlwZSI6IlByb2ZpdCIsInJlcXVpcmVkIjp0cnVlfV0sIm9ibGlnYXRpb25zIjpbXSwiY29sbGVjdGlvbk1ldGhvZCI6IiIsInRlcm1pbmF0aW9uIjoiIn1dLCJzb3VyY2VDcklkIjoiNWU1NTU1MGZiYzU3NmU1NTA3ZWIwMWI1In19.ngh9xFREbZZ8LTrOTcvrybxyGu8xyJS8GBVO2ISA_hE",
+    "notarizationStatus": "confirmed",
+    "notarizationHash": ""
+  },
+  {
+    "servicename": "Health@Home",
+    "source": "MySugar",
+    "userId": "c7dc97fd-73ce-44f4-982b-2cb153d0d954",
+    "role_specific_part": {
+      "usage_rules": [
+        {
+          "purposeId": "1",
+          "purposeCategory": "Protecting Your Health",
+          "legalBasis": "Consent",
+          "purposeName": "Suggest personlized diet",
+          "processingCategories": [
+            "Analyse"
+          ],
+          "policyRef": "http://localhost:8080/ife/policy",
+          "storage": {
+            "location": "EU",
+            "duration": "Business Practices"
+          },
+          "recipients": [],
+          "shareWith": [
+            {
+              "orgName": "ACME 1",
+              "orgUrl": "https://",
+              "businessType": "Profit",
+              "required": true
+            }
+          ],
+          "obligations": [],
+          "collectionMethod": "",
+          "termination": "",
+          "operator":""
+        }
+      ],
+      "source_cr_id": "5e55550fbc576e5507eb01b5"
+    },
+    "common_part": {
+      "version": "2.0",
+      "cr_id": "5e55550fbc576e5507eb01b4",
+      "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+      "rs_description": {
+        "resource_set": {
+          "rs_id": "5e5554e5bc576e5507eb01b3",
+          "datasets": [
+            {
+              "id": "Contacts",
+              "purposeId": "share_1",
+              "status": true,
+              "dataMappings": [
+                {
+                  "property": "Blood_Glucose",
+                  "conceptId": "blood_glucose",
+                  "name": "Blood Glucose",
+                  "type": "text",
+                  "required": 1,
+                  "sensitive": 0
+                }
+              ],
+              "created": "2020-02-25T17:09:57Z"
+            }
+          ]
+        }
+      },
+      "slr_id": "5e4e750802304a32d31e5c6a",
+      "iat": "2020-02-25T17:10:39.076Z",
+      "nbf": "",
+      "exp": "",
+      "operator": "_cape",
+      "subject_id": "M1876",
+      "jurisdiction": "",
+      "dataController": {
+        "piiController": "Controller Name",
+        "onBehalf": false,
+        "org": "PA NAme",
+        "contact": "contact Name",
+        "address": "address 123",
+        "email": "mail@pa.it",
+        "phone": "123"
+      },
+      "serviceDescriptionDigest": "",
+      "serviceDescriptionVersion": "v0.3",
+      "role": "sink"
+    },
+    "consentStatusList": [
+      {
+        "record_id": "5e55550fbc576e5507eb01b6",
+        "version": "",
+        "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+        "cr_id": "5e55550fbc576e5507eb01b4",
+        "consent_status": "ACTIVE",
+        "iat": "2020-02-25T17:10:39Z"
+      }
+    ],
+    "consentSignedToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlX3NwZWNpZmljX3BhcnQiOnsidXNhZ2VSdWxlcyI6W3sicHVycG9zZUlkIjoic2hhcmVfMSIsInB1cnBvc2VDYXRlZ29yeSI6IjUgLSBQZXJzb25hbGl6ZWQgRXhwZXJpZW5jZSIsImxlZ2FsQmFzaXMiOiJDb25zZW50IiwicHVycG9zZU5hbWUiOiJTaGFyaW5nIGFjcm9zcyBzZXJ2aWNlcyIsInByb2Nlc3NpbmdDYXRlZ29yaWVzIjpbIkNvbGxlY3QiLCJUcmFuc2ZlciJdLCJwb2xpY3lSZWYiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvaWZlL3BvbGljeSIsInN0b3JhZ2UiOnsibG9jYXRpb24iOiJFVSIsImR1cmF0aW9uIjoiQnVzaW5lc3MgUHJhY3RpY2VzIn0sInJlY2lwaWVudHMiOltdLCJzaGFyZVdpdGgiOlt7Im9yZ05hbWUiOiJBQ01FIDEiLCJvcmdVcmwiOiJodHRwczovLyIsImJ1c2luZXNzVHlwZSI6IlByb2ZpdCIsInJlcXVpcmVkIjp0cnVlfV0sIm9ibGlnYXRpb25zIjpbXSwiY29sbGVjdGlvbk1ldGhvZCI6IiIsInRlcm1pbmF0aW9uIjoiIn1dLCJzb3VyY2VDcklkIjoiNWU1NTU1MGZiYzU3NmU1NTA3ZWIwMWI1In19.ngh9xFREbZZ8LTrOTcvrybxyGu8xyJS8GBVO2ISA_hE",
+    "notarizationStatus": "confirmed",
+    "notarizationHash": ""
+  },
+  {
+    "servicename": "MyParcel",
+    "source": "-",
+    "userId": "c7dc97fd-73ce-44f4-982b-2cb153d0d954",
+    "role_specific_part": {
+      "usage_rules": [
+        {
+          "purposeId": "1",
+          "purposeCategory": "3- Delivery of Goods",
+          "legalBasis": "Consent",
+          "purposeName": "Personalized delivery of packages",
+          "processingCategories": [
+            "Collect",
+            "Query",
+            "Transfer"
+          ],
+          "policyRef": "http://localhost:8080/ife/policy",
+          "storage": {
+            "location": "EU",
+            "duration": "Business Practices"
+          },
+          "recipients": [],
+          "shareWith": [
+            {
+              "orgName": "ACME 1",
+              "orgUrl": "https://",
+              "businessType": "Profit",
+              "required": true
+            }
+          ],
+          "obligations": [],
+          "collectionMethod": "",
+          "termination": "",
+          "operator":""
+        }
+      ],
+      "source_cr_id": "5e55550fbc576e5507eb01b5"
+    },
+    "common_part": {
+      "version": "2.0",
+      "cr_id": "5e55550fbc576e5507eb01b4",
+      "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+      "rs_description": {
+        "resource_set": {
+          "rs_id": "5e5554e5bc576e5507eb01b3",
+          "datasets": [
+            {
+              "id": "Contact_position",
+              "purposeId": "share_1",
+              "status": true,
+              "dataMappings": [
+                {
+                  "property": "Position",
+                  "conceptId": "position",
+                  "name": "Position",
+                  "type": "text",
+                  "required": 1,
+                  "sensitive": 0
+                }
+              ],
+              "created": "2020-02-25T17:09:57Z"
+            }
+          ]
+        }
+      },
+      "slr_id": "5e4e750802304a32d31e5c6a",
+      "iat": "2020-02-25T17:10:39.076Z",
+      "nbf": "",
+      "exp": "",
+      "operator": "_cape",
+      "subject_id": "M1876",
+      "jurisdiction": "",
+      "dataController": {
+        "piiController": "Controller Name",
+        "onBehalf": false,
+        "org": "PA NAme",
+        "contact": "contact Name",
+        "address": "address 123",
+        "email": "mail@pa.it",
+        "phone": "123"
+      },
+      "serviceDescriptionDigest": "",
+      "serviceDescriptionVersion": "v0.3",
+      "role": "sink"
+    },
+    "consentStatusList": [
+      {
+        "record_id": "5e55550fbc576e5507eb01b6",
+        "version": "",
+        "surrogate_id": "21ed4b1e-974d-4a3b-b0ea-9fcc7174b188",
+        "cr_id": "5e55550fbc576e5507eb01b4",
+        "consent_status": "ACTIVE",
+        "iat": "2020-02-25T17:10:39Z"
+      }
+    ],
+    "consentSignedToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlX3NwZWNpZmljX3BhcnQiOnsidXNhZ2VSdWxlcyI6W3sicHVycG9zZUlkIjoic2hhcmVfMSIsInB1cnBvc2VDYXRlZ29yeSI6IjUgLSBQZXJzb25hbGl6ZWQgRXhwZXJpZW5jZSIsImxlZ2FsQmFzaXMiOiJDb25zZW50IiwicHVycG9zZU5hbWUiOiJTaGFyaW5nIGFjcm9zcyBzZXJ2aWNlcyIsInByb2Nlc3NpbmdDYXRlZ29yaWVzIjpbIkNvbGxlY3QiLCJUcmFuc2ZlciJdLCJwb2xpY3lSZWYiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvaWZlL3BvbGljeSIsInN0b3JhZ2UiOnsibG9jYXRpb24iOiJFVSIsImR1cmF0aW9uIjoiQnVzaW5lc3MgUHJhY3RpY2VzIn0sInJlY2lwaWVudHMiOltdLCJzaGFyZVdpdGgiOlt7Im9yZ05hbWUiOiJBQ01FIDEiLCJvcmdVcmwiOiJodHRwczovLyIsImJ1c2luZXNzVHlwZSI6IlByb2ZpdCIsInJlcXVpcmVkIjp0cnVlfV0sIm9ibGlnYXRpb25zIjpbXSwiY29sbGVjdGlvbk1ldGhvZCI6IiIsInRlcm1pbmF0aW9uIjoiIn1dLCJzb3VyY2VDcklkIjoiNWU1NTU1MGZiYzU3NmU1NTA3ZWIwMWI1In19.ngh9xFREbZZ8LTrOTcvrybxyGu8xyJS8GBVO2ISA_hE",
+    "notarizationStatus": "confirmed",
+    "notarizationHash": ""
+  }
+]

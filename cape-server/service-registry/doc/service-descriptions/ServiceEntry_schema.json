@@ -1,0 +1,564 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "serviceId",
+    "name",
+    "identifier",
+    "issued",
+    "createdByUserId",
+    "serviceDescriptionVersion",
+    "serviceIconUrl",
+    "status",
+    "supportedProfiles",
+    "spatial",
+    "lifeEvent",
+    "businessEvent",
+    "sector",
+    "type",
+    "thematicArea",
+    "language",
+    "hasCompetentAuthority",
+    "humanReadableDescription",
+    "serviceInstance",
+    "isDescribedAt",
+    "processingBases"
+  ],
+  "properties": {
+    "serviceId": {
+      "type": "string",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "default": ""
+    },
+    "identifier": {
+      "type": "string",
+      "default": ""
+    },
+    "issued": {
+      "type": "string",
+      "default": ""
+    },
+    "createdByUserId": {
+      "type": "string",
+      "default": ""
+    },
+    "serviceDescriptionVersion": {
+      "type": "string",
+      "default": ""
+    },
+    "serviceIconUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "status": {
+      "type": "string",
+      "default": ""
+    },
+    "supportedProfiles": {
+      "type": "array"
+    },
+    "spatial": {
+      "type": "string",
+      "default": ""
+    },
+    "lifeEvent": {
+      "type": "string",
+      "default": ""
+    },
+    "businessEvent": {
+      "type": "string",
+      "default": ""
+    },
+    "sector": {
+      "type": "array"
+    },
+    "type": {
+      "type": "array"
+    },
+    "thematicArea": {
+      "type": "array"
+    },
+    "language": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    "hasCompetentAuthority": {
+      "type": "object",
+      "required": [
+        "prefLabel",
+        "spatial"
+      ],
+      "properties": {
+        "prefLabel": {
+          "type": "string",
+          "default": ""
+        },
+        "spatial": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "humanReadableDescription": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "locale",
+          "description",
+          "keyword"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "default": ""
+          },
+          "keyword": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        }
+      }
+    },
+    "serviceInstance": {
+      "type": "object",
+      "required": [
+        "serviceProvider",
+        "cert",
+        "serviceUrls"
+      ],
+      "properties": {
+        "serviceProvider": {
+          "type": "object",
+          "required": [
+            "businessId",
+            "name",
+            "address1",
+            "address2",
+            "postalcode",
+            "city",
+            "state",
+            "country",
+            "email",
+            "phone",
+            "jurisdiction"
+          ],
+          "properties": {
+            "businessId": {
+              "type": "string",
+              "default": ""
+            },
+            "name": {
+              "type": "string",
+              "default": ""
+            },
+            "address1": {
+              "type": "string",
+              "default": ""
+            },
+            "address2": {
+              "type": "string",
+              "default": ""
+            },
+            "postalcode": {
+              "type": "string",
+              "default": ""
+            },
+            "city": {
+              "type": "string",
+              "default": ""
+            },
+            "state": {
+              "type": "string",
+              "default": ""
+            },
+            "country": {
+              "type": "string",
+              "default": ""
+            },
+            "email": {
+              "type": "string",
+              "default": ""
+            },
+            "phone": {
+              "type": "string",
+              "default": ""
+            },
+            "jurisdiction": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        },
+        "cert": {
+          "type": "object",
+          "required": [
+            "x5u"
+          ],
+          "properties": {
+            "x5u": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        },
+        "serviceUrls": {
+          "type": "object",
+          "required": [
+            "domain",
+            "libraryDomain",
+            "linkingUri",
+            "linkingRedirectUri",
+            "objectionUri",
+            "notificationUri"
+          ],
+          "properties": {
+            "domain": {
+              "type": "string",
+              "default": ""
+            },
+            "libraryDomain": {
+              "type": "string",
+              "default": ""
+            },
+            "linkingUri": {
+              "type": "string",
+              "default": ""
+            },
+            "linkingRedirectUri": {
+              "type": "string",
+              "default": ""
+            },
+            "objectionUri": {
+              "type": "string",
+              "default": ""
+            },
+            "notificationUri": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        }
+      }
+    },
+    "isDescribedAt": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "datasetId",
+          "description",
+          "datasetSchema",
+          "dataStructureSpecification",
+          "distribution",
+          "dataMapping"
+        ],
+        "properties": {
+          "datasetId": {
+            "type": "string",
+            "default": ""
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "locale",
+                "description",
+                "keyword"
+              ],
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "default": ""
+                },
+                "description": {
+                  "type": "string",
+                  "default": ""
+                },
+                "keyword": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              }
+            }
+          },
+          "datasetSchema": {
+            "type": "object",
+            "required": [
+              "context",
+              "type",
+              "id"
+            ],
+            "properties": {
+              "context": {
+                "type": "string",
+                "default": ""
+              },
+              "type": {
+                "type": "string",
+                "default": ""
+              },
+              "id": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "dataStructureSpecification": {
+            "type": "string",
+            "default": ""
+          },
+          "distribution": {
+            "type": "object",
+            "required": [
+              "distributionId",
+              "accessUrl",
+              "description",
+              "format"
+            ],
+            "properties": {
+              "distributionId": {
+                "type": "string",
+                "default": ""
+              },
+              "accessUrl": {
+                "type": "string",
+                "default": ""
+              },
+              "description": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "locale",
+                    "description"
+                  ],
+                  "properties": {
+                    "locale": {
+                      "type": "string",
+                      "default": ""
+                    },
+                    "description": {
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              },
+              "format": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "dataMapping": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "property",
+                "conceptId",
+                "name",
+                "type",
+                "required",
+                "sensitive"
+              ],
+              "properties": {
+                "property": {
+                  "type": "string",
+                  "default": ""
+                },
+                "conceptId": {
+                  "type": "string",
+                  "default": ""
+                },
+                "name": {
+                  "type": "string",
+                  "default": ""
+                },
+                "type": {
+                  "type": "string",
+                  "default": ""
+                },
+                "required": {
+                  "type": "integer",
+                  "default": 0
+                },
+                "sensitive": {
+                  "type": "integer",
+                  "default": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "processingBases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "purposeId",
+          "purposeName",
+          "legalBasis",
+          "purposeCategory",
+          "processingCategories",
+          "description",
+          "requiredDatasets",
+          "storage",
+          "recipients",
+          "shareWith",
+          "obligations",
+          "policyRef"
+        ],
+        "properties": {
+          "purposeId": {
+            "type": "string",
+            "default": ""
+          },
+          "purposeName": {
+            "type": "string",
+            "default": ""
+          },
+          "legalBasis": {
+            "type": "string",
+            "default": ""
+          },
+          "purposeCategory": {
+            "type": "string",
+            "default": ""
+          },
+          "processingCategories": {
+            "type": "array"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "locale",
+                "title",
+                "description",
+                "descriptionUrl",
+                "iconUrl"
+              ],
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "default": ""
+                },
+                "title": {
+                  "type": "string",
+                  "default": ""
+                },
+                "description": {
+                  "type": "string",
+                  "default": ""
+                },
+                "descriptionUrl": {
+                  "type": "string",
+                  "default": ""
+                },
+                "iconUrl": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+          },
+          "requiredDatasets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "storage": {
+            "type": "object",
+            "required": [
+              "location",
+              "duration"
+            ],
+            "properties": {
+              "location": {
+                "type": "string",
+                "default": ""
+              },
+              "duration": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "recipients": {
+            "type": "array"
+          },
+          "shareWith": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "orgName",
+                "businessType"
+              ],
+              "properties": {
+                "orgName": {
+                  "type": "string",
+                  "default": ""
+                },
+                "businessType": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+          },
+          "obligations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "event",
+                "activity"
+              ],
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "default": ""
+                },
+                "activity": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+          },
+          "policyRef": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      }
+    }
+  }
+}

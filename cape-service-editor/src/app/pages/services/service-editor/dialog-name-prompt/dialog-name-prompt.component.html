@@ -1,0 +1,14 @@
+<nb-card>
+  <nb-card-header>Enter file name</nb-card-header>
+  <nb-card-body>
+      <div class="container">
+          <div class="">
+            <input #name nbInput placeholder="Name">
+          </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+       <button nbButton status="danger" (click)="cancel()">Cancel</button>
+       <button nbButton status="success" (click)="submit(name.value)">Submit</button>
+  </nb-card-footer>
+</nb-card>

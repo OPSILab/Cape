@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Demo page</title>
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+
+
+
+    <!-- ////////////////////      SIMPATICO:BEGIN      /////////////////// -->
+
+    <!-- Global variables set up -->
+    <script type="text/javascript">
+      var simpaticoEservice = "2"; //  the id corresponding to the e-service
+      var simpaticoCategory = "Wellness"; // the general category of the e-service
+	  var simpaticoMapping=["AventeTitolo_EMailPEC","AventeTitolo_Fax","AventeTitolo_EMail"];
+	  var serviceName = "Test Web Form"; // Eservice example
+	  var serviceURL="http://localhost:8080/IFE/index_demo.html"	  
+    </script>
+
+    <!-- Injection of JS Libraries -->
+    <script src="js/log-ui.js"></script>
+    <script src="js/log-core.js"></script>
+    <script src="js/ctz-ui.js"></script>
+    <script src="js/ctz-core.js"></script>
+    <script src="js/cdv-ui-popup.js"></script>
+    <script src="js/cdv-core-popup.js"></script>
+    <script src="js/tae-core.js"></script>
+    <script src="js/tae-ui.js"></script>
+    <script src="js/wae-core.js"></script>
+    <script src="js/wae-ui.js"></script>
+
+    <script src="js/tae-core-popup.js"></script>
+    <script src="js/tae-ui-popup.js"></script>
+
+    <script src="js/simpatico-ife.js"></script>
+    <script src="js/simpatico-auth.js"></script>
+
+    <!-- /////////////////////      SIMPATICO:END      //////////////////// -->
+
+
+
+    <!-- ////////      STYLES USED BY SIMPATICO TOOLBAR:BEGIN      //////// -->
+    <!-- NOTE: CSS styles should be pasted in a CSS file -->
+  <style type="text/css">
+    /********************* Toolbar and buttons Styles *********************/
+    body {
+      margin-top: 60px;
+    }
+    /************************* CDV styles**********************************/
+    .ui-dialog {
+        position: fixed !important;
+    } 
+	
+	.no-close .ui-dialog-titlebar-close {
+        display: none;
+    }
+	/* Personalised style for active buttons cdv */
+    .simp-bar-btn-active-cdv {
+      background-color: #379E4C;
+      border: 1px solid #fff;
+    }
+	
+		
+	/************************* **********************************/
+	
+    #simp-bar {
+      display: inline-table;
+      z-index: 999;
+      position: fixed;
+      top:0;
+      width: 100%;
+      height: 52px;
+      background-color: #d3d3d6 !important;
+      box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    #simp-bar img {
+        vertical-align: middle;
+    }
+
+    /* Private buttons container */
+    #simp-bar-container-left {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    /* Login button container */
+    #simp-bar-container-right {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 0;
+      float: right;
+    }
+    /* Toolbar divs and containers */
+    #simp-bar div, #simp-bar ul {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    /* Generic style for all the buttons */
+    #simp-bar li {
+        border: 1px solid transparent;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    /* Personalised style for buttons */
+
+    /* >>> QAE Button */
+    .simp-bar-btn-inactive {
+      background-color: transparent;
+      border: 0px solid #fff;
+    }
+    .simp-bar-btn-inactive:hover {
+        background-color: #24BCDA;
+        border: 1px solid #fff;
+        animation-name: anim-inactive-hover;
+        animation-duration: 1s;
+    }
+    @keyframes anim-inactive-hover {
+      from {background-color: transparent;}
+      to {background-color: #24BCDA;}
+    }
+    .simp-bar-btn-active {
+      background-color: #24BCDA;
+      border: 1px solid #fff;
+    }
+    /* <<< QAE Button */
+
+    /* >>> TAE Button */
+    .simp-bar-btn-inactive-tae {
+      background-color: transparent;
+      border: 0px solid #fff;
+    }
+    .simp-bar-btn-inactive-tae:hover {
+        background-color: #DE453E;
+        border: 1px solid #fff;
+        animation-name: anim-inactive-hover-tae;
+        animation-duration: 1s;
+    }
+    @keyframes anim-inactive-hover-tae {
+      from {background-color: transparent;}
+      to {background-color: #DE453E;}
+    }
+    .simp-bar-btn-active-tae {
+      background-color: #DE453E;
+      border: 1px solid #fff;
+    }
+    /* <<< TAE Button */
+
+    /*****************************************************************************/
+
+
+    /***************************** Citizenpedia Styles ***************************/
+
+    /* Main question box class */
+    .simp-ctz-ui-qb {
+      border-top: : thick solid #24BCDA !important;
+      background-color: #E9F8FC !important;
+      border-radius: 0px 16px 16px 0px;
+      margin-left: -8px;
+      font-size: 12px;
+      line-height: 18px;
+      webkit-box-shadow: inset -2px -2px 60px 0px rgba(36, 188, 218, 0.29);
+      -moz-box-shadow: inset -2px -2px 60px 0px rgba(36, 188, 218, 0.29);
+      box-shadow: inset -2px -2px 60px 0px rgba(36, 188, 218, 0.29);
+    }
+
+    /* Title of a question box */
+    .simp-ctz-ui-qb p {
+      font-weight: bold;
+      padding-left: 10px;
+      margin-left: 0px !important;
+      margin-right: : 0px !important;
+      color: #E9F8FC !important;
+      background-color: #24BCDA !important;
+      border-radius: 0px 16px 0px 0px;
+    }
+
+    /* Each question in a question list */
+    .simp-ctz-ui-qb ul {
+      padding: 5px 5px !important;
+    }
+    .simp-ctz-ui-qb li {
+      list-style-type: none;
+      line-height: 18px;
+    }
+
+    /* Answers style*/
+    .simp-ctz-ui-qb li a i {
+      font-style: italic;
+      font-weight: bold;
+      padding-left: 5px !important;
+      color: #24BCDA  !important;
+    }
+    /* Number of answers & add question style*/
+    .simp-ctz-ui-qb li a b {
+      font-style: initial;
+      padding: 1px 5px 1px 5px !important;
+      border-radius: 6px !important;
+      color: #E9F8FC  !important;
+      background-color: #24BCDA !important;
+    }
+    /* Diagram found notification style*/
+    .simp-ctz-ui-diagram {
+      z-index: 999;
+      position: fixed;
+      font-style: initial;
+      border-radius: 0px 25px 25px 0px;
+      padding: 0px 16px 0px 16px !important;
+      background-color: #d3d3d6 !important;
+      webkit-box-shadow: 0px 0px 5px 0px #000000;
+      -moz-box-shadow: 0px 0px 5px 0px #000000;
+      box-shadow: 0px 0px 5px 0px #000000;
+      margin: 0px 0px 0px 0px !important;
+    }
+    .simp-ctz-ui-diagram:hover {
+      border-left: 12px solid #24BCDA;
+      padding: 0px 16px 0px 4px !important;
+    }
+
+    /*****************************************************************************/
+
+
+    /********************* Text Adaptation Engine box Styles *********************/
+
+    /* Main simplified text box class */
+    .simp-tae-ui-sb {
+      border-top: : thick solid #DE453E !important;
+      background-color: #FAE1E0 !important;
+      border-radius: 0px 16px 16px 0px;
+      margin-left: -8px;
+      font-size: 12px;
+      line-height: 18px;
+      webkit-box-shadow: inset -2px -2px 60px 0px #ee9f9b;
+      -moz-box-shadow: inset -2px -2px 60px 0px #ee9f9b;
+      box-shadow: inset -2px -2px 60px 0px #ee9f9b;
+    }
+
+    /* Title of a simplified text box */
+    .simp-tae-ui-sb p {
+      font-weight: bold;
+      padding-left: 10px;
+      margin-left: 0px !important;
+      margin-right: : 0px !important;
+      color: #FAE1E0 !important;
+      background-color: #DE453E !important;
+      border-radius: 0px 16px 0px 0px;
+    }
+
+    /* Style of a complex word */
+    .simp-tae-ui-sb span {
+      font-style: italic;
+      padding: 1px 5px 1px 5px !important;
+      border-radius: 6px !important;
+      color: #FAE1E0 !important;
+      background-color: #DE453E !important;
+    }
+
+    /* The simplified text list */
+    .simp-tae-ui-sb ul {
+      padding: 5px 5px !important;
+    }
+    .simp-tae-ui-sb li {
+      list-style-type: none;
+      padding-left: .5em !important;
+    }
+
+    /* The word properties box style */
+    .simp-tae-ui-word {
+      list-style-type: none;
+      padding-left: .5em !important;
+      background-color: WHITE;
+      margin:.5em;
+      padding:.5em;
+      border: solid 1px #DE453E;
+      border-radius: 1em;
+    }
+
+    /* The definition title */
+    .simp-tae-ui-word b {
+      list-style-type: none;
+      font-style: italic;
+      padding: 1px 5px 1px 5px !important;
+      border-radius: 6px !important;
+      color: #FAE1E0 !important;
+      background-color: #DE453E !important;
+      line-height: 30px;
+    }
+    /* The synonyms title */
+    .simp-tae-ui-word i {
+      font-style: oblique;
+      padding-right: .5em !important;
+      color: #DE453E !important;
+    }
+    /*****************************************************************************/
+
+  </style>
+    <!-- /////////      STYLES USED BY SIMPATICO TOOLBAR:END      ///////// -->
+
+  </head>
+  <body style="background-color: lightblue;">
+    <div id="simpatico_top"></div>
+
+
+    <h1 style="padding: 25px; text-align: center;">Demo page of IFE</h1>
+
+    <div style="padding: 25px; background-color: white; margin: auto; width: 90%;">
+
+    <div class="demo_paragraphs">
+      <h3> First paragraph </h3>
+      <p class ="simp-text-paragraph">
+        This is a paragraph wich contains instructions, laws or any descripcion of an electronic service. Normaly, the content is difficult to understand, specialy the terms tlike this one: <span class="simp-text-term">(DNI)</span>. All these paragraphs can be large and has a lot of content.
+      </p>
+      <ul>
+        <li class ="simp-text-paragraph">Lists also can be simplified of enhanced by Simpatico</li>
+        <li class ="simp-text-paragraph">Lists also can be simplified of enhanced by Simpatico</li>
+        <li class ="simp-text-paragraph">Lists also can be simplified of enhanced by Simpatico</li>
+        <li class ="simp-text-paragraph">Lists also can be simplified of enhanced by Simpatico</li>
+      </ul>
+      <h3> Second paragraph </h3>
+      <p class ="simp-text-paragraph">
+        This is a paragraph wich contains instructions, laws or any descripcion of an electronic service. Normaly, the content is difficult to understand, specialy the terms tlike this one: <span class="simp-text-term">(DNI)</span>. All these paragraphs can be large and has a lot of content.
+      </p>
+      <h3> Third paragraph </h3>
+      <p class ="simp-text-paragraph">
+        This is a paragraph wich contains instructions, laws or any descripcion of an electronic service. Normaly, the content is difficult to understand, specialy the terms tlike this one: <span class="simp-text-term">(DNI)</span>. All these paragraphs can be large and has a lot of content.
+      </p>
+      <h3> Fourth paragraph </h3>
+      <p class ="simp-text-paragraph">
+        This is a paragraph wich contains instructions, laws or any descripcion of an electronic service. Normaly, the content is difficult to understand, specialy the terms tlike this one: <span class="simp-text-term">(DNI)</span>. All these paragraphs can be large and has a lot of content.
+      </p>
+    </div>
+   </div>
+  
+    
+	<div style="padding: 25px; background-color: lightblue; margin: auto; width: 90%;"></div>
+	
+	<div style="padding: 25px; background-color: white; margin: auto; width: 90%;">
+
+    <div class="demo_paragraphs">
+      <h3> Web form </h3>
+      <p class ="simp-text-paragraph">
+        This is a paragraph which contains a sample form that can be filled with the support of CDV. The highligted fields can be filled with data stored in CDV or its values can be stored in CDV for next usage.
+      </p>
+           
+     <form autocomplete="off"> 
+      <p>
+		<table class="Modulo" >
+			<tbody>
+				<tr >
+					<td style="width: 16.5%;">
+						<p class="Labelcella">Phone</p>
+					</td>
+					<td style="width: 16.5%;">
+						<p class="Labelcella">Fax</p>
+					</td>
+					<td style="width: 33%;">
+						<p class="Labelcella">
+							E-mail <i> (ordinary) </i>
+						</p>
+					</td>
+					<td>
+						<p >
+							PEC E-mail <i> (digital domicile) </i>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td><input class="inputNormal mandatory" id="AventeTitolo_Telefono" label="Phone" name="AventeTitolo_Telefono" style="width: 100%" placeholder="" >
+					
+					</td>
+					<td><input class="inputNormal" id="AventeTitolo_Fax" label="Fax" mandatory="false" name="AventeTitolo_Fax" style="width: 100%" placeholder=""></td>
+					<td><input class="inputNormal" format="email" id="AventeTitolo_EMail" label="Ordinary E-mail" mandatory="false" name="AventeTitolo_EMail" style="width: 100%;" placeholder=""></td>
+					<td><input class="inputNormal" format="pec" id="AventeTitolo_EMailPEC" label="PEC E-mail" name="AventeTitolo_EMailPEC" style="width: 100%;" mandatory="false" placeholder=""></td>
+
+				</tr>
+			</tbody>
+		</table>
+      </p>
+      
+    </div>
+    </div>
+	<div style="padding: 25px; background-color: lightblue; margin: auto; width: 90%;"></div>
+ 
+				
+  </body>
+</html>

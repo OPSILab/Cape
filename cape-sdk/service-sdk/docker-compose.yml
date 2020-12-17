@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+
+  service-sdk:
+    image: service-sdk
+    build: ./
+    ports:
+      - "8085:8085"
+    environment:
+      - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
+      - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
+      - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
+      - CAPE_CONSENT_MANAGER_URL=http://consent-manager:8083/consent-manager
+      - CAPE_SERVICESDK_BUSINESS_ID=ENG
+      - CAPE_SDK_MONGODB_HOST=service-sdk-mongo
+      - CAPE_SDK_MONGODB_PORT=27017
+      - CAPE_SDK_MONGODB_USER=root
+      - CAPE_SDK_MONGODB_PASSWORD=root
+    networks:
+      - cape-sdk-network
+  service-sdk-mongo:
+    image: mongo:4.2
+    restart: always
+    ports:
+     - "27025:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - type: volume
+        source: service-sdk-volume
+        target: /data/db
+        volume:
+          nocopy: true  
+    networks:
+      - cape-sdk-network
+
+volumes:
+  service-sdk-volume:
+
+networks:
+ cape-sdk-network:
+    external:
+      name: cape-server-network

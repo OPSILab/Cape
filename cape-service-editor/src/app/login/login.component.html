@@ -1,0 +1,19 @@
+<nb-layout>
+  <nb-layout-header class="h3 d-flex justify-content-around mt-3">{{'general.login.no_name_welcome' | translate}}</nb-layout-header>
+  <nb-layout-column class="login-background d-inline-flex justify-content-center align-items-center">
+    <a class="cm-login-link  text-center" href=# (click)="login()" title="Login with Keyrock IdM">
+      <nb-card class="card-badge d-inline-flex justify-content-center align-items-center align-self-center">
+
+        <nb-card-body class="">
+          <img class="cm-logo" src="assets/images/app/cape-logo.png">
+        </nb-card-body>
+        <nb-card-footer class="signin-text-login">{{'general.login.enter_button' | translate}}</nb-card-footer>
+      </nb-card>
+    </a>
+
+  </nb-layout-column>
+
+</nb-layout>
+<div>
+  <router-outlet></router-outlet>
+</div>

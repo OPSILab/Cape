@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header class="h3">
+    {{'general.linked_services.services_linked_to_me'|translate}}
+  </nb-card-header>
+
+  <nb-card-body>
+
+    <div class="row mb-2">
+      <div class="col-12 col-md-12 text-right">
+        <button nbButton ghost shape="rectangle" (click)="resetfilters()"><i class="material-icons">cancel</i>&nbsp;{{'general.services.clear_filters'|translate}}</button>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12 col-md-12">
+        <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (create)="onCreateConfirm($event)">
+        </ng2-smart-table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+

@@ -1,0 +1,64 @@
+<nb-layout>
+  <nb-layout-column class="login-background d-inline-flex justify-content-center align-items-center">
+    <nb-card class="card-badge">
+      <nb-card-body class="justify-content-center">
+        <div class="row justify-content-center my-2">
+          <img class="cm-logo" src="assets/images/app/cape-logo.png">
+        </div>
+
+        <p class="h5 row p-3 justify-content-center">
+          {{'general.login.loginPopup.authorize_account_data' | translate}}
+        </p>
+        <div class="row justify-content-center my-2">
+          <nb-checkbox #check (checkedChange)="oncheck()" id="check" [value]="rememberMe"> {{'general.login.loginPopup.dont_ask_again' | translate}}</nb-checkbox>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row justify-content-center my-2">
+          <div class="col-12 col-sm my-1 text-center">
+            <button nbButton shape="rectangle" status="success" class="button-filled-medium-padding button-filled-success-focus-border-color" (click)="complete()" [disabled]="rememberMe">{{'general.login.loginPopup.authorize' | translate}}</button>
+          </div>
+          <div class="col-12 col-sm my-1 text-center">
+            <button nbButton shape="rectangle" status="danger" class="button-filled-danger-focus-border-color" (click)="cancel()" [disabled]="rememberMe">{{'general.login.loginPopup.do_not_authorize' | translate}}</button>
+          </div>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>
+
+
+<ng-template #noAccountDialog let-data let-ref="dialogRef">
+  <nb-card status="control">
+    <nb-card-header>{{'general.login.loginPopup.no_cape_account' | translate}}</nb-card-header>
+    <nb-card-footer>
+      <div class="row my-2">
+        <div class="col-sm text-center">
+          <button nbButton status="primary" (click)="submitCreateAccount(data.queryParams)">{{'general.login.loginPopup.create_button' | translate}}</button>
+        </div>
+        <div class="col-sm text-center">
+          <button nbButton status="danger" (click)="cancelCreateAccount()">{{'general.login.loginPopup.cancel_button' | translate}}</button>
+        </div>
+
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #errorDialog let-data let-ref="dialogRef">
+  <nb-card status="danger">
+    <nb-card-header>{{'general.login.loginPopup.error_message' | translate}}</nb-card-header>
+    <nb-card-body>
+      <div class="alert alert-danger shadow">
+        <div class="text-center pb-3 subtitle">{{data.error.status}}</div>
+        <div class="text-center pb-3 ">{{data.error.message}}</div>
+        <div class="text-center ">{{data.error.debugMessage}}</div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="col-sm text-center">
+        <button nbButton status="danger" (click)="cancelCreateAccount()">{{'general.login.loginPopup.cancel_button' | translate}}</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

@@ -1,0 +1,280 @@
+{
+  "title":"ServiceEntry",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  
+  "format":"categories",
+  
+  "properties": {
+	  
+		  
+    "publicServiceID": {
+      "type": "string",
+	  "title":"Public Service ID"
+    },
+    "publicServiceName": {
+      "type": "string",
+	  "title":"Service Name"
+    },
+    "serviceUri": {
+      "type": "string",
+	  "title":"Service URL",
+	  "format":"url",
+	  "links": [
+		{
+		  "rel": "Open Service page",
+		  "href": "{{self}}",
+		  "target": "_blank",
+		  "class": "comment-link open-in-modal primary-text"
+		}
+	  ]
+	  
+    },
+    "serviceDescriptionVersion": {
+      "type": "string",
+	  "title":"Version"
+    },
+    "publicServiceKeyword": {
+      "type": "string",
+	  "title":"Keywords"
+    },
+	"publicServiceStatus": {
+      "type": "string",
+	  "title":"Status",
+	  "enum":["Completed", "Deprecated","UnderDevelopment","WithDrawn"]
+    },    
+    "serviceProviderId": {
+      "type": "string",
+	  "title":"Provider ID"
+    },
+    "organizationId": {
+      "type": "string",
+	  "title":"Organization ID"
+    },
+    "serviceType": {
+      "type": "string",
+	  "title":"Service Provision Type",
+		 "enum":["DataSource", "DataSink","Both"]
+    },
+    "technicalDescriptionId": {
+      "type": "string",
+	  "title":"Technical Description ID"
+    },
+	
+	"spatial":{
+		"$ref": "./spatials.json"	
+		
+	},
+	
+	"lifeEvent":{
+		 "$ref": "./life_event.json"	
+		
+	},
+	"businessEvent":{
+		"$ref": "./business_event.json"	
+		
+	},
+	
+    "publicServiceSector": {
+      "$ref": "./sectors.json"
+    },
+    "publicServiceTypeProp": {
+      "$ref": "./types.json"
+      
+    },
+    "publicServiceLanguage": {
+      "$ref": "./locale.json"
+      
+    },
+    "humanReadableDescription": {
+      "type": "array",
+	  "title":"Description",
+	  "format":"tabs",
+	  "uniqueItems": true,
+      "items": 
+        {
+          "type": "object",
+		  "title":"Locale",
+		  "headerTemplate": "Locale ({{ self.locale }}) ",
+		  "options": {
+				"collapsed": false
+			},
+          "properties": {
+            "locale": {
+              "type": "string",
+			  "enumSource":"possible_langs",
+			  "watch": {
+				  "possible_langs": "root.publicServiceLanguage"
+				  }
+            },
+            "description": {
+              "type": "string",
+			  "format": "textarea"
+            }
+          },
+          "required": [
+            "locale",
+            "description"
+          ]
+        }
+     
+    },
+    "publicServiceIsDescribedAt": {
+      "type": "array",
+	  "title":"Service Data Description",
+	  "format":"tabs",
+      "items": 
+        {
+          "type": "object",
+		  "title":"DataSet",
+		  "options": {
+				"collapsed": false
+			},
+		   "format":"categories",
+          "properties": {
+            "publicServiceDatasetID": {
+              "type": "string",
+			  "title":"DataSet ID"
+            },
+            "serviceDataDescriptionUri": {
+              "type": "string",
+			  "title":"Description URI"
+            },
+            "taxonomy": {
+              "type": "string",
+			  "title":"Taxonomy"
+            },
+            "title": {
+              "type": "string",
+			   "title":"Title"
+            },
+            "issued": {
+              "type": "integer",
+			   "title":"Issued"
+            },
+            "modified": {
+              "type": "integer",
+			   "title":"Modified"
+            },
+            "purpose": {
+              "type": "array",
+			  "title": "Purposes",
+			  "format":"tabs",
+	           "uniqueItems": true,
+              "items": 
+                {
+                  "type": "string",
+				  "title": "Purpose"
+                }
+              
+            },
+            "serviceDataType": {
+              "type": "string",
+			   "title": "Data Type"
+            },
+            "dataStructureSpecification": {
+              "type": "array",
+			  "title": "Data Structure",
+              "items": {}
+            },
+            "dataMapping": {
+              "type": "array",
+			  "format":"tabs",
+			  
+			  "title": "Data Mapping",
+              "items": 
+                {
+                  "type": "object",
+				  "title": "Field",
+				  "id": "arr_item",
+				  "properties": {
+                    "property": {
+                      "type": "string",
+					   "title": "Property"
+                    },
+                    
+                    "conceptId": {
+						"$ref": "./concepts.json"
+                      					   
+                    },
+					"name": {
+                       "type": "string",
+					   "options": {
+							"hidden": false
+						  }
+                    },
+                    "type": {
+                      "type": "string",
+					   "title": "Type",
+					  "options" :{
+						  "input_width":"85px"
+					  },
+					  "default":"string"
+                    },
+                    "required": {
+                      "type": "number",
+					   "title": "Required",
+					  "enum": [1,0],
+					  "options" :{
+						  "enum_titles":["True","False"],
+						  "input_width":"100px"
+					  }
+                    },
+                    "sensitive": {
+                      "type": "number",
+					  "title": "Sensitive",
+					  "enum": [1,0],
+					  "options" :{
+						  "enum_titles":["True","False"],
+						  
+						  "input_width":"100px"
+					  }
+                    }					
+                  },
+                  "required": [
+                    "property",
+                    "conceptId",
+                    "name",
+                    "type",
+					"required",
+					"sensitive"
+                  ]
+                }
+            }
+          },
+          "required": [
+            "publicServiceDatasetID",
+            "serviceDataDescriptionUri",
+            "taxonomy",
+            "title",
+            "issued",
+            "modified",
+            "purpose",
+            "serviceDataType",
+            "dataStructureSpecification",
+            "dataMapping"
+          ]
+        }
+      
+    }
+  },
+  "required": [
+    "publicServiceID",
+    "publicServiceName",
+    "serviceUri",
+    "serviceDescriptionVersion",
+    "publicServiceKeyword",
+    "publicServiceSector",
+    "publicServiceTypeProp",
+    "publicServiceLanguage",
+    "publicServiceStatus",
+    "serviceProviderId",
+    "organizationId",
+	"lifeEvent",
+	"businessEvent",
+	"spatial",
+    "humanReadableDescription",
+    "technicalDescriptionId",
+    "publicServiceIsDescribedAt"
+  ]
+}

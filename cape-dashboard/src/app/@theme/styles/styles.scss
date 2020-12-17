@@ -1,0 +1,504 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
+
+// themes - our custom or/and out of the box themes
+@import 'themes';
+
+// framework component themes (styles tied to theme variables)
+@import '~@nebular/theme/styles/globals';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/grid';
+
+// loading progress bar theme
+@import './pace.theme';
+
+@import './layout';
+@import './overrides';
+
+// install the framework and custom global styles
+@include nb-install() {
+  // framework global styles
+  @include nb-theme-global();
+/*  @include nb-auth-global();*/
+
+  @include ngx-layout();
+  // loading progress bar
+  @include ngx-pace-theme();
+
+  @include nb-overrides();
+}
+
+;
+
+
+/*  DATA WORKFLOW STYLES*/
+
+
+$sink: #17a2b8;
+$source: #17a2b8;
+$processor: #17a2b8;
+$purpose: #007bff;
+$processing: #28a745;
+$storage: #6c757d;
+$shared: #dc3545;
+
+g.graph-node-data g.body-group rect,
+g.graph-node-root g.body-group rect,
+g.graph-node-sink g.body-group rect,
+g.graph-node-source g.body-group rect,
+g.graph-node-processor g.body-group rect,
+g.graph-node-processing g.body-group rect,
+g.graph-node-storage g.body-group rect,
+g.graph-node-purpose g.body-group rect,
+g.graph-node-shared g.body-group rect {
+  fill: white !important;
+  stroke-width: 2px;
+}
+
+.text-svg-icon {
+  font-family: FontAwesome;
+}
+
+g.graph-node-data g.body-group:hover,
+g.graph-node-root g.body-group:hover,
+.body-group .fa-bezier-curve:hover,
+.body-group .fa-user:hover {
+  color: blue !important;
+}
+
+
+g.graph-node-data g.title-group rect,
+g.graph-node-root g.title-group rect,
+g.graph-node-data g.body-group rect,
+g.graph-node-root g.body-group rect {
+  fill: transparent !important;
+  stroke-width: 0px;
+}
+
+
+g.graph-node-sink g.body-group rect,
+g.graph-node-sink g.title-group rect {
+  stroke: $sink !important;
+}
+
+g.graph-node-sink g.title-group rect {
+  fill: $processor !important;
+}
+
+g.graph-node-source g.body-group rect,
+g.graph-node-source g.title-group rect {
+  stroke: $source !important;
+}
+
+g.graph-node-source g.title-group rect {
+  fill: $source !important;
+}
+
+g.graph-node-processor g.body-group rect,
+g.graph-node-processor g.title-group rect {
+  stroke: $processor !important;
+}
+
+g.graph-node-processor g.title-group rect {
+  fill: $processor !important;
+}
+
+g.graph-node-purpose g.body-group rect,
+g.graph-node-purpose g.title-group rect {
+  stroke: $purpose !important;
+}
+
+g.graph-node-purpose g.title-group rect {
+  fill: $purpose !important;
+}
+
+g.graph-node-processing g.body-group rect,
+g.graph-node-processing g.title-group rect {
+  stroke: $processing !important;
+}
+
+g.graph-node-processing g.title-group rect {
+  fill: $processing !important;
+}
+
+g.graph-node-storage g.body-group rect,
+g.graph-node-storage g.title-group rect {
+  stroke: $storage !important;
+}
+
+g.graph-node-storage g.title-group rect {
+  fill: $storage !important;
+}
+
+g.graph-node-shared g.body-group rect,
+g.graph-node-shared g.title-group rect {
+  stroke: $shared !important;
+}
+
+g.graph-node-shared g.title-group rect {
+  fill: $shared !important;
+}
+
+.text-source {
+  color: $source
+}
+
+.text-sink {
+  color: $sink
+}
+
+.text-processor {
+  color: $processor
+}
+
+.text-purpose {
+  color: $purpose
+}
+
+.text-processing {
+  color: $processing
+}
+
+.text-storage {
+  color: $storage
+}
+
+.text-shared {
+  color: $shared
+}
+
+/***** GENERAL STYLES */
+
+button[aria-expanded="false"] {
+  i.material-icons.expand_less {
+    display: none;
+  }
+
+  i.material-icons.expand_more {
+    display: block;
+  }
+}
+
+button[aria-expanded="true"] {
+  i.material-icons.expand_less {
+    display: block;
+  }
+
+  i.material-icons.expand_more {
+    display: none;
+  }
+}
+
+nb-context-menu {
+  background-color: nb-theme(context-menu-background-color);
+  border-color: nb-theme(context-menu-border-color);
+  border-style: nb-theme(context-menu-border-style);
+  border-width: nb-theme(context-menu-border-width);
+  border-radius: nb-theme(context-menu-border-radius);
+  box-shadow: nb-theme(context-menu-shadow);
+  min-width: nb-theme(context-menu-min-width);
+  max-width: nb-theme(context-menu-max-width);
+
+  nb-menu {
+    border-radius: nb-theme(context-menu-border-radius);
+    overflow: hidden;
+    text-align: left;
+  }
+}
+
+.menu-item a {
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+  align-items: left;
+
+  .menu-title {
+    flex: 0 1 auto;
+  }
+}
+
+@each $status in nb-get-statuses() {
+  .border-#{$status} {
+    border-color: nb-theme(color-#{$status}-default) !important;
+  }
+
+  .badge-#{$status} {
+    color: nb-theme(color-basic-100);
+    background-color: nb-theme(color-#{$status}-default);
+
+    &:focus,
+    &.focus {
+      outline: 0;
+      box-shadow: 0 0 0 $badge-focus-width rgba(nb-theme(color-#{$status}-default), .5);
+    }
+  }
+}
+
+
+[nbButton] {
+  // box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+  @each $status in nb-get-statuses() {
+    &.status-#{$status} {
+      border-width: 0;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+
+      &:focus {
+        border-width: 0;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+      }
+
+      &:hover {
+        border-width: 0;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+      }
+
+      &:active {
+        border-width: 0;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+      }
+
+      &[disabled], &[ghost] {
+        border-width: 0;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+
+nb-select {
+  .select-button {
+    min-width: nb-theme(select-min-width);
+    cursor: nb-theme(select-cursor);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+
+    &.placeholder {
+      font-weight: nb-theme(select-placeholder-text-font-weight);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 nb-theme(select-outline-width) nb-theme(select-outline-color);
+      outline: none;
+    }
+
+    &[disabled] {
+      cursor: nb-theme(select-disabled-cursor);
+    }
+  }
+}
+
+/*Switch alternative Toggle*/
+label.switch {
+
+  .slider {
+    height: .9rem;
+    width: 2.3rem;
+    border-width: 0px;
+    background-color: nb-theme(toggle-background-color);
+  }
+
+  .slider::before {
+    width: 1.3rem;
+    height: 1.3rem;
+    top: -4px;
+    left: -4px;
+    right: auto;
+    background-color: nb-theme(color-basic-200);
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  }
+
+  input:checked + .slider {
+    background-color: nb-theme(toggle-switcher-checkmark-color);
+
+    ::before {
+      top: -4px;
+      left: -4px;
+      right: auto;
+      background-color: nb-theme(color-basic-200);
+      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    }
+  }
+
+  input:checked + .slider.round {
+    background-color: nb-theme(toggle-switcher-checkmark-color);
+
+    ::before {
+      background-color: nb-theme(color-basic-200);
+      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    }
+  }
+}
+
+
+// @mixin nb-toggle-theme() {
+nb-toggle {
+  padding: 0.5rem 1rem;
+  margin-top: 3px;
+
+  .toggle {
+    background-color: nb-theme(toggle-background-color);
+
+    .toggle-switcher {
+      top: -4.5px;
+      left: -5px;
+      right: auto;
+      background-color: nb-theme(color-basic-200);
+      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    }
+  }
+
+  .toggle.checked {
+    .toggle-switcher {
+      right: -5px !important;
+      left: auto;
+      background-color: nb-theme(toggle-switcher-checkmark-color);
+    }
+  }
+}
+// }
+
+@mixin nb-toggle-status($status: '') {
+  nb-toggle.status-#{$status} {
+    padding: 0.5rem 1rem;
+    margin-top: 3px;
+
+    .toggle {
+      background-color: nb-theme(toggle-background-color);
+
+      .toggle-switcher {
+        background-color: nb-theme(color-basic-200);
+
+        nb-icon {
+          color: nb-theme(toggle-#{$status}-checked-switcher-checkmark-color);
+        }
+      }
+    }
+
+    .toggle.checked {
+      .toggle-switcher {
+        background-color: nb-theme(color-#{$status}-default);
+
+        nb-icon {
+          color: nb-theme(toggle-#{$status}-checked-switcher-checkmark-color);
+        }
+      }
+    }
+  }
+}
+
+/*Bootstrap table*/
+.table .thead-light th {
+  color: nb-theme(color-basic-100);
+  background-color: nb-theme(color-success-500);
+  border-color: nb-theme(color-basic-300);
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid nb-theme(color-basic-300);
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-top: 1px solid nb-theme(color-basic-300);
+}
+
+/*Angular smart-table*/
+ng2-smart-table table thead tr {
+  background-color: nb-theme(color-success-500);
+}
+
+ng2-smart-table table thead tr:nth-child(2) {
+  background-color: nb-theme(color-primary-100);
+}
+
+ng2-smart-table table tr.ng2-smart-titles th,
+ng2-smart-table table tr.ng2-smart-titles th a,
+ng2-smart-table table tr.ng2-smart-titles th a:hover,
+ng2-smart-table table tr.ng2-smart-titles th a:active,
+ng2-smart-table table tr.ng2-smart-titles th a:visited {
+  color: nb-theme(color-basic-100);
+  font-weight: bold;
+}
+
+/*Custom tables*/
+.gridTable {
+  min-width: 340px;
+  width: 450px
+}
+
+.gridTableHeaders {
+  background-color: nb-theme(color-success-500);
+  border: 1px solid nb-theme(color-success-500);
+  padding: 5px 5px 0;
+  grid-area: gridTableHeaders;
+  display: grid;
+  grid-template-columns: auto 33% 33%;
+  grid-template-rows: auto;
+  grid-template-areas: "col-status col-from col-to";
+}
+
+.colStatus {
+  color: nb-theme(color-basic-100);
+  grid-area: col-status;
+}
+
+.colFrom {
+  color: nb-theme(color-basic-100);
+  grid-area: col-from;
+}
+
+.colTo {
+  color: nb-theme(color-basic-100);
+  grid-area: col-to;
+}
+
+.gridTableBody {
+  border-style: solid;
+  border-color: nb-theme(color-basic-300);
+  border-width: 1px 1px 0px 1px;
+}
+
+.dataRow {
+  padding: 7px 7px 12px;
+  display: grid;
+  grid-template-columns: auto 33% 33%;
+  grid-template-rows: auto auto;
+  grid-template-areas: "status from to" "dataName dataName dataName";
+  border-bottom: 1px solid nb-theme(color-basic-300);
+}
+
+.dataCol {
+  padding: 5px 0;
+}
+
+.statusData {
+  grid-area: status;
+}
+
+.fromData {
+  grid-area: from;
+}
+
+.toData {
+  grid-area: to;
+}
+
+.dataName {
+  grid-area: dataName;
+}
+
+.dataBadge {
+  padding: 5px 10px;
+  background-color: nb-theme(color-primary-200);
+  color: nb-theme(color-basic-100);
+  margin: 5px;
+  border-radius: 15px;
+}
+
+.gridTable-hover .gridTableBody .dataRow:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}

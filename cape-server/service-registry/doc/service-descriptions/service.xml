@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceEntry>
+  <publicServiceID>str1234</publicServiceID>
+  <publicServiceName>str1234</publicServiceName>
+  <serviceUri>str1234</serviceUri>
+  <serviceDescriptionVersion>str1234</serviceDescriptionVersion>
+  <publicServiceKeyword>str1234</publicServiceKeyword>
+  <publicServiceSector />
+  <publicServiceTypeProp />
+  <publicServiceLanguage />
+  <publicServiceStatus />
+  <humanReadableDescription>
+    <locale>str1234</locale>
+    <description>str1234</description>
+  </humanReadableDescription>
+  <technicalDescriptionId>str1234</technicalDescriptionId>
+  <publicServiceIsDescribedAt>
+    <PublicServiceDatasetID />
+    <serviceDataDescriptionUri>str1234</serviceDataDescriptionUri>
+    <taxonomy>str1234</taxonomy>
+    <title>str1234</title>
+    <issued>12345</issued>
+    <modified>12345</modified>
+    <purpose>str1234</purpose>
+    <serviceDataType>str1234</serviceDataType>
+    <dataStructureSpecification>
+      <component>
+        <componentProperty>
+          <componentPropertyId>str1234</componentPropertyId>
+          <label>str1234</label>
+          <range>str1234</range>
+        </componentProperty>
+        <componentRequired>true</componentRequired>
+        <componentSpecificationId>str1234</componentSpecificationId>
+        <label>str1234</label>
+      </component>
+      <dataStructureDefinitionId>str1234</dataStructureDefinitionId>
+      <description>str1234</description>
+    </dataStructureSpecification>
+    <dataMapping>
+      <property>str1234</property>
+      <conceptId>str1234</conceptId>
+      <name>str1234</name>
+      <type>str1234</type>
+    </dataMapping>
+  </publicServiceIsDescribedAt>
+</ServiceEntry>
