@@ -1,11 +1,11 @@
 ﻿<p align="center">
-<img width="200" height="200" src="https://www.cape-suite.eu/cape-dashboard/assets/images/app/cape-logo.png">
+<img width="500" height="250" src="https://www.cape-suite.eu/cape-dashboard/assets/images/app/cape-logo.png">
 </p>
 
-# CaPE - A Consent Based Personal Data Suite
+# CaPe - A Consent Based Personal Data Suite
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/capesuite/cape)](https://hub.docker.com/r/capesuite/cape)
-[![Documentation badge](https://img.shields.io/readthedocs/idra.svg)](https://idra.readthedocs.io/en/latest/)
+[![Documentation badge](https://img.shields.io/readthedocs/cape-suite)](https://cape-suite.readthedocs.io/en/latest/)
 
 CaPe is a consent-based and user-centric platform targeted at organizations acting as Data Processors, in the private or public sector. It enables them to take advantage of the value of personal data in compliance with GDPR while providing data subjects the natural need to detain both the use and the protection on their own data.
 
@@ -40,7 +40,7 @@ API Reference Documentation (**Apiary**):
 
 -   [`https://capesuite.docs.apiary.io`](https://capesuite.docs.apiary.io)
 
-## CaPE Sandbox
+## CaPe Sandbox
 
 A demo instance of CaPe is available at the following link:
 
