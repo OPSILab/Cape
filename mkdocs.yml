@@ -1,0 +1,22 @@
+site_name: CaPe 
+site_url: https://cape-suite.readthedocs.org
+repo_url: https://github.com/OPSILab/Cape
+site_description: CaPe - A Consent Based Personal Data Suite
+
+site_dir: html
+markdown_extensions: [toc,fenced_code]
+use_directory_urls: true
+theme: readthedocs
+
+pages:
+  - 'Home': 'index.md' 
+  - 'Introduction': 'introduction.md'
+  - 'Architecture Overview': 'architecture/architecture.md'
+  #- 'Installation & Administration Manual':
+      #- 'Introduction': 'admin/index.md'
+      #- 'Installation overview': 'admin/installation.md'
+      #- 'Install with WARs packages': 'admin/install_war.md'
+      #- 'Install with Docker': 'admin/install_docker.md'
+      #- 'Sanity Checks': 'admin/sanitychecks.md'
+
+
