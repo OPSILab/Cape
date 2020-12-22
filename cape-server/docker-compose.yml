@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-
   account-manager:
     image: account-manager
     build: ./account-manager
