@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  cape-dashboard:
+    image: capesuite/cape-dashboard
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/assets/config.json:/usr/share/nginx/html/assets/config.json
+networks:
+   - cape-network
+
+
+networks:
+ cape-network:
+   name: cape-dashboard-network
+   driver: bridge
+   driver_opts:
+     com.docker.network.driver.mtu: 1400
