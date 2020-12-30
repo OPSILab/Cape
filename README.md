@@ -1,5 +1,5 @@
 ﻿<p align="center">
-<img width="500" height="250" src="https://www.cape-suite.eu/cape-dashboard/assets/images/app/cape-logo.png">
+<img width="500" height="250" src="cape-dashboard/src/assets/images/app/cape-logo.png">
 </p>
 
 # CaPe - A Consent Based Personal Data Suite

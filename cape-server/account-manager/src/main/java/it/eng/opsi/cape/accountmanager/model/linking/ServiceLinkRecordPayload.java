@@ -104,7 +104,6 @@ public class ServiceLinkRecordPayload {
 	@NonNull
 	@NotBlank(message = "surrogate_id field is mandatory")
 	@JsonProperty(value = "surrogate_id")
-	@Indexed(unique = true)
 	private String surrogateId;
 
 	/*
