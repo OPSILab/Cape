@@ -2,7 +2,10 @@ version: "3.8"
 services:
   cape-playground:
     image: capesuite/cape-playground
-    build: .
+    build:
+      context: .
+      args:
+        BASE_HREF: /
     ports:
       - "80:80"
     volumes:

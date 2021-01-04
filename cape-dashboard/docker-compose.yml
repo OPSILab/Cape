@@ -2,7 +2,10 @@ version: "3.8"
 services:
   cape-dashboard:
     image: capesuite/cape-dashboard
-    build: .
+    build:
+      context: .
+      args:
+        BASE_HREF: /
     ports:
       - "80:80"
     volumes:

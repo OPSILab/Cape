@@ -14,6 +14,10 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_PORT=27017
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
+      - CAPE_IDM_HOST=www.cape-suite.eu:8002
+      - CAPE_IDM_CLIENTID=
+      - CAPE_IDM_CLIENTSECRET=
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
   account-manager-mongo:
