@@ -7,8 +7,8 @@ services:
       - "80:80"
     volumes:
       - ./src/assets/config.json:/usr/share/nginx/html/assets/config.json
-  networks:
-    - cape-network
+    networks:
+      - cape-network
 
 
 networks:
