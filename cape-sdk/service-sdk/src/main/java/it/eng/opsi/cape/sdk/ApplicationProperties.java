@@ -250,11 +250,11 @@ public class ApplicationProperties {
 //
 //		}
 //
-//		@NotBlank
-//		private String clientId;
-//
-//		@NotBlank
-//		private String clientSecret;
+		@NotBlank
+		private String clientId;
+
+		@NotBlank
+		private String clientSecret;
 //
 //		@NotBlank
 //		private String redirectUri;

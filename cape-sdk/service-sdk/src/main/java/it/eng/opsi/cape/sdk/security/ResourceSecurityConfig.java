@@ -69,9 +69,10 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().formLogin().disable().headers().httpStrictTransportSecurity().disable().and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and().authorizeRequests()
-				.antMatchers("/api/v2/**", "/api/v2").authenticated().and().authorizeRequests()
-				.antMatchers("/api/v2/idm/user").permitAll()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
+				.authorizeRequests(authz -> authz.antMatchers("/api/v2/idm/oauth2/token").permitAll()
+						.antMatchers("/api/v2/idm/user").permitAll().antMatchers("/api/v2/**", "/api/v2")
+						.authenticated())
 //        	.anyRequest().permitAll()
 		;
 	}

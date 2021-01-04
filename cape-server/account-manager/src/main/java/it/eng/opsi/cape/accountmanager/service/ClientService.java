@@ -83,9 +83,9 @@ public class ClientService {
 	public Object getIdmUserDetail(String token) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForObject(UriComponentsBuilder
-				.fromHttpUrl(appProperty.getIdm().getProtocol() + "://" + appProperty.getIdm().getHost() + "/user")
-				.queryParam("access_token", token).toUriString(), Object.class);
+		return restTemplate
+				.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/user")
+						.queryParam("access_token", token).toUriString(), Object.class);
 
 	}
 
@@ -101,12 +101,10 @@ public class ClientService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
-		
-		return restTemplate
-				.exchange(RequestEntity
-						.post(UriComponentsBuilder.fromHttpUrl(appProperty.getIdm().getProtocol() + "://"
-								+ appProperty.getIdm().getHost() + "/oauth2/token").build().toUri())
-						.headers(headers).body(body), Object.class);
+
+		return restTemplate.exchange(RequestEntity.post(UriComponentsBuilder
+				.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/oauth2/token").build().toUri())
+				.headers(headers).body(body), Object.class);
 
 	}
 

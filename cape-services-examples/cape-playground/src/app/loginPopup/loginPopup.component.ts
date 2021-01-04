@@ -4,6 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { NbDialogService } from '@nebular/theme';
 
 import { LoginService } from '../login/login.service';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'login-popup',
@@ -21,7 +22,8 @@ export class LoginPopupComponent implements AfterViewInit {
 
 
   constructor(private configService: NgxConfigureService, private http: HttpClient,
-    private dialogService: NbDialogService, private loginService: LoginService, private cdr: ChangeDetectorRef) {
+    private dialogService: NbDialogService, private loginService: LoginService,
+    private cdr: ChangeDetectorRef, private route: ActivatedRoute) {
 
     this.capeHost = configService.config.system.host;
   }
@@ -42,7 +44,11 @@ export class LoginPopupComponent implements AfterViewInit {
   }
 
   complete() {
-    this.loginService.completeLogin(this.noAccountDialogTemplateRef, this.errorDialogTemplateRef);
+
+    // Propagates (if any) queryParams, in order to be propagated also in the redirected URL after authentication
+    const queryParams: Params = this.route.snapshot.queryParams;
+
+    this.loginService.completeLogin(this.noAccountDialogTemplateRef, this.errorDialogTemplateRef, queryParams);
   }
 
 

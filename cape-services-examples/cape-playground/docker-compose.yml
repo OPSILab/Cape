@@ -1,7 +1,7 @@
 version: "3.8"
 services:
-  cape-dashboard:
-    image: capesuite/cape-dashboard
+  cape-playground:
+    image: capesuite/cape-playground
     build: .
     ports:
       - "80:80"
@@ -13,7 +13,7 @@ services:
 
 networks:
  cape-network:
-   name: cape-dashboard-network
+   name: cape-playground-network
    driver: bridge
    driver_opts:
      com.docker.network.driver.mtu: 1400

@@ -36,7 +36,7 @@ public class RestTemplateHeaderModifierInterceptor implements ClientHttpRequestI
 				request.getHeaders().add("Authorization", "Bearer " + details.getTokenValue());
 
 		} catch (Exception e) {
-			log.warn(e.getClass().getSimpleName() + "Maybe no toke provided?");
+			log.warn(e.getClass().getSimpleName() + "Maybe no token provided?");
 		}
 		ClientHttpResponse response = execution.execute(request, body);
 		return response;

@@ -27,7 +27,7 @@ export class LoginComponent {
     const basePath = window.location.href.split('/');
 
     window.open(`${this.environment.idmHost}/oauth2/authorize?response_type=token&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${basePath[0]}//${basePath[2]}${this.environment.loginPopupUrl}`
-      , 'AuthPopup', 'width=600,height=500,menubar=false,resizable=true,scrollbars=false,status=false');
+      , 'AuthPopup', 'width=800,height=500,menubar=false,resizable=true,scrollbars=false,status=false');
   }
 
 

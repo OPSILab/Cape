@@ -30,10 +30,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -68,6 +72,7 @@ public class ClientService {
 	private final String serviceRegistryHost;
 	private final String serviceManagerHost;
 	private final String consentManagerHost;
+	private final ApplicationProperties.Idm idm;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -79,14 +84,34 @@ public class ClientService {
 		serviceRegistryHost = this.appProperty.getCape().getServiceRegistry().getHost();
 		serviceManagerHost = this.appProperty.getCape().getServiceManager().getHost();
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
+		idm = this.appProperty.getIdm();
 	}
 
 	public Object getIdmUserDetail(String token) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForObject(UriComponentsBuilder
-				.fromHttpUrl(appProperty.getIdm().getProtocol() + "://" + appProperty.getIdm().getHost() + "/user")
-				.queryParam("access_token", token).toUriString(), Object.class);
+		return restTemplate
+				.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/user")
+						.queryParam("access_token", token).toUriString(), Object.class);
+
+	}
+
+	public Object postCodeForToken(String grantType, String redirectUri, String code) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("grant_type", grantType);
+		body.add("redirect_uri", redirectUri);
+		body.add("code", code);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
+
+		return restTemplate.exchange(RequestEntity.post(UriComponentsBuilder
+				.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/oauth2/token").build().toUri())
+				.headers(headers).body(body), Object.class);
 
 	}
 
@@ -252,24 +277,26 @@ public class ClientService {
 			throw new ServiceManagerException(
 					"There was an error while retrieving Linking Session from Service Manager");
 	}
-	
-	/*
-	 * Call Get Linking Code to start service link session from service in automatic mode-> Service Manager
-	 */
-	public String callGetLinkingCode(String serviceId,String userId, String surrogateId, String returnUrl ) throws SessionNotFoundException, ServiceManagerException {
 
-				
+	/*
+	 * Call Get Linking Code to start service link session from service in automatic
+	 * mode-> Service Manager
+	 */
+	public String callGetLinkingCode(String serviceId, String userId, String surrogateId, String returnUrl)
+			throws SessionNotFoundException, ServiceManagerException {
+
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<String> response = restTemplate
-				.getForEntity(serviceManagerHost + "/api/v2/slr/service/{serviceId}/account/{userId}?surrogateId="+surrogateId+"&returnUrl="+returnUrl+"&linkingFrom=Service&forceLinking=false&forceLinkCode=true", String.class , serviceId, userId);
+		ResponseEntity<String> response = restTemplate.getForEntity(
+				serviceManagerHost + "/api/v2/slr/service/{serviceId}/account/{userId}?surrogateId=" + surrogateId
+						+ "&returnUrl=" + returnUrl + "&linkingFrom=Service&forceLinking=false&forceLinkCode=true",
+				String.class, serviceId, userId);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
 		if (responseStatus.is2xxSuccessful())
 			return response.getBody();
 		else
-			throw new ServiceManagerException(
-					"There was an error while retrieving Linking Code from Service Manager");
+			throw new ServiceManagerException("There was an error while retrieving Linking Code from Service Manager");
 	}
 
 	/*

@@ -20,7 +20,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     const token: string = localStorage.getItem('token');
 
-    if (token) {
+    if (token && !request.url.includes('/idm/')) {
       request = request.clone({
         headers: new HttpHeaders({ 'Authorization': 'Bearer ' + token })
       });

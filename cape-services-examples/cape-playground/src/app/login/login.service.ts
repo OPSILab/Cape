@@ -1,5 +1,5 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgxConfigureService } from 'ngx-configure';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -10,6 +10,7 @@ import { NbDialogService, NbDialogRef } from '@nebular/theme';
 export class LoginService {
 
   environment;
+  playgroundUrl: string;
   capeHost: string;
   idmHost: string;
   username: string;
@@ -24,6 +25,7 @@ export class LoginService {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private configService: NgxConfigureService,
     private http: HttpClient, private dialogService: NbDialogService) {
     this.environment = configService.config.system;
+    this.playgroundUrl = this.environment.playgroundUrl;
     this.capeHost = this.environment.capeHost;
     this.idmHost = this.environment.idmHost;
     this.loginPopupUrl = this.environment.loginPopupUrl;
@@ -95,31 +97,51 @@ export class LoginService {
   //  this.dialogRef.close();
   //}
 
-  completeLogin = (noAccountDialogRef, errorDialogRef) => {
+  completeLogin = async (noAccountDialogRef: TemplateRef<unknown>, errorDialogRef: TemplateRef<unknown>, prevQueryParams: Params) => {
 
-    this.activatedRoute.queryParams.subscribe(params => {
 
-      const token: string = params.token;
+    const queryParams = this.activatedRoute.snapshot.queryParams;
 
-      if (!token || token === '')
-        this.dialogService.open(errorDialogRef, { closeOnBackdropClick: false });
+    let token: string = queryParams.token;
+    const code: string = queryParams.code;
+    const state: string = queryParams.state;
+
+    if (!state || state === '' || state !== sessionStorage.getItem('loginState') || ((!token || token === '') && (!code || code === '')))
+      this.dialogService.open(errorDialogRef, { context: { error: new Error('Token or login State are empty or invalid') }, closeOnBackdropClick: false });
+
+    if (token && token !== '') {
 
       console.log(`token: ${token}`);
       localStorage.setItem('token', token);
+      sessionStorage.removeItem('loginState');
 
-      // Get Idm User Details to create the associated Cape Account
+    } else if (code && code !== '') {
+
+      let params = new HttpParams();
+      params = params.append('grant_type', 'authorization_code');
+      params = params.append('code', code);
+      params = params.append('redirect_uri', this.playgroundUrl + this.loginPopupUrl);
+
+      const resp: any = await this.http.post(`${this.sdkUrl}/idm/oauth2/token`, params.toString(), {
+        responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      }).toPromise();
+
+      token = resp.body.access_token;
+      localStorage.setItem('token', token);
+      sessionStorage.removeItem('loginState');
+    }
 
 
-      this.http.get(`${this.sdkUrl}/idm/user?access_token=${token}`).subscribe((data: any) => {
+    // Get Idm User Details to create the associated Cape Account
+    this.http.get(`${this.sdkUrl}/idm/user?access_token=${token}`).subscribe((data: any) => {
 
-        localStorage.setItem('accountId', data.username);
-        localStorage.setItem('accountEmail', data.email);
-        this.closeLoginPopup();
-        // this.cape_getAccount(noAccountDialogRef, errorDialogRef);
-      }, err => {
-        console.log(err);
-        this.dialogService.open(errorDialogRef, { context: { error: err }, closeOnBackdropClick: false });
-      });
+      localStorage.setItem('accountId', data.username);
+      localStorage.setItem('accountEmail', data.email);
+      this.closeLoginPopup();
+      // this.cape_getAccount(noAccountDialogRef, errorDialogRef);
+    }, err => {
+      console.log(err);
+      this.dialogService.open(errorDialogRef, { context: { error: err }, closeOnBackdropClick: false });
     });
   }
 
