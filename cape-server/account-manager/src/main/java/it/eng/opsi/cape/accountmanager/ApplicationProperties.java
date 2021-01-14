@@ -193,12 +193,6 @@ public class ApplicationProperties {
 	@NoArgsConstructor
 	public class Idm {
 
-//		@NotBlank
-//		private String version;
-
-		@NotBlank
-		private String protocol;
-
 		@NotBlank
 		private String host;
 

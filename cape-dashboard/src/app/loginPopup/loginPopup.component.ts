@@ -59,7 +59,7 @@ export class LoginPopupComponent implements AfterViewInit {
   }
 
   cancelCreateAccount() {
-    this.loginService.cancelCreateAccount();
+    this.loginService.cancelCreateAccount(this.errorDialogTemplateRef);
   }
 
   submitCreateAccount(queryParams) {

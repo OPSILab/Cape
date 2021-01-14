@@ -38,6 +38,9 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { CAPE_THEME } from './styles/theme.cape';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
+import { TranslateModule } from '@ngx-translate/core';
+import { LoginModule } from '../login/login.module';
+import { LoginPopupModule } from '../loginPopup/loginPopup.module';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -71,7 +74,7 @@ const PIPES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES],
+  imports: [CommonModule, ...NB_MODULES, TranslateModule.forChild({})],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
 })

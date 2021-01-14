@@ -6,10 +6,9 @@
   },
   "system": {
     "operatorId": "cape",
-    "dashHost": "https://www.cape-suite.eu/cape-dashboard",
-    "dashPath": "/",
-    "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "",
+    "dashHost": "http://localhost:4200/cape-dashboard",
+    "idmHost": "https://www.cape-suite.eu",
+    "clientId": "7fa3a6ad-d27d-45c5-8f65-d262b3a4c970",
     "loginPopupUrl": "/loginPopup",
     "accountUrl": "http://localhost:8080/account-manager/api/v2",
     "serviceManagerUrl": "http://localhost:8082/service-manager/api/v2",

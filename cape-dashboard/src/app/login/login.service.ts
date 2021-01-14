@@ -12,7 +12,7 @@ import { Account } from '../model/account/account.model';
 export class LoginService {
 
   environment;
-  accountUrl: string; capeHost: string; dashHost: string; idmHost: string; dashPath: string;
+  accountUrl: string; capeHost: string; dashHost: string; idmHost: string;
   username: string; state: string; loginPopupUrl: string; clientId: string;
   dialogRef: NbDialogRef<unknown>;
 
@@ -24,7 +24,6 @@ export class LoginService {
     this.capeHost = this.environment.host;
     this.accountUrl = this.environment.accountUrl;
     this.dashHost = this.environment.dashHost;
-    this.dashPath = this.environment.dashPath;
     this.idmHost = this.environment.idmHost;
     this.loginPopupUrl = this.environment.loginPopupUrl;
     this.clientId = this.environment.clientId;
@@ -48,9 +47,9 @@ export class LoginService {
     } catch (err) {
       console.log(err);
       if (err.error.statusCode === 500 && err.error.statusCode !== 401)
-        this.dialogRef = this.dialogService.open(errorDialogTemplate, { context: { error: err }, closeOnBackdropClick: false });
+        this.openDialog(errorDialogTemplate, { error: err });
       else
-        this.dialogRef = this.dialogService.open(createDialogTemplate, { context: { queryParams: queryParams }, closeOnBackdropClick: false });
+        this.openDialog(createDialogTemplate, { queryParams: queryParams });
     }
   }
 
@@ -87,21 +86,31 @@ export class LoginService {
         },
         err => {
           console.log(err);
-          this.dialogService.open(errorDialogTemplate, { context: { error: err }, closeOnBackdropClick: false });
+          this.openDialog(errorDialogTemplate, { error: err });
+
           localStorage.clear();
         }
       );
   }
 
   closeLoginPopup = () => {
-    window.opener.document.location.href = this.dashHost + this.dashPath;
+    window.opener.document.location.href = this.dashHost;
     window.close();
   }
 
-  cancelCreateAccount() {
-    this.dialogRef.close();
-    this.closeLoginPopup();
-    this.logout();
+  cancelCreateAccount = async (errorDialogRef: TemplateRef<unknown>) => {
+
+    try {
+      this.dialogRef.close();
+      await this.logout();
+      this.closeLoginPopup();
+
+    } catch (err) {
+      console.log(err);
+      this.openDialog(errorDialogRef, {
+        error: err
+      });
+    }
   }
 
   submitCreateAccount(errorDialogTemplate: TemplateRef<unknown>, queryParams: Params) {
@@ -118,53 +127,70 @@ export class LoginService {
     const code: string = queryParams.code;
     const state: string = queryParams.state;
 
-    if (!state || state === '' || state !== sessionStorage.getItem('loginState') || ((!token || token === '') && (!code || code === '')))
-      this.dialogService.open(errorDialogRef, { context: { error: new Error('Token or login State are empty or invalid') }, closeOnBackdropClick: false });
+    try {
+      // if (!state || state === '' || state !== sessionStorage.getItem('loginState') || ((!token || token === '') && (!code || code === '')))
+      //   this.openDialog(errorDialogRef, { error: new Error('Token or login State are empty or invalid') });
 
-    if (token && token !== '') {
+      if (token && token !== '') {
 
-      console.log(`token: ${token}`);
-      localStorage.setItem('token', token);
-      sessionStorage.removeItem('loginState');
+        console.log(`token: ${token}`);
+        localStorage.setItem('token', token);
+        sessionStorage.removeItem('loginState');
 
-    } else if (code && code !== '') {
+      } else if (code && code !== '') {
 
-      let params = new HttpParams();
-      params = params.append('grant_type', 'authorization_code');
-      params = params.append('code', code);
-      params = params.append('redirect_uri', this.dashHost + this.loginPopupUrl);
+        let params = new HttpParams();
+        params = params.append('grant_type', 'authorization_code')
+          .append('code', code)
+          .append('redirect_uri', this.dashHost + this.loginPopupUrl);
+
+        const resp: any = await this.http.post(`${this.accountUrl}/idm/oauth2/token`, params.toString(), {
+          responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+        }).toPromise();
+
+        token = resp.body.access_token;
+        localStorage.setItem('token', token);
+        sessionStorage.removeItem('loginState');
+
+      }
 
 
+      // Get Idm User Details to create the associated Cape Account
+      const resp: any = await this.http.get(`${this.accountUrl}/idm/user?token=${token}`).toPromise();
 
-      const resp: any = await this.http.post(`${this.accountUrl}/idm/oauth2/token`, params.toString(), {
-        responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
-      }).toPromise();
-
-      token = resp.body.access_token;
-      localStorage.setItem('token', token);
-      sessionStorage.removeItem('loginState');
-    }
-
-
-    // Get Idm User Details to create the associated Cape Account
-    this.http.get(`${this.accountUrl}/idm/user?token=${token}`).subscribe((data: any) => {
-
-      localStorage.setItem('accountId', data.username);
-      localStorage.setItem('accountEmail', data.email);
+      localStorage.setItem('accountId', resp.username);
+      localStorage.setItem('accountEmail', resp.email);
 
       this.cape_getAccount(noAccountDialogRef, errorDialogRef, queryParams);
-    }, err => {
+
+
+    } catch (err) {
+
       console.log(err);
-      this.dialogRef = this.dialogService.open(errorDialogRef, { context: { error: err }, closeOnBackdropClick: false });
-    });
+      this.openDialog(errorDialogRef, {
+        error: err
+      });
+    }
 
   }
 
 
-  logout = () => {
+  logout = async () => {
     localStorage.clear();
-    location.href = `${this.idmHost}/auth/external_logout?_method=DELETE&client_id=${this.clientId}`;
+    const logout_redirect = await this.http.get<any>(`${this.idmHost}/auth/external_logout?client_id=${this.clientId}&_method=DELETE`, { withCredentials: true }).toPromise();
+    location.href = logout_redirect.redirect_sign_out_uri;
   }
 
+
+  openDialog = (dialogTemplate: TemplateRef<unknown>, ctx: unknown) => {
+
+    this.dialogRef = this.dialogService.open(dialogTemplate,
+      {
+        context: ctx,
+        hasScroll: false,
+        closeOnBackdropClick: false,
+        closeOnEsc: false
+      });
+  }
 
 }

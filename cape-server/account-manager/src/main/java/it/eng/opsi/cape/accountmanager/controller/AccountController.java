@@ -137,6 +137,14 @@ public class AccountController implements IAccountController {
 
 	}
 	
+	@DeleteMapping(value = "/idm/auth/external_logout")
+	public ResponseEntity<Object> externalLogout(@RequestParam(name = "client_id") String clientId) {
+
+		Object response = clientService.externalLogout(clientId);
+
+		return ResponseEntity.ok(response);
+
+	}
 
 	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
 			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })

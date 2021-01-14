@@ -6,6 +6,7 @@
     "error": "Errore",
     "login": {
       "enter_button": "Entra",
+      "logout_button": "Disconnetti",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad usare i dati dal tuo account?",
         "dont_ask_again": "Non chiedermelo più",

@@ -6,6 +6,7 @@
     "error": "Error",
     "login": {
       "enter_button": "Enter",
+      "logout_button": "Logout",
       "loginPopup": {
         "authorize_account_data": "Do you authorize to use your account data?",
         "dont_ask_again": "Don't Ask again",

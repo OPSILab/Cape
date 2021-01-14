@@ -214,12 +214,6 @@ public class ApplicationProperties {
 	public class Idm {
 
 		@NotBlank
-		private String version;
-
-		@NotBlank
-		private String protocol;
-
-		@NotBlank
 		private String host;
 
 		@Valid

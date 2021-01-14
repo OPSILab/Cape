@@ -34,6 +34,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +75,15 @@ public class AuthenticationController {
 		Object token = clientService.postCodeForToken(grantType, redirectUri, code);
 
 		return ResponseEntity.ok(token);
+
+	}
+
+	@DeleteMapping(value = "/idm/auth/external_logout")
+	public ResponseEntity<Object> externalLogout(@RequestParam(name = "client_id") String clientId) {
+
+		clientService.externalLogout(clientId);
+
+		return ResponseEntity.ok(null);
 
 	}
 

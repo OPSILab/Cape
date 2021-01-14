@@ -53,7 +53,6 @@ public class ApplicationProperties {
 	@NoArgsConstructor
 	public class Cape {
 
-
 //		@Valid
 //		private AccountManager accountManager = new AccountManager();
 
@@ -86,7 +85,6 @@ public class ApplicationProperties {
 
 		@NotBlank
 		private String operatorId;
-
 
 //		@Getter
 //		@Setter
@@ -208,12 +206,6 @@ public class ApplicationProperties {
 	@Setter
 	@NoArgsConstructor
 	public class Idm {
-
-		@NotBlank
-		private String version;
-
-		@NotBlank
-		private String protocol;
 
 		@NotBlank
 		private String host;

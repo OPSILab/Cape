@@ -65,6 +65,7 @@ public class ClientService {
 	private final String serviceManagerHost;
 	private final String accountManagerHost;
 	private final String auditLogManagerHost;
+	private final ApplicationProperties.Idm idm;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -77,13 +78,14 @@ public class ClientService {
 		auditLogManagerHost = this.appProperty.getCape().getAuditLogManager().getHost();
 		accountManagerHost = this.appProperty.getCape().getAccountManager().getHost();
 		serviceManagerHost = this.appProperty.getCape().getServiceManager().getHost();
+		idm = this.appProperty.getIdm();
 	}
 
 	public Object getIdmUserDetail(String token) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.getForObject(UriComponentsBuilder
-				.fromHttpUrl(appProperty.getIdm().getProtocol() + "://" + appProperty.getIdm().getHost() + "/user")
+				.fromHttpUrl(idm.getHost() + "/user")
 				.queryParam("access_token", token).toUriString(), Object.class);
 
 	}

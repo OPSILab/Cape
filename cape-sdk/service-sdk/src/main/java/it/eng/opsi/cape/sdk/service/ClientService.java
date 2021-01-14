@@ -91,7 +91,7 @@ public class ClientService {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate
-				.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/user")
+				.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/user")
 						.queryParam("access_token", token).toUriString(), Object.class);
 
 	}
@@ -110,8 +110,17 @@ public class ClientService {
 		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
 
 		return restTemplate.exchange(RequestEntity.post(UriComponentsBuilder
-				.fromHttpUrl(idm.getProtocol() + "://" + idm.getHost() + "/oauth2/token").build().toUri())
+				.fromHttpUrl(idm.getHost() + "/oauth2/token").build().toUri())
 				.headers(headers).body(body), Object.class);
+
+	}
+
+	public void externalLogout(String clientId) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+		restTemplate.delete(
+				UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/auth/external_logout")
+						.queryParam("clientId", clientId).build().toUri());
 
 	}
 

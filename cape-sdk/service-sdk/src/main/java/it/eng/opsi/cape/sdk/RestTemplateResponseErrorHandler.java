@@ -40,6 +40,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
 	private ApplicationContext applicationContext;
@@ -75,9 +76,14 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
 		} else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
 
-			ErrorResponse error = mapper.readValue(body, ErrorResponse.class);
+			ErrorResponse error = null;
+			if (body.contains("Invalid token: access token is invalid"))
+				error = new ErrorResponse(HttpStatus.UNAUTHORIZED, body,
+						new Exception("Invalid token: access token is invalid"));
+			else
+				error = mapper.readValue(body, ErrorResponse.class);
 			Exception cause = null;
-
+			
 			try {
 				Class<?> clazz = Class.forName(error.getCause());
 				Constructor<?> constructor = clazz.getConstructor(String.class);

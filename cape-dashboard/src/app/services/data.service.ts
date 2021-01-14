@@ -47,7 +47,7 @@ export class DataService {
 
   getGraphData() {
    // return this.http.get(this.globals.GRAPH_DATA_URL);
-   this.apiRoot = `${this.config.system.dashHost}${this.config.system.dashPath}${this.config.system.assetsDataDir}cape_dataflow.json`;
+   this.apiRoot = `${this.config.system.dashHost}${this.config.system.assetsDataDir}cape_dataflow.json`;
     return this.http.get(this.apiRoot);
   
   

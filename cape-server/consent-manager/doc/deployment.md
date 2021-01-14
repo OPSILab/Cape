@@ -87,9 +87,7 @@ The registration process, described above, provides **`Client Id`** and **`Clien
         (same value of the **callbackURL** specified above in the IdM).
     -   **`idm.logout.callback`**: **`http://CAPE_DASHBOARD_HOST`**,
         (same value of the **URL** specified above in the IdM).
-    -   **`idm.protocol`**: Protocol of Fiware IdM instance (`http` or `https`)
-    -   **`idm.host`**: Host of Fiware IdM instance. (**INCLUDE ALSO THE PORT,
-        IF ANY**).
+    -   **`idm.host`**: Host of Fiware IdM instance. (**INCLUDE ALSO PROTOCOL AND PORT**).
 
 > **Note**. Replace **`CAPE_DASHBOARD_HOST`** with the actual value, namely the URL where the CaPe Dashboard is available.
 
