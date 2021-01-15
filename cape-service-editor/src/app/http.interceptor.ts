@@ -21,17 +21,17 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     const token: string = localStorage.getItem('token');
 
-    if (token) {
+    if (token && !request.url.includes('/idm/')) {
       request = request.clone({
         headers: new HttpHeaders({ 'Authorization': 'Bearer ' + token })
       });
     }
 
-    if (!request.headers.has('Content-Type')) {
-     request = request.clone({ headers: request.headers.append('Content-Type', 'application/json') });
-    }
+    // if (!request.headers.has('Content-Type')) {
+    //  request = request.clone({ headers: request.headers.append('Content-Type', 'application/json') });
+    // }
 
-    request = request.clone({ headers: request.headers.append('Accept', 'application/json') });
+    // request = request.clone({ headers: request.headers.append('Accept', 'application/json') });
 
 
 

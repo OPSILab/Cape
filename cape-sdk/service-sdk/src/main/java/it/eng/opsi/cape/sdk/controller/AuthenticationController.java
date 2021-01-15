@@ -60,7 +60,7 @@ public class AuthenticationController {
 	private ClientService clientService;
 
 	@GetMapping(value = "/idm/user")
-	public ResponseEntity<Object> getUserDetails(@RequestParam(name = "access_token") String token) {
+	public ResponseEntity<Object> getUserDetails(@RequestParam(name = "token") String token) {
 
 		Object userDetails = clientService.getIdmUserDetail(token);
 
@@ -81,9 +81,9 @@ public class AuthenticationController {
 	@DeleteMapping(value = "/idm/auth/external_logout")
 	public ResponseEntity<Object> externalLogout(@RequestParam(name = "client_id") String clientId) {
 
-		clientService.externalLogout(clientId);
+		Object response = clientService.externalLogout(clientId);
 
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(response);
 
 	}
 

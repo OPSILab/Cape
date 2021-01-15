@@ -1,0 +1,197 @@
+// @nebular theming framework
+@import '~@nebular/theme/styles/theming';
+// @nebular out of the box themes
+@import '~@nebular/theme/styles/themes';
+
+$nb-enable-css-custom-properties: true; // <-- enable css custom properties
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: #f7f9fc,
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), default, default);
+
+$nb-themes: nb-register-theme((
+
+/* Status colors: primary, success, info, warning, danger - for colored elements (buttons, etc) */
+  color-primary-100: #688498,
+  color-primary-200: #4E6F86,
+  color-primary-300: #345A74,
+  color-primary-400: #1A4562,
+  color-primary-500: #003050,
+  color-primary-600: #002B48,
+  color-primary-700: #002640,
+  color-primary-800: #002138,
+  color-primary-900: #001C30,
+
+  color-success-100: #E06893,
+  color-success-200: #D85586,
+  color-success-300: #D4346F,
+  color-success-400: #CE1A5D,
+  color-success-500: #C8004B,
+  color-success-600: #B40043,
+  color-success-700: #A0003B,
+  color-success-800: #8C0033,
+  color-success-900: #78002B,
+
+  color-info-100: #bbdefb,
+  color-info-200: #90caf9,
+  color-info-300: #64b5f6,
+  color-info-400: #42a5f5,
+  color-info-500: #2196f3,
+  color-info-600: #1e88e5,
+  color-info-700: #1976d2,
+  color-info-800: #1565c0,
+  color-info-900: #0d47a1,
+
+  color-warning-100: #ffecb3,
+  color-warning-200: #ffe082,
+  color-warning-300: #ffd54f,
+  color-warning-400: #ffca28,
+  color-warning-500: #ffc107,
+  color-warning-600: #ffb300,
+  color-warning-700: #ffa000,
+  color-warning-800: #ff8f00,
+  color-warning-900: #ff6f00,
+
+  color-danger-100: #ffcdd2,
+  color-danger-200: #ef9a9a,
+  color-danger-300: #e57373,
+  color-danger-400: #ef5350,
+  color-danger-500: #f44336,
+  color-danger-600: #e53935,
+  color-danger-700: #d32f2f,
+  color-danger-800: #c62828,
+  color-danger-900: #b71c1c,
+
+  color-basic-100: #f5f5f5,
+  color-basic-200: #eeeeee,
+  color-basic-300: #e0e0e0,
+  color-basic-400: #bdbdbd,
+  color-basic-500: #9e9e9e,
+  color-basic-600: #757575,
+  color-basic-700: #616161,
+  color-basic-800: #424242,
+  color-basic-900: #212121,
+  color-basic-1000: #121212,
+  color-basic-1100: #111111,
+
+
+  /* Basic colors - for backgrounds and borders and texts */
+  /* Status colors states - focus, hover, default, active, disabled  */
+  /* Backgrounds and borders - basic, alternative and primary  */
+  /* Text colors - general and status */
+
+  /* Fonts and text styles - headings, subtitles, paragraphs, captions, button */
+  font-family-primary: unquote('Roboto, sans-serif'),
+
+  /* Supporting variables - border radius, outline, shadow, divider */
+  outline-width: 0,
+  outline-color: color-basic-400,
+  shadow: (0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2)),
+
+
+
+    /* CUSTOM */
+  /*Context Menu*/
+  context-menu-border-radius: 0px,
+  /* header */
+  header-height: 64px,
+  header-padding: 0px 20px,
+  /*Links*/
+  link-text-color: text-success-color,
+  link-text-focus-color: text-success-focus-color,
+  link-text-hover-color: text-success-hover-color,
+  /* menu */
+  menu-item-hover-text-color: text-success-hover-color,
+  menu-item-active-text-color: text-success-color,
+  /*Toggle*/
+  toggle-height: .9rem,
+  toggle-width: 2.3rem,
+  toggle-border-width: 0px,
+  toggle-switcher-size: 1.3rem,
+  toggle-background-color: color-basic-500,
+  toggle-switcher-background-color: background-basic-color-1,
+  toggle-switcher-checkmark-color: color-primary-default,
+
+  toggle-primary-background-color: color-primary-100,
+  toggle-primary-checked-background-color: color-primary-300,
+  toggle-primary-checked-switcher-checkmark-color: color-basic-100,
+
+  toggle-success-background-color: color-success-100,
+  toggle-success-checked-background-color: color-success-300,
+  toggle-success-checked-switcher-checkmark-color: color-basic-100,
+
+  toggle-info-background-color: color-info-100,
+  toggle-info-checked-background-color: color-info-300,
+  toggle-info-checked-switcher-checkmark-color: color-basic-100,
+
+  toggle-warning-background-color: color-warning-100,
+  toggle-warning-checked-background-color: color-warning-300,
+  toggle-warning-checked-switcher-checkmark-color: color-basic-100,
+
+  toggle-danger-background-color: color-danger-100,
+  toggle-danger-checked-background-color: color-danger-300,
+  toggle-danger-checked-switcher-checkmark-color: color-basic-100,
+  button-filled-success-background-color: #00d68f,
+  button-filled-success-hover-background-color: #2ce69b
+
+), cape, default);
+
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: linear-gradient(270deg, #edf1f7 0%, #e4e9f2 100%),
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), corporate, corporate);
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), dark, dark);

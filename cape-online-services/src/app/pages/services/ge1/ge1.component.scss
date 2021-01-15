@@ -1,0 +1,153 @@
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-gap: 1rem;
+    padding: 25px;
+    align-content: center;
+    align-items: center;
+}
+
+.menu-item {
+   
+    background: #036;
+    color: whitesmoke;
+    padding: 20px;
+    margin: 20px;
+ 
+    border-radius: 15px;
+}
+
+    .menu-item:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+
+
+.menu-item-disabled {
+   
+    background: #001a33;
+    color: whitesmoke;
+    padding: 20px;
+    margin: 20px;
+    
+    border-radius: 15px;
+}
+
+.menu-item-notification {
+    position: relative;
+    top: -185px;
+    right: -130px;
+    padding: 10px;
+    z-index: 100;
+}
+
+.menu-item-text {
+    display: block;
+    font-size: 1.2rem;
+    line-height: 1.0rem;
+    padding: 0px  10px;
+    text-align: center;
+    margin: 15px;
+}
+
+.menu-item-icon {
+    display: block;
+    padding: 10px 0px;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    fill: whitesmoke;
+    text-align: center;
+}
+
+    .menu-item-icon svg {
+        width: 110px;
+        height: 80px;
+        fill: whitesmoke;
+        
+    }
+
+.SI {
+    color: green;
+    font-weight: bold;
+}
+
+.icon-orange {
+    fill: #f95e01;
+    height: 90px;
+    width: 100px;
+}
+
+#body {
+    top: 100px;
+    min-height: 600px;
+}
+
+#body2 {
+    margin-top: 100px;
+    min-height: 470px;
+}
+
+header {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+#main-nav {
+    background-color: #152f52;
+    color: #fff;
+}
+
+.dropdown-menu.dark {
+    width: 250px;
+    background-color: #435a70;
+}
+
+.notvisible {
+    visibility: hidden;
+    height: 0px;
+}
+
+.form-group label.notransform.active {
+    -webkit-transform: none;
+    transform: none;
+}
+
+.item-mandatory label::before {
+    content: "(*) ";
+}
+
+.alert-danger {
+    color: black;
+    font-weight: bold;
+}
+
+
+
+.tooltip-inner {
+    background-color: #004d99 !important;
+    font-size: medium;
+}
+
+.tooltip {
+    pointer-events: none;
+}
+
+.callout {
+    padding: 1rem !important;
+    max-width: 100% !important;
+}
+
+.callout p {
+    font-family: unset;
+    font-size: unset;
+    color: unset;
+}
+
+.word-wrap {
+    text-overflow: unset !important;
+    white-space: normal !important;
+}

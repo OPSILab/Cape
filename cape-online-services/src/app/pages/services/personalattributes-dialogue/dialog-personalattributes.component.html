@@ -1,0 +1,44 @@
+
+  <nb-card style="width:60vw;height:auto;max-width: 95vw;
+  max-height: 70vh;">
+    <nb-card-header>Personalizzazione degli attributi</nb-card-header>
+    <nb-card-body>
+      <div class="row justify-content-around">
+        Di seguito viene presentato l'elenco degli attributi del profilo utente ottenuti dall'Identity Provider utilizzato per l'autenticazione che risulta possibile personalizzare prima di accedere al servizio applicativo richiesto.
+I valori presentati per gli attributi riflettono già eventuali personalizzazioni effettuate nel passato se ne è stata richiesta la memorizzazione.
+      </div>
+      <nb-card>
+
+        <nb-card-header>Attributi da personalizzare</nb-card-header>
+        <nb-card-body>
+          <form class="form-horizontal" [formGroup]="generalInformationForm" (ngSubmit)="submit()">
+            <div class="form-group row">
+              <label for="email" class="label col-sm-3 form-control-label">Email</label>
+              <div class="col-sm-9">
+                <input type="email" nbInput fullWidth id="email" placeholder="Email" formControlName="email">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="phone" class="label col-sm-3 form-control-label">Telefono</label>
+              <div class="col-sm-9">
+                <input type="text" nbInput fullWidth id="phone" placeholder="Telefono" formControlName="phone">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="address" class="label col-sm-3 form-control-label">Indirizzo</label>
+              <div class="col-sm-9">
+                <input type="text" nbInput fullWidth id="address" placeholder="Indirizzo" formControlName="address">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="offset-sm-3 col-sm-9">
+                <button nbButton status="success" type="submit">Invia</button>
+              </div>
+            </div>
+          </form>
+        </nb-card-body>
+      </nb-card>
+
+    </nb-card-body>
+   
+  </nb-card>

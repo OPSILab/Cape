@@ -71,8 +71,8 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
 		http.cors().and().csrf().disable().formLogin().disable().headers().httpStrictTransportSecurity().disable().and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
 				.authorizeRequests(authz -> authz.antMatchers("/api/v2/idm/oauth2/token").permitAll()
-						.antMatchers("/api/v2/idm/user").permitAll().antMatchers("/api/v2/**", "/api/v2")
-						.authenticated())
+						.antMatchers("/api/v2/idm/user").permitAll().antMatchers("/api/v2/idm/auth/external_logout")
+						.permitAll().antMatchers("/api/v2/**", "/api/v2").authenticated())
 //        	.anyRequest().permitAll()
 		;
 	}

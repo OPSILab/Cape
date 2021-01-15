@@ -3,6 +3,7 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-header',
@@ -37,16 +38,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'cape';
 
-  loggedUserMenu = [{ title: 'Account', link: "pages/account" }, { title: 'Log out'}];
+  loggedUserMenu = [{ title: 'Account', link: "pages/account" }];
   userMenu = [{ title: 'Log in', link: '/login' }];
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService,
+    private translateService: TranslateService) {
   }
 
   ngOnInit() {
+
+    this.loggedUserMenu.push({ title: this.translateService.instant('general.login.logout_button'), link: '' });
     this.currentTheme = this.themeService.currentTheme;
 
     // this.userService.getUsers()

@@ -1,0 +1,50 @@
+{
+  "system": {
+    "operatorId": "cape",
+    "playgroundUrl": "http://localhost/cape-playground",
+    "dashboardUrl": "http://localhost/cape-dashboard",
+    "idmHost": "https://www.cape-suite.eu:8002",
+    "clientId": "e0c16d56-0568-4553-85e7-06bb94985bd8",
+    "loginPopupUrl": "/loginPopup",
+    "disable_auth": "false",
+    "assetsDataDir": "/assets/data/"
+  },
+  "services": {
+    "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
+    "checkConsentAtOperator": "true",
+    "mywellness": {
+      "serviceId": "MYW20",
+      "serviceUrl": "http://localhost/pages/services/my-wellness",
+      "serviceName": "MyWellness",
+      "purposes": {
+        "cholesterol": {
+          "purposeId": "1",
+          "sourceDatasetId": "D_1",
+          "sourceServiceId": "MYM20"
+        },
+        "weight": {
+          "purposeId": "2",
+          "sourceDatasetId": "D_2",
+          "sourceServiceId": "MYM20"
+        }
+      }
+    },
+    "mymeasurements": {
+      "serviceId": "MYM20",
+      "serviceUrl": "http://localhost/pages/services/my-measurements",
+      "serviceName": "MyMeasurements",
+      "purposes": {
+        "cholesterol": {
+          "purposeId": "1"
+        },
+        "weight": {
+          "purposeId": "2"
+        }
+      }
+
+    }
+  },
+  "i18n": {
+    "locale": "it"
+  }
+}

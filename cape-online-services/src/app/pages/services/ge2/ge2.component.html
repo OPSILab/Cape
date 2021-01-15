@@ -1,0 +1,25 @@
+<nb-card class="">
+  <nb-card-header>
+    <div class="row h3 justify-content-center"> Protezione Civile - Iscrizione allerta </div>
+    <div class="row justify-content-center"><img src="assets\img\alert.jpg"></div>
+
+
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row justify-content-center">
+      <div class="col-md-auto justify-content-center">
+        <h5> Seleziona il canale di allerta: </h5>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-auto">
+        <nb-radio-group [(value)]="selectedService">
+          <nb-radio value="sms">SMS</nb-radio>
+          <nb-radio value="chat">Chat</nb-radio>
+          <nb-radio value="mail">Mail</nb-radio>
+        </nb-radio-group>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-center"><button nbButton status="primary" (click)="onClickGo()">{{ 'general.services.goButton' | translate }}</button></nb-card-footer>
+</nb-card>

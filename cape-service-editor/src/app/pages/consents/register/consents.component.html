@@ -4,6 +4,13 @@
   </nb-card-header>
 
   <nb-card-body>
+    <div class="row mb-2">
+      <div class="col-12 col-md-12 text-right">
+        <button nbButton ghost shape="round" size="small" (click)="ngOnInit()">
+          {{'general.consents.refresh' | translate }}&nbsp;<i class="material-icons">refresh</i>
+        </button>
+      </div>
+    </div>
     <ng2-smart-table [settings]="settings" [source]="source" >
     </ng2-smart-table>
   </nb-card-body>

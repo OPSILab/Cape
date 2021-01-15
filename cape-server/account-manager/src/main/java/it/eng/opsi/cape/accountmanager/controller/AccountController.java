@@ -124,19 +124,17 @@ public class AccountController implements IAccountController {
 		return ResponseEntity.ok(userDetails);
 
 	}
-	
+
 	@PostMapping(value = "/idm/oauth2/token")
 	public ResponseEntity<Object> postCodeforToken(@RequestParam(name = "grant_type") String grantType,
-			@RequestParam(name = "redirect_uri") String redirectUri,
-			@RequestParam(name = "code") String code
-			) {
+			@RequestParam(name = "redirect_uri") String redirectUri, @RequestParam(name = "code") String code) {
 
-		Object userDetails = clientService.postCodeForToken(grantType, redirectUri, code);
+		Object token = clientService.postCodeForToken(grantType, redirectUri, code);
 
-		return ResponseEntity.ok(userDetails);
+		return ResponseEntity.ok(token);
 
 	}
-	
+
 	@DeleteMapping(value = "/idm/auth/external_logout")
 	public ResponseEntity<Object> externalLogout(@RequestParam(name = "client_id") String clientId) {
 

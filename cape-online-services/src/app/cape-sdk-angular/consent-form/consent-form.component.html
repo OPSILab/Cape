@@ -1,0 +1,99 @@
+<form [formGroup]="userConsentForm" (ngSubmit)="giveConsent();dialogRef.close()">
+  <nb-card style="width:60vw;height:auto;max-width: 95vw;
+  max-height: 95vh;">
+    <nb-card-header class="d-flex justify-content-between">
+      <h5 class="h5 mr-3">{{ 'general.consent.form.header' | translate}}</h5>
+      <button nbButton ghost shape="rectangle" size="small" (click)="dialogRef.close()">
+        <i class="material-icons">close</i>
+      </button>
+    </nb-card-header>
+    <nb-card-body class="m-3">
+      <h3>{{ 'general.consent.form.title' | translate}}</h3>
+      <div class="row">
+        <span class="col-md">{{ 'general.consent.form.body' | translate}}</span>
+      </div>
+      <div class="m-2" formGroupName="dataMapping">
+        <div class="" *ngFor="let concept of consentForm.resource_set.datasets[0].dataMappings">
+          <nb-checkbox [formControlName]="concept.name">{{concept.name}}</nb-checkbox>
+        </div>
+      </div>
+      <div class="row m-2 font-weight-bold">{{'general.consent.form.policyRef' | translate }} <a href="{{consentForm.usage_rules.policy.policyRef}}" class="ml-2">{{consentForm.usage_rules.policy.policyRef}}</a></div>
+      <div class="mt-4 shadow-none">
+        <nb-accordion class="">
+          <nb-accordion-item>
+            <nb-accordion-item-header class="">{{ 'general.consent.form.processing.header' | translate }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <span class="row font-weight-bold m-1">{{ 'general.consent.form.processing.purpose' | translate }}</span>
+              <span class="row m-1 mb-3">{{consentForm.usage_rules.purposeName}}</span>
+              <span class="row font-weight-bold m-1">{{ 'general.consent.form.processing.categories' | translate }}</span>
+              <div class="row">
+                <div class="col-sm my-1 ml-3 mr-2 py-2 badge badge-info" *ngFor="let category of consentForm.usage_rules.processingCategories">
+                  {{category}}
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header>{{ 'general.consent.form.shareWith.header' | translate }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row m-1">{{ 'general.consent.form.shareWith.body' | translate}}</div>
+              <div class="m-2" formGroupName="shareWith">
+                <div class="" *ngFor="let org of consentForm.usage_rules.shareWith">
+                  <nb-checkbox [formControlName]="org.orgName">{{org.orgName}}</nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header>{{ 'general.consent.form.storage.header' | translate }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row m-1 font-weight-bold">{{ 'general.consent.form.storage.location' | translate}}</div>
+              <div class="row m-1">{{consentForm.usage_rules.storage.location}}</div>
+              <div class="row m-1 mt-4 font-weight-bold">{{ 'general.consent.form.storage.duration' | translate}}</div>
+              <div class="row m-1">{{consentForm.usage_rules.storage.duration}}</div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header>{{ 'general.consent.form.contact.header' | translate }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <dl class="row">
+                <dt class="col-sm-2 font-weight-bold">{{ 'general.consent.form.contact.controller' | translate }}:</dt>
+                <dd class="col-sm-2">{{consentForm.data_controller.piiController}}</dd>
+                <span class="col-sm-8"></span>
+                <dt class="col-sm-2 font-weight-bold">{{ 'general.consent.form.contact.organization' | translate }}:</dt>
+                <dd class="col-sm-2">{{consentForm.data_controller.org}}</dd>
+                <span class="col-sm-8"></span>
+                <dt class="col-sm-2 font-weight-bold">{{ 'general.consent.form.contact.address' | translate }}:</dt>
+                <dd class="col-sm-2">{{consentForm.data_controller.address}}</dd>
+                <span class="col-sm-8"></span>
+              </dl>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header>{{ 'general.consent.form.disclaimer.header' | translate }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row m-1">{{ 'general.consent.form.disclaimer.withdraw' | translate }}</div>
+              <div class="row m-1">{{ 'general.consent.form.disclaimer.objection' | translate }}</div>
+              <div class="row m-1">{{ 'general.consent.form.disclaimer.erasure' | translate }}</div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+
+
+      </div>
+
+    </nb-card-body>
+    <nb-card-footer class="d-flex justify-content-end">
+      <button nbButton type="submit" ghost shape="rectangle" size="medium">
+        {{ 'general.consent.giveConsentButton' | translate }}
+      </button>
+      <button nbButton ghost shape="rectangle" size="medium" (click)="dialogRef.close()">
+        {{ 'general.consent.cancelButton' | translate }}
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</form>

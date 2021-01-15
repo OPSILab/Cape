@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService, 
-    private translateService: TranslateService, private loginService: LoginService) {
+    private translateService: TranslateService) {
   }
 
   ngOnInit() {

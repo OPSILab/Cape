@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   account-manager:
-    image: account-manager
+    image: capesuite/account-manager
     build: ./account-manager
     ports:
       - "8080:8080"
@@ -14,10 +14,10 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_PORT=27017
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_HOST=http://localhost:3000
-      - CAPE_IDM_CLIENTID=22f42036-acff-40c5-ab69-232dbadc4857
-      - CAPE_IDM_CLIENTSECRET=29e0769d-54d3-4f29-93dc-a69a08c48f50
-      - CAPE_IDM_USERINFOURI=http://localhost:3000
+      - CAPE_IDM_HOST=http://172.26.1.1:3000
+      - CAPE_IDM_CLIENTID=6c950a93-c17b-4760-abab-ce645c9eee89
+      - CAPE_IDM_CLIENTSECRET=a9166f2f-6756-4ebd-93d0-6402b2f26389
+      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
     networks:
       - cape-network
   account-manager-mongo:
@@ -38,7 +38,7 @@ services:
       - cape-network
 
   auditlog-manager:
-    image: auditlog-manager
+    image: capesuite/auditlog-manager
     build: ./auditlog-manager
     ports:
       - "8081:8081"
@@ -50,6 +50,7 @@ services:
       - CAPE_AUDITLOG_MANAGER_MONGODB_PORT=27017
       - CAPE_AUDITLOG_MANAGER_MONGODB_USER=root
       - CAPE_AUDITLOG_MANAGER_MONGODB_PWD=root
+      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
     networks:
       - cape-network
 
@@ -71,7 +72,7 @@ services:
       - cape-network
 
   consent-manager:
-    image: consent-manager
+    image: capesuite/consent-manager
     build: ./consent-manager
     ports:
       - "8083:8083"
@@ -84,6 +85,7 @@ services:
       - CAPE_CONSENT_MANAGER_MONGODB_PORT=27017
       - CAPE_CONSENT_MANAGER_MONGODB_USER=root
       - CAPE_CONSENT_MANAGER_MONGODB_PWD=root
+      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
     networks:
       - cape-network
 
@@ -105,7 +107,7 @@ services:
       - cape-network
 
   service-manager:
-    image: service-manager
+    image: capesuite/service-manager
     build: ./service-manager
     ports:
       - "8082:8082"
@@ -118,6 +120,7 @@ services:
       - CAPE_SERVICE_MANAGER_MONGODB_PORT=27017
       - CAPE_SERVICE_MANAGER_MONGODB_USER=root
       - CAPE_SERVICE_MANAGER_MONGODB_PWD=root
+      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
     networks:
       - cape-network
 
@@ -139,7 +142,7 @@ services:
       - cape-network
 
   service-registry:
-    image: service-registry
+    image: capesuite/service-registry
     build: ./service-registry
     ports:
       - "8088:8088"
@@ -148,6 +151,7 @@ services:
       - CAPE_SERVICE_REGISTRY_MONGODB_PORT=27017
       - CAPE_SERVICE_REGISTRY_MONGODB_USER=root
       - CAPE_SERVICE_REGISTRY_MONGODB_PWD=root
+      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
     networks:
       - cape-network
 
@@ -181,3 +185,6 @@ networks:
    driver: bridge
    driver_opts:
      com.docker.network.driver.mtu: 1400
+   ipam:
+     config:
+       - subnet: 172.26.1.0/24

@@ -30,9 +30,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onContecxtItemSelection(title) {
 
-    if (title === 'Log out') {
+    if (title === this.translateService.instant('general.login.logout_button')) {
       this.loginService.logout();
-      location.reload();
     }
   }
 
