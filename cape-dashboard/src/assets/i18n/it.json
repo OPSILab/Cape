@@ -1,4 +1,4 @@
-{ 
+{
   "general": {
     "welcome": "Benvenuto su CaPe!",
     "logo_text": "CaPe",
@@ -7,6 +7,13 @@
     "login": {
       "enter_button": "Entra",
       "logout_button": "Disconnetti",
+      "select_login": "Seleziona il tuo gestore di identità digitale",
+      "login_with_cape_idm": "Accedi con CaPe",
+      "login_with_cape_idm_description": "CaPe utilizza nativamente Keyrock IdM di FIWARE",
+      "keyrock_idm_link": "Login con Fiware Keyrock",
+      "login_with_eidas": "Accedi con eIDAS",
+      "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
+      "eidas_link":"Sign in with a digital identity from another European Country",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad usare i dati dal tuo account?",
         "dont_ask_again": "Non chiedermelo più",
@@ -17,7 +24,6 @@
         "cancel_button": "Annulla",
         "create_button": "Crea"
       }
-
     },
     "dashboard": {
       "statusCards": {
@@ -200,7 +206,6 @@
       "noServiceIdOperatorLink": "Nessun Service Id specificato durante il collegamento da CaPe",
       "servicelink_disabled_message": "Il collegamento con il Servizio {{serviceName}} è stato disabilitato",
       "servicelink_enabled_message": "Il collegamento con il Servizio {{serviceName}} è stato abilitato"
-
     },
     "linked_services": {
       "services_linked_to_me": "Servizi collegati a me",
@@ -211,12 +216,12 @@
     "auditlogs": {
       "ServiceLink": "Collegamento al servizio",
       "Create": "creato",
-      "Send":"inviato",
+      "Send": "inviato",
       "Update": "aggiornato",
       "Give": "dato",
-      "Disable":"disabilitato",
-      "Activate":"attivato",
-      "Withdraw":"revocato",
+      "Disable": "disabilitato",
+      "Activate": "attivato",
+      "Withdraw": "revocato",
       "Delete": "cancellato",
       "Consent": "Consenso",
       "filters": "Filtri",
@@ -270,7 +275,6 @@
       "data_consent": "Consenso",
       "enabled": "Abilitato",
       "disabled": "Disabilitato"
-
     }
   }
 }

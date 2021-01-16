@@ -30,7 +30,7 @@ export class LoginComponent {
       queryString = Object.entries(queryParams).reduce((acc, entry) => { return `${acc}&${entry[0]}=${entry[1]}`; }, '');
 
     this.popupCenter({
-      url: `${this.environment.idmHost}/oauth2/authorize?response_type=token${queryString}&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${this.environment.dashHost}${this.environment.loginPopupUrl}`,
+      url: `${this.environment.idmHost}/oauth2/authorize?response_type=token${queryString}&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${this.environment.dashUrl}${this.environment.loginPopupUrl}`,
       title: 'AuthPopup',
       w: 900,
       h: 500
@@ -56,8 +56,7 @@ export class LoginComponent {
     const top = (height - h) / 2 / systemZoom + dualScreenTop;
     const newWindow = window.open(url, title,
       `
-      scrollbars=false,
-      menubar=false,
+      toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no,
       width=${w / systemZoom}, 
       height=${h / systemZoom}, 
       top=${top + 50}, 

@@ -36,8 +36,8 @@ export class EditorComponent implements OnInit {
   private serviceData: any;
   loading = false;
   public config: any;
-  apiRoot: string = 'http://localhost:8080/service-registry/api/v1/services';
-  schemaDir = "/assets/data/service-schema/service-entry2.json";
+  apiRoot: string;
+  schemaDir;
   public onEdit=false;
 
   //configToaster: ToasterConfig;
@@ -50,8 +50,7 @@ export class EditorComponent implements OnInit {
 
     this.doc = document;
     this.config = configService.config;
-    this.apiRoot = this.config.serviceRegistry.host + this.config.serviceRegistry.servicesApiPath;
-    this.schemaDir = this.config.system.dashPath + this.config.editorSchemaPath;
+    this.schemaDir = this.config.editorSchemaPath;
     this.loading = true;
   }
 
@@ -73,7 +72,6 @@ export class EditorComponent implements OnInit {
 
       async function getService(serviceId: string, service: any) {
 
-        //let service_data = await fetch(apiRoot+ serviceId);
         let service_data = await service.getService(serviceId);
         console.log(service_data);
         return service_data.json();
@@ -95,16 +93,12 @@ export class EditorComponent implements OnInit {
       } else {
         this.initializeEditor(this.serviceData);
       }
-
-
     });
-
 
   }
 
 
   initializeEditor(serviceData) {
-
 
     console.log("prima?");
     console.log(this.serviceData);
@@ -148,8 +142,6 @@ export class EditorComponent implements OnInit {
 
     });
 
-
-
     //editor.on('ready', this.closeSpinner);
 
     editor.on('ready', function () {
@@ -160,15 +152,15 @@ export class EditorComponent implements OnInit {
 
     });
 
-
-
   }
+
 
   closeSpinner() {
     console.log("closing");
     this.loading = false;
     $("nb-spinner").remove();
   }
+
 
   saveAsFile() {
     this.dialogService.open(DialogNamePromptComponent)
@@ -212,10 +204,12 @@ export class EditorComponent implements OnInit {
     }
   }
 
+
   stopLoading() {
     console.log(this.loading)
     this.loading = false;
   }
+
 
   async save() {
     if (confirm('Service will be saved, proceed?')) {
@@ -231,10 +225,7 @@ export class EditorComponent implements OnInit {
             this.router.navigate(['/login']);
           } else
             this.errorDialogService.openErrorDialog("Errors occurred in service registration. Please be careful and try again...");
-        }  
-
-      
-      
+        }     
     }
   }
 
@@ -277,6 +268,5 @@ export class EditorComponent implements OnInit {
       body,
       `${titleContent}`);
   }
-
 
 }

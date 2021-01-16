@@ -124,9 +124,9 @@ public class ServiceRegistryController implements IServiceRegistryController {
 					@ApiResponse(description = "Returns the requested Service Entry", responseCode = "200") })
 	@GetMapping(value = "/services/count", produces = MediaType.TEXT_PLAIN_VALUE)
 	@Override
-	public ResponseEntity<String> getServicesCount() {
+	public ResponseEntity<String> getServicesCount(@RequestParam(defaultValue = "false") Boolean onlyRegistered) {
 
-		return ResponseEntity.ok(serviceRepo.getServicesCount().toString());
+		return ResponseEntity.ok(serviceRepo.getServicesCount(onlyRegistered).toString());
 	}
 
 	@Operation(summary = "Create a new Service Entry description.", tags = { "Service Entry" }, responses = {

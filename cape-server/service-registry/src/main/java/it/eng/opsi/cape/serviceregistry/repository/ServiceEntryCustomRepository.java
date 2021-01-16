@@ -14,7 +14,7 @@ import it.eng.opsi.cape.serviceregistry.model.ServiceReportGroupingCriteria;
 
 public interface ServiceEntryCustomRepository {
 
-	public Long getServicesCount();
+	public Long getServicesCount(Boolean onlyRegistered);
 
 	public Optional<ServiceEntry> updateService(String serviceId, ServiceEntry service);
 

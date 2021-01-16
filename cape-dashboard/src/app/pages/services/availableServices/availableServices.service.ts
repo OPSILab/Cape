@@ -20,7 +20,7 @@ export class AvailableServicesService {
 
     this.loading = false;
     this.config = this.configService.config;
-    this.serviceRegistryUrl = this.config.serviceRegistry.host + this.config.serviceRegistry.servicesApiPath;
+    this.serviceRegistryUrl = this.config.serviceRegistry.url;
     this.accountUrl = this.config.system.accountUrl;
     this.serviceManagerUrl = this.config.system.serviceManagerUrl;
   }

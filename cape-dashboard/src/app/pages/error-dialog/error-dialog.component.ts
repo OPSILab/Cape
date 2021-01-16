@@ -28,12 +28,12 @@ export class ErrorDialogComponent {
 
   error;
   service;
-  private dashHost: string;
+  private dashUrl: string;
 
   constructor(public ref: NbDialogRef<unknown>, private _location: Location,
     private router: Router, private configService: NgxConfigureService, private loginService: LoginService) {
 
-    this.dashHost = this.configService.config.system.dashHost;
+    this.dashUrl = this.configService.config.system.dashUrl;
 
   }
 

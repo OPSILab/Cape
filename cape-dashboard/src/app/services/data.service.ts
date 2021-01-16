@@ -17,7 +17,6 @@ export class DataService {
   ) { 
 
     this.config = configService.config;
-    //this.apiRoot=this.config.service_registry+"/service-registry/api/v1/services";
     
   }
 
@@ -47,7 +46,7 @@ export class DataService {
 
   getGraphData() {
    // return this.http.get(this.globals.GRAPH_DATA_URL);
-   this.apiRoot = `${this.config.system.dashHost}${this.config.system.assetsDataDir}cape_dataflow.json`;
+   this.apiRoot = `${this.config.system.dashUrl}${this.config.system.assetsDataDir}/cape_dataflow.json`;
     return this.http.get(this.apiRoot);
   
   

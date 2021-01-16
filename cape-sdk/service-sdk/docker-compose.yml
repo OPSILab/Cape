@@ -16,10 +16,10 @@ services:
       - CAPE_SDK_MONGODB_PORT=27017
       - CAPE_SDK_MONGODB_USER=root
       - CAPE_SDK_MONGODB_PASSWORD=root
-      - CAPE_IDM_HOST=http://172.26.1.1:3000
-      - CAPE_IDM_CLIENTID=badeeebb-9266-4751-9d35-ebd75220540a
-      - CAPE_IDM_CLIENTSECRET=51e73ebf-cc17-488e-a6ce-e55420cb7927
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_HOST=https://www.cape-suite.eu:8002
+      - CAPE_IDM_CLIENTID=c3b0f7d9-412b-4309-ac70-94a5cb04fcf7
+      - CAPE_IDM_CLIENTSECRET=9d2eaac5-b9c1-4a42-bb35-20fa69ef896b
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-sdk-network
   service-sdk-mongo:

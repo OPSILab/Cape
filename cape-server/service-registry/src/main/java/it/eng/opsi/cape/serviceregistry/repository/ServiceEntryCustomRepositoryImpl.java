@@ -32,8 +32,12 @@ public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepos
 	MongoTemplate template;
 
 	@Override
-	public Long getServicesCount() {
-		return template.count(query(new Criteria()), ServiceEntry.class);
+	public Long getServicesCount(Boolean onlyRegistered) {
+
+		if (onlyRegistered)
+			return template.count(query(where("serviceInstance.cert").ne(null)), ServiceEntry.class);
+		else
+			return template.count(query(new Criteria()), ServiceEntry.class);
 	}
 
 	@Override

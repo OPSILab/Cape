@@ -44,7 +44,7 @@ public interface IServiceRegistryController {
 
 	public abstract ResponseEntity<ServiceEntry> getServiceById(String serviceId, Boolean onlyRegistered) throws ServiceNotFoundException;
 
-	public abstract ResponseEntity<String> getServicesCount();
+	public abstract ResponseEntity<String> getServicesCount(Boolean onlyRegistered);
 
 	public abstract ResponseEntity<ServiceEntry> createService(ServiceEntry service);
 

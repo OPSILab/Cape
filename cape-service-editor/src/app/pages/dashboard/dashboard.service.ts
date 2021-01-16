@@ -25,13 +25,13 @@ export class DashboardService {
   private auditApiPath: string;
   private token: string = `Bearer ${localStorage.getItem('tokenData')}`;
   private accountId: string = localStorage.getItem('accountId');
-  private servicesApiPath: string;
+  private serviceRegistryUrl: string;
 
   constructor(configService: NgxConfigureService, private http: HttpClient) {
 
     this.config = configService.config;
     this.auditApiPath = this.config.system.host + this.config.system.auditlog;
-    this.servicesApiPath = this.config.serviceRegistry.host + this.config.serviceRegistry.servicesApiPath;
+    this.serviceRegistryUrl = this.config.serviceRegistry.url;
   }
 
 
@@ -45,14 +45,14 @@ export class DashboardService {
     };
 
     return this.http
-      .get<AuditLog>(`${this.auditApiPath}auditLogs/accounts/${this.accountId}`, httpOptions);
+      .get<AuditLog>(`${this.auditApiPath}/auditLogs/accounts/${this.accountId}`, httpOptions);
   }
 
 
   getServicesCount(): Observable<any> {
 
     return this.http
-      .get(this.servicesApiPath + 'count');
+      .get(this.serviceRegistryUrl + '/services/count');
   }
 
 }

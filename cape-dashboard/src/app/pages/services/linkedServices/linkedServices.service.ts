@@ -20,7 +20,7 @@ export class LinkedServicesService {
   constructor(configService: NgxConfigureService, private http: HttpClient) {
 
     this.config = configService.config;
-    this.serviceRegistryUrl = this.config.serviceRegistry.host + this.config.serviceRegistry.servicesApiPath;
+    this.serviceRegistryUrl = this.config.serviceRegistry.url;
     this.accountUrl = this.config.system.accountUrl;
     this.serviceManagerUrl = this.config.system.serviceManagerUrl;
   }

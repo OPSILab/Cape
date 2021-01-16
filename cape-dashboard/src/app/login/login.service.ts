@@ -12,7 +12,7 @@ import { Account } from '../model/account/account.model';
 export class LoginService {
 
   environment;
-  accountUrl: string; capeHost: string; dashHost: string; idmHost: string;
+  accountUrl: string; capeHost: string; dashUrl: string; idmHost: string;
   username: string; state: string; loginPopupUrl: string; clientId: string;
   dialogRef: NbDialogRef<unknown>;
 
@@ -23,7 +23,7 @@ export class LoginService {
     this.environment = configService.config.system;
     this.capeHost = this.environment.host;
     this.accountUrl = this.environment.accountUrl;
-    this.dashHost = this.environment.dashHost;
+    this.dashUrl = this.environment.dashUrl;
     this.idmHost = this.environment.idmHost;
     this.loginPopupUrl = this.environment.loginPopupUrl;
     this.clientId = this.environment.clientId;
@@ -39,7 +39,7 @@ export class LoginService {
 
       if (redirectAfterLogin) {
         const queryString = this.printQueryParamsString(queryParams);
-        window.opener.document.location.href = this.dashHost + redirectAfterLogin + (queryString ? queryString : '');
+        window.opener.document.location.href = this.dashUrl + redirectAfterLogin + (queryString ? queryString : '');
         window.close();
         //   this.router.navigate([redirectAfterLogin], { relativeTo: this.activatedRoute, queryParams: queryParams });
       } else
@@ -79,7 +79,7 @@ export class LoginService {
           const redirectAfterLogin = queryParams.redirectAfterLogin;
           if (redirectAfterLogin) {
             const queryString = this.printQueryParamsString(queryParams);
-            window.opener.document.location.href = this.dashHost + redirectAfterLogin + (queryString ? queryString : '');
+            window.opener.document.location.href = this.dashUrl + redirectAfterLogin + (queryString ? queryString : '');
             window.close();
           } else
             this.closeLoginPopup();
@@ -94,7 +94,7 @@ export class LoginService {
   }
 
   closeLoginPopup = () => {
-    window.opener.document.location.href = this.dashHost;
+    window.opener.document.location.href = this.dashUrl;
     window.close();
   }
 
@@ -142,7 +142,7 @@ export class LoginService {
         let params = new HttpParams();
         params = params.append('grant_type', 'authorization_code')
           .append('code', code)
-          .append('redirect_uri', this.dashHost + this.loginPopupUrl);
+          .append('redirect_uri', this.dashUrl + this.loginPopupUrl);
 
         const resp: any = await this.http.post(`${this.accountUrl}/idm/oauth2/token`, params.toString(), {
           responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })

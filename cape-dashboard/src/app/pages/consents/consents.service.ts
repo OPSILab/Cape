@@ -32,7 +32,7 @@ export class ConsentsService {
     this.config = configService.config;
     this.consentsApiPath = this.config.system.consentManagerUrl;
     this.accountManagerUrl = this.config.system.accountUrl;
-    this.serviceRegistryUrl = this.config.serviceRegistry.host + this.config.serviceRegistry.servicesApiPath;
+    this.serviceRegistryUrl = this.config.serviceRegistry.url;
   }
 
 
