@@ -10,7 +10,7 @@ import { NbDialogService, NbDialogRef } from '@nebular/theme';
 export class LoginService {
 
   environment;
-  playgroundUrl: string;
+  onlineServicesUrl: string;
   capeHost: string;
   idmHost: string;
   username: string;
@@ -25,7 +25,7 @@ export class LoginService {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private configService: NgxConfigureService,
     private http: HttpClient, private dialogService: NbDialogService) {
     this.environment = configService.config.system;
-    this.playgroundUrl = this.environment.playgroundUrl;
+    this.onlineServicesUrl = this.environment.onlineServicesUrl;
     this.capeHost = this.environment.capeHost;
     this.idmHost = this.environment.idmHost;
     this.loginPopupUrl = this.environment.loginPopupUrl;
@@ -84,7 +84,7 @@ export class LoginService {
         let params = new HttpParams();
         params = params.append('grant_type', 'authorization_code')
           .append('code', code)
-          .append('redirect_uri', this.playgroundUrl + this.loginPopupUrl);
+          .append('redirect_uri', this.onlineServicesUrl + this.loginPopupUrl);
 
         const resp: any = await this.http.post(`${this.sdkUrl}/idm/oauth2/token`, params.toString(), {
           responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })

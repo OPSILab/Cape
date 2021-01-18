@@ -7,6 +7,13 @@
     "login": {
       "enter_button": "Entra",
       "logout_button": "Disconnetti",
+      "select_login": "Seleziona il tuo gestore di identità digitale",
+      "login_with_cape_idm": "Accedi con CaPe",
+      "login_with_cape_idm_description": "CaPe utilizza nativamente Keyrock IdM di FIWARE",
+      "keyrock_idm_link": "Login con Fiware Keyrock",
+      "login_with_eidas": "Accedi con eIDAS",
+      "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
+      "eidas_link":"Sign in with a digital identity from another European Country",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad usare i dati dal tuo account?",
         "dont_ask_again": "Non chiedermelo più",
@@ -19,8 +26,8 @@
       }
     },
     "services": {
-      "welcome": " Ciao {{name}}! Benvenuto su Cape Services Playground!",
-      "no_name_welcome": "Servizi online",
+      "welcome": " Ciao {{name}}! Benvenuto su Cape Servizi Online!",
+      "no_name_welcome": "Benvenuto su Cape Servizi online",
       "selectService": "Seleziona uno dei seguenti servizi e clicca su VAI!",
       "selectPurpose": "Seleziona una delle seguenti finalità e clicca su VAI!",
       "goButton": "VAI",

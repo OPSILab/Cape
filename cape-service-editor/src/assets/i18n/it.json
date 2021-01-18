@@ -1,5 +1,6 @@
 {
   "general": {
+    "welcome": "Benvenuto sulla Dashboard di Cape per il Data Controller!",
     "logo_text": "CaPe",
     "home": "Home",
     "dashboard": {
@@ -10,8 +11,13 @@
     "login": {
       "enter_button": "Entra",
       "logout_button": "Disconnetti",
-      "welcome": "Benvenuto sulla Dashboard di Cape per il Data Controller!",
-      "no_name_welcome": "Benvenuto sulla Dashboard di Cape per il Data Controller!",
+      "select_login": "Seleziona il tuo gestore di identità digitale",
+      "login_with_cape_idm": "Accedi con CaPe",
+      "login_with_cape_idm_description": "CaPe utilizza nativamente Keyrock IdM di FIWARE",
+      "keyrock_idm_link": "Login con Fiware Keyrock",
+      "login_with_eidas": "Accedi con eIDAS",
+      "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
+      "eidas_link":"Accedere con un'identità digitale da altro Paese Europeo",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad utilizzare i tuoi dati di registrazione per accedere a CaPe?",
         "dont_ask_again": "Non chiedere di nuovo",

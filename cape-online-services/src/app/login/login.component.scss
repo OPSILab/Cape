@@ -1,3 +1,9 @@
+@import '../../themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+
 .login-background {
   background-color: #f5f5f5;
 }
@@ -6,10 +12,6 @@
   background-color: #fefefe;
 }
 
-.cm-logo {
-  width: 350px;
-  height: auto;
-}
 
 .cm-login-link:hover {
   text-decoration: none;
@@ -20,10 +22,30 @@
   text-transform: uppercase;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  width: auto;
+  justify-content: center !important;
+
+  .logo {
+    padding: 0 1.25rem;
+    font-size: 1.75vw;
+    @include nb-ltr(border-right, 3px solid nb-theme(divider-color));
+    @include nb-rtl(border-left, 3px solid nb-theme(divider-color));
+    white-space: nowrap;
+    text-decoration: none;
+  }
+}
 
 
-
-
+}
 
 
 

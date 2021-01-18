@@ -57,7 +57,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   @Input()
   private userId: string;
 
-  private isServiceRegistered: boolean = false;
+  public isServiceRegistered: boolean = false;
   private serviceLinkRecord: ServiceLinkRecordDoubleSigned;
   private consentRecord: ConsentRecordSigned;
   private linkingFrom: LinkingFromEnum;

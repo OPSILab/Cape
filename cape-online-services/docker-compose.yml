@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        BASE_HREF: /cape-online-services
+        BASE_HREF: /cape-online-services/
     ports:
       - "80:80"
     volumes:

@@ -13,7 +13,7 @@
       "keyrock_idm_link": "Login con Fiware Keyrock",
       "login_with_eidas": "Accedi con eIDAS",
       "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
-      "eidas_link":"Sign in with a digital identity from another European Country",
+      "eidas_link":"Accedere con un'identità digitale da altro Paese Europeo",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad usare i dati dal tuo account?",
         "dont_ask_again": "Non chiedermelo più",

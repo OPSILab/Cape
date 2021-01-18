@@ -25,7 +25,7 @@ export class LoginComponent {
     sessionStorage.setItem('loginState', state);
 
     this.popupCenter({
-      url: `${this.environment.idmHost}/oauth2/authorize?response_type=token&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${this.environment.playgroundUrl}${this.environment.loginPopupUrl}`,
+      url: `${this.environment.idmHost}/oauth2/authorize?response_type=token&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${this.environment.onlineServicesUrl}${this.environment.loginPopupUrl}`,
       title: 'AuthPopup',
       w: 900,
       h: 500

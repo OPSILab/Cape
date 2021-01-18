@@ -31,13 +31,12 @@
     padding: 0 !important;
   }
 
+
   .header-container {
     display: flex;
     align-items: center;
     width: auto;
-    color:white; 
-    
-
+color: white;
     .sidebar-toggle {
       @include nb-ltr(padding-right, 1.25rem);
       @include nb-rtl(padding-left, 1.25rem);
@@ -56,11 +55,6 @@
       @include nb-rtl(border-right, 1px solid nb-theme(divider-color));
       white-space: nowrap;
       text-decoration: none;
-
-      img {
-        max-width: 13%;
-        max-height: 13%;
-      }
     }
   }
 

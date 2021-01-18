@@ -1,7 +1,7 @@
 {
   "system": {
     "operatorId": "cape",
-    "playgroundUrl": "http://localhost/cape-playground",
+    "onlineServicesUrl": "http://localhost:4400/cape-online-services",
     "dashboardUrl": "http://localhost:4200",
     "idmHost": "https://www.cape-suite.eu:8002",
     "clientId": "c8072b40-336d-43df-a054-290e97c614bf",
@@ -45,6 +45,6 @@
     }
   },
   "i18n": {
-    "locale": "it"
+    "locale": "en"
   }
 }

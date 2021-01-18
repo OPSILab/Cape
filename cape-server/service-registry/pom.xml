@@ -11,7 +11,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.eng.opsi.cape</groupId>
-	<artifactId>service-manager</artifactId>
+	<artifactId>service-registry</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CaPe Service Registry</name>
 	<properties>

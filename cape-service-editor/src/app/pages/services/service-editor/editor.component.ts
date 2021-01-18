@@ -49,8 +49,8 @@ export class EditorComponent implements OnInit {
   private service: AvailableServicesService, configService: NgxConfigureService,private loginService: LoginService, private errorDialogService: ErrorDialogService ) {
 
     this.doc = document;
-    this.config = configService.config;
-    this.schemaDir = this.config.editorSchemaPath;
+    this.config = configService.config.system;
+    this.schemaDir = (this.config.serviceEditorUrl.includes("localhost")? "" : this.config.serviceEditorUrl) + this.config.editorSchemaPath;
     this.loading = true;
   }
 

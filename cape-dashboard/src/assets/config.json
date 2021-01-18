@@ -6,7 +6,7 @@
     "operatorId": "cape",
     "dashUrl": "http://localhost/cape-dashboard",
     "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "7fa3a6ad-d27d-45c5-8f65-d262b3a4c970",
+    "clientId": "",
     "loginPopupUrl": "/loginPopup",
     "accountUrl": "https://www.cape-suite.eu/cape-server/account-manager/api/v2",
     "serviceManagerUrl": "http://localhost:8082/service-manager/api/v2",
