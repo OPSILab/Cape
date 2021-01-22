@@ -11,7 +11,7 @@ import { LoginService } from '../../login/login.service';
     <nb-card accent="danger" style=" max-width: 95vw; max-height: 95vh;">
       <nb-card-header class="d-flex justify-content-between">
         <h5>{{'general.error' | translate}}</h5>
-        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="closeModal(error); ">
+        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="closeModal(error);">
           <i class="material-icons">close</i>
         </button>
       </nb-card-header>
@@ -40,7 +40,7 @@ export class ErrorDialogComponent {
 
   closeModal(error) {
 
-    if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0)
+    if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
       this.loginService.logout();
     else
       this.backClicked();

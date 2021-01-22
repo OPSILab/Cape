@@ -1,22 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbIconLibraries, NbMenuService } from '@nebular/theme';
 import { LoginService } from './login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   template: '<router-outlet></router-outlet>'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+  private unsubscribe: Subject<void> = new Subject();
 
   constructor(private configService: NgxConfigureService, private iconLibraries: NbIconLibraries, 
     private menuService: NbMenuService, private loginService: LoginService, private translate: TranslateService) {
 
-    this.menuService.onItemClick()
-      .subscribe((event) => {
-        this.onContecxtItemSelection(event.item.title);
-      });
     this.iconLibraries.registerFontPack('md-icon', { packClass: 'material-icons', iconClassPrefix: 'material-icons' });
     //this.iconLibraries.setDefaultPack('md-icon');
 
@@ -33,6 +33,19 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
+    this.menuService.onItemClick().pipe(takeUntil(this.unsubscribe))
+    .subscribe(event => {
+      this.onContecxtItemSelection(event.item.title);
+    });
+
   }
+
+  ngOnDestroy() {
+
+    console.log('ngOnDestroy');
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
 }
 

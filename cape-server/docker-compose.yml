@@ -6,6 +6,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+     #- PROFILE=
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -14,10 +15,10 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_PORT=27017
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_HOST=http://172.26.1.1:3000
-      - CAPE_IDM_CLIENTID=6c950a93-c17b-4760-abab-ce645c9eee89
-      - CAPE_IDM_CLIENTSECRET=a9166f2f-6756-4ebd-93d0-6402b2f26389
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_HOST=https://www.cape-suite.eu:8002
+      - CAPE_IDM_CLIENTID=7fa3a6ad-d27d-45c5-8f65-d262b3a4c970
+      - CAPE_IDM_CLIENTSECRET=dfa39000-9d07-4df9-9a86-45740c518c00
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
   account-manager-mongo:
@@ -43,6 +44,7 @@ services:
     ports:
       - "8081:8081"
     environment:
+     #- PROFILE=
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
@@ -50,7 +52,7 @@ services:
       - CAPE_AUDITLOG_MANAGER_MONGODB_PORT=27017
       - CAPE_AUDITLOG_MANAGER_MONGODB_USER=root
       - CAPE_AUDITLOG_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
 
@@ -77,6 +79,7 @@ services:
     ports:
       - "8083:8083"
     environment:
+     #- PROFILE=
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -85,7 +88,7 @@ services:
       - CAPE_CONSENT_MANAGER_MONGODB_PORT=27017
       - CAPE_CONSENT_MANAGER_MONGODB_USER=root
       - CAPE_CONSENT_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
 
@@ -112,6 +115,7 @@ services:
     ports:
       - "8082:8082"
     environment:
+     #- PROFILE=
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -120,7 +124,7 @@ services:
       - CAPE_SERVICE_MANAGER_MONGODB_PORT=27017
       - CAPE_SERVICE_MANAGER_MONGODB_USER=root
       - CAPE_SERVICE_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
 
@@ -147,11 +151,12 @@ services:
     ports:
       - "8088:8088"
     environment:
+     #- PROFILE=
       - CAPE_SERVICE_REGISTRY_MONGODB_HOST=service-registry-mongo
       - CAPE_SERVICE_REGISTRY_MONGODB_PORT=27017
       - CAPE_SERVICE_REGISTRY_MONGODB_USER=root
       - CAPE_SERVICE_REGISTRY_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=http://172.26.1.1:3000/user
+      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
 

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
+import { LoginService } from 'src/app/login/login.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'error-dialog',
@@ -7,7 +9,7 @@ import { NbDialogRef } from '@nebular/theme';
     <nb-card accent="danger" style=" max-width: 95vw; max-height: 95vh;">
       <nb-card-header class="d-flex justify-content-between">
         <h5 class="h5">Error</h5>
-        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="ref.close()">
+        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="closeModal(error);">
           <i class="material-icons">close</i>
         </button>
       </nb-card-header>
@@ -23,13 +25,24 @@ export class ErrorDialogComponent implements OnInit {
 
   error;
 
-  constructor(public ref: NbDialogRef<unknown>) { }
+  constructor(public ref: NbDialogRef<unknown>, private _location: Location, private loginService: LoginService) { }
 
   ngOnInit() {
   }
 
-  closeModal() {
+ 
+  closeModal(error) {
+
+    if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
+      this.loginService.logout();
+    else
+      this.backClicked();
     this.ref.close();
+
+  }
+
+  backClicked() {
+    this._location.back();
   }
 
 

@@ -115,7 +115,10 @@ export class LoginService {
 
 
   logout = async () => {
-    localStorage.clear();
+    
+	localStorage.removeItem('accountId');
+    localStorage.removeItem('accountEmail');
+    localStorage.removeItem('token');
     const logout_redirect = await this.http.get<any>(`${this.idmHost}/auth/external_logout?client_id=${this.clientId}&_method=DELETE`, { withCredentials: true }).toPromise();
     location.href = logout_redirect.redirect_sign_out_uri;
   }

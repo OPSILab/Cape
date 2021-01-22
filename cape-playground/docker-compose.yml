@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        BASE_HREF: /cape-playground
+        BASE_HREF: /cape-playground/
     ports:
       - "80:80"
     volumes:

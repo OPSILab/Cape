@@ -5,5 +5,5 @@ import { Injectable } from '@angular/core';
 export class AppOptions extends NgxConfigureOptions {
   ConfigurationURL = 'assets/config.json';
   AppVersion = '0.0.0';
-  BustCache = false;
+  BustCache = true;
 }

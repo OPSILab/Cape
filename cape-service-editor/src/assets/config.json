@@ -1,13 +1,13 @@
 {
   "serviceRegistry": {
-    "url": "https://www.cape-suite.eu/cape-server/service-registry/api/v2"
+    "url": "http://localhost:8088/service-registry/api/v2"
   },
   
   "system": {
-    "sdkUrl": "https://www.cape-suite.eu/cape-server/cape-service-sdk/api/v2",
-    "auditLogUrl": "https://www.cape-suite.eu/cape-server/auditlog-manager/api/v2",
+    "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
+    "auditLogUrl": "http://localhost:8081/auditlog-manager/api/v2",
     "bypass_sdk":"true",
-    "serviceEditorUrl": "http://localhost/cape-service-editor",
+    "serviceEditorUrl": "http://localhost:81/cape-service-editor",
     "idmHost": "https://www.cape-suite.eu:8002",
     "clientId": "c3b0f7d9-412b-4309-ac70-94a5cb04fcf7",
     "loginPopupUrl": "/loginPopup",

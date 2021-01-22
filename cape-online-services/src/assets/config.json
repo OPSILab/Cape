@@ -2,7 +2,7 @@
   "system": {
     "operatorId": "cape",
     "onlineServicesUrl": "http://localhost:4400/cape-online-services",
-    "dashboardUrl": "http://localhost:4200",
+    "dashboardUrl": "http://localhost/cape-dashboard",
     "idmHost": "https://www.cape-suite.eu:8002",
     "clientId": "c8072b40-336d-43df-a054-290e97c614bf",
     "loginPopupUrl": "/loginPopup",
