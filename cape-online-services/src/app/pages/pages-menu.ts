@@ -5,16 +5,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'SERVIZI',
     group: true,
   },
-  /*{
-    title: 'My Wellness Service',
-    icon: 'grid-outline',
-    link: '/pages/services/my-wellness'
-  },
-  {
-    title: 'My Measurements Service',
-    icon: 'grid-outline',
-    link: '/pages/services/my-measurements'
-  },*/
   {
     title: 'Demografici',
     icon: 'home-outline',

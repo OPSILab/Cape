@@ -25,42 +25,12 @@
       }
     },
     "services": {
-      "welcome": " Hi {{name}}, welcome to Cape Online Services!",
-      "no_name_welcome": "Welcome to Cape Online Services!",
+      "welcome": " Hi {{name}}, welcome to Online Services!",
+      "no_name_welcome": "Welcome to Online Services!",
       "selectService": "Please select one of the following Services and then press GO!",
       "selectPurpose": "Please select one of the following Purposes and then press GO!",
-      "goButton": "GO",
-      "mywellness": {
-        "welcome": " Hi {{name}}, welcome to My Wellness Service!",
-        "cholesterol": {
-          "title": "My Cholesterol",
-          "intro": "Hi {{name}},\r\n lowering cholesterol is the fundamental imperative for those with higher than normal blood cholesterol values, especially in a context of cardiovascular risk.",
-          "text": "Diet recommendations from My Personal Trainer site:\r\n\r\n\u2022 Eat at least 3 portions of fish rich in omega 3 per week\r\n\r\n\u2022 Dried fruit as daily dessert;\r\n\r\n\u2022 Prefer lean white meat (without skin) to fat red meat\r\n\r\n\u2022 Eliminate animal fats from seasoning: butter e lard\r\n ",
-          "additionalInfoText": "Diet is based also on following additional data: ",
-          "ageText": "Eta': ",
-          "sexText": "Sesso: ",
-          "no_cape_registered": "To visualize a chart with your blood cholesterol measurements from third party My Measurements service, ask the Service Provider to register this Service on Cape",
-          "no_cape_linked": "To visualize a chart with your blood cholesterol measurements from third party My Measurements service, click the CaPe Button below and Link the Service to your Cape Account\r\n Then link also My Measurements and give the consent to use your data from My Measurements!",
-          "cape_linked": "The Service is linked to your Cape Account!",
-          "no_cape_consent": "To visualize a chart with your blood cholesterol measurements from third party My Measurements service, ensure also My Measure is linked to your Cape Account\n\r Then click the CaPe Button below and Give Consent",
-          "cape_consent_given": "The Service is linked to your Cape Account and you gave the Consent to visualize the following chart by using data retrieved from third party My Measurements service"
-        }
-      },
-      "mymeasurements": {
-        "welcome": " Hello {{name}}, welcome to My Measurements Service!",
-        "cholesterol": {
-          "title": "Cholesterol Trend",
-          "intro": "Hi {{name}},\r\n lowering cholesterol is the fundamental imperative for those with higher than normal blood cholesterol values, especially in a context of cardiovascular risk.",
-          "text": "Your blood cholesterol measurements recorded by your registered e-health device",
-          "additionalInfoText": "Additional info: ",
-          "ageText": "Age: ",
-          "sexText": "Sex: ",
-          "no_cape_linked": "Below the chart with your historical cholesterol trend. You can link this Service to your Cape Account, in order to give the Consent to provide these measurements as source for a third party Service (e.g. My Wellness)",
-          "cape_linked": "The Service is linked to your Cape Account! Now you can use this Service as source and Give the Consent from the requesting Service (sink)",
-          "no_cape_consent": "Click the CaPe Button below and Give/Enable Consent",
-          "cape_consent_given": "The Service is linked to your Cape Account and you gave the Consent to provide measurements data to a third party service (e.g. My Wellness)"
-        }
-      }
+      "goButton": "GO"   
+      
     }
   }
 }
