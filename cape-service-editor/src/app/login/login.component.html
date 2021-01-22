@@ -8,13 +8,13 @@
 
   <nb-layout-column class="">
 
-    <nb-card class="shadow" accent="primary">
+    <nb-card class="shadow" accent="info">
       <nb-card-header class=" h3 text-center">{{'general.login.select_login' | translate}}</nb-card-header>
       <nb-card-body class="py-0">
 
         <div class="row">
-          <nb-card accent="info" class="col-lg-6 py-1">
-            <nb-card-header class="">
+          <nb-card  class="col-lg-6 py-1">
+            <nb-card-header >
               <h2 class="h3 mb-3 font-weight-bold text-center">Accedi con SPID</h2>
               <p class="text-center">SPID è il sistema di accesso che consente di utilizzare, con un'identità digitale
                 unica, i servizi online della Pubblica Amministrazione e dei privati accreditati.</p>
@@ -39,13 +39,13 @@
             </div>
           </nb-card>
 
-          <nb-card accent="danger" class="col-lg-6 py-1">
+          <nb-card  class="col-lg-6 py-1">
             <nb-card-header>
               <h2 class="h3 mb-3 font-weight-bold text-center">{{'general.login.login_with_cape_idm' | translate}}</h2>
               <p class="text-center">{{'general.login.login_with_cape_idm_description' | translate}}</p><br />
             </nb-card-header>
             <nb-card-body class="text-center">
-              <!-- CAPE BUTTON MEDIUM "ENTER WITH EIDAS" * begin * -->
+              <!-- CAPE BUTTON MEDIUM "ENTER WITH CaPe" * begin * -->
               <a class="italia-it-button italia-it-button-size-l button-spid"
                 eidas-idp-button="#spid-idp-button-medium-post" aria-haspopup="true" aria-expanded="false"
                 (click)="login()" style="color: white;">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="row">
-          <nb-card accent="info" class="col-lg-6 py-1">
+          <nb-card  class="col-lg-6 py-1">
             <nb-card-header>
               <h2 class="h3 mb-3 font-weight-bold text-center">{{'general.login.login_with_eidas' |translate}}</h2>
               <p class="text-center">{{'general.login.login_with_eidas_description' |translate}}</p>
@@ -83,7 +83,7 @@
             </div>
           </nb-card>
 
-          <nb-card accent="warning" class="col-lg-6 py-1">
+          <nb-card  class="col-lg-6 py-1">
             <nb-card-header class="mb-2">
               <h2 class="h3 mb-3 font-weight-bold text-center">Accedi con CIE</h2>
               <p class="text-center">
@@ -91,7 +91,7 @@
               </p>
             </nb-card-header>
 
-            <nb-card-body class="mb-4 text-center">
+            <nb-card-body class="text-center">
               <a href="#"> <img src="assets\images\login-logo\entra-con-cie-300x60.png" alt=""></a>
             </nb-card-body>
           </nb-card>

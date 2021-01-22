@@ -54,10 +54,7 @@ export class ServicesComponent implements OnInit {
     this.operatorId = this.config.system.operatorId;
     this.dashboardUrl = this.config.system.dashboardUrl;
     this.sdkUrl = this.config.services.sdkUrl;
-    this.purposeId = this.config.services.mywellness.purposes.cholesterol.purposeId;
     
-    this.sourceDatasetId = this.config.services.mywellness.purposes.cholesterol.sourceDatasetId;
-    this.sourceServiceId = this.config.services.mywellness.purposes.cholesterol.sourceServiceId;
     this.returnUrl = this.config.system.onlineServicesUrl;
     this.checkConsentAtOperator = this.config.services.checkConsentAtOperator;
 
