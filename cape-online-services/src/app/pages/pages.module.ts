@@ -6,6 +6,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { TranslateModule } from "@ngx-translate/core";
 import { LayoutModule } from '../layout/layout.module';
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
+import { LoginModule } from '../login/login.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ErrorDialogModule } from './error-dialog/error-dialog.module';
     NbSelectModule,
     NbThemeModule,
     LayoutModule,
-    ErrorDialogModule
+    ErrorDialogModule,
+    LoginModule
   ],
   declarations: [
     PagesComponent

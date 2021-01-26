@@ -34,6 +34,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
+    let onlyRegistered = true;
+
     try {
       this.auditLog = await this.auditService.getAuditLog();
 
@@ -44,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             title: this.translateService.instant('general.dashboard.statusCards.availableServices'),
             iconClass: 'nb-grid-b-outline',
             type: 'primary',
-            value: (await this.servicesService.getServicesCount()).toString()
+            value: (await this.servicesService.getServicesCount(onlyRegistered)).toString()
           },
           {
             title: this.translateService.instant('general.dashboard.statusCards.linkedServices'),

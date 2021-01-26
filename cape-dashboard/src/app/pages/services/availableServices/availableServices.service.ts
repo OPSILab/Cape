@@ -32,10 +32,10 @@ export class AvailableServicesService {
       .get<ServiceEntry[]>(`${this.serviceRegistryUrl}/services?onlyRegistered=true`).toPromise();
   }
 
-  getServicesCount(): Promise<number> {
+  getServicesCount(onlyRegistered: boolean): Promise<number> {
 
     return this.http
-      .get<number>(`${this.serviceRegistryUrl}/services/count`).toPromise();
+      .get<number>(`${this.serviceRegistryUrl}/services/count?onlyRegistered=${onlyRegistered}`).toPromise();
   }
 
   getService(serviceId: string): Promise<ServiceEntry> {

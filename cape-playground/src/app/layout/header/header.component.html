@@ -3,7 +3,9 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo" href="#" (click)="navigateHome()"><img src="assets\img\mywellness.png"><span>  CaPe Service Examples</span></a>
+    <a class="logo" href="#" (click)="navigateHome()"><img src="assets\img\mywellness.png">
+      <span class="ml-5">{{ 'general.logo_text' | translate }}</span>
+    </a>
   </div>
   <!--<nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>

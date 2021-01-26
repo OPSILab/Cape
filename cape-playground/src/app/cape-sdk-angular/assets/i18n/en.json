@@ -1,7 +1,6 @@
 {
   "general": {
     "welcome": "Welcome to CaPe!",
-    "logo_text": "CaPe",
     "home": "Home",
     "goToDashboard": "Go to CaPe Dashboard",
     "login": {

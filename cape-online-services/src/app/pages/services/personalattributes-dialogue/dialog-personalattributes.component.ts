@@ -38,25 +38,23 @@ export class DialogPersonalAttributesComponent {
     this.accountEmail = localStorage.getItem('accountEmail')==="null" ? "": localStorage.getItem('accountEmail') ;
     this.accountAddress = localStorage.getItem('accountAddress')==="null" ? "": localStorage.getItem('accountAddress') ;
     this.accountPhone =localStorage.getItem('accountPhone') ==="null" ? "": localStorage.getItem('accountPhone');
-    
    
-    
     this.generalInformationForm.patchValue({
       address: this.accountAddress,
       email: this.accountEmail,
       phone: this.accountPhone
     });
 
-   
-
   }
   
   
   cancel() {
+
     this.ref.close();
   }
 
   submit() {
+    
     localStorage.setItem('accountEmail', this.generalInformationForm.value.email);
     localStorage.setItem('accountAddress', this.generalInformationForm.value.address);
     localStorage.setItem('accountPhone', this.generalInformationForm.value.phone);

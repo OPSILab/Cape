@@ -188,22 +188,21 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 		return ResponseEntity.ok().body(operatorDescription);
 	}
-	
-	
+
 	@Operation(summary = "Get Linking code from Service Manager for automatic linking starting", tags = {
-	"Service Linking" }, responses = {
-			@ApiResponse(description = "Returns the requested linking code.", responseCode = "200", content = @Content(mediaType = "application/json")) })
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns the requested linking code.", responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@Override
 	@GetMapping(value = "/slr/linking/code", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getLinkSessionCode(@RequestParam("serviceId") String serviceId,@RequestParam("userId") String userId, @RequestParam("surrogateId") String surrogateId, @RequestParam("returnUrl") String returnUrl)
-		throws  ServiceManagerException, SessionNotFoundException {
-	
-	String code = clientService.callGetLinkingCode(serviceId, userId, surrogateId, returnUrl);
-	
-	return ResponseEntity.ok(code);
+	public ResponseEntity<String> getLinkSessionCode(@RequestParam("serviceId") String serviceId,
+			@RequestParam("userId") String userId, @RequestParam("surrogateId") String surrogateId,
+			@RequestParam("returnUrl") String returnUrl, @RequestParam("forceLinking") Boolean forceLinking)
+			throws ServiceManagerException, SessionNotFoundException {
+
+		String code = clientService.callGetLinkingCode(serviceId, userId, surrogateId, returnUrl, forceLinking);
+
+		return ResponseEntity.ok(code);
 	}
-	
-		
 
 	/**
 	 * 
@@ -674,7 +673,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	 * @throws JOSEException
 	 * @throws ParseException
 	 * @throws JsonProcessingException
-	 * @throws ConsentRecordNotValid 
+	 * @throws ConsentRecordNotValid
 	 **/
 	@Operation(summary = "Verify and update the Consent Record (along with new Csr as last one in the csr list) issued by the Consent Manager.", tags = {
 			"Consenting" }, responses = {
@@ -731,7 +730,6 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok().body(null);
 	}
 
-
 	/**
 	 * Give Consent from Consent Manager
 	 */
@@ -741,10 +739,10 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@PostMapping(value = "/users/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
 			@RequestBody @Valid ConsentForm consentForm) {
-		
+
 		ConsentRecordSigned createdCr = clientService.callGiveConsent(surrogateId, consentForm);
 		String crId = createdCr.getPayload().getCommonPart().getCrId();
-		
+
 		/*
 		 * Store Signed CR and CSR
 		 */

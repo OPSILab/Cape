@@ -35,8 +35,8 @@ export class ErrorDialogComponent implements OnInit {
 
     if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
       this.loginService.logout();
-    else
-      this.backClicked();
+    // else
+    //   this.backClicked();
     this.ref.close();
 
   }

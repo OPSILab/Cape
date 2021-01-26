@@ -5,9 +5,9 @@
   
   "system": {
     "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
-    "serviceEditorUrl": "http://localhost:4300/cape-service-editor",
+    "serviceEditorUrl": "http://localhost:81/cape-service-editor",
     "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "cc67f066-c0f7-433e-87cd-9b86df450adf",
+    "clientId": "c3b0f7d9-412b-4309-ac70-94a5cb04fcf7",
     "loginPopupUrl": "/loginPopup",
     "disable_auth": "false",
     "assetsDataDir": "/assets/data",

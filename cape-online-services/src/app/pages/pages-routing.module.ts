@@ -12,7 +12,7 @@ const routes: Routes = [
         path: 'services',
         loadChildren: () => import('./services/services.module')
           .then(m => m.ServicesModule),
-        
+        canActivate: [AuthGuard]
       },
       {
         path: '',

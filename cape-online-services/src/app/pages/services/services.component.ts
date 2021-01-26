@@ -7,12 +7,13 @@ import { ConsentFormComponent } from '../../cape-sdk-angular/consent-form/consen
 import { TranslateService } from '@ngx-translate/core';
 import { SlStatusEnum } from '../../cape-sdk-angular/model/service-link/serviceLinkStatusRecordPayload';
 import { ConsentStatusEnum } from '../../cape-sdk-angular/model/consent/consentStatusRecordPayload';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 
 import { DialogPersonalAttributesComponent } from './personalattributes-dialogue/dialog-personalattributes.component';
 
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
 import { ConsentRecordSigned } from 'src/app/cape-sdk-angular/model/consent/consentRecordSigned';
+import { LoginService } from 'src/app/login/login.service';
+import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -46,20 +47,18 @@ export class ServicesComponent implements OnInit {
 
 
   constructor(private configService: NgxConfigureService, private translateService: TranslateService,
-    private capeService: CapeSdkAngularService, private router: Router, private activatedRoute: ActivatedRoute, private errorDialogService: ErrorDialogService,
-    private dialogService: NbDialogService,) {
+    private capeService: CapeSdkAngularService, private router: Router, private activatedRoute: ActivatedRoute,
+    private errorDialogService: ErrorDialogService, private dialogService: NbDialogService, private loginService: LoginService) {
 
     this.config = configService.config;
     this.locale = this.config.i18n.locale;
     this.operatorId = this.config.system.operatorId;
     this.dashboardUrl = this.config.system.dashboardUrl;
     this.sdkUrl = this.config.services.sdkUrl;
-    
+
     this.returnUrl = this.config.system.onlineServicesUrl;
     this.checkConsentAtOperator = this.config.services.checkConsentAtOperator;
-
   }
-
 
 
   ngOnInit() {
@@ -81,14 +80,16 @@ export class ServicesComponent implements OnInit {
       this.checkAndGo(service, purpose);
 
 
-     /* this.dialogService.open(DialogPersonalAttributesComponent)
-        .onClose.subscribe(() => this.checkAndGo(service, purpose));*/
-      
+      /* this.dialogService.open(DialogPersonalAttributesComponent)
+         .onClose.subscribe(() => this.checkAndGo(service, purpose));*/
+
     }
   }
 
+
   // to update with actual auth session if it is valid yet
   checkAuth() {
+
     this.accountId = localStorage.getItem('accountId');
     if (this.accountId) {
       return true;
@@ -97,6 +98,7 @@ export class ServicesComponent implements OnInit {
     }
   }
 
+
   checkAndGo = async (service: string, purpose: string) => {
 
     var checkLinking = await this.onCheckLinking(service);
@@ -104,47 +106,45 @@ export class ServicesComponent implements OnInit {
 
     if (checkLinking) {
 
-      var check = await this.onCheckConsent(service, purpose);
-      console.log(check);
-      if (!check){        
+      var checkConsent = await this.onCheckConsent(service, purpose);
+      console.log(checkConsent);
+
+      if (!checkConsent) {
         this.dialogService.open(DialogPersonalAttributesComponent)
-        .onClose.subscribe(() => this.openInformativaForm(service, purpose));        
-        
+          .onClose.subscribe(() => this.openInformativaForm(service, purpose));
       }
-      
-      else { 
-        console.log(check); 
+
+      else {
+        console.log(checkConsent);
         // to enforce consentRules 
         this.testPDProcessingByConsent(this.consentRecord);
         this.dialogService.open(DialogPersonalAttributesComponent)
-        .onClose.subscribe(() => {this.router.navigate([service], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' });} );
-        
+          .onClose.subscribe(() => { this.router.navigate([service], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' }); });
+
         //this.router.navigate([service], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' });
       }
-      
+
     }
   };
 
 
-  
+  onCheckLinking = async (serviceId: string): Promise<boolean> => {
 
-  onCheckLinking = async (serviceId: string) => {
+    let linkSurrogateId;
+
     try {
       console.log("checking service linking for service: " + serviceId + " and user: " + this.accountId);
-      var linkSurrogateId = await this.capeService.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(this.sdkUrl, this.accountId, serviceId, this.operatorId);
+      linkSurrogateId = await this.capeService.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(this.sdkUrl, this.accountId, serviceId, this.operatorId);
 
       console.log("checking surrogateId ...");
-      console.log(linkSurrogateId);
+
       if (linkSurrogateId) {
         console.log("checking SLR status");
 
         var serviceLinkStatus = await this.capeService.getServiceLinkStatus(this.sdkUrl, this.accountId, serviceId, this.operatorId);
         console.log("checking SLR status...OK" + serviceLinkStatus);
 
-        if (serviceLinkStatus === "Active")
-          return true
-        else
-          return false
+        return serviceLinkStatus === "Active";
 
       } else {
 
@@ -155,43 +155,46 @@ export class ServicesComponent implements OnInit {
 
 
     } catch (error) {
-      console.log(error)
-      if (error.error?.statusCode === '401') {
-        this.router.navigate(['/login']);
-      }
-      if (error.status === 404) {
-        console.log("no service link for service " + serviceId);
-        linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceName, this.accountId, this.capeAccountId, this.returnUrl)
-        if (linkSurrogateId)
-          return true
-      }
 
+      if (error.error?.statusCode === '401' || error.status === 401) {
+
+        this.errorDialogService.openErrorDialog(error);
+      } else if (error.status === 404) {
+
+        console.log("No ServiceLink for service: " + serviceId + "...starting service linking");
+        try {
+          linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceName, this.accountId, this.capeAccountId, this.returnUrl)
+          return linkSurrogateId ? true : false;
+        } catch (error) {
+            this.errorDialogService.openErrorDialog(error);
+        }
+
+      } else
+        this.errorDialogService.openErrorDialog(error);
     }
 
   }
 
-  onCheckConsent = async (serviceId: string, purpose: string) => {
+
+  onCheckConsent = async (serviceId: string, purpose: string): Promise<boolean> => {
     try {
       console.log("checking consent for service: " + serviceId);
 
-     // var consentStatus = await this.capeService.getConsentStatus(this.sdkUrl, this.accountId, serviceId, purpose, this.operatorId, this.checkConsentAtOperator);
+      // var consentStatus = await this.capeService.getConsentStatus(this.sdkUrl, this.accountId, serviceId, purpose, this.operatorId, this.checkConsentAtOperator);
       const consentRecords = await this.capeService.getConsentsByUserIdAndServiceIdAndPurposeId(this.sdkUrl, this.accountId, serviceId, purpose, this.operatorId, this.checkConsentAtOperator);
-      var consentStatus= consentRecords[0].consentStatusList.pop().payload.consent_status;
-      
+      var consentStatus = consentRecords[0].consentStatusList.pop().payload.consent_status;
+
       console.log("checking Consent" + consentStatus);
       if (consentStatus === "Active") {
-        this.consentRecord= consentRecords[0];
+        this.consentRecord = consentRecords[0];
         return true
       }
-        
+
       else
         return false
 
     } catch (error) {
-      if (error.error?.statusCode === '401') {
-        this.router.navigate(['/login']);
-      } else
-        console.log("ERROR:" + error)
+      this.errorDialogService.openErrorDialog(error);
     }
 
   }
@@ -216,14 +219,14 @@ export class ServicesComponent implements OnInit {
           }
         }).onClose.subscribe(accepted => { if (accepted) this.router.navigate([serviceId], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' }); });
 
-        
+
 
       this.capeService.consentRecordStatus$.subscribe(event => {
         console.log(event);
         if (event?.consentRecord) {
           // perform consent enforcement about personal data processing
           this.testPDProcessingByConsent(event.consentRecord);
-          
+
         }
       });
 
@@ -233,7 +236,7 @@ export class ServicesComponent implements OnInit {
   }
 
 
- //fake data processing. It store on localstorage the data according to consent
+  //fake data processing. It store on localstorage the data according to consent
   testPDProcessingByConsent(consent: ConsentRecordSigned) {
 
     var dataset = consent.payload.common_part.rs_description.resource_set.datasets[0].dataMappings
@@ -267,6 +270,5 @@ export class ServicesComponent implements OnInit {
       }
     }
   }
-
 
 }

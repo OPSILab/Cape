@@ -3,6 +3,8 @@ ARG BASE_HREF
 RUN mkdir -p /app
 WORKDIR /app
 COPY package.json /app
+COPY package-lock.json /app
+
 RUN npm install
 COPY . /app
 RUN npm run build -- --prod --aot --base-href $BASE_HREF

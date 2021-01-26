@@ -9,8 +9,8 @@ import { NgxConfigureService } from 'ngx-configure';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
-import {RegisterButtonRenderComponent} from './registerButtonRender.component';
-import {ActionsServiceMenuRenderComponent} from './actionsServiceMenuRender.component';
+import { RegisterButtonRenderComponent } from './registerButtonRender.component';
+import { ActionsServiceMenuRenderComponent } from './actionsServiceMenuRender.component';
 
 @Component({
   selector: 'available-services-smart-table',
@@ -67,12 +67,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
       }));
 
     } catch (error) {
-
-      if (error.error.statusCode === '401') {
-        this.loginService.logout();
-        this.router.navigate(['/login']);
-      } else
-        this.errorDialogService.openErrorDialog(error);
+      this.errorDialogService.openErrorDialog(error);
     }
 
 
@@ -84,7 +79,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-   
+
   }
 
   loadTableSettings() {
@@ -103,7 +98,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
         add: true,
         edit: false,
         delete: false,
-        columnTitle:""
+        columnTitle: ""
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
@@ -143,34 +138,34 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
           valuePrepareFunction: (cell, row) => row,
           renderComponent: ServiceInfoRenderComponent
         },
-       /* actions: {
-          title: this.actionsLabel,
-          filter: false,
+        /* actions: {
+           title: this.actionsLabel,
+           filter: false,
+           sort: false,
+           width: '5%',
+           type: 'custom',
+           valuePrepareFunction: (cell, row) => row,
+           renderComponent: RegisterButtonRenderComponent,
+           onComponentInitFunction: (instance) => {
+             instance.updateResult.subscribe(updatedServiceData => {
+               this.handleUpdatedService(updatedServiceData);
+             });
+           }
+         },*/
+
+        actions: {
           sort: false,
           width: '5%',
+          filter: false,
           type: 'custom',
           valuePrepareFunction: (cell, row) => row,
-          renderComponent: RegisterButtonRenderComponent,
+          renderComponent: ActionsServiceMenuRenderComponent,
           onComponentInitFunction: (instance) => {
             instance.updateResult.subscribe(updatedServiceData => {
               this.handleUpdatedService(updatedServiceData);
             });
           }
-        },*/
-
-        actions: {
-        sort: false,
-        width: '5%',
-        filter: false,
-        type: 'custom',
-        valuePrepareFunction: (cell, row) => row,
-        renderComponent: ActionsServiceMenuRenderComponent,
-        onComponentInitFunction: (instance) => {
-          instance.updateResult.subscribe(updatedServiceData => {
-            this.handleUpdatedService(updatedServiceData);
-          });
         }
-      }
 
       }
     };
@@ -185,7 +180,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/pages/services/service-editor', {}]);
   }
 
- 
+
 
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -195,12 +190,12 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     }
   }
 
-    
+
   onEdit(event): void {
     console.log(event.data)
-    this.router.navigate(['/pages/services/service-editor', {"serviceId":event.data.serviceId}]);
+    this.router.navigate(['/pages/services/service-editor', { "serviceId": event.data.serviceId }]);
   }
-  
+
   resetfilters() {
     this.source.reset();
   }

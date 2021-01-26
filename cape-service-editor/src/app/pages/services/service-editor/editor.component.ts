@@ -38,23 +38,21 @@ export class EditorComponent implements OnInit {
   public config: any;
   apiRoot: string;
   schemaDir;
-  public onEdit=false;
+  public onEdit = false;
 
   //configToaster: ToasterConfig;
 
 
 
-  constructor(@Inject(DOCUMENT) document, private toastrService: NbToastrService, 
-  private dialogService: NbDialogService, private router: Router, private route: ActivatedRoute, 
-  private service: AvailableServicesService, configService: NgxConfigureService,private loginService: LoginService, private errorDialogService: ErrorDialogService ) {
+  constructor(@Inject(DOCUMENT) document, private toastrService: NbToastrService,
+    private dialogService: NbDialogService, private router: Router, private route: ActivatedRoute,
+    private service: AvailableServicesService, configService: NgxConfigureService, private loginService: LoginService, private errorDialogService: ErrorDialogService) {
 
     this.doc = document;
     this.config = configService.config.system;
-    this.schemaDir = (this.config.serviceEditorUrl.includes("localhost")? "" : this.config.serviceEditorUrl) + this.config.editorSchemaPath;
+    this.schemaDir = (this.config.serviceEditorUrl.includes("localhost") ? "" : this.config.serviceEditorUrl) + this.config.editorSchemaPath;
     this.loading = true;
   }
-
-
 
 
   ngOnDestroy() {
@@ -62,10 +60,7 @@ export class EditorComponent implements OnInit {
   }
 
 
-
   ngOnInit() {
-
-
 
     this.sub = this.route.params.subscribe(params => {
 
@@ -215,17 +210,13 @@ export class EditorComponent implements OnInit {
     if (confirm('Service will be saved, proceed?')) {
 
       var payload = this.editor.getValue();
-      
+
       try {
-          await this.service.saveService(payload);
-          this.showToast('success', "Success!", "Service " + payload.name + " saved.")
-        } catch (error) {
-          if (error.error?.statusCode === '401') {
-            this.loginService.logout();
-            this.router.navigate(['/login']);
-          } else
-            this.errorDialogService.openErrorDialog("Errors occurred in service registration. Please be careful and try again...");
-        }     
+        await this.service.saveService(payload);
+        this.showToast('success', "Success!", "Service " + payload.name + " saved.")
+      } catch (error) {
+        this.errorDialogService.openErrorDialog(error);
+      }
     }
   }
 
@@ -234,25 +225,19 @@ export class EditorComponent implements OnInit {
     if (confirm('Service will be saved, proceed?')) {
 
       var payload = this.editor.getValue();
-      
       try {
-          await this.service.updateService(payload, payload.serviceId);
-          this.showToast('success', "Success!", "Service " + payload.name + " updated.")
-        } catch (error) {
-          if (error.error?.statusCode === '401') {
-            this.loginService.logout();
-            this.router.navigate(['/login']);
-          } else
-            this.errorDialogService.openErrorDialog("Errors occurred in service registration. Please be careful and try again...");
-        }  
+        await this.service.updateService(payload, payload.serviceId);
+        this.showToast('success', "Success!", "Service " + payload.name + " updated.")
+      } catch (error) {
+        this.errorDialogService.openErrorDialog(error);
+      }
 
-      
-      
     }
   }
 
 
   private showToast(type: NbComponentStatus, title: string, body: string) {
+   
     const config = {
       status: type,
       destroyByClick: true,
@@ -262,7 +247,6 @@ export class EditorComponent implements OnInit {
       preventDuplicates: true,
     };
     const titleContent = title;
-
 
     this.toastrService.show(
       body,

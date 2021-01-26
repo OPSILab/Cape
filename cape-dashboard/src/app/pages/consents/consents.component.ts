@@ -141,7 +141,6 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     } catch (error) {
       if (error.error?.statusCode === '401') {
         this.loginService.logout();
-        this.router.navigate(['/login']);
       } else
         this.errorDialogService.openErrorDialog(error);
     }

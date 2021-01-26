@@ -291,14 +291,16 @@ public class ClientService {
 	 * Call Get Linking Code to start service link session from service in automatic
 	 * mode-> Service Manager
 	 */
-	public String callGetLinkingCode(String serviceId, String userId, String surrogateId, String returnUrl)
-			throws SessionNotFoundException, ServiceManagerException {
+	public String callGetLinkingCode(String serviceId, String userId, String surrogateId, String returnUrl,
+			Boolean forceLinking) throws SessionNotFoundException, ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<String> response = restTemplate.getForEntity(
-				serviceManagerHost + "/api/v2/slr/service/{serviceId}/account/{userId}?surrogateId=" + surrogateId
-						+ "&returnUrl=" + returnUrl + "&linkingFrom=Service&forceLinking=false&forceLinkCode=true",
-				String.class, serviceId, userId);
+		ResponseEntity<String> response = restTemplate
+				.getForEntity(
+						serviceManagerHost + "/api/v2/slr/service/{serviceId}/account/{userId}?surrogateId="
+								+ surrogateId + "&returnUrl=" + returnUrl
+								+ "&linkingFrom=Service&forceLinkCode=true&forceLinking=" + forceLinking,
+						String.class, serviceId, userId);
 
 		HttpStatus responseStatus = response.getStatusCode();
 

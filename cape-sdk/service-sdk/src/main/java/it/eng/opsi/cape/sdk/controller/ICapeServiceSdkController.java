@@ -174,7 +174,7 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<ServiceEntry> getService(String serviceId, Boolean onlyRegistered)
 			throws ServiceManagerException, ServiceDescriptionNotFoundException;
 
-	public abstract ResponseEntity<String> getLinkSessionCode(String serviceId, String userId, String surrogateId, String returnUrl)
-			throws ServiceManagerException, SessionNotFoundException;
+	public abstract ResponseEntity<String> getLinkSessionCode(String serviceId, String userId, String surrogateId,
+			String returnUrl, Boolean forceLinking) throws ServiceManagerException, SessionNotFoundException;
 
 }

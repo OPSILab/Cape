@@ -1,0 +1,27 @@
+{
+  "operatorId": "cape",
+  "serviceProvider": {
+    "businessId": "string", 
+    "name": "string",
+    "address1": "string",
+    "address2": "string",
+    "postalcode": "string",
+    "city": "string",
+    "state": "string",
+    "country": "string",
+    "email": "string",
+    "phone": "string",
+    "jurisdiction": "string"
+  },
+  "operatorServiceDescriptionVersion": "string",
+  "supportedProfiles": [
+    "Consenting"
+  ],
+  "operatorUrls": {
+    "domain": "string",
+    "linkingUri": "http://localhost/cape-dashboard/serviceLinking",
+    "linkingRedirectUri": "http://localhost/cape-dashboard/pages/services/linkedServices"
+  },
+  "createdOnDate": "2020-04-10T10:06:55.333Z",
+  "createdByUserId": "string"
+}

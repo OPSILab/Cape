@@ -119,13 +119,13 @@ export class CapeSdkAngularService {
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, userId, surrogateId, serviceId, operatorId);
   }
 
-  
-  async automaticLinkFromService(sdkUrl: string, operatorId: string, serviceId: string, serviceName: string, userId: string, accountId:string, returnUrl: string) {
+
+  async automaticLinkFromService(sdkUrl: string, operatorId: string, serviceId: string, serviceName: string, userId: string, accountId: string, returnUrl: string) {
 
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, userId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const  code= await this.getServiceLinkingSessionCode(sdkUrl,accountId,surrogateId,serviceId,returnUrl);
+    const code = await this.getServiceLinkingSessionCode(sdkUrl, accountId, surrogateId, serviceId, returnUrl);
     console.log(code);
 
     const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
@@ -135,23 +135,23 @@ export class CapeSdkAngularService {
     return userSurrogateLink;
   }
 
-    
+
   /*
    * 
    * Get Session Code for  background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
 
-  
-  async  getServiceLinkingSessionCode(sdkUrl: string, accountId: string, surrogateId: string, serviceId: string, returnUrl: string) {
 
-   
-    return this.http.get(`${sdkUrl}/slr/linking/code?serviceId=${serviceId}&userId=${accountId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}`,{responseType: 'text'}).toPromise();
+  async getServiceLinkingSessionCode(sdkUrl: string, accountId: string, surrogateId: string, serviceId: string, returnUrl: string) {
+
+
+    return this.http.get(`${sdkUrl}/slr/linking/code?serviceId=${serviceId}&userId=${accountId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`, { responseType: 'text' }).toPromise();
 
   }
-  
-  
-    
+
+
+
   /*
    * Used when linking was started at Operator and after Service Login
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
