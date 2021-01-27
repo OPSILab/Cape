@@ -61,7 +61,6 @@ public class ServiceRegistryController implements IServiceRegistryController {
 	public ServiceRegistryController(ApplicationProperties appProperty) {
 		this.appProperty = appProperty;
 		this.serviceRegistryPublicUrl = this.appProperty.getCape().getServiceRegistry().getHost();
-
 	}
 
 	@Operation(summary = "Get all the Service Entry descriptions. Optionally return only services registered to Cape, namely having not null Cert field", description = "Get all the registered services. Optionally filter also by by Service Name, Service Url or Service Provider Business Id.", tags = {

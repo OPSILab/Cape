@@ -5,7 +5,8 @@
   "issued": "2020-27-08T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
-  "serviceIconUrl": "http://localhost/cape-playground/my-measurements/favicon.ico",
+  "serviceDescriptionSignature": "",
+  "serviceIconUrl": "",
   "status": "Completed",
   "supportedProfiles": [
     "Consenting"
@@ -14,7 +15,7 @@
   "lifeEvent": "other",
   "businessEvent": "other",
   "sector": [
-    "2"
+  "other"
   ],
   "type": [
     "other"
@@ -55,6 +56,10 @@
       "phone": "",
       "jurisdiction": "EU"
     },
+	"cert": {
+			"x5u": "",
+			"x5c": []
+		},
     "serviceUrls": {
       "domain": "http://localhost/cape-playground",
       "libraryDomain": "http://localhost:8085/cape-service-sdk",
@@ -71,8 +76,7 @@
       "contact": "",
       "address": "",
       "email": "johndoe@example.com",
-      "phone": "+39222222",
-      "operatorName": "John Doe"
+      "phone": "+39222222"
     }
   },
   "isDescribedAt": [

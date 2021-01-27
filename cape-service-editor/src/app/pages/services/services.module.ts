@@ -22,7 +22,8 @@ import {
   NbSpinnerModule,
   NbIconModule,
   NbToastrModule,
-  NbContextMenuModule
+  NbContextMenuModule,
+  NbInputModule
 } from '@nebular/theme';
 import { ActionsServiceMenuRenderComponent } from './availableServices/actionsServiceMenuRender.component';
 
@@ -40,6 +41,7 @@ import { ActionsServiceMenuRenderComponent } from './availableServices/actionsSe
     NbIconModule,
     NbToastrModule,
     NbContextMenuModule,
+    NbInputModule,
     TranslateModule.forChild({})
     
    

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { JSONEditor } from '@json-editor/json-editor/dist/jsoneditor.js';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -21,6 +21,7 @@ import {
   NbGlobalPosition,
   NbToastrService,
 } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -42,11 +43,14 @@ export class EditorComponent implements OnInit {
 
   //configToaster: ToasterConfig;
 
-
+  @ViewChild('confirmSaveDialog', { static: false }) confirmSaveDialogTemplate: TemplateRef<any>;
+  @ViewChild('confirmUpdateDialog', { static: false }) confirmUpdateDialogTemplate: TemplateRef<any>;
 
   constructor(@Inject(DOCUMENT) document, private toastrService: NbToastrService,
     private dialogService: NbDialogService, private router: Router, private route: ActivatedRoute,
-    private service: AvailableServicesService, configService: NgxConfigureService, private loginService: LoginService, private errorDialogService: ErrorDialogService) {
+    private service: AvailableServicesService, configService: NgxConfigureService,
+    private loginService: LoginService, private errorDialogService: ErrorDialogService,
+    private translateService: TranslateService) {
 
     this.doc = document;
     this.config = configService.config.system;
@@ -206,38 +210,53 @@ export class EditorComponent implements OnInit {
   }
 
 
-  async save() {
-    if (confirm('Service will be saved, proceed?')) {
+  openSaveToRegistryDialog() {
 
-      var payload = this.editor.getValue();
+    const payload = this.editor.getValue();
 
-      try {
-        await this.service.saveService(payload);
-        this.showToast('success', "Success!", "Service " + payload.name + " saved.")
-      } catch (error) {
-        this.errorDialogService.openErrorDialog(error);
-      }
-    }
+    const ref = this.dialogService.open(this.confirmSaveDialogTemplate,
+      {
+        context: {
+          name: payload.name,
+          callback: async () => {
+
+
+            try {
+              await this.service.saveService(payload);
+              this.showToast('success', "", this.translateService.instant('general.editor.save_success',
+                { name: payload.name }));
+              ref.close();
+            } catch (error) {
+              this.errorDialogService.openErrorDialog(error);
+            }
+          }
+        }
+      });
   }
 
+  openUpdateToRegistryDialog() {
 
-  async update() {
-    if (confirm('Service will be saved, proceed?')) {
-
-      var payload = this.editor.getValue();
-      try {
-        await this.service.updateService(payload, payload.serviceId);
-        this.showToast('success', "Success!", "Service " + payload.name + " updated.")
-      } catch (error) {
-        this.errorDialogService.openErrorDialog(error);
-      }
-
-    }
+    const payload = this.editor.getValue();
+    const ref = this.dialogService.open(this.confirmUpdateDialogTemplate,
+      {
+        context: {
+          name: payload.name,
+          callback: async () => {
+            try {
+              await this.service.updateService(payload, payload.serviceId);
+              this.showToast('success', "", this.translateService.instant('general.editor.update_success',
+                { name: payload.name }));
+              ref.close();
+            } catch (error) {
+              this.errorDialogService.openErrorDialog(error);
+            }
+          }
+        }
+      });
   }
-
 
   private showToast(type: NbComponentStatus, title: string, body: string) {
-   
+
     const config = {
       status: type,
       destroyByClick: true,

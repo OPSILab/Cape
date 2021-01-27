@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { AvailableServicesService } from './availableServices.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
@@ -7,7 +7,7 @@ import { LoginService } from '../../../login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
-import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
+import { NbToastrService, NbGlobalLogicalPosition, NbDialogService, NbComponentStatus, NbGlobalPhysicalPosition } from '@nebular/theme';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
 import { RegisterButtonRenderComponent } from './registerButtonRender.component';
 import { ActionsServiceMenuRenderComponent } from './actionsServiceMenuRender.component';
@@ -28,10 +28,11 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
   private locale: string;
   public source: LocalDataSource = new LocalDataSource();
   private availableServices: ServiceEntry[];
-
-  constructor(private service: AvailableServicesService, private route: ActivatedRoute, private router: Router,
+ 
+  constructor(private availableServicesService: AvailableServicesService, private route: ActivatedRoute, private router: Router,
     private translate: TranslateService, private configService: NgxConfigureService,
-    private loginService: LoginService, private errorDialogService: ErrorDialogService, private toastrService: NbToastrService) {
+    private loginService: LoginService, private errorDialogService: ErrorDialogService, private toastrService: NbToastrService,
+    private dialogService: NbDialogService, private translateService: TranslateService) {
 
     this.settings = this.loadTableSettings();
     this.locale = this.configService.config.i18n.locale;  // TODO change with user language preferences
@@ -41,7 +42,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
   async ngOnInit() {
 
     try {
-      this.availableServices = await this.service.getServices();
+      this.availableServices = await this.availableServicesService.getServices();
       this.source.load(this.availableServices.map(serviceDescr => {
 
         /* Get Localized Human readable description of the Service, default en */
@@ -172,22 +173,12 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
   }
 
   handleUpdatedService(updatedServiceData: any) {
-    this.source.refresh();
+    this.ngOnInit();
   }
 
 
   onCreate(event): void {
     this.router.navigate(['/pages/services/service-editor', {}]);
-  }
-
-
-
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
   }
 
 
@@ -200,4 +191,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     this.source.reset();
   }
 
+ 
+
 }
+

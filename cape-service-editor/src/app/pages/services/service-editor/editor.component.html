@@ -1,41 +1,62 @@
+<nb-card>
+  <nb-card-header class="h3">
+    {{'general.editor.title'|translate}}
+  </nb-card-header>
 
+  <nb-card-body>
 
-  <nb-card>
-    <nb-card-header class="h3">
-      {{'general.menu.editorpage_title'|translate}}
-    </nb-card-header>
-    
-    <nb-card-body>
-
-
-    <ng-container
-      *ngIf="onEdit; then editButton; else createButton">
+    <ng-container *ngIf="onEdit; then editButton; else createButton">
     </ng-container>
-    
+
     <ng-template #createButton>
-      <button  nbButton shape="rectangle" size="medium" status="primary" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="save()">Save</button>
+      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary"
+        (click)="openSaveToRegistryDialog()">{{'general.editor.save'|translate}}</button>
     </ng-template>
     <ng-template #editButton>
-      <button nbButton shape="rectangle" size="medium" status="primary" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="update()">Update</button>
-    </ng-template> 
-       
-       
-        
-        <button nbButton shape="rectangle" size="medium" status="warning" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="saveAsFile()">Export</button>
-        <button nbButton shape="rectangle" size="medium" status="danger" class="button-filled-medium-padding button-filled-primary-focus-border-color" (click)="importAsFile()">Import</button>
-        
-    </nb-card-body>
-    
-  </nb-card>
-  <nb-card>
-      <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success">
-          
+      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary"
+        (click)="openUpdateToRegistryDialog()">{{'general.editor.update'|translate}}</button>
+    </ng-template>
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="warning"
+      (click)="saveAsFile()">{{'general.editor.export'|translate}}</button>
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="danger"
+      (click)="importAsFile()">{{'general.editor.import'|translate}}</button>
+  </nb-card-body>
 
-          <div class="form-group"> 
-            
-              
-              <div id="editor" ></div> 
-        </div>  
-     
-      </nb-card-body>
-    </nb-card>     
+</nb-card>
+<nb-card>
+  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success">
+    <div class="form-group">
+      <div id="editor"></div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<!-- Save Service modal ng-template -->
+<ng-template #confirmSaveDialog let-data let-ref="dialogRef">
+  <nb-card status="primary">
+    <nb-card-body class="p-5">{{ 'general.editor.confirm_save'|translate :{name:data.name} }}</nb-card-body>
+    <nb-card-footer class="d-flex justify-content-center">
+      <button nbButton status="primary" size="small" (click)="data.callback()">
+        {{'general.editor.save'|translate}}
+      </button>
+      <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
+        {{'general.editor.cancel' | translate}}
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- Update Service modal ng-template -->
+<ng-template #confirmUpdateDialog let-data let-ref="dialogRef">
+  <nb-card status="primary">
+    <nb-card-body class="p-5">{{ 'general.editor.confirm_update'|translate :{name:data.name} }}</nb-card-body>
+    <nb-card-footer class="d-flex justify-content-center">
+      <button nbButton status="primary" size="small" (click)="data.callback()">
+        {{'general.editor.update'|translate}}
+      </button>
+      <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
+        {{'general.editor.cancel' | translate}}
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

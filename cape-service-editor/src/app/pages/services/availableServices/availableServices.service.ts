@@ -42,7 +42,7 @@ export class AvailableServicesService {
 
 
   getService(serviceId: string) {
-    
+
     return this.http
       .get(`${this.serviceRegistryUrl}/services/${serviceId}`);
   }
@@ -58,7 +58,7 @@ export class AvailableServicesService {
   registerService(serviceId: string): Promise<Object> {
 
     return this.http
-    .post(`${this.sdkUrl}/services/${serviceId}`, "", { headers: { "Content-Type": "application/json" } }).toPromise();
+      .post(`${this.sdkUrl}/services/${serviceId}`, "", { headers: { "Content-Type": "application/json" } }).toPromise();
   }
 
 
@@ -76,4 +76,13 @@ export class AvailableServicesService {
       ).toPromise();
   }
 
+  deleteService(serviceId: string): Promise<unknown> {
+
+    return this.http.delete<unknown>(`${this.serviceRegistryUrl}/services/${serviceId}`).toPromise();
+
+  }
+
+  
 }
+
+

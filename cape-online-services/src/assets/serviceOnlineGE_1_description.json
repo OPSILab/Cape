@@ -1,205 +1,203 @@
 {
-    "serviceId": "GE_1",
-    "name": "Iscrizioni servizi 0-6",
-    "identifier": "GE_1",
-    "issued": "",
-    "createdByUserId": "",
-    "serviceDescriptionVersion": "1.0",
-    "serviceDescriptionSignature": "",
-    "serviceIconUrl": "",
-    "status": "Completed",
-    "supportedProfiles": [
-      "Consenting",
-      "3rd party re-use",
-      "Notification",
-      "Objection"
-    ],
-    "spatial": "ITA-Italy",
-    "lifeEvent": "Starting education",
-    "businessEvent": "",
-    "sector": [],
-    "type": [
-      "01 - General public services"
-    ],
-    "thematicArea": [
-      "01 - General public services"
-    ],
-    "language": [
-      "en",
-      "it"
-    ],
-    "hasCompetentAuthority": {
-      "prefLabel": "Genova Smart Services",
-      "spatial": "ITA-Italy"
-    },
-    "humanReadableDescription": [
-      {
-        "locale": "it",
-        "description": "Manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
-        "keywords": []
-      }
-    ],
-    "serviceInstance": {
-      "serviceProvider": {
-        "businessId": "ENG",
-        "name": "Engineering",
-        "address1": "Genova",
-        "address2": "Genova",
-        "postalcode": "00666",
-        "city": "Genova",
-        "state": "Italy",
-        "country": "Italy",
-        "email": "genova@genova.it",
-        "phone": "1111",
-        "jurisdiction": "IT"
-      },
-      "cert": {
-        "x5u": "",
-        "x5c": [
-          
-        ]
-      },
-      "serviceUrls": {
-        "domain": "http://localhost:4400",
-        "libraryDomain": "http://localhost:8085/cape-service-sdk",
-        "loginUri": "http://localhost:4100/pages/services",
-        "linkingUri": "http://localhost:8085/cape-service-sdk/api/v2/slr/linking",
-        "linkingRedirectUri": "http://localhost:4400",
-        "objectionUri": "",
-        "notificationUri": ""
-      },
-      "dataController": {
-        "piiController": "",
-        "onBehalf": false,
-        "org": "",
-        "contact": "",
-        "address": "",
-        "email": "",
-        "phone": ""
-      }
-    },
-    "isDescribedAt": [
-      {
-        "datasetId": "General_01",
-        "description": [
-          {
-            "locale": "it",
-            "description": "Dati generali del richiedente (email, indirizzo, telefono)",
-            "keyword": []
-          }
-        ],
-        "datasetSchema": {
-          "context": "",
-          "type": "",
-          "id": ""
-        },
-        "dataStructureSpecification": "",
-        "distribution": {
-          "distributionId": "",
-          "accessUrl": "",
-          "description": [],
-          "format": ""
-        },
-        "dataMapping": [
-          {
-            "property": "email",
-            "conceptId": "personal_email",
-            "name": "Email",
-            "type": "text",
-            "required": true
-          },
-          {
-            "property": "phone",
-            "conceptId": "phone_number",
-            "name": "Phone Number",
-            "type": "text",
-            "required": false
-          },
-          {
-            "property": "address",
-            "conceptId": "previous_address_street",
-            "name": "Street Address 1",
-            "type": "text",
-            "required": false
-          }
-        ]
-      }
-    ],
-    "processingBases": [
-      {
-        "purposeId": "PInterest_1",
-        "purposeName": "Registrazione Servizio",
-        "legalBasis": "Public interest",
-        "purposeCategory": "1 - Core Function",
-        "processingCategories": [
-          "Collect"
-        ],
-        "description": [
-          {
-            "locale": "it",
-            "title": "Registrazione Servizio",
-            "description": "Raccolta dati per manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
-            "descriptionUrl": "",
-            "iconUrl": ""
-          }
-        ],
-        "requiredDatasets": [
-          "General_01"
-        ],
-        "storage": {
-          "location": "Our servers",
-          "duration": "Business practices"
-        },
-        "recipients": [
-          "Ours"
-        ],
-        "shareWith": [],
-        "obligations": [],
-        "policyRef": "https://smart.comune.genova.it/privacy",
-        "collectionMethod": "Online",
-        "termination": ""
-      },
-      {
-        "purposeId": "Reuse_1",
-        "purposeName": "Riutilizzo dei dati per altri servizi all'interno della municipalità",
-        "legalBasis": "Consent",
-        "purposeCategory": "5 - Personalized Experience",
-        "processingCategories": [
-          "Collect",
-          "Copy"
-        ],
-        "description": [
-          {
-            "locale": "it",
-            "title": "Riuso e personalizzazione servizi",
-            "description": "I dati salvati potranno essere riutilizzati per la personalizzazione di altri servizi forniti dal comune",
-            "descriptionUrl": "",
-            "iconUrl": ""
-          }
-        ],
-        "requiredDatasets": [
-          "General_01"
-        ],
-        "storage": {
-          "location": "Our servers",
-          "duration": "Stated purpose"
-        },
-        "recipients": [
-          "Other recipient"
-        ],
-        "shareWith": [
-          {
-            "orgName": "Mensa comunale ",
-            "orgUrl": "",
-            "businessType": "Profit",
-            "required": false
-          }
-        ],
-        "obligations": [],
-        "policyRef": "https://smart.comune.it/privacy",
-        "collectionMethod": "Online",
-        "termination": ""
-      }
-    ],
-    "role": "Sink"
-  }
+	"serviceId": "GE_1",
+	"name": "Iscrizioni servizi 0-6",
+	"identifier": "GE_1",
+	"issued": "",
+	"createdByUserId": "",
+	"serviceDescriptionVersion": "1.0",
+	"serviceDescriptionSignature": "",
+	"serviceIconUrl": "",
+	"status": "Completed",
+	"supportedProfiles": [
+		"Consenting",
+		"3rd party re-use",
+		"Notification",
+		"Objection"
+	],
+	"spatial": "ITA-Italy",
+	"lifeEvent": "Starting education",
+	"businessEvent": "",
+	"sector": [],
+	"type": [
+		"01 - General public services"
+	],
+	"thematicArea": [
+		"01 - General public services"
+	],
+	"language": [
+		"en",
+		"it"
+	],
+	"hasCompetentAuthority": {
+		"prefLabel": "Genova Smart Services",
+		"spatial": "ITA-Italy"
+	},
+	"humanReadableDescription": [
+		{
+			"locale": "it",
+			"description": "Manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
+			"keywords": []
+		}
+	],
+	"serviceInstance": {
+		"serviceProvider": {
+			"businessId": "ENG",
+			"name": "Engineering",
+			"address1": "Genova",
+			"address2": "Genova",
+			"postalcode": "00666",
+			"city": "Genova",
+			"state": "Italy",
+			"country": "Italy",
+			"email": "genova@genova.it",
+			"phone": "1111",
+			"jurisdiction": "IT"
+		},
+		"cert": {
+			"x5u": "",
+			"x5c": []
+		},
+		"serviceUrls": {
+			"domain": "http://localhost:4400",
+			"libraryDomain": "http://localhost:8085/cape-service-sdk",
+			"loginUri": "http://localhost:4100/pages/services",
+			"linkingUri": "http://localhost:8085/cape-service-sdk/api/v2/slr/linking",
+			"linkingRedirectUri": "http://localhost:4400",
+			"objectionUri": "",
+			"notificationUri": ""
+		},
+		"dataController": {
+			"piiController": "",
+			"onBehalf": false,
+			"org": "",
+			"contact": "",
+			"address": "",
+			"email": "",
+			"phone": ""
+		}
+	},
+	"isDescribedAt": [
+		{
+			"datasetId": "General_01",
+			"description": [
+				{
+					"locale": "it",
+					"description": "Dati generali del richiedente (email, indirizzo, telefono)",
+					"keyword": []
+				}
+			],
+			"datasetSchema": {
+				"context": "",
+				"type": "",
+				"id": ""
+			},
+			"dataStructureSpecification": "",
+			"distribution": {
+				"distributionId": "",
+				"accessUrl": "",
+				"description": [],
+				"format": ""
+			},
+			"dataMapping": [
+				{
+					"property": "email",
+					"conceptId": "personal_email",
+					"name": "Email",
+					"type": "text",
+					"required": true
+				},
+				{
+					"property": "phone",
+					"conceptId": "phone_number",
+					"name": "Phone Number",
+					"type": "text",
+					"required": false
+				},
+				{
+					"property": "address",
+					"conceptId": "previous_address_street",
+					"name": "Street Address 1",
+					"type": "text",
+					"required": false
+				}
+			]
+		}
+	],
+	"processingBases": [
+		{
+			"purposeId": "PInterest_1",
+			"purposeName": "Registrazione Servizio",
+			"legalBasis": "Public interest",
+			"purposeCategory": "1 - Core Function",
+			"processingCategories": [
+				"Collect"
+			],
+			"description": [
+				{
+					"locale": "it",
+					"title": "Registrazione Servizio",
+					"description": "Raccolta dati per manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
+					"descriptionUrl": "",
+					"iconUrl": ""
+				}
+			],
+			"requiredDatasets": [
+				"General_01"
+			],
+			"storage": {
+				"location": "Our servers",
+				"duration": "Business practices"
+			},
+			"recipients": [
+				"Ours"
+			],
+			"shareWith": [],
+			"obligations": [],
+			"policyRef": "https://smart.comune.genova.it/privacy",
+			"collectionMethod": "Online",
+			"termination": ""
+		},
+		{
+			"purposeId": "Reuse_1",
+			"purposeName": "Riutilizzo dei dati per altri servizi all'interno della municipalità",
+			"legalBasis": "Consent",
+			"purposeCategory": "5 - Personalized Experience",
+			"processingCategories": [
+				"Collect",
+				"Copy"
+			],
+			"description": [
+				{
+					"locale": "it",
+					"title": "Riuso e personalizzazione servizi",
+					"description": "I dati salvati potranno essere riutilizzati per la personalizzazione di altri servizi forniti dal comune",
+					"descriptionUrl": "",
+					"iconUrl": ""
+				}
+			],
+			"requiredDatasets": [
+				"General_01"
+			],
+			"storage": {
+				"location": "Our servers",
+				"duration": "Stated purpose"
+			},
+			"recipients": [
+				"Other recipient"
+			],
+			"shareWith": [
+				{
+					"orgName": "Mensa comunale ",
+					"orgUrl": "",
+					"businessType": "Profit",
+					"required": false
+				}
+			],
+			"obligations": [],
+			"policyRef": "https://smart.comune.it/privacy",
+			"collectionMethod": "Online",
+			"termination": ""
+		}
+	],
+	"role": "Sink"
+}

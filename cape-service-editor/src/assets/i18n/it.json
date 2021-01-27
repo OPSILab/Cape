@@ -17,7 +17,7 @@
       "keyrock_idm_link": "Login con Fiware Keyrock",
       "login_with_eidas": "Accedi con eIDAS",
       "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
-      "eidas_link":"Accedere con un'identità digitale da altro Paese Europeo",
+      "eidas_link": "Accedere con un'identità digitale da altro Paese Europeo",
       "loginPopup": {
         "authorize_account_data": "Autorizzi ad utilizzare i tuoi dati di registrazione per accedere a CaPe?",
         "dont_ask_again": "Non chiedere di nuovo",
@@ -44,8 +44,7 @@
       "logs": "Log",
       "connectors": "Connettori",
       "registry": "Registro Servizi",
-      "account": "Account",
-      "editorpage_title": "Descrizione servizio e processamento dati"
+      "account": "Account"
     },
     "consents": {
       "history": "Cronologia",
@@ -241,6 +240,27 @@
       "deregister_service": "Disattiva servizio",
       "deregister_services_message": "Sei sicuro di disattivare il servizio?\n",
       "service_deregistered_message": "Disattivazione avvenuta con successo!"
+    },
+    "editor": {
+      "title": "Descrizione servizio e processamento dati",
+      "save": "Salva",
+      "import": "Importa",
+      "update": "Aggiorna",
+      "export": "Exporta",
+      "select_file": "Seleziona un file locale JSON da importare",
+      "browse": "Sfoglia",
+      "upload": "Carica",
+      "cancel": "Annulla",
+      "delete": "Elimina",
+      "selected": "Selezionato",
+      "enter_filename": "Inserisci nome file",
+      "confirm_save" : "Il Servizio {{name}} verrà salvato, procedere?",
+      "save_success": "Il Servizio {{name}} è stato salvato con successo!",
+      "confirm_update" : "Il Servizio {{name}} verrà salvato, procedere?",
+      "update_success": "Il Servizio {{name}} è stato salvato con successo!",
+      "download": "Download",
+      "confirm_delete" : "Il Servizio {{name}} verrà eliminato, procedere?",
+      "delete_success": "Il Servizio {{name}} è stato eliminato con successo!"
     },
     "connectors": {
       "connector": "Connector",
