@@ -21,8 +21,8 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
       - CAPE_IDM_HOST=https://www.cape-suite.eu:8002
-      - CAPE_IDM_CLIENTID=7fa3a6ad-d27d-45c5-8f65-d262b3a4c970
-      - CAPE_IDM_CLIENTSECRET=dfa39000-9d07-4df9-9a86-45740c518c00
+      - CAPE_IDM_CLIENTID=c5e13913-11e9-4675-83c5-0cf0f67c131a
+      - CAPE_IDM_CLIENTSECRET=58fd387a-6e13-474b-b552-1258cad55768
       - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-network
