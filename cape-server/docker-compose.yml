@@ -7,6 +7,11 @@ services:
       - "8080:8080"
     environment:
      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -45,6 +50,11 @@ services:
       - "8081:8081"
     environment:
      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
@@ -80,6 +90,11 @@ services:
       - "8083:8083"
     environment:
      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -116,6 +131,11 @@ services:
       - "8082:8082"
     environment:
      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -152,6 +172,11 @@ services:
       - "8088:8088"
     environment:
      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_SERVICE_REGISTRY_MONGODB_HOST=service-registry-mongo
       - CAPE_SERVICE_REGISTRY_MONGODB_PORT=27017
       - CAPE_SERVICE_REGISTRY_MONGODB_USER=root

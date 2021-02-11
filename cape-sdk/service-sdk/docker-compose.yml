@@ -7,6 +7,12 @@ services:
     ports:
       - "8085:8085"
     environment:
+      #- PROFILE=
+      - APIDOCS_PATH=/api-docs
+      - SPRING_LOGGING_LEVEL=DEBUG
+      - MONGO_LOGGING_LEVEL=DEBUG
+      - SECURITY_LOGGING_LEVEL=DEBUG
+      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
