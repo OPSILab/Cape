@@ -1,4 +1,6 @@
 package-lock.json
+src/assets/config.json
+
 # compiled output
 /dist
 /tmp
@@ -41,3 +43,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+

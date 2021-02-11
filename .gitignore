@@ -1,4 +1,7 @@
 # Created by https://www.gitignore.io/api/java,maven,osx,windows,python,eclipse
+
+docker-compose.prod
+
 .vs/
 .vscode/
 
@@ -225,8 +228,3 @@ hs_err_pid*
 
 # Current Config...
 .env
-/cape-services-examples/sink/healthathome-angular/node_modules
-cape-dashboard/package-lock.json
-cape-dashboard/package-lock.json
-cape-dashboard/src/assets/config.json
-cape-services-examples/cape-playground/src/assets/config.json
