@@ -1,7 +1,6 @@
-
-
 /******** .btn-update and tooltip START ********/
-.btn-update.to-update .btn, .btn-update.to-update .btn:hover {
+.btn-update.to-update .btn,
+.btn-update.to-update .btn:hover {
   border: 3px solid #f79646 !important;
 }
 
@@ -24,7 +23,6 @@
   }
 }
 
-
 .btn-update .tooltip .tooltip-inner {
   background: #f79646;
 }
@@ -36,10 +34,10 @@
 
 .btn-update .tooltip .arrow:before {
   position: absolute;
-  content: "";
+  content: '';
   border-color: transparent;
   border-style: solid;
-  border-width: .4rem .4rem .4rem 0;
+  border-width: 0.4rem 0.4rem 0.4rem 0;
   border-right-color: #f79646;
   left: -6px;
 }
@@ -93,9 +91,7 @@ table tr td, table tr th {
   border: 1px solid #e9ebec;
 }*/
 
-
 /***********************/
-
 
 h4.modal-title {
   color: #666666;
@@ -108,7 +104,6 @@ h4.modal-title {
 .modal-footer {
   padding-top: 0;
 }
-
 
 /* The switch - the box around the slider */
 .switch {
@@ -133,21 +128,21 @@ h4.modal-title {
   right: 0;
   bottom: 0;
   background-color: #397173;
-  opacity: .65;
-  -webkit-transition: .4s;
-  transition: .4s;
+  opacity: 0.65;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -189,7 +184,6 @@ input:checked + .slider:before {
 .modal-footer-scroll {
   padding-top: 15px;
 }
-
 
 .loader {
   border: 16px solid #f3f3f3;

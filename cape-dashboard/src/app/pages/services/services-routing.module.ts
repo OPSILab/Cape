@@ -7,25 +7,20 @@ import { LinkedServicesComponent } from './linkedServices/linkedServices.compone
 const routes: Routes = [
   {
     path: 'availableServices',
-    component: AvailableServicesComponent
+    component: AvailableServicesComponent,
   },
   {
     path: 'linkedServices',
-    component: LinkedServicesComponent
+    component: LinkedServicesComponent,
   },
   {
     path: 'linkedServices/:serviceId/:serviceName',
-    component: LinkedServicesComponent
-  }
+    component: LinkedServicesComponent,
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  exports: [
-    RouterModule,
-  ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-
-export class ServicesRoutingModule { }
+export class ServicesRoutingModule {}

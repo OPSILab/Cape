@@ -32,7 +32,7 @@ import { LinkedServicesService } from '../services/linkedServices/linkedServices
     NbDatepickerModule,
     NbDateFnsDateModule.forChild({
       parseOptions: { awareOfUnicodeTokens: true },
-      formatOptions: { awareOfUnicodeTokens: true, },
+      formatOptions: { awareOfUnicodeTokens: true },
       format: 'dd.MM.yyyy',
     }),
     TranslateModule.forChild({}),
@@ -49,16 +49,9 @@ import { LinkedServicesService } from '../services/linkedServices/linkedServices
     NgbCollapseModule,
     NbSelectModule,
     NbTooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [
-    ConsentsComponent,
-    D3treeComponent,
-    ControlFlowComponent
-  ],
-  providers: [
-    ConsentsService,
-    LinkedServicesService
-  ]
+  declarations: [ConsentsComponent, D3treeComponent, ControlFlowComponent],
+  providers: [ConsentsService, LinkedServicesService],
 })
-export class ConsentsModule { }
+export class ConsentsModule {}

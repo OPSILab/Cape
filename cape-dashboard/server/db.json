@@ -1,258 +1,231 @@
 {
-    "widgets": 
+  "widgets": {
+    "available_services": 16,
+    "linked_services": 4,
+    "consents": 3,
+    "personal_data": 300
+  },
+  "personal-data": [
+    { "name": "Blood Type", "value": 57 },
+    { "name": "Blood Pressure", "value": 23 },
+    { "name": "Blood Glucose", "value": 10 },
+    { "name": "Age", "value": 10 },
+    { "name": "Gender", "value": 10 },
+    { "name": "Name", "value": 10 },
+    { "name": "Last Name", "value": 10 },
+    { "name": "Address", "value": 10 },
+    { "name": "Position", "value": 10 }
+  ],
+  "purpose": [
+    { "name": "Core Function", "value": 45 },
+    { "name": "Contracted Service", "value": 5 },
+    { "name": "Personalized Experience", "value": 10 },
+    { "name": "Use for delivery of goods", "value": 20 },
+    { "name": "3rd Party Disclosure for Core Function", "value": 13 },
+    { "name": "Improve performance", "value": 7 }
+  ],
+  "context": [
+    { "name": "Consent", "value": 50 },
+    { "name": "Contract", "value": 20 },
+    { "name": "Public Interest", "value": 5 },
+    { "name": "Legal Obligation", "value": 5 },
+    { "name": "Legitimate Interest", "value": 10 },
+    { "name": "Vital Interest", "value": 10 }
+  ],
+  "stored-data": [
     {
-        "available_services": 16,
-        "linked_services": 4,
-        "consents": 3,
-        "personal_data": 300
+      "name": "Countries in the European Economic Area",
+      "series": [
+        { "name": "Blood measurement", "value": 0 },
+        { "name": "Glucose", "value": 50 },
+        { "name": "Age", "value": 50 }
+      ]
     },
-    "personal-data":
-    [
-        { "name": "Blood Type", "value": 57 },
-        { "name": "Blood Pressure", "value": 23 },
-        { "name": "Blood Glucose", "value": 10 },
-        { "name": "Age", "value": 10 },
-        { "name": "Gender", "value": 10 },
-        { "name": "Name", "value": 10 },
-        { "name": "Last Name", "value": 10 },
-        { "name": "Address", "value": 10 },
-        { "name": "Position", "value": 10 }
-    ],
-    "purpose":
-    [
-        { "name": "Core Function", "value": 45 },
-        { "name": "Contracted Service", "value": 5 },
-        { "name": "Personalized Experience", "value": 10 },
-        { "name": "Use for delivery of goods", "value": 20 },
-        { "name": "3rd Party Disclosure for Core Function", "value": 13 },
-        { "name": "Improve performance", "value": 7 }
-    ],
-    "context":
-    [
-        { "name": "Consent", "value": 50 },
-        { "name": "Contract", "value": 20 },
-        { "name": "Public Interest", "value": 5 },
-        { "name": "Legal Obligation", "value": 5 },
-        { "name": "Legitimate Interest", "value": 10 },
-        { "name": "Vital Interest", "value": 10 }
-    ],
-    "stored-data":
-    [
-        {
-            "name": "Countries in the European Economic Area",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 0 },
-                { "name": "Glucose", "value": 50 },
-                { "name": "Age", "value": 50 }
-            ]
-        },
-        {
-            "name": "the European Union",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 50 },
-                { "name": "Glucose", "value": 30 },
-                { "name": "Age", "value": 20 }
-            ]
-        },
-        {
-            "name": "The controller servers",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 20 },
-                { "name": "Glucose", "value": 48 },
-                { "name": "Age", "value": 32 }
-            ]
-        },
-        {
-            "name": "third Countries",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 50 },
-                { "name": "Glucose", "value": 30 },
-                { "name": "Age", "value": 20 }
-            ]
-        }
-    ],
-    "personal-vs-processed-data":
-    [
-        {
-            "name": "Aggregate",
-            "series":
-            [
-                { "name": "Glucose", "value": 50 },
-                { "name": "Age", "value": 50 }
-            ]
-            },
-        {
-            "name": "Analyse",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 50 },
-                { "name": "Glucose", "value": 30 },
-                { "name": "Age", "value": 20 }
-            ]
-        },
-        {
-            "name": "Anonymize",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 20 },
-                { "name": "Glucose", "value": 48 },
-                { "name": "Age", "value": 32 }
-            ]
-        },
-        {
-            "name": "Collect",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 30 },
-                { "name": "Glucose", "value": 20 },
-                { "name": "Age", "value": 50 }
-            ]
-        },
-        {
-            "name": "Copy",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 50 },
-                { "name": "Glucose", "value": 30 },
-                { "name": "Age", "value": 20 }
-            ]
-        },
-        {
-            "name": "Derive",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 50 },
-                { "name": "Glucose", "value": 26 },
-                { "name": "Age", "value": 24 }
-            ]
-        },
-        {
-            "name": "Move",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 20 },
-                { "name": "Glucose", "value": 30 },
-                { "name": "Age", "value": 50 }
-            ]
-        },
-        {
-            "name": "Transfer",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 45 },
-                { "name": "Glucose", "value": 50 },
-                { "name": "Age", "value": 5 }
-            ]
-        },
-        {
-            "name": "Query",
-            "series":
-            [
-                { "name": "Blood measurement", "value": 30 },
-                { "name": "Glucose", "value": 20 },
-                { "name": "Age", "value": 50 }
-            ]
-        }
-    ],
-
-    "timeline-data":{
-
-
-    },
-
-
-    "graph-data":
     {
-        "id": 1,
+      "name": "the European Union",
+      "series": [
+        { "name": "Blood measurement", "value": 50 },
+        { "name": "Glucose", "value": 30 },
+        { "name": "Age", "value": 20 }
+      ]
+    },
+    {
+      "name": "The controller servers",
+      "series": [
+        { "name": "Blood measurement", "value": 20 },
+        { "name": "Glucose", "value": 48 },
+        { "name": "Age", "value": 32 }
+      ]
+    },
+    {
+      "name": "third Countries",
+      "series": [
+        { "name": "Blood measurement", "value": 50 },
+        { "name": "Glucose", "value": 30 },
+        { "name": "Age", "value": 20 }
+      ]
+    }
+  ],
+  "personal-vs-processed-data": [
+    {
+      "name": "Aggregate",
+      "series": [
+        { "name": "Glucose", "value": 50 },
+        { "name": "Age", "value": 50 }
+      ]
+    },
+    {
+      "name": "Analyse",
+      "series": [
+        { "name": "Blood measurement", "value": 50 },
+        { "name": "Glucose", "value": 30 },
+        { "name": "Age", "value": 20 }
+      ]
+    },
+    {
+      "name": "Anonymize",
+      "series": [
+        { "name": "Blood measurement", "value": 20 },
+        { "name": "Glucose", "value": 48 },
+        { "name": "Age", "value": 32 }
+      ]
+    },
+    {
+      "name": "Collect",
+      "series": [
+        { "name": "Blood measurement", "value": 30 },
+        { "name": "Glucose", "value": 20 },
+        { "name": "Age", "value": 50 }
+      ]
+    },
+    {
+      "name": "Copy",
+      "series": [
+        { "name": "Blood measurement", "value": 50 },
+        { "name": "Glucose", "value": 30 },
+        { "name": "Age", "value": 20 }
+      ]
+    },
+    {
+      "name": "Derive",
+      "series": [
+        { "name": "Blood measurement", "value": 50 },
+        { "name": "Glucose", "value": 26 },
+        { "name": "Age", "value": 24 }
+      ]
+    },
+    {
+      "name": "Move",
+      "series": [
+        { "name": "Blood measurement", "value": 20 },
+        { "name": "Glucose", "value": 30 },
+        { "name": "Age", "value": 50 }
+      ]
+    },
+    {
+      "name": "Transfer",
+      "series": [
+        { "name": "Blood measurement", "value": 45 },
+        { "name": "Glucose", "value": 50 },
+        { "name": "Age", "value": 5 }
+      ]
+    },
+    {
+      "name": "Query",
+      "series": [
+        { "name": "Blood measurement", "value": 30 },
+        { "name": "Glucose", "value": 20 },
+        { "name": "Age", "value": 50 }
+      ]
+    }
+  ],
+
+  "timeline-data": {},
+
+  "graph-data": {
+    "id": 1,
+    "name": "c",
+    "type": "root",
+    "description": "User",
+    "children": [
+      {
+        "id": 2,
         "name": "c",
-        "type": "root",
-        "description": "User",
+        "type": "data",
+        "description": "Blood Glucose",
         "children": [
-           
           {
-            "id": 2,
-            "name": "c",
-            "type": "data",
-            "description": "Blood Glucose",
+            "id": 3,
+            "name": "e",
+            "type": "source",
+            "description": "My Sugar",
             "children": [
               {
-                "id": 3,
-                "name": "e",
-                "type": "source",
-                "description": "My Sugar",
+                "id": 4,
+                "name": "beh",
+                "type": "sink",
+                "description": "Health@Home",
                 "children": [
                   {
-                    "id": 4,
-                    "name": "beh",
-                    "type": "sink",
-                    "description": "Health@Home",
+                    "id": 5,
+                    "name": "suvvia",
+                    "type": "purpose",
+                    "description": "PhysicalActivity@Home",
                     "children": [
                       {
-                        "id": 5,
-                        "name": "suvvia",
-                        "type": "purpose",
-                        "description": "PhysicalActivity@Home",
+                        "id": 6,
+                        "name": "c",
+                        "type": "processing",
+                        "description": "Analyse",
                         "children": [
                           {
-                            "id": 6,
+                            "id": 7,
                             "name": "c",
-                            "type": "processing",
-                            "description": "Analyse",
-                            "children": [
-                              {
-                                "id": 7,
-                                "name": "c",
-                                "type": "storage",
-                                "description": "Controller Servers",
-                                "children": [],
-                                "url": "http://www.google.com/"
-                              }
-                            ],
+                            "type": "storage",
+                            "description": "Controller Servers",
+                            "children": [],
                             "url": "http://www.google.com/"
                           }
                         ],
                         "url": "http://www.google.com/"
                       }
-                    ]
+                    ],
+                    "url": "http://www.google.com/"
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "name": "so?",
+            "type": "source",
+            "description": "My Sugar",
+            "children": [
               {
-                "id": 8,
-                "name": "so?",
-                "type": "source",
-                "description": "My Sugar",
+                "id": 9,
+                "name": "c",
+                "type": "sink",
+                "description": "Health@Home",
                 "children": [
                   {
-                    "id": 9,
+                    "id": 10,
                     "name": "c",
-                    "type": "sink",
-                    "description": "Health@Home",
+                    "type": "purpose",
+                    "description": "Diet@Home",
                     "children": [
                       {
-                        "id": 10,
+                        "id": 11,
                         "name": "c",
-                        "type": "purpose",
-                        "description": "Diet@Home",
+                        "type": "processing",
+                        "description": "Analyse",
                         "children": [
                           {
-                            "id": 11,
+                            "id": 12,
                             "name": "c",
-                            "type": "processing",
-                            "description": "Analyse",
-                            "children": [
-                              {
-                                "id": 12,
-                                "name": "c",
-                                "type": "storage",
-                                "description": "Controller Servers",
-                                "children": []
-                              }
-                            ]
+                            "type": "storage",
+                            "description": "Controller Servers",
+                            "children": []
                           }
                         ]
                       }
@@ -261,75 +234,44 @@
                 ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "name": "Blood Pressure",
+        "type": "data",
+        "description": "Blood Pressure",
+        "children": [
           {
-            "id": 13,
-            "name": "Blood Pressure",
-            "type": "data",
-            "description": "Blood Pressure",
+            "id": 14,
+            "name": "My Sugar",
+            "type": "source",
+            "description": "My Sugar",
             "children": [
               {
-                "id": 14,
-                "name": "My Sugar",
-                "type": "source",
-                "description": "My Sugar",
+                "id": 15,
+                "name": "Heath@Home",
+                "type": "sink",
+                "description": "Heath@Home",
                 "children": [
                   {
-                    "id": 15,
-                    "name": "Heath@Home",
-                    "type": "sink",
-                    "description": "Heath@Home",
+                    "id": 16,
+                    "name": "PhisycalActivity@Home",
+                    "type": "purpose",
+                    "description": "PhisycalActivity@Home",
                     "children": [
                       {
-                        "id": 16,
-                        "name": "PhisycalActivity@Home",
-                        "type": "purpose",
-                        "description": "PhisycalActivity@Home",
+                        "id": 17,
+                        "name": "Analyze",
+                        "type": "processing",
+                        "description": "Analyze",
                         "children": [
                           {
-                            "id": 17,
-                            "name": "Analyze",
-                            "type": "processing",
-                            "description": "Analyze",
-                            "children": [
-                              {
-                                "id": 18,
-                                "name": "Contoller servers",
-                                "type": "storage",
-                                "description": "Contoller servers",
-                                "children": []
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": 35,
-                "name": "My Sugar",
-                "type": "source",
-                "description": "My Sugar",
-                "children": [
-                  {
-                    "id": 36,
-                    "name": "Heath@Home",
-                    "type": "sink",
-                    "description": "Heath@Home",
-                    "children": [
-                      {
-                        "id": 37,
-                        "name": "Diet@Home",
-                        "type": "purpose",
-                        "description": "Diet@Home",
-                        "children": [
-                          {
-                            "id": 38,
-                            "name": "Analyze",
-                            "type": "processing",
-                            "description": "Analyze",
+                            "id": 18,
+                            "name": "Contoller servers",
+                            "type": "storage",
+                            "description": "Contoller servers",
                             "children": []
                           }
                         ]
@@ -341,43 +283,74 @@
             ]
           },
           {
-            "id": 29,
-            "name": "c",
-            "type": "data",
-            "description": "Position",
+            "id": 35,
+            "name": "My Sugar",
+            "type": "source",
+            "description": "My Sugar",
             "children": [
               {
-                "id": 30,
-                "name": "c",
-                "type": "processor",
-                "description": "My Poste",
+                "id": 36,
+                "name": "Heath@Home",
+                "type": "sink",
+                "description": "Heath@Home",
                 "children": [
                   {
-                    "id": 31,
-                    "name": "c",
+                    "id": 37,
+                    "name": "Diet@Home",
                     "type": "purpose",
-                    "description": "Personalized Delivery",
+                    "description": "Diet@Home",
                     "children": [
                       {
-                        "id": 32,
-                        "name": "c",
+                        "id": 38,
+                        "name": "Analyze",
                         "type": "processing",
-                        "description": "Collect, Query, Transfer",
+                        "description": "Analyze",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "name": "c",
+        "type": "data",
+        "description": "Position",
+        "children": [
+          {
+            "id": 30,
+            "name": "c",
+            "type": "processor",
+            "description": "My Poste",
+            "children": [
+              {
+                "id": 31,
+                "name": "c",
+                "type": "purpose",
+                "description": "Personalized Delivery",
+                "children": [
+                  {
+                    "id": 32,
+                    "name": "c",
+                    "type": "processing",
+                    "description": "Collect, Query, Transfer",
+                    "children": [
+                      {
+                        "id": 33,
+                        "name": "c",
+                        "type": "storage",
+                        "description": "Controller Servers",
                         "children": [
                           {
-                            "id": 33,
+                            "id": 34,
                             "name": "c",
-                            "type": "storage",
-                            "description": "Controller Servers",
-                            "children": [
-                              {
-                                "id": 34,
-                                "name": "c",
-                                "type": "shared",
-                                "description": "SDA",
-                                "children": []
-                              }
-                            ]
+                            "type": "shared",
+                            "description": "SDA",
+                            "children": []
                           }
                         ]
                       }
@@ -389,4 +362,6 @@
           }
         ]
       }
+    ]
+  }
 }

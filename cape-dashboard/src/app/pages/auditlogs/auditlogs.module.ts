@@ -1,20 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import { AuditRoutingModule } from './audit-routing.module';
 import { AuditLogsService } from './auditlogs.service';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { AuditLogsComponent } from './auditlogs.component';
-import {
-  NbAccordionModule,
-  NbButtonModule,
-  NbCardModule,
-  NbSelectModule,
-  NbDatepickerModule,
-  NbBadgeModule
-} from '@nebular/theme';
+import { NbAccordionModule, NbButtonModule, NbCardModule, NbSelectModule, NbDatepickerModule, NbBadgeModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
 
 @NgModule({
   imports: [
@@ -22,8 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NbDatepickerModule,
     NbDateFnsDateModule.forChild({
       parseOptions: { awareOfUnicodeTokens: true },
-      formatOptions: { awareOfUnicodeTokens: true,  },
-      format: 'dd.MM.yyyy' ,
+      formatOptions: { awareOfUnicodeTokens: true },
+      format: 'dd.MM.yyyy',
     }),
     AuditRoutingModule,
     NbCardModule,
@@ -32,11 +24,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     NbButtonModule,
     NbBadgeModule,
     TranslateModule.forChild({}),
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [AuditLogsComponent ],
-  providers:[
-    AuditLogsService,
-  ]
+  declarations: [AuditLogsComponent],
+  providers: [AuditLogsService],
 })
-export class AuditLogsModule { }
+export class AuditLogsModule {}

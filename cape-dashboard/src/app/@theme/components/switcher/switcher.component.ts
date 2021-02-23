@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -6,33 +7,31 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   template: `
     <label class="switch-label" [class.vertical]="vertical">
       <span class="first" [class.active]="vertical || isFirstValue()">
-        {{vertical ? currentValueLabel() : firstValueLabel}}
+        {{ vertical ? currentValueLabel() : firstValueLabel }}
       </span>
 
       <div class="switch">
-        <input type="checkbox" [checked]="isSecondValue()" (change)="changeValue()">
+        <input type="checkbox" [checked]="isSecondValue()" (change)="changeValue()" />
         <span class="slider"></span>
       </div>
 
-      <span *ngIf="!vertical"
-            class="second"
-            [class.active]="isSecondValue()">
-          {{secondValueLabel}}
+      <span *ngIf="!vertical" class="second" [class.active]="isSecondValue()">
+        {{ secondValueLabel }}
       </span>
     </label>
   `,
 })
 export class SwitcherComponent {
-  @Input() firstValue: any;
-  @Input() secondValue: any;
+  @Input() firstValue: unknown;
+  @Input() secondValue: unknown;
 
   @Input() firstValueLabel: string;
   @Input() secondValueLabel: string;
 
   @Input() vertical: boolean;
 
-  @Input() value: any;
-  @Output() valueChange = new EventEmitter<any>();
+  @Input() value: unknown;
+  @Output() valueChange = new EventEmitter<unknown>();
 
   isFirstValue() {
     return this.value === this.firstValue;
@@ -43,15 +42,11 @@ export class SwitcherComponent {
   }
 
   currentValueLabel() {
-    return this.isFirstValue()
-      ? this.firstValueLabel
-      : this.secondValueLabel;
+    return this.isFirstValue() ? this.firstValueLabel : this.secondValueLabel;
   }
 
   changeValue() {
-    this.value = this.isFirstValue()
-      ? this.secondValue
-      : this.firstValue;
+    this.value = this.isFirstValue() ? this.secondValue : this.firstValue;
 
     this.valueChange.emit(this.value);
   }

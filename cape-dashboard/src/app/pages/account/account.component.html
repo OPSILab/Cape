@@ -1,5 +1,4 @@
-
-  <!--<form [formGroup]="form" (ngSubmit)="submit()">
+<!--<form [formGroup]="form" (ngSubmit)="submit()">
     <label formArrayName="orders" *ngFor="let order of ordersFormArray.controls; let i = index">
       <input type="checkbox" [formControlName]="i">
 
@@ -9,31 +8,31 @@
 <!-- General Information -->
 <form [formGroup]="generalInformationForm" (ngSubmit)="onSubmitGeneralInformation()">
   <nb-card>
-    <nb-card-header>{{'general.account.general_information'|translate}}</nb-card-header>
+    <nb-card-header>{{ 'general.account.general_information' | translate }}</nb-card-header>
     <nb-card-body>
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <label class="m-3" for="firstName">{{ 'general.account.first_name'|translate }}</label>
-          <input nbInput type="text" id="firstName" formControlName="firstName" name="firstName">
+          <label class="m-3" for="firstName">{{ 'general.account.first_name' | translate }}</label>
+          <input nbInput type="text" id="firstName" formControlName="firstName" name="firstName" />
           <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text-danger d-flex justify-content-center">
             <div *ngIf="firstName.errors?.required">
-              {{'general.account.first_name_errors_required'|translate}}
+              {{ 'general.account.first_name_errors_required' | translate }}
             </div>
             <div *ngIf="firstName.errors?.minlength">
-              {{'general.account.first_name_errors_minlength'|translate}}
+              {{ 'general.account.first_name_errors_minlength' | translate }}
             </div>
           </div>
         </div>
 
         <div class="col-md-6">
-          <label class="m-3" for="lastName">{{'general.account.last_name'|translate}}</label>
-          <input nbInput type="text" id="lastName" formControlName="lastName" name="lastName">
+          <label class="m-3" for="lastName">{{ 'general.account.last_name' | translate }}</label>
+          <input nbInput type="text" id="lastName" formControlName="lastName" name="lastName" />
           <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="mt-2 text-danger d-flex justify-content-center">
             <div *ngIf="lastName.errors?.required">
-              {{'general.account.last_name_errors_required'|translate}}
+              {{ 'general.account.last_name_errors_required' | translate }}
             </div>
             <div *ngIf="lastName.errors?.minlength">
-              {{'general.account.last_name_errors_minlength'|translate}}
+              {{ 'general.account.last_name_errors_minlength' | translate }}
             </div>
           </div>
         </div>
@@ -41,35 +40,36 @@
 
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <label class="m-3" for="email"><span class="m-2 material-icons">email</span>{{'general.account.email'|translate}}</label>
-          <input nbInput type="email" id="email" formControlName="email" name="email">
+          <nb-icon icon="email" pack="md-icon"></nb-icon>
+          <label class="m-3" for="email"><span class="m-2 material-icons">email</span>{{ 'general.account.email' | translate }}</label>
+          <input nbInput type="email" id="email" formControlName="email" name="email" />
           <div *ngIf="email.invalid && (email.dirty || email.touched)" class="mt-2 text-danger d-flex justify-content-center">
             <div *ngIf="email.errors?.required">
-              {{'general.account.first_name_errors_required'|translate}}
+              {{ 'general.account.first_name_errors_required' | translate }}
             </div>
             <div *ngIf="email.errors?.pattern">
-              {{'general.account.email_errors_message'|translate}}
+              {{ 'general.account.email_errors_message' | translate }}
             </div>
           </div>
         </div>
 
         <div class="col-md-6">
-          <label class="m-3" for="phone"><span class="m-2 material-icons">phone</span>{{'general.account.phone'|translate}}</label>
-          <input nbInput type="text" id="phone" formControlName="phone" name="phone">
+          <label class="m-3" for="phone"><span class="m-2 material-icons">phone</span>{{ 'general.account.phone' | translate }}</label>
+          <input nbInput type="text" id="phone" formControlName="phone" name="phone" />
           <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="mt-2 text-danger d-flex justify-content-center">
             <div *ngIf="phone.errors?.required">
-              {{'general.account.first_name_errors_required'|translate}}
+              {{ 'general.account.first_name_errors_required' | translate }}
             </div>
             <div *ngIf="phone.errors?.pattern">
-              {{'general.account.phone_errors_message'|translate}}
+              {{ 'general.account.phone_errors_message' | translate }}
             </div>
           </div>
         </div>
       </div>
     </nb-card-body>
     <nb-card-footer class="row justify-content-center">
-      <button nbButton shape="rectangle" status="primary" [disabled]="!generalInformationForm.dirty||generalInformationForm.invalid" type="submit">
-        {{'general.account.save_button'|translate}}
+      <button nbButton shape="rectangle" status="primary" [disabled]="!generalInformationForm.dirty || generalInformationForm.invalid" type="submit">
+        {{ 'general.account.save_button' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -78,32 +78,31 @@
 <!-- Configurations -->
 <form [formGroup]="configurationForm" (ngSubmit)="onSubmitConfiguration()">
   <nb-card>
-    <nb-card-header>{{'general.account.configurations'|translate}}</nb-card-header>
+    <nb-card-header>{{ 'general.account.configurations' | translate }}</nb-card-header>
     <nb-card-body>
       <div class="row mb-4 justify-content-center">
         <div class="col-sm-6 mb-4">
-          <label class="control-label col-md-3">{{'general.account.language'|translate}}:</label>
+          <label class="control-label col-md-3">{{ 'general.account.language' | translate }}:</label>
           <nb-select class="col-md-auto" placeholder="Select" formControlName="language">
             <nb-option *ngFor="let language of languages" [value]="language.value">
-              {{language.value}}
+              {{ language.value }}
             </nb-option>
           </nb-select>
         </div>
 
         <div class="col-sm-6">
-          <label class="control-label col-md-3">{{'general.account.notifications'|translate}}:</label>
+          <label class="control-label col-md-3">{{ 'general.account.notifications' | translate }}:</label>
           <div class="col-md-auto mt-4" *ngFor="let key of accountNotificationsKeys; let i = index" formArrayName="notification">
             <nb-checkbox [formControlName]="i">
-              {{key}}
+              {{ key }}
             </nb-checkbox>
           </div>
         </div>
       </div>
     </nb-card-body>
     <nb-card-footer class="row justify-content-center">
-      <button nbButton shape="rectangle" status="primary" style="float: right;" type="submit"
-              [disabled]="!configurationForm?.dirty">
-        {{'general.account.save_button'|translate}}
+      <button nbButton shape="rectangle" status="primary" style="float: right" type="submit" [disabled]="!configurationForm?.dirty">
+        {{ 'general.account.save_button' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -111,19 +110,16 @@
 
 <!-- Account Management-->
 <nb-card>
-  <nb-card-header>{{'general.account.management'|translate}}</nb-card-header>
+  <nb-card-header>{{ 'general.account.management' | translate }}</nb-card-header>
   <nb-card-body class="row justify-content-around">
-    <button class="col-sm-auto m-3" nbButton status="control"
-            (click)="openChangePassword(changePassword)">
-      {{'general.account.change_password'|translate}}
+    <button class="col-sm-auto m-3" nbButton status="control" (click)="openChangePassword(changePassword)">
+      {{ 'general.account.change_password' | translate }}
     </button>
-    <button class="col-sm-auto m-3" nbButton status="info"
-            (click)="openRegenerateKey(regenerateKey)">
-      {{'general.account.change_key'|translate}}
+    <button class="col-sm-auto m-3" nbButton status="info" (click)="openRegenerateKey(regenerateKey)">
+      {{ 'general.account.change_key' | translate }}
     </button>
-    <button class="col-sm-auto m-3" nbButton status="danger"
-            (click)="openDeleteAccount(deleteAccount)">
-      {{'general.account.delete_account'|translate}}
+    <button class="col-sm-auto m-3" nbButton status="danger" (click)="openDeleteAccount(deleteAccount)">
+      {{ 'general.account.delete_account' | translate }}
     </button>
   </nb-card-body>
 </nb-card>
@@ -133,7 +129,7 @@
   <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
     <nb-card>
       <nb-card-header class="d-flex justify-content-between">
-        <h5>{{'general.account.change_password'|translate}}</h5>
+        <h5>{{ 'general.account.change_password' | translate }}</h5>
         <button nbButton ghost shape="rectangle" size="tiny" class="close" (click)="ref.close()">
           <i class="material-icons">close</i>
         </button>
@@ -141,38 +137,48 @@
       <nb-card-body>
         <div class="row">
           <div class="col-md-6">
-            <label class="m-3" for="password">{{'general.account.new_password'|translate}}</label>
-            <input nbInput type="password" formControlName="newPassword" name="newPassword">
+            <label class="m-3" for="password">{{ 'general.account.new_password' | translate }}</label>
+            <input nbInput type="password" formControlName="newPassword" name="newPassword" />
           </div>
           <div class="col-md-6">
-            <label class="m-3" for="confirmPassword">{{'general.account.confirm_password'|translate}}</label>
-            <input nbInput type="password" formControlName="confirmPassword" name="confirmPassword">
+            <label class="m-3" for="confirmPassword">{{ 'general.account.confirm_password' | translate }}</label>
+            <input nbInput type="password" formControlName="confirmPassword" name="confirmPassword" />
           </div>
         </div>
         <div class="row no-gutters">
           <div *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)" class="col-md-6 mt-2 text-danger">
             <div *ngIf="newPassword.errors?.required">
-              {{'general.account.newpassword_errors_required'|translate}}
+              {{ 'general.account.newpassword_errors_required' | translate }}
             </div>
             <div *ngIf="newPassword.errors?.minlength">
-              {{'general.account.newpassword_errors_minlength'|translate}}
+              {{ 'general.account.newpassword_errors_minlength' | translate }}
             </div>
             <div *ngIf="newPassword.errors?.pattern">
-              {{'general.account.newpassword_errors_pattern'|translate}}
+              {{ 'general.account.newpassword_errors_pattern' | translate }}
             </div>
           </div>
-          <div *ngIf="passwordForm.errors?.passwordMismatch" class="col-md-6 d-flex justify-content-center mt-2 text-danger d-flex justify-content-start">
-            {{'general.account.passwords_errors_dontmatch' | translate}}
+          <div
+            *ngIf="passwordForm.errors?.passwordMismatch"
+            class="col-md-6 d-flex justify-content-center mt-2 text-danger d-flex justify-content-start"
+          >
+            {{ 'general.account.passwords_errors_dontmatch' | translate }}
           </div>
         </div>
       </nb-card-body>
       <nb-card-footer class="d-flex justify-content-center">
-        <button nbButton class="mr-2" shape="rectangle" status="primary" type="submit"
-                [disabled]="!passwordForm.valid" (click)="onSubmitPassword(ref)">
-          {{'general.account.save_button'|translate}}
+        <button
+          nbButton
+          class="mr-2"
+          shape="rectangle"
+          status="primary"
+          type="submit"
+          [disabled]="!passwordForm.valid"
+          (click)="onSubmitPassword(ref)"
+        >
+          {{ 'general.account.save_button' | translate }}
         </button>
         <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-          {{'general.services.close' | translate}}
+          {{ 'general.services.close' | translate }}
         </button>
       </nb-card-footer>
     </nb-card>
@@ -183,19 +189,18 @@
 <ng-template #regenerateKey let-data let-ref="dialogRef">
   <nb-card>
     <nb-card-header class="d-flex justify-content-between">
-      <h5>{{'general.account.regenerate_key'|translate}}</h5>
+      <h5>{{ 'general.account.regenerate_key' | translate }}</h5>
       <button nbButton ghost shape="rectangle" size="tiny" class="close" (click)="ref.close()">
         <i class="material-icons">close</i>
       </button>
     </nb-card-header>
-    <nb-card-body class="p-5">{{ 'general.account.regenerate_key_message'|translate }}</nb-card-body>
+    <nb-card-body class="p-5">{{ 'general.account.regenerate_key_message' | translate }}</nb-card-body>
     <nb-card-footer class="d-flex justify-content-center">
-      <button nbButton status="primary" size="small"
-              (click)="onRegenerateKey(ref)">
-        {{'general.account.regenerate_key'|translate}}
+      <button nbButton status="primary" size="small" (click)="onRegenerateKey(ref)">
+        {{ 'general.account.regenerate_key' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{'general.services.close' | translate}}
+        {{ 'general.services.close' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -205,38 +210,35 @@
 <ng-template #deleteAccount let-data let-ref="dialogRef">
   <nb-card>
     <nb-card-header class="d-flex justify-content-between">
-      <h5>{{'general.account.delete_account'|translate}}</h5>
+      <h5>{{ 'general.account.delete_account' | translate }}</h5>
       <button nbButton ghost shape="rectangle" size="tiny" class="close" (click)="ref.close()">
         <i class="material-icons">close</i>
       </button>
     </nb-card-header>
-    <nb-card-body class="p-5">{{ 'general.account.delete_account_message'|translate }}</nb-card-body>
+    <nb-card-body class="p-5">{{ 'general.account.delete_account_message' | translate }}</nb-card-body>
     <nb-card-footer class="d-flex justify-content-center">
-      <button nbButton status="danger" size="small"
-              (click)="onDeleteAccount(ref)">
-        {{'general.account.delete_account'|translate}}
+      <button nbButton status="danger" size="small" (click)="onDeleteAccount(ref)">
+        {{ 'general.account.delete_account' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{'general.services.close' | translate}}
+        {{ 'general.services.close' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
 
-
 <!-- Privacy -->
 <nb-card>
-  <nb-card-header>{{'general.account.privacy'|translate}}</nb-card-header>
+  <nb-card-header>{{ 'general.account.privacy' | translate }}</nb-card-header>
   <nb-card-body>
     <div class="row">
       <div class="mb-1 col-sm-6 d-flex justify-content-center">
-        <button nbButton shape="rectangle" status="primary"
-                (click)="openDownloadAccountExport()">
-          {{'general.account.download'|translate}}
+        <button nbButton shape="rectangle" status="primary" (click)="openDownloadAccountExport()">
+          {{ 'general.account.download' | translate }}
         </button>
       </div>
-      <div class="mb-1 col-sm-6  d-flex justify-content-center">
-        <a href="">{{'general.account.privacy_policy'|translate}}</a>
+      <div class="mb-1 col-sm-6 d-flex justify-content-center">
+        <a href="">{{ 'general.account.privacy_policy' | translate }}</a>
       </div>
     </div>
   </nb-card-body>
@@ -244,40 +246,31 @@
 
 <!-- Assistance and Support -->
 <nb-card>
-  <nb-card-header>{{'general.account.assistance_and_support'|translate}}</nb-card-header>
+  <nb-card-header>{{ 'general.account.assistance_and_support' | translate }}</nb-card-header>
   <nb-card-body>
     <div class="row">
       <div class="mb-1 col-sm-6 d-flex justify-content-center">
-        <button nbButton shape="rectangle" status="primary"
-                (click)="openReportProblem()">
-          {{'general.account.report_the_problem'|translate}}
+        <button nbButton shape="rectangle" status="primary" (click)="openReportProblem()">
+          {{ 'general.account.report_the_problem' | translate }}
         </button>
       </div>
-      <div class="mb-1 col-sm-6  d-flex justify-content-center">
-        <a href="">{{'general.account.tutorials_and_documentations'|translate}}</a>
+      <div class="mb-1 col-sm-6 d-flex justify-content-center">
+        <a href="">{{ 'general.account.tutorials_and_documentations' | translate }}</a>
       </div>
     </div>
 
     <ng-template #reportProblemWindowTemplate let-data>
       <form [formGroup]="reportProblemForm" (ngSubmit)="onSubmitReportProblem()">
         <div class="row align-items-center justify-content-center mb-3 flex-column">
-          <label class="text-center">{{'general.account.report_message'|translate}}</label>
-          <textarea nbInput type="text" id="textarea" name="textarea" rows="4" cols="50"
-                    formControlName="reportProblemText"></textarea>
+          <label class="text-center">{{ 'general.account.report_message' | translate }}</label>
+          <textarea nbInput type="text" id="textarea" name="textarea" rows="4" cols="50" formControlName="reportProblemText"></textarea>
         </div>
         <div class="row justify-content-center">
-          <button nbButton type="submit" status="primary"
-                  size="medium">
-            {{'general.account.submit_button'|translate}}
+          <button nbButton type="submit" status="primary" size="medium">
+            {{ 'general.account.submit_button' | translate }}
           </button>
         </div>
       </form>
     </ng-template>
-
   </nb-card-body>
 </nb-card>
-
-
-
-
-

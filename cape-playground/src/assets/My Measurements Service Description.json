@@ -1,12 +1,12 @@
 {
   "serviceId": "MYM20",
   "name": "My Measurements",
-  "identifier": "http://localhost/cape-playground/pages/services/my-measurements",
+  "identifier": "http://localhost:82/cape-playground/pages/services/my-measurements",
   "issued": "2020-27-08T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
-  "serviceIconUrl": "",
+  "serviceIconUrl": "http://localhost:82/cape-playground/my-measurements/favicon.ico",
   "status": "Completed",
   "supportedProfiles": [
     "Consenting"
@@ -61,11 +61,11 @@
 			"x5c": []
 		},
     "serviceUrls": {
-      "domain": "http://localhost/cape-playground",
-      "libraryDomain": "http://localhost:8085/cape-service-sdk",
-      "loginUri": "http://localhost/cape-playground/pages/services/my-measurements",
-      "linkingUri": "http://localhost:8085/cape-service-sdk/api/v2/slr/linking",
-      "linkingRedirectUri": "http://localhost/cape-playground",
+      "domain": "http://localhost:82/cape-playground",
+      "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
+      "loginUri": "http://localhost:82/cape-playground/pages/services/my-measurements",
+      "linkingUri": "http://service-sdk:8085/cape-service-sdk/api/v2/slr/linking",
+      "linkingRedirectUri": "http://localhost:82/cape-playground",
       "objectionUri": "",
       "notificationUri": ""
     },

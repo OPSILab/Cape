@@ -23,7 +23,7 @@
 
 FROM openjdk:8-jdk-alpine as build
 
-MAINTAINER Engineering Ingegneria Informatica S.p.A.
+LABEL maintainer="Engineering Ingegneria Informatica S.p.A."
 
 COPY mvnw .
 COPY .mvn .mvn

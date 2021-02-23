@@ -1,47 +1,47 @@
 import { Component, OnDestroy, Input, OnInit } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
+import { NbJSThemeVariable, NbThemeService } from '@nebular/theme';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'purpose-category-pie',
-  template: `
-    <ngx-charts-pie-chart
-      [results]="pieData"
-      [legend]="showLegend"
-      [labels]="showLabels">
-    </ngx-charts-pie-chart>
-  `,
+  template: ` <ngx-charts-pie-chart [scheme]="colorScheme" [results]="pieData" [legend]="showLegend" [labels]="showLabels"> </ngx-charts-pie-chart> `,
 })
-export class PurposeCategoryPie implements OnInit, OnDestroy {
+export class PurposeCategoryPieComponent implements OnInit, OnDestroy {
+  @Input()
+  inputData: Record<string, number>;
 
   showLegend = true;
   showLabels = true;
-  colorScheme: any;
-  themeSubscription: any;
+  colorScheme: { domain: (string | string[] | NbJSThemeVariable)[] };
+  private unsubscribe: Subject<void> = new Subject();
 
-  @Input()
-  inputData: Object;
+  pieData: { name: string; value: number }[];
 
-  pieData: any[];
-
-  constructor(private theme: NbThemeService) {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-      const colors: any = config.variables;
-      this.colorScheme = {
-        domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight],
-      };
-    });
-  }
+  constructor(private theme: NbThemeService) {}
 
   ngOnInit(): void {
-
+    this.theme
+      .getJsTheme()
+      .pipe(
+        takeUntil(this.unsubscribe),
+        map((config) => config.variables)
+      )
+      .subscribe((colors) => {
+        this.colorScheme = {
+          domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight, '#dddddd'],
+        };
+      });
     this.pieData = Object.entries(this.inputData).map((entry) => {
       return {
         name: entry[0],
-        value: entry[1]
+        value: entry[1],
       };
     });
   }
+
   ngOnDestroy(): void {
-    this.themeSubscription.unsubscribe();
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

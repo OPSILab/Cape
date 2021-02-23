@@ -1,35 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
-import { DataService } from '../../../services/data.service';
-import { NbIconLibraries } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-control-flow',
   templateUrl: './control-flow.component.html',
-  styleUrls: ['./control-flow.component.scss']
+  styleUrls: ['./control-flow.component.scss'],
 })
 export class ControlFlowComponent implements OnInit {
-  data: any;
+  data: unknown;
 
-  constructor(
-    private dataService: DataService,
-    private iconsLibrary: NbIconLibraries
-  ) {
-    this.iconsLibrary.registerFontPack('fa', { packClass: 'fa', iconClassPrefix: 'fa' });
+  constructor(private http: HttpClient) {}
+
+  async ngOnInit(): Promise<void> {
+    this.data = await this.http.get(`assets/data/cape_dataflow.json`).toPromise();
   }
-
-  initData() {
-    this.dataService.getGraphData()
-      .subscribe(res => {
-        this.data = res;
-      }, err => {
-        console.log(err);
-      })
-  }
-
- 
-  ngOnInit() {
-    this.initData();
-  }
-
 }

@@ -6,13 +6,12 @@ const routes: Routes = [
   {
     path: '',
     component: ConsentsComponent,
-
   },
   //{
   //  path: ':serviceId/:serviceName',
   //  component: ConsentsComponent
   //},
- 
+
   //{
   //  path: ':consentId/:eventName',
   //  component: ConsentsComponent
@@ -20,16 +19,11 @@ const routes: Routes = [
   {
     path: 'controlflow',
     component: ControlFlowComponent,
-  }
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-  ],
-  exports: [
-    RouterModule,
-  ],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-
-export class ConsentsRoutingModule { }
+export class ConsentsRoutingModule {}

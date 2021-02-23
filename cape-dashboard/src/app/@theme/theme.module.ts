@@ -16,31 +16,14 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 //import { NbSecurityModule } from '@nebular/security';
 
-import {
-  FooterComponent,
-  HeaderComponent,
-  SearchInputComponent,
-  SwitcherComponent,
-} from './components';
-import {
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-} from './pipes';
-import {
-  OneColumnLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
-} from './layouts';
+import { FooterComponent, HeaderComponent, SearchInputComponent, SwitcherComponent } from './components';
+import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe, NumberWithCommasPipe } from './pipes';
+import { OneColumnLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
 import { DEFAULT_THEME } from './styles/theme.default';
 import { CAPE_THEME } from './styles/theme.cape';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
 import { TranslateModule } from '@ngx-translate/core';
-import { LoginModule } from '../login/login.module';
-import { LoginPopupModule } from '../loginPopup/loginPopup.module';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -65,13 +48,7 @@ const COMPONENTS = [
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
 ];
-const PIPES = [
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-];
+const PIPES = [CapitalizePipe, PluralPipe, RoundPipe, TimingPipe, NumberWithCommasPipe];
 
 @NgModule({
   imports: [CommonModule, ...NB_MODULES, TranslateModule.forChild({})],
@@ -87,7 +64,7 @@ export class ThemeModule {
           {
             name: 'cape',
           },
-          [DEFAULT_THEME, CAPE_THEME, CORPORATE_THEME, DARK_THEME],
+          [DEFAULT_THEME, CAPE_THEME, CORPORATE_THEME, DARK_THEME]
         ).providers,
       ],
     };

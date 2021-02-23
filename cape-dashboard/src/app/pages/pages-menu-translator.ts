@@ -1,46 +1,25 @@
 import { NbMenuItem } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
-import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NgxConfigureService } from 'ngx-configure';
+import { Injectable } from '@angular/core';
 
 @Injectable()
-export class PagesMenuTranslator implements OnDestroy {
-  private menuItem$ = new Subscription();
-
-  constructor(private translateService: TranslateService, private configService: NgxConfigureService) {
-  }
+export class PagesMenuTranslator {
+  constructor(private translateService: TranslateService) {}
 
   translate(menuItems: NbMenuItem[]): NbMenuItem[] {
-    // deep copy array (without reference)
-    const translationMenu = JSON.parse(JSON.stringify(menuItems));
     // this.translateService.setDefaultLang('en');
     // this.translateService.use(this.configService.config.i18n.locale);
-    for (let mainIndex = 0; mainIndex < menuItems.length; mainIndex++) {
-      const mainSubscription = this.translateService.stream(menuItems[mainIndex].title).subscribe(res => {
-        const mainMenu = translationMenu[mainIndex];
-        mainMenu.title = res;
-      });
 
-      this.menuItem$.add(mainSubscription);
+    for (const item of menuItems) {
+      item.title = this.translateService.instant(item.title) as string;
 
-      if (menuItems[mainIndex].children) {
-        for (let childIndex = 0; childIndex < menuItems[mainIndex].children.length; childIndex++) {
-          const childSubscription = this.translateService.stream(menuItems[mainIndex].children[childIndex].title).subscribe(res => {
-            const subMenu = translationMenu[mainIndex].children[childIndex];
-            subMenu.title = res;
-          });
-
-          this.menuItem$.add(childSubscription);
+      if (item.children) {
+        for (const child of item.children) {
+          child.title = this.translateService.instant(child.title) as string;
         }
       }
     }
 
-    return translationMenu;
+    return menuItems;
   }
-
-  ngOnDestroy() {
-    this.menuItem$.unsubscribe();
-  }
-
 }

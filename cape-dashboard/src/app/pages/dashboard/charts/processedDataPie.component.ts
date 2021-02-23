@@ -1,56 +1,46 @@
-import { Component, OnDestroy, Input, AfterViewChecked, OnInit, ViewEncapsulation } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
+import { NbJSThemeVariable, NbThemeService } from '@nebular/theme';
+import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-
-interface AuditDataMapping {
-  name: string,
-  count: string
-};
+import { AuditDataMapping } from '../../../model/auditlogs/auditlogs.model';
 
 @Component({
   selector: 'processed-data-pie',
-  template: `
-    <ngx-charts-advanced-pie-chart
-      [scheme]="colorScheme"
-      [results]="pieData"
-  >
-    </ngx-charts-advanced-pie-chart>
-  `
+  template: ` <ngx-charts-advanced-pie-chart [scheme]="colorScheme" [results]="pieData"> </ngx-charts-advanced-pie-chart> `,
 })
-export class ProcessedDataPie implements OnInit, OnDestroy {
-
+export class ProcessedDataPieComponent implements OnInit, OnDestroy {
   @Input()
-  inputData: Object;
+  private inputData: Record<string, AuditDataMapping>;
 
-  pieData: any[];
-  colorScheme: any;
-  themeSubscription: any;
+  pieData: { name: string; value: number }[];
+  colorScheme: { domain: (string | string[] | NbJSThemeVariable)[] };
   private unsubscribe: Subject<void> = new Subject();
 
-  constructor(private theme: NbThemeService) {
-    this.themeSubscription = this.theme.getJsTheme().pipe(takeUntil(this.unsubscribe)).subscribe(config => {
-      const colors: any = config.variables;
-      this.colorScheme = {
-        domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight],
+  constructor(private theme: NbThemeService) {}
+
+  ngOnInit(): void {
+    this.theme
+      .getJsTheme()
+      .pipe(
+        takeUntil(this.unsubscribe),
+        map((config) => config.variables)
+      )
+      .subscribe((colors) => {
+        this.colorScheme = {
+          domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight, '#dddddd'],
+        };
+      });
+
+    this.pieData = Object.values(this.inputData).map((dataMapping) => {
+      return {
+        name: dataMapping.name,
+        value: dataMapping.count,
       };
     });
   }
 
-  ngOnInit(): void {
-
-    this.pieData = Object.entries(this.inputData).map((entry: [string, AuditDataMapping]) => {
-        return {
-          name: entry[1].name,
-          value: entry[1].count
-        };
-      });
-
-
-  }
-
   ngOnDestroy(): void {
-    this.themeSubscription.unsubscribe();
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
-
 }

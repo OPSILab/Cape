@@ -1,69 +1,58 @@
 import { Component, OnDestroy, Input, OnInit } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-
-
-interface AuditDataMapping {
-  name: string;
-  count: string;
-}
+import { NbJSThemeVariable, NbThemeService } from '@nebular/theme';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { AuditDataMapping } from '../../../model/auditlogs/auditlogs.model';
 
 @Component({
   selector: 'personal-data-processing-bar',
   template: `
-    <ngx-charts-bar-horizontal-stacked
-      [scheme]="colorScheme"
-      [results]="barData"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="showLegend"
-      [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel">
+    <ngx-charts-bar-horizontal-stacked [scheme]="colorScheme" [results]="barData" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend">
     </ngx-charts-bar-horizontal-stacked>
-  `
+  `,
 })
-export class PersonalDataProcessingBar implements OnInit, OnDestroy {
+export class PersonalDataProcessingBarComponent implements OnInit, OnDestroy {
+  @Input()
+  private inputData: Record<string, Record<string, AuditDataMapping>>;
 
   showLegend = true;
   showXAxis = true;
   showYAxis = true;
-  xAxisLabel = 'Country';
-  yAxisLabel = 'Population';
-  colorScheme: any;
-  themeSubscription: any;
+  colorScheme: { domain: (string | string[] | NbJSThemeVariable)[] };
+  private unsubscribe: Subject<void> = new Subject();
 
-  @Input()
-  inputData: Object;
+  barData: { name: string; series: { name: string; value: number }[] }[];
 
-  barData: any[];
-
-  constructor(private theme: NbThemeService) {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-      const colors: any = config.variables;
-      this.colorScheme = {
-        domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight],
-      };
-    });
-  }
-
+  constructor(private theme: NbThemeService) {}
 
   ngOnInit(): void {
+    this.theme
+      .getJsTheme()
+      .pipe(
+        takeUntil(this.unsubscribe),
+        map((config) => config.variables)
+      )
+      .subscribe((colors) => {
+        this.colorScheme = {
+          domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight, '#dddddd'],
+        };
+      });
 
     this.barData = Object.entries(this.inputData).map((processingCategory) => {
-
       return {
         name: processingCategory[0],
         series: Object.entries(processingCategory[1]).map((entry: [string, AuditDataMapping]) => {
           return {
             name: entry[1].name,
-            value: entry[1].count
+            value: entry[1].count,
           };
-        })
+        }),
       };
     });
   }
 
   ngOnDestroy(): void {
-
-    this.themeSubscription.unsubscribe();
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

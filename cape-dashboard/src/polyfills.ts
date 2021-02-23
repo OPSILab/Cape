@@ -19,35 +19,32 @@ import '@angular/localize/init';
  */
 
 /***************************************************************************************************
-* BROWSER POLYFILLS
-*/
-
+ * BROWSER POLYFILLS
+ */
 
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 
 /** IE10 and IE11 requires the following to support `@angular/animation`. */
-import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+import 'web-animations-js'; // Run `npm install --save web-animations-js`.
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
 if (typeof (window as any).global === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
   (window as any).global = window;
 }
-
 
 /** Evergreen browsers require these. **/
 //import 'core-js/es6/reflect';
 //import 'core-js/es7/reflect';
 
-
 /** ALL Firefox browsers require the following to support `@angular/animation`. **/
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
-
 
 /***************************************************************************************************
  * Zone JS is required by Angular itself.
  */
-import 'zone.js/dist/zone';  // Included with Angular CLI.
-
+import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
@@ -61,5 +58,6 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 //import 'core-js/es7/object';
 
 if (typeof SVGElement.prototype.contains === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
 }

@@ -15,13 +15,11 @@ import { PagesMenuTranslator } from './pages-menu-translator';
   `,
 })
 export class PagesComponent implements OnInit {
-
   menu: NbMenuItem[];
 
-  constructor(private translator: PagesMenuTranslator) {
-  }
+  constructor(private translator: PagesMenuTranslator) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // if put on constructor it will doing twice when refresh a page.
     this.menu = this.translator.translate(MENU_ITEMS);
   }

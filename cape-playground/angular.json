@@ -42,9 +42,7 @@
               "node_modules/socicon/css/socicon.css",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css"
             ],
-            "scripts": [
-              "node_modules/pace-js/pace.min.js"
-            ]
+            "scripts": ["node_modules/pace-js/pace.min.js"]
           },
           "configurations": {
             "production": {
@@ -87,8 +85,7 @@
             "production": {
               "browserTarget": "cape-playground:build:production"
             }
-          },
-          
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -112,8 +109,7 @@
               "src/styles.scss",
               "node_modules/bootstrap/scss/bootstrap.scss"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           }
         },
         "lint": {
@@ -124,9 +120,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -142,6 +136,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "cape-playground"
 }

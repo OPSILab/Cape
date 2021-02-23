@@ -14,7 +14,7 @@
     "checkConsentAtOperator": "true",
     "mywellness": {
       "serviceId": "MYW20",
-      "serviceUrl": "http://localhost:82/pages/services/my-wellness",
+      "serviceUrl": "http://localhost:82/cape-playground/pages/services/my-wellness",
       "serviceName": "MyWellness",
       "purposes": {
         "cholesterol": {
@@ -31,7 +31,7 @@
     },
     "mymeasurements": {
       "serviceId": "MYM20",
-      "serviceUrl": "http://localhost:82/pages/services/my-measurements",
+      "serviceUrl": "http://localhost:82/cape-playground/pages/services/my-measurements",
       "serviceName": "MyMeasurements",
       "purposes": {
         "cholesterol": {

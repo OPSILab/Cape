@@ -7,7 +7,6 @@ import { NbLayoutModule, NbSidebarModule, NbCardModule, NbCheckboxModule, NbButt
 import { TranslateModule } from '@ngx-translate/core';
 import { LoginService } from './login.service';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -19,13 +18,9 @@ import { LoginService } from './login.service';
     NbSidebarModule,
     NbCheckboxModule,
     NbButtonModule,
-    TranslateModule.forChild({})
+    TranslateModule.forChild({}),
   ],
-  declarations: [
-    LoginComponent
-  ],
-  providers: [
-    LoginService
-  ]
+  declarations: [LoginComponent],
+  providers: [LoginService],
 })
-export class LoginModule { }
+export class LoginModule {}

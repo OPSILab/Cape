@@ -187,6 +187,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${springboot.version}</version>
+				<configuration>
+					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+				</configuration>
 				<executions>
 					<execution>
 						<id>pre-integration-test</id>
@@ -247,33 +250,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.codehaus.mojo</groupId> -->
-			<!-- <artifactId>cobertura-maven-plugin</artifactId> -->
-			<!-- <version>2.7</version> -->
-			<!-- <configuration> -->
-			<!-- <formats> -->
-			<!-- <format>html</format> -->
-			<!-- <format>xml</format> -->
-			<!-- </formats> -->
-			<!-- <check /> -->
-			<!-- <instrumentation> -->
-			<!-- <includes> -->
-			<!-- <include>it/eng/opsi/serviceregistry/service/*</include> -->
-			<!-- </includes> -->
-			<!-- <excludes> -->
-			<!-- <exclude>it/eng/opsi/serviceregistry/dao/*</exclude> -->
-			<!-- </excludes> -->
-			<!-- </instrumentation> -->
-			<!-- </configuration> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <goals> -->
-			<!-- <goal>clean</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 		</plugins>
 
 	</build>

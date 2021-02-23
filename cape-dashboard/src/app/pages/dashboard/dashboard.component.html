@@ -12,8 +12,8 @@
 </div>
 
 <div class="row d-flex justify-content-center">
-  <nb-card class="p-0 col-lg-12 col-md-8 " *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0">
-    <nb-card-header>{{ 'general.dashboard.chartsCards.processedPersonalData' | translate}}</nb-card-header>
+  <nb-card class="p-0 col-lg-12 col-md-8" *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0">
+    <nb-card-header>{{ 'general.dashboard.chartsCards.processedPersonalData' | translate }}</nb-card-header>
     <nb-card-body class="p-0">
       <processed-data-pie [inputData]="auditLog.processedPersonalDataCount"></processed-data-pie>
     </nb-card-body>
@@ -21,20 +21,21 @@
 </div>
 
 <div class="row d-flex justify-content-center">
-  <nb-card class="col-lg-12 col-md-6" *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.processingCategoryPersonalData| keyvalue)?.length">
-    <nb-card-header>{{ 'general.dashboard.chartsCards.personalDataVSProcessing' | translate}}</nb-card-header>
+  <nb-card
+    class="col-lg-12 col-md-6"
+    *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.processingCategoryPersonalData | keyvalue)?.length"
+  >
+    <nb-card-header>{{ 'general.dashboard.chartsCards.personalDataVSProcessing' | translate }}</nb-card-header>
     <nb-card-body class="px-1">
       <personal-data-processing-bar [inputData]="auditLog.processingCategoryPersonalData"></personal-data-processing-bar>
     </nb-card-body>
   </nb-card>
 </div>
 
-
-
 <div class="px-0 row d-flex justify-content-center">
   <div class="col-lg-6" *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.purposeCategoryCount | keyvalue)?.length">
     <nb-card>
-      <nb-card-header>{{ 'general.dashboard.chartsCards.purpose' | translate}}</nb-card-header>
+      <nb-card-header>{{ 'general.dashboard.chartsCards.purpose' | translate }}</nb-card-header>
       <nb-card-body>
         <purpose-category-pie [inputData]="auditLog.purposeCategoryCount"></purpose-category-pie>
       </nb-card-body>
@@ -42,7 +43,7 @@
   </div>
   <div class="col-lg-6" *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.legalBasisCount | keyvalue)?.length">
     <nb-card>
-      <nb-card-header>{{ 'general.dashboard.chartsCards.context' | translate}}</nb-card-header>
+      <nb-card-header>{{ 'general.dashboard.chartsCards.context' | translate }}</nb-card-header>
       <nb-card-body>
         <legalbasis-pie [inputData]="auditLog.legalBasisCount"></legalbasis-pie>
       </nb-card-body>
@@ -50,10 +51,12 @@
   </div>
 </div>
 
-
 <div class="row d-flex justify-content-center">
-  <nb-card class="col-lg-12 col-md-6" *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.storageLocationPersonalData | keyvalue)?.length">
-    <nb-card-header>{{ 'general.dashboard.chartsCards.storage' | translate}}</nb-card-header>
+  <nb-card
+    class="col-lg-12 col-md-6"
+    *ngIf="auditLog && auditLog.totalProcessedPersonalDataCount > 0 && (auditLog.storageLocationPersonalData | keyvalue)?.length"
+  >
+    <nb-card-header>{{ 'general.dashboard.chartsCards.storage' | translate }}</nb-card-header>
     <nb-card-body class="px-1">
       <personal-data-storage-bar [inputData]="auditLog.storageLocationPersonalData"></personal-data-storage-bar>
     </nb-card-body>

@@ -1,82 +1,95 @@
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { NbDialogRef, NbDialogService } from '@nebular/theme';
 
-import { Component, Input, OnInit } from '@angular/core';
-import { NbDialogService } from '@nebular/theme';
-
-import { LinkedServiceInfoModalComponent } from './linkedServiceInfo-modal/linkedServiceInfo-modal.component';
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
 import { IsDescribedAt } from '../../../model/service-linking/isDescribedAt';
-import { Row } from './linkedServices.component';
 import { TranslateService } from '@ngx-translate/core';
-
-
+import { LinkedServiceRow } from './linkedServices.component';
+import { ProcessingBasis } from '../../../model/processingBasis';
+import { HumanReadableDescription } from '../../../model/humanReadableDescription';
+import { Description2 } from '../../../model/description2';
+import { Router } from '@angular/router';
 
 @Component({
-  template: `
-    <button nbButton ghost shape="round" size="small" status="primary"
-      (click)="showServiceInfoModal()"><i class="material-icons">info</i></button>
-  `
+  templateUrl: './linkedServiceInfoRender.component.html',
 })
-export class LinkedServiceInfoRenderComponent implements OnInit {
+export class LinkedServiceInfoRenderComponent {
+  @Input() value: LinkedServiceRow;
+  @ViewChild('linkedServiceInfoModal', { static: true }) linkedServiceInfoModalRef: TemplateRef<unknown>;
 
-  public serviceInfo;
+  private modalRef: NbDialogRef<unknown>;
 
-  @Input() value: Row;
+  constructor(
+    private modalService: NbDialogService,
+    private availableService: AvailableServicesService,
+    private translateService: TranslateService,
+    private router: Router
+  ) {}
 
-
-  constructor(private modalService: NbDialogService, private availableService: AvailableServicesService,
-    private translateService: TranslateService) {
-  }
-
-  ngOnInit() {
-  }
-
-  async showServiceInfoModal() {
-
-    const serviceDescription: ServiceEntry = await this.availableService.getService(this.value.serviceId);
+  async showServiceInfoModal(): Promise<void> {
+    const serviceDescription: ServiceEntry = await this.availableService.getService(this.value.service_id);
 
     /* Get Localized Human readable description of the Service, default en */
-    let localizedHumanReadableDescription = serviceDescription.humanReadableDescription.filter(d => d.locale === this.value.locale)[0];
-    if (!localizedHumanReadableDescription)
-      localizedHumanReadableDescription = serviceDescription.humanReadableDescription.filter(d => d.locale === 'en')[0];
-
+    const localizedHumanReadableDescription = this.getLocalizedDescription(serviceDescription.humanReadableDescription);
     /* Get Localized Purposes descriptions, default en */
-    serviceDescription.processingBases = serviceDescription.processingBases.map(b => {
-      const firstMatch = b.description.filter(d =>
-        d.locale === this.value.locale);
+    serviceDescription.processingBases = this.getLocalizedPurposesDescription(serviceDescription.processingBases);
 
-      b.description = firstMatch.length > 0 ? firstMatch : b.description.filter(d => d.locale === 'en');
-      return b;
-    });
-
-    this.modalService.open(LinkedServiceInfoModalComponent, {
+    this.modalRef = this.modalService.open(this.linkedServiceInfoModalRef, {
       context: {
-        modalHeader: this.value.serviceName,
+        modalHeader: this.value.service_name,
         created: this.value.created,
-        serviceUri: this.value.serviceUri,
-        slrId: this.value.slrId,
+        serviceUri: this.value.service_uri,
+        slrId: this.value.link_id,
         serviceId: serviceDescription.serviceId,
-        description: localizedHumanReadableDescription.description,
-        iconUrl: (serviceDescription.serviceIconUrl !== '') ?
-          serviceDescription.serviceIconUrl : 'assets/images/app/no_image.png',
-        keywords: localizedHumanReadableDescription.keywords,
+        description: localizedHumanReadableDescription[0].description,
+        iconUrl: serviceDescription.serviceIconUrl !== '' ? serviceDescription.serviceIconUrl : 'assets/images/app/no_image.png',
+        keywords: localizedHumanReadableDescription[0].keywords,
         provider: serviceDescription.serviceInstance.serviceProvider.name,
         processings: serviceDescription.processingBases,
-        data: this.mapDatasetsConcept(serviceDescription.isDescribedAt)
-      }, hasScroll: true
+        datasetsMap: this.mapDatasetsConcept(serviceDescription.isDescribedAt),
+      },
+      hasScroll: true,
     });
   }
 
-  mapDatasetsConcept(datasets: Array<IsDescribedAt>) {
-
+  mapDatasetsConcept(datasets: Array<IsDescribedAt>): Map<string, string[]> {
     return datasets.reduce(
-      (map, dataset) => map.set(dataset.datasetId,
-        dataset.dataMapping.map(concept =>
-          concept.name + (concept.required ? '' : ` (${this.translateService.instant('general.services.data_concept_optional')})`))),
-      new Map<string, string[]>());
+      (map, dataset) =>
+        map.set(
+          dataset.datasetId,
+          dataset.dataMapping.map(
+            (concept) =>
+              concept.name + (concept.required ? '' : ` (${this.translateService.instant('general.services.data_concept_optional') as string})`)
+          )
+        ),
+      new Map<string, string[]>()
+    );
   }
 
+  openConsents(): void {
+    void this.router.navigate(['/pages/consents', { serviceId: this.value.service_id, serviceName: this.value.service_name }]);
+    this.modalRef.close();
+  }
 
+  private getLocalizedPurposesDescription(linkedServicePurpose: ProcessingBasis[]): ProcessingBasis[] {
+    return linkedServicePurpose.map((processingBase) => {
+      return {
+        ...processingBase,
+        description: processingBase.description.reduce((filtered: Description2[], description: Description2) => {
+          if (this.value.locale !== 'en' && description.locale === this.value.locale) filtered = [description, ...filtered];
+          else if (description.locale === 'en') filtered = [...filtered, description];
+          return filtered;
+        }, []),
+      };
+    });
+  }
 
-
+  private getLocalizedDescription(availableServiceDescr: HumanReadableDescription[]): HumanReadableDescription[] {
+    return availableServiceDescr.reduce((filtered: HumanReadableDescription[], description: HumanReadableDescription) => {
+      if (this.value.locale !== 'en' && description.locale === this.value.locale) filtered = [description, ...filtered];
+      else if (description.locale === 'en') filtered = [...filtered, description];
+      return filtered;
+    }, []);
+  }
 }

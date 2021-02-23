@@ -5,11 +5,13 @@ CaPe Dashboard
 ## Start local dev server
 
 ### Demo
+
 To run the example application type
 
-` npm run start `
+`npm run start`
 
 ### Testing with stub backend and database
+
 To test the application fetching data from a stub database, type the following commands
 
 ```

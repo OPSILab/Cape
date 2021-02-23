@@ -12,11 +12,9 @@
     "serviceManagerUrl": "http://localhost:8082/service-manager/api/v2",
     "auditLogUrl": "http://localhost:8081/auditlog-manager/api/v2",
     "consentManagerUrl": "http://localhost:8083/consent-manager/api/v2",
-    "disable_auth": "false",
-    "assetsDataDir": "/assets/data"
+    "disable_auth": "false"
   },
   "i18n": {
     "locale": "it"
   }
 }
-

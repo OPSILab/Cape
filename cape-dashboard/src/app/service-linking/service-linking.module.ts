@@ -7,7 +7,8 @@ import { ServiceLinkingService } from './service-linking.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-export function createTranslateLoader(http: HttpClient) {
+
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -24,11 +25,11 @@ export function createTranslateLoader(http: HttpClient) {
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
   ],
-  providers: [ServiceLinkingService]
+  providers: [ServiceLinkingService],
 })
-export class ServiceLinkingModule { }
+export class ServiceLinkingModule {}

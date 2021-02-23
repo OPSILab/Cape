@@ -1,8 +1,6 @@
 import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
-  
- 
   {
     title: 'general.menu.dashboard',
     icon: 'pie-chart-outline',
@@ -48,5 +46,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'general.menu.data_connectors',
     icon: 'cube-outline',
     link: '/pages/tables/linked_services',
-  }
+  },
 ];

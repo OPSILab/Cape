@@ -21,7 +21,7 @@
 @include nb-install() {
   // framework global styles
   @include nb-theme-global();
-/*  @include nb-auth-global();*/
+  /*  @include nb-auth-global();*/
 
   @include ngx-layout();
   // loading progress bar
@@ -30,11 +30,7 @@
   @include nb-overrides();
 }
 
-;
-
-
 /*  DATA WORKFLOW STYLES*/
-
 
 $sink: #17a2b8;
 $source: #17a2b8;
@@ -68,7 +64,6 @@ g.graph-node-root g.body-group:hover,
   color: blue !important;
 }
 
-
 g.graph-node-data g.title-group rect,
 g.graph-node-root g.title-group rect,
 g.graph-node-data g.body-group rect,
@@ -76,7 +71,6 @@ g.graph-node-root g.body-group rect {
   fill: transparent !important;
   stroke-width: 0px;
 }
-
 
 g.graph-node-sink g.body-group rect,
 g.graph-node-sink g.title-group rect {
@@ -142,36 +136,36 @@ g.graph-node-shared g.title-group rect {
 }
 
 .text-source {
-  color: $source
+  color: $source;
 }
 
 .text-sink {
-  color: $sink
+  color: $sink;
 }
 
 .text-processor {
-  color: $processor
+  color: $processor;
 }
 
 .text-purpose {
-  color: $purpose
+  color: $purpose;
 }
 
 .text-processing {
-  color: $processing
+  color: $processing;
 }
 
 .text-storage {
-  color: $storage
+  color: $storage;
 }
 
 .text-shared {
-  color: $shared
+  color: $shared;
 }
 
 /***** GENERAL STYLES */
 
-button[aria-expanded="false"] {
+button[aria-expanded='false'] {
   i.material-icons.expand_less {
     display: none;
   }
@@ -181,7 +175,7 @@ button[aria-expanded="false"] {
   }
 }
 
-button[aria-expanded="true"] {
+button[aria-expanded='true'] {
   i.material-icons.expand_less {
     display: block;
   }
@@ -231,35 +225,35 @@ nb-context-menu {
     &:focus,
     &.focus {
       outline: 0;
-      box-shadow: 0 0 0 $badge-focus-width rgba(nb-theme(color-#{$status}-default), .5);
+      box-shadow: 0 0 0 $badge-focus-width rgba(nb-theme(color-#{$status}-default), 0.5);
     }
   }
 }
-
 
 [nbButton] {
   // box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
   @each $status in nb-get-statuses() {
     &.status-#{$status} {
       border-width: 0;
-      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 
       &:focus {
         border-width: 0;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
       }
 
       &:hover {
         border-width: 0;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
       }
 
       &:active {
         border-width: 0;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
       }
 
-      &[disabled], &[ghost] {
+      &[disabled],
+      &[ghost] {
         border-width: 0;
         box-shadow: none;
       }
@@ -267,12 +261,11 @@ nb-context-menu {
   }
 }
 
-
 nb-select {
   .select-button {
     min-width: nb-theme(select-min-width);
     cursor: nb-theme(select-cursor);
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 
     &.placeholder {
       font-weight: nb-theme(select-placeholder-text-font-weight);
@@ -291,9 +284,8 @@ nb-select {
 
 /*Switch alternative Toggle*/
 label.switch {
-
   .slider {
-    height: .9rem;
+    height: 0.9rem;
     width: 2.3rem;
     border-width: 0px;
     background-color: nb-theme(toggle-background-color);
@@ -306,7 +298,7 @@ label.switch {
     left: -4px;
     right: auto;
     background-color: nb-theme(color-basic-200);
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   }
 
   input:checked + .slider {
@@ -317,7 +309,7 @@ label.switch {
       left: -4px;
       right: auto;
       background-color: nb-theme(color-basic-200);
-      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+      box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     }
   }
 
@@ -326,11 +318,10 @@ label.switch {
 
     ::before {
       background-color: nb-theme(color-basic-200);
-      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+      box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     }
   }
 }
-
 
 // @mixin nb-toggle-theme() {
 nb-toggle {
@@ -345,7 +336,7 @@ nb-toggle {
       left: -5px;
       right: auto;
       background-color: nb-theme(color-basic-200);
-      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+      box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     }
   }
 
@@ -400,7 +391,8 @@ nb-toggle {
   border-bottom: 2px solid nb-theme(color-basic-300);
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 0.75rem;
   vertical-align: middle;
   border-top: 1px solid nb-theme(color-basic-300);
@@ -427,7 +419,7 @@ ng2-smart-table table tr.ng2-smart-titles th a:visited {
 /*Custom tables*/
 .gridTable {
   min-width: 340px;
-  width: 450px
+  width: 450px;
 }
 
 .gridTableHeaders {
@@ -438,7 +430,7 @@ ng2-smart-table table tr.ng2-smart-titles th a:visited {
   display: grid;
   grid-template-columns: auto 33% 33%;
   grid-template-rows: auto;
-  grid-template-areas: "col-status col-from col-to";
+  grid-template-areas: 'col-status col-from col-to';
 }
 
 .colStatus {
@@ -467,7 +459,7 @@ ng2-smart-table table tr.ng2-smart-titles th a:visited {
   display: grid;
   grid-template-columns: auto 33% 33%;
   grid-template-rows: auto auto;
-  grid-template-areas: "status from to" "dataName dataName dataName";
+  grid-template-areas: 'status from to' 'dataName dataName dataName';
   border-bottom: 1px solid nb-theme(color-basic-300);
 }
 

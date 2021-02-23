@@ -1,5 +1,5 @@
-import { NgModule }      from '@angular/core';
-import { CommonModule }  from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbLayoutModule, NbSidebarModule, NbCardModule, NbCheckboxModule, NbButtonModule } from '@nebular/theme';
 
@@ -20,10 +20,8 @@ import { AccountModule } from '../pages/account/account.module';
     NbCheckboxModule,
     NbButtonModule,
     TranslateModule.forChild({}),
-    AccountModule
+    AccountModule,
   ],
-  declarations: [
-    LoginPopupComponent,
-  ]
+  declarations: [LoginPopupComponent],
 })
 export class LoginPopupModule {}

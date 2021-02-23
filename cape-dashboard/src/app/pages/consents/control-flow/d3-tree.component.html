@@ -1,16 +1,17 @@
 <div class="border border-secondary rounded">
-    <div class="row shadow-sm mx-0">
-        <div  class="col p-3"><nb-select placeholder="Filter by Data Type" (selectedChange)="filterNodes($event)">
-                <nb-option ><i>Clean</i></nb-option>
-                <nb-option *ngFor="let concept of concepts" value="{{concept}}">{{concept}}</nb-option>
-                
-              </nb-select></div>
-           
-        <div *ngFor="let icon of legendIcons" class="col p-3 text-{{icon.color}}">
-            <nb-icon [icon]="icon.class" pack="fa"></nb-icon>
-            <span class="ml-3">{{icon.title}}</span>
-        </div>
+  <div class="row shadow-sm mx-0">
+    <div class="col p-3">
+      <nb-select placeholder="Filter by Data Type" (selectedChange)="filterNodes($event)">
+        <nb-option><i>Clean</i></nb-option>
+        <nb-option *ngFor="let concept of concepts" value="{{ concept }}">{{ concept }}</nb-option>
+      </nb-select>
     </div>
 
-    <section id="visualisation" style="width: 100%; height: 600px"></section>
+    <div *ngFor="let icon of legendIcons" class="col p-3 text-{{ icon.color }}">
+      <nb-icon [icon]="icon.class" pack="fa"></nb-icon>
+      <span class="ml-3">{{ icon.title }}</span>
+    </div>
+  </div>
+
+  <section id="visualisation" style="width: 100%; height: 600px"></section>
 </div>

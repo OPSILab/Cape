@@ -1,17 +1,14 @@
-
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AuditLogsService } from './auditlogs.service';
-import { NbRangepickerComponent, NbSelectComponent } from '@nebular/theme';
+import { NbRangepickerComponent } from '@nebular/theme';
 import { NgxConfigureService } from 'ngx-configure';
 import { LoginService } from '../../login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
-import { EventLog, EventType, DateRange, ConsentEventLog, ServiceLinkEventLog, ConsentActionType, ServiceLinkActionType } from '../../model/auditlogs/auditlogs.model';
+import { EventLog, EventType, DateRange, ConsentEventLog, ServiceLinkEventLog } from '../../model/auditlogs/auditlogs.model';
 import { ProcessingBasisLegalBasis, ProcessingBasisProcessingCategories } from '../../model/processingBasis';
 import { FormGroup, FormControl } from '@angular/forms';
-
-
 
 @Component({
   selector: 'auditlogs-component',
@@ -19,9 +16,9 @@ import { FormGroup, FormControl } from '@angular/forms';
   templateUrl: './auditlogs.component.html',
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
-
-  loading: boolean = true;
-  @ViewChild('rangepicker', { static: true }) rangepicker: NbRangepickerComponent<any>;
+  loading = true;
+  @ViewChild('rangepicker', { static: true })
+  rangepicker: NbRangepickerComponent<unknown>;
   @ViewChild('inputrange', { static: true }) inputRange: ElementRef;
 
   dateRangeFilter: DateRange;
@@ -35,84 +32,87 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
   public filtersForm = new FormGroup({
     legalBasis: new FormControl(),
     processingCategory: new FormControl(),
-    dateRange: new FormControl()
+    dateRange: new FormControl(),
   });
 
-  constructor(private service: AuditLogsService, private translate: TranslateService, private configService: NgxConfigureService,
-    private loginService: LoginService, private router: Router, private route: ActivatedRoute, private errorDialogService: ErrorDialogService) {
-
+  constructor(
+    private service: AuditLogsService,
+    private translate: TranslateService,
+    private configService: NgxConfigureService,
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private errorDialogService: ErrorDialogService
+  ) {
     this.processingCategoryOptions = Object.keys(this.processingCategoryEnum);
     this.legalBasisOptions = Object.keys(this.legalBasisEnum);
   }
 
-  async ngOnInit() {
-
-    this.service.getEventLogs().then(result => {
-      this.eventLogs = this.groupEventLogsByMonthDays(result);
-      this.loading = false;
-    }).catch(error => {
-      if (error.status === 401) {
-        this.loginService.logout();
-        this.router.navigate(['/login']);
-      } else
-        this.errorDialogService.openErrorDialog(error);
-    });
+  ngOnInit(): void {
+    this.service
+      .getEventLogs()
+      .then((result) => {
+        this.eventLogs = this.groupEventLogsByMonthDays(result);
+        this.loading = false;
+      })
+      .catch((error) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if (error.status === 401) {
+          this.loginService.logout().catch((error) => this.errorDialogService.openErrorDialog(error));
+          // this.router.navigate(['/login']);
+        } else this.errorDialogService.openErrorDialog(error);
+      });
   }
 
-  ngOnDestroy() {
-
+  ngOnDestroy(): void {
     console.log('ngOnDestroy');
   }
 
-  openConsent(consentId, message) {
-
-    this.router.navigate(['/pages/consents'], { queryParams: { consentId: consentId, eventName: message } });
+  openConsent(consentId: string, message: string): void {
+    void this.router.navigate(['/pages/consents'], {
+      queryParams: { consentId: consentId, eventName: message },
+    });
   }
 
-  openServiceLink(serviceId, serviceName) {
-
-    this.router.navigate(['/pages/services/linkedServices'], { queryParams: { serviceId: serviceId, serviceName: serviceName } });
+  openServiceLink(serviceId: string, serviceName: string): void {
+    void this.router.navigate(['/pages/services/linkedServices'], {
+      queryParams: { serviceId: serviceId, serviceName: serviceName },
+    });
   }
 
-
-  async onFilterSubmit() {
-
+  async onFilterSubmit(): Promise<void> {
     try {
-      this.eventLogs = this.groupEventLogsByMonthDays(await this.service.getFilteredEventLogs(
-        this.filtersForm.get('legalBasis').value,
-        this.filtersForm.get('dateRange').value,
-        this.filtersForm.get('processingCategory').value));
-
+      this.eventLogs = this.groupEventLogsByMonthDays(
+        await this.service.getFilteredEventLogs(
+          this.filtersForm.get('legalBasis').value,
+          this.filtersForm.get('dateRange').value,
+          this.filtersForm.get('processingCategory').value
+        )
+      );
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.status === 401) {
-        this.loginService.logout();
-        this.router.navigate(['/login']);
-      } else
-        this.errorDialogService.openErrorDialog(error);
+        this.loginService.logout().catch((error) => this.errorDialogService.openErrorDialog(error));
+        // this.router.navigate(['/login']);
+      } else this.errorDialogService.openErrorDialog(error);
     }
-
   }
 
-
-  resetFilters() {
-
+  resetFilters(): void {
     this.filtersForm.reset({
       legalBasis: [],
       processingCategory: [],
-      dateRange: ''
+      dateRange: '',
     });
 
-    this.onFilterSubmit();
+    void this.onFilterSubmit();
   }
 
-
   groupEventLogsByMonthDays(eventLogs: EventLog[]): unknown[] {
-
     const groupedEvents: unknown[] = [];
     const map: Map<string, Map<string, EventLog[]>> = new Map<string, Map<string, EventLog[]>>();
 
     for (const event of eventLogs) {
-
       const date = new Date(event.created);
       const month = `${(date.getUTCMonth() + 1).toString()}/${date.getUTCFullYear().toString()}`;
       const day = `${date.getUTCDate().toString()}/${month}`;
@@ -126,7 +126,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         } else {
           mapMonthEntry.set(day, [event]);
         }
-
       } else {
         // Add the event in a new Map for that day and insert it in the new month entry
         const dayMap = new Map<string, EventLog[]>([[day, [event]]]);
@@ -134,32 +133,28 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
       }
     }
 
-    for (const [monthKey, monthValue] of map.entries()) {
-
+    for (const [monthKey, monthValue] of map) {
       const monthDay = [];
-      for (const [dayKey, dayEvents] of monthValue.entries()) {
-
+      for (const [dayKey, dayEvents] of monthValue) {
         const typedEvents = dayEvents.map((event) => {
-
           if (event.type === EventType.Consent) {
-
             return {
               context: event.type && event.type[0].toUpperCase() + event.type.slice(1),
               legalBasis: event.legalBasis,
               message: event.message,
               created: new Date(event.created),
-              type: this.translate.instant('general.auditlogs.'+event.type),
-              action:this.translate.instant('general.auditlogs.'+(event as ConsentEventLog).action),
+              type: this.translate.instant('general.auditlogs.' + event.type) as string,
+              action: this.translate.instant('general.auditlogs.' + (event as ConsentEventLog).action) as string,
               purpose: {
                 purposeId: (event as ConsentEventLog).usageRules.purposeId,
                 purposeName: (event as ConsentEventLog).usageRules.purposeName,
-                purposeCategory: (event as ConsentEventLog).usageRules.purposeCategory
+                purposeCategory: (event as ConsentEventLog).usageRules.purposeCategory,
               },
               process: (event as ConsentEventLog).usageRules.processingCategories.join(', '),
               source: (event as ConsentEventLog).sourceId,
               target: (event as ConsentEventLog).sinkId,
               dataConcepts: (event as ConsentEventLog).dataConcepts,
-              consent_id: (event as ConsentEventLog).consentRecordId
+              consent_id: (event as ConsentEventLog).consentRecordId,
             };
           }
 
@@ -168,35 +163,32 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
               context: event.type && event.type[0].toUpperCase() + event.type.slice(1),
               legalBasis: event.legalBasis,
               message: event.message,
-              type: this.translate.instant("general.auditlogs."+event.type),
-              action:this.translate.instant("general.auditlogs."+(event as ServiceLinkEventLog).action),
+              type: this.translate.instant('general.auditlogs.' + event.type) as string,
+              action: this.translate.instant('general.auditlogs.' + (event as ServiceLinkEventLog).action) as string,
               created: new Date(event.created),
               serviceId: (event as ServiceLinkEventLog).serviceId,
               serviceName: (event as ServiceLinkEventLog).serviceName,
-              serviceUri: (event as ServiceLinkEventLog).serviceUri
+              serviceUri: (event as ServiceLinkEventLog).serviceUri,
             };
           }
 
           if (event.type === EventType.DataProcessing) {
             return {};
           }
-
         });
 
         monthDay.push({
           day: dayKey,
-          events: typedEvents
+          events: typedEvents,
         });
       }
 
       groupedEvents.push({
         month: monthKey,
-        days: monthDay
+        days: monthDay,
       });
     }
 
     return groupedEvents;
   }
-
-
 }

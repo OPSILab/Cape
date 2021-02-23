@@ -14,7 +14,5 @@ export interface AccountInfo {
 export enum AccountNotificationEnum {
   Dashboard = 'DASHBOARD',
   Email = 'EMAIL',
-  Phone = 'PHONE'
+  Phone = 'PHONE',
 }
-
-

@@ -7,11 +7,11 @@ export interface AuditLog {
   linkedServicesCount: number;
   givenConsentsCount: number;
   totalProcessedPersonalDataCount: number;
-  processedPersonalDataCount: object;
-  processingCategoryPersonalData: object;
-  purposeCategoryCount: object;
-  legalBasisCount: object;
-  storageLocationPersonalData: object;
+  processedPersonalDataCount: Record<string, AuditDataMapping>;
+  processingCategoryPersonalData: Record<string, Record<string, AuditDataMapping>>;
+  purposeCategoryCount: Record<string, number>;
+  legalBasisCount: Record<string, number>;
+  storageLocationPersonalData: Record<string, Record<string, AuditDataMapping>>;
 }
 
 export interface EventLog {
@@ -25,7 +25,7 @@ export interface EventLog {
 export enum EventType {
   Consent = 'Consent',
   ServiceLink = 'ServiceLink',
-  DataProcessing = 'DataProcessing'
+  DataProcessing = 'DataProcessing',
 }
 
 export interface ServiceLinkEventLog extends EventLog {
@@ -50,21 +50,19 @@ export interface AuditDataMapping extends DataMapping {
   count: number;
 }
 
-
 export enum ConsentActionType {
   GIVE = 'Give',
   UPDATE = 'Update',
   DISABLE = 'Disable',
   ACTIVATE = 'Activate',
   WITHDRAW = 'Withdraw',
-  SEND = 'Send'
+  SEND = 'Send',
 }
-
 
 export enum ServiceLinkActionType {
   CREATE = 'Create',
   DISABLE = 'Disable',
-  DELETE = 'Delete'
+  DELETE = 'Delete',
 }
 
 export interface DateRange {

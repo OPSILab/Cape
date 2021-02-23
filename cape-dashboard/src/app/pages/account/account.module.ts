@@ -40,16 +40,9 @@ import { AccountService } from './account.service';
     NbRadioModule,
     ReactiveFormsModule,
     NbWindowModule.forChild(),
-    NbCheckboxModule
+    NbCheckboxModule,
   ],
-  declarations: [
-    AccountComponent,
-  ],
-  providers: [
-    AccountService
-  ]
+  declarations: [AccountComponent],
+  providers: [AccountService],
 })
-
-export class AccountModule {
-
-}
+export class AccountModule {}

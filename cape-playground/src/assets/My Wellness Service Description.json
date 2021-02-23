@@ -1,12 +1,12 @@
 {
 	"serviceId": "MYW20",
 	"name": "My Wellness",
-	"identifier": "http://localhost/cape-playground/pages/services/my-wellness",
+	"identifier": "http://localhost:82/cape-playground/pages/services/my-wellness",
 	"issued": "2020-18-06T13:48:00Z",
 	"createdByUserId": "Cape Developers",
 	"serviceDescriptionVersion": "1.0",
 	"serviceDescriptionSignature": "",
-	"serviceIconUrl": "http://localhost/cape-playground/my-wellness/favicon.ico",
+	"serviceIconUrl": "http://localhost:82/cape-playground/my-wellness/favicon.ico",
 	"status": "Completed",
 	"supportedProfiles": [
 		"Consenting"
@@ -62,11 +62,11 @@
 			"x5c": []
 		},
 		"serviceUrls": {
-			"domain": "http://localhost/cape-playground",
-			"libraryDomain": "http://localhost:8085/cape-service-sdk",
-			"loginUri": "http://localhost/cape-playground/pages/services/my-wellness",
-			"linkingUri": "http://localhost:8085/cape-service-sdk/api/v2/slr/linking",
-			"linkingRedirectUri": "http://localhost/cape-playground",
+			"domain": "http://localhost82/cape-playground",
+			"libraryDomain": "http://service-sdk:8085/cape-service-sdk",
+			"loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
+			"linkingUri": "http://service-sdk:8085/cape-service-sdk/api/v2/slr/linking",
+			"linkingRedirectUri": "http://localhost:82/cape-playground",
 			"objectionUri": "",
 			"notificationUri": ""
 		},

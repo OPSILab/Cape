@@ -177,6 +177,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${springboot.version}</version>
+				<configuration>
+					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+				</configuration>
 				<executions>
 					<execution>
 						<id>pre-integration-test</id>

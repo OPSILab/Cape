@@ -10,10 +10,10 @@
       "select_login": "Select your Digital Identity Provider",
       "login_with_cape_idm": "Login with CaPe",
       "login_with_cape_idm_description": "CaPe uses natively the Keyrock IdM",
-      "keyrock_idm_link":"Sign in with FIWARE Keyrock",
+      "keyrock_idm_link": "Sign in with FIWARE Keyrock",
       "login_with_eidas": "Login with eIDAS",
       "login_with_eidas_description": "The eIDAS regulation is the legislative basis for electronic interactions between businesses, citizens and public authorities.",
-      "eidas_link":"Sign in with a digital identity from another European Country",
+      "eidas_link": "Sign in with a digital identity from another European Country",
       "loginPopup": {
         "authorize_account_data": "Do you authorize to use your account data?",
         "dont_ask_again": "Don't Ask again",
@@ -24,7 +24,6 @@
         "cancel_button": "Cancel",
         "create_button": "Create"
       }
-
     },
     "dashboard": {
       "statusCards": {
@@ -114,7 +113,7 @@
       "disabled": "Disabled",
       "withdrawn": "Withdrawn",
       "reset": "Reset",
-      "refresh":  "Refresh Consents",
+      "refresh": "Refresh Consents",
       "apply": "Apply",
       "force_serviceLink_activation": "Activate both Service Link and Consent"
     },
@@ -218,12 +217,12 @@
     "auditlogs": {
       "ServiceLink": "Link to service",
       "Create": "created",
-      "Send":"sent",
+      "Send": "sent",
       "Update": "updated",
       "Give": "given",
-      "Disable":"disabled",
-      "Activate":"enabled",
-      "Withdraw":"withdrawn",
+      "Disable": "disabled",
+      "Activate": "enabled",
+      "Withdraw": "withdrawn",
       "Delete": "deleted",
       "Consent": "Consent",
       "filters": "Filters",

@@ -7,21 +7,15 @@ const routes: Routes = [
   {
     path: '',
     component: AuditLogsComponent,
-
   },
   {
     path: ':filters',
-    component: AuditLogsComponent
-  }
+    component: AuditLogsComponent,
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-  ],
-  exports: [
-    RouterModule,
-  ],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-
-export class AuditRoutingModule { }
+export class AuditRoutingModule {}

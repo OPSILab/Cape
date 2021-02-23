@@ -7,7 +7,7 @@ export const CORPORATE_THEME = {
   base: 'corporate',
   variables: {
     temperature: {
-      arcFill: [ '#ffa36b', '#ffa36b', '#ff9e7a', '#ff9888', '#ff8ea0' ],
+      arcFill: ['#ffa36b', '#ffa36b', '#ff9e7a', '#ff9888', '#ff8ea0'],
       arcEmpty: baseThemeVariables.bg2,
       thumbBg: baseThemeVariables.bg2,
       thumbBorder: '#ffa36b',

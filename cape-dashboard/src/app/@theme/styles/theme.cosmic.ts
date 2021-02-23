@@ -7,7 +7,7 @@ export const COSMIC_THEME = {
   base: 'cosmic',
   variables: {
     temperature: {
-      arcFill: [ '#2ec7fe', '#31ffad', '#7bff24', '#fff024', '#f7bd59' ],
+      arcFill: ['#2ec7fe', '#31ffad', '#7bff24', '#fff024', '#f7bd59'],
       arcEmpty: baseThemeVariables.bg2,
       thumbBg: '#ffffff',
       thumbBorder: '#ffffff',

@@ -7,10 +7,9 @@ describe('ServiceLinkingComponent', () => {
   let fixture: ComponentFixture<ServiceLinkingComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ServiceLinkingComponent ]
-    })
-    .compileComponents();
+    void TestBed.configureTestingModule({
+      declarations: [ServiceLinkingComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -20,6 +19,6 @@ describe('ServiceLinkingComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

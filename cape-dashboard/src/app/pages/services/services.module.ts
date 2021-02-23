@@ -6,9 +6,7 @@ import { AvailableServicesService } from './availableServices/availableServices.
 import { ServiceInfoRenderComponent } from './availableServices/serviceInfoRender.component';
 import { LinkButtonRenderComponent } from './availableServices/linkButtonRender.component';
 import { ServicesRoutingModule } from './services-routing.module';
-import { ServiceInfoModalComponent } from './availableServices/serviceInfo-modal/serviceInfo-modal.component';
 import { LinkedServicesComponent } from './linkedServices/linkedServices.component';
-import { LinkedServiceInfoModalComponent } from './linkedServices/linkedServiceInfo-modal/linkedServiceInfo-modal.component';
 import { LinkedServiceInfoRenderComponent } from './linkedServices/linkedServiceInfoRender.component';
 import { EnableServiceLinkButtonRenderComponent } from './linkedServices/enableServiceLinkButtonRender.component';
 import { LinkedServicesService } from './linkedServices/linkedServices.service';
@@ -22,12 +20,10 @@ import {
   NbToggleModule,
   NbContextMenuModule,
   NbIconModule,
-
-  NbToastrModule
+  NbToastrModule,
 } from '@nebular/theme';
 import { ActionsServiceLinkMenuRenderComponent } from './linkedServices/actionsServiceLinkMenuRender.component';
 import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButtonRender.component';
-
 
 @NgModule({
   imports: [
@@ -42,34 +38,27 @@ import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButt
     NbIconModule,
     NbContextMenuModule,
     ServicesRoutingModule,
-    TranslateModule.forChild({})
+    TranslateModule.forChild({}),
   ],
   declarations: [
     AvailableServicesComponent,
     LinkButtonRenderComponent,
     ServiceInfoRenderComponent,
-    ServiceInfoModalComponent,
     LinkedServicesComponent,
-    LinkedServiceInfoModalComponent,
     LinkedServiceInfoRenderComponent,
     EnableServiceLinkButtonRenderComponent,
     ActionsServiceLinkMenuRenderComponent,
-    ServiceUrlButtonRenderComponent
+    ServiceUrlButtonRenderComponent,
   ],
-  providers: [
-    AvailableServicesService,
-    LinkedServicesService
-  ],
+  providers: [AvailableServicesService, LinkedServicesService],
   entryComponents: [
     LinkButtonRenderComponent,
     ServiceInfoRenderComponent,
-    ServiceInfoModalComponent,
     LinkedServicesComponent,
-    LinkedServiceInfoModalComponent,
     LinkedServiceInfoRenderComponent,
     EnableServiceLinkButtonRenderComponent,
     ActionsServiceLinkMenuRenderComponent,
-    ServiceUrlButtonRenderComponent
-  ]
+    ServiceUrlButtonRenderComponent,
+  ],
 })
-export class ServicesModule { }
+export class ServicesModule {}

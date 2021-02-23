@@ -67,7 +67,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   public menuItems: NbMenuItem[];
 
   @ViewChild('linkingDialog', { static: false }) linkingDialog: TemplateRef<unknown>;
-  @ViewChild('linkedDialog', { static: true }) linkedDialog;
+  @ViewChild('linkedDialog', { static: true }) linkedDialog: TemplateRef<unknown>;
+  @ViewChild('consentUpdateConflict') private consentUpdateConflict: TemplateRef<unknown>;
+
   public openedDialog: NbDialogRef<unknown> = undefined;
   private unsubscribe: Subject<void> = new Subject();
 
@@ -454,8 +456,27 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
       this.cdr.detectChanges();
     } catch (error) {
-      this.errorDialogService.openErrorDialog(error);
+      if (error.status === 409) {
+        this.openConsentUpdateConflictDialog(error, this.consentUpdateConflict, consentIndex, consent.payload.common_part.subject_id, consent.payload.common_part.slr_id);
+      } else
+        this.errorDialogService.openErrorDialog(error);
     }
+  }
+
+  openConsentUpdateConflictDialog(error: unknown, consentUpdateConflict: TemplateRef<any>, consentIndex: number, serviceId: string, slrId: string) {
+
+
+    this.dialogService.open(consentUpdateConflict, {
+      context: {
+        error: error,
+        consentIndex: consentIndex,
+        serviceId: serviceId,
+        slrId: slrId
+      },
+      hasScroll: false,
+      closeOnBackdropClick: false,
+      closeOnEsc: false
+    });
   }
 
   async withdrawConsent(): Promise<void> {

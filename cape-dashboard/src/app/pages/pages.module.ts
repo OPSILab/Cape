@@ -8,18 +8,8 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
-  imports: [
-    PagesRoutingModule,
-    ThemeModule,
-    NbMenuModule,
-    DashboardModule
-  ],
-  declarations: [
-    PagesComponent,
-  ],
-  providers: [
-    PagesMenuTranslator,
-  ]
+  imports: [PagesRoutingModule, ThemeModule, NbMenuModule, DashboardModule],
+  declarations: [PagesComponent],
+  providers: [PagesMenuTranslator],
 })
-export class PagesModule {
-}
+export class PagesModule {}
