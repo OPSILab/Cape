@@ -40,9 +40,9 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   public isCollapsed: boolean[];
   public changedDataMapping: boolean[];
   public changedShareWith: boolean[];
-  private lastClickedIndex: number;
-  private lastClickedDataMapping: Map<number, DataMapping[]> = new Map<number, DataMapping[]>();
-  private lastClickedShareWith: Map<number, ShareWith[]> = new Map<number, ShareWith[]>();
+  public lastClickedIndex: number;
+  public lastClickedDataMapping: Map<number, DataMapping[]> = new Map<number, DataMapping[]>();
+  public lastClickedShareWith: Map<number, ShareWith[]> = new Map<number, ShareWith[]>();
   public consents: ConsentRecordSignedPair[];
   public services: ServiceEntry[];
 
@@ -50,10 +50,10 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   private consentUpdateConflict: TemplateRef<unknown>;
 
   @Input() loading = true;
-  private processingCategoryEnum = ProcessingBasisProcessingCategories;
+  public processingCategoryEnum = ProcessingBasisProcessingCategories;
   public processingCategoryOptions;
 
-  private changeStatusButtons;
+  public changeStatusButtons;
   public filtersForm = new FormGroup({
     service: new FormControl(),
     status: new FormControl(),

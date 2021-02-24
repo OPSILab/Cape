@@ -17,7 +17,7 @@ services:
 
 networks:
  cape-network:
-   name: cape-dashboard-network
+   name: cape-service-editor-network
    driver: bridge
    driver_opts:
      com.docker.network.driver.mtu: 1400

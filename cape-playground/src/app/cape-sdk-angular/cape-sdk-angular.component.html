@@ -48,3 +48,36 @@
     </nb-card-footer>
   </nb-card>
 </ng-template>
+
+<!-- Conflict on Consent Update Template -->
+<ng-template #consentUpdateConflict let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header class="d-flex justify-content-between">
+      <h5 class="h5 mr-3">{{ 'general.error' | translate }}</h5>
+      <button nbButton ghost shape="rectangle" size="small" (click)="ref.close()">
+        <i class="material-icons">close</i>
+      </button>
+    </nb-card-header>
+    <nb-card-body class="m-3">
+      <div class="row p-1">{{ data.error.message }}</div>
+      <div *ngIf="data.error.error" class="row justify-content-center p-1">{{ data.error.error.message }}</div>
+      <div class="row p-1 mt-1 justify-content-center">
+        <strong>Status: {{ data.error.status }}</strong>
+      </div>
+    </nb-card-body>
+    <nb-card-footer class="d-flex justify-content-end">
+      <button nbButton ghost shape="rectangle" size="medium" (click)="ref.close()">
+        {{ 'general.services.closeButton' | translate }}
+      </button>
+      <button
+        nbButton
+        ghost
+        shape="rectangle"
+        size="medium"
+        (click)="enableConsent(true); ref.close()"
+      >
+        {{ 'general.consents.force_serviceLink_activation' | translate }}
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

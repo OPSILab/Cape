@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, AfterViewChecked, TemplateRef, OnDestroy } from '@angular/core';
-import { NbMenuService, NbMenuItem, NbToastrService, NbDialogService, NbDialogRef } from '@nebular/theme';
+import { NbMenuService, NbMenuItem, NbToastrService, NbDialogService, NbDialogRef, NbGlobalLogicalPosition } from '@nebular/theme';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from './error-dialog/error-dialog.service';
@@ -444,6 +444,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   async enableConsent(): Promise<void> {
 
     try {
+
       this.consentRecord.consentStatusList.push(await this.capeService.enableConsent(this.sdkUrl, this.consentRecord));
       this.menuItems = [
         { title: this.translateService.instant('general.goToDashboard') },
@@ -455,21 +456,19 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         { title: this.translateService.instant('general.services.enableServiceLinkLabel'), target: 'Enable Service Link' });
 
       this.cdr.detectChanges();
+
     } catch (error) {
       if (error.status === 409) {
-        this.openConsentUpdateConflictDialog(error, this.consentUpdateConflict, consentIndex, consent.payload.common_part.subject_id, consent.payload.common_part.slr_id);
+        this.openConsentUpdateConflictDialog(error, this.consentUpdateConflict, this.consentRecord.payload.common_part.subject_id, this.consentRecord.payload.common_part.slr_id);
       } else
         this.errorDialogService.openErrorDialog(error);
     }
   }
 
-  openConsentUpdateConflictDialog(error: unknown, consentUpdateConflict: TemplateRef<any>, consentIndex: number, serviceId: string, slrId: string) {
-
-
+  openConsentUpdateConflictDialog(error: unknown, consentUpdateConflict: TemplateRef<any>, serviceId: string, slrId: string) {
     this.dialogService.open(consentUpdateConflict, {
       context: {
         error: error,
-        consentIndex: consentIndex,
         serviceId: serviceId,
         slrId: slrId
       },

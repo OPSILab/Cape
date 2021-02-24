@@ -1,0 +1,20 @@
+{
+  "system": {
+    "operatorId": "cape",
+    "onlineServicesUrl": "https://www.cape-suite.eu/cape-online-services",
+    "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
+    "idmHost": "https://www.cape-suite.eu:8002",
+    "clientId": "1e6347c0-526e-463f-84e3-0cc4c24743e0",
+    "loginPopupUrl": "/loginPopup",
+    "disable_auth": "false",
+    "assetsDataDir": "/assets/data/"
+  },
+  "services": {
+    "sdkUrl": "https://www.cape-suite.eu/cape-server/cape-service-sdk/api/v2",
+    "checkConsentAtOperator": "true"
+    
+  },
+  "i18n": {
+    "locale": "en"
+  }
+}

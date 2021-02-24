@@ -63,9 +63,9 @@ export class LoginComponent {
       title,
       `
       toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no,
-      width=${w / systemZoom}, 
-      height=${h / systemZoom}, 
-      top=${top + 50}, 
+      width=${w / systemZoom},
+      height=${h / systemZoom},
+      top=${top + 50},
       left=${left}
       `
     );
