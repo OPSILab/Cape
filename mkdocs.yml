@@ -8,15 +8,31 @@ markdown_extensions: [toc,fenced_code]
 use_directory_urls: true
 theme: readthedocs
 
-pages:
+nav:
   - 'Home': 'index.md' 
   - 'Introduction': 'introduction.md'
   - 'Architecture Overview': 'architecture/architecture.md'
-  #- 'Installation & Administration Manual':
-      #- 'Introduction': 'admin/index.md'
-      #- 'Installation overview': 'admin/installation.md'
-      #- 'Install with WARs packages': 'admin/install_war.md'
-      #- 'Install with Docker': 'admin/install_docker.md'
-      #- 'Sanity Checks': 'admin/sanitychecks.md'
-
-
+  - 'Cape Workflow':
+      - 'Introduction': 'workflow/workflow.md'
+      - 'Service Description & Registration': 'workflow/service-description.md'
+      - 'Service Linking': 'workflow/service-linking.md'
+      - 'Consent Form & Consent Request': 'workflow/consenting.md'
+      - 'Data Request, Notifications & Activity Logs': 'workflow/data-request.md'  
+      - 'Consent Management & Data Usage Control': 'workflow/consent-management.md'      
+  - 'Installation Manual':
+      - 'Introduction': 'install/index.md'
+      - 'Installing CaPe Server': 'install/install-cape-server.md'
+      - 'Install CaPe Server - WAR packages': 'install/install-cape-server-war.md'
+      - 'Install CAPe Server - Docker' : 'install/install-cape-server-docker.md'
+      - 'Installing CaPe SDK': 'install/install-cape-sdk.md'
+      - 'CaPe SDK Client': 'install/install-cape-sdk-client.md'
+      - 'CaPe SDK Angular Plugin': 'install/install-cape-sdk-angular.md'
+      - 'Installing CaPe Dashboards':
+          - 'User Self-Service Dashboard': 'install/install-cape-user-dashboard.md'
+          - 'Data Controller Dashboard': 'install/install-cape-datacontroller-dashboard.md'
+  - 'User Guide & Dashboard Manuals':
+      - 'User Self-Service Dashboard': 'manual/end-user-dashboard.md'
+      - 'Data Controller Dashboard': 'manual/data-controller-dashboard.md'
+  - 'Use Cases & Demo':
+      - 'Within Service': 'demo/within-service.md'
+      - 'Sharing between Services': 'demo/sharing-services.md'

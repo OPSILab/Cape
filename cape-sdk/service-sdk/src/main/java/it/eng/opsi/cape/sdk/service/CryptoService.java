@@ -279,7 +279,7 @@ public class CryptoService {
 	}
 
 	public String signAndSerializeDataRequestAuthorization(ServicePopKey popKey,
-			DataRequestAuthorizationPayload dataRequest) throws JsonProcessingException, JOSEException {
+			DataRequestAuthorizationPayload authPayload) throws JsonProcessingException, JOSEException {
 
 		/*
 		 * Get Public part of Service Proof of Possession key pair to be put into the
@@ -302,7 +302,7 @@ public class CryptoService {
 		 */
 
 		JWSObject jwsObject = new JWSObject(protectedHeader,
-				new Payload(payloadMapper.writeValueAsString(dataRequest)));
+				new Payload(payloadMapper.writeValueAsString(authPayload)));
 
 		/*
 		 * RSA Sign the JWS Object with the Service private Key

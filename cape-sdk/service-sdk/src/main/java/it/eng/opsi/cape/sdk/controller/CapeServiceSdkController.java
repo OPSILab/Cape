@@ -835,11 +835,11 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return clientService.callChangeConsentStatus(surrogateId, slrId, crId, request);
 	}
 
-	@Operation(summary = "End point that initialises Data Transfer flow.", tags = { "Data Request" }, responses = {
+	@Operation(summary = "End point that initialises Data Transfer flow from Sink.", tags = { "Data Request" }, responses = {
 			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<DataTransferResponse> startDataTransfer(@RequestBody @Valid DataTransferRequest body,
+	public ResponseEntity<DataTransferResponse> startDataTransfer(@RequestBody @Valid DataTransferRequest dataRequest,
 			@RequestParam Boolean checkConsentAtOperator, @RequestParam(value = "dataset_id") String datasetId)
 			throws ConsentRecordNotFoundException, JsonMappingException, JsonProcessingException, ParseException,
 			ConsentStatusNotValidException, CapeSdkManagerException, JOSEException, ServiceManagerException,
@@ -850,13 +850,13 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 */
 		ConsentRecordSigned consentRecord;
 		consentRecord = checkConsentAtOperator
-				? clientService.callGetConsentRecordBySurrogateIdAndCrId(body.getSurrogateId(), body.getCrId())
+				? clientService.callGetConsentRecordBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId())
 						.getBody()
 				: consentRecordRepo
-						.findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(body.getSurrogateId(),
-								body.getCrId())
+						.findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(dataRequest.getSurrogateId(),
+								dataRequest.getCrId())
 						.orElseThrow(() -> new ConsentRecordNotFoundException(
-								"The Consent Record with Cr Id: " + body.getCrId() + " was not found"));
+								"The Consent Record with Cr Id: " + dataRequest.getCrId() + " was not found"));
 
 		/*
 		 * Check Consent Status (if Active)
@@ -864,14 +864,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		if (!consentRecord.getConsentStatusList().get(consentRecord.getConsentStatusList().size() - 1).getPayload()
 				.getConsentStatus().equals(ConsentRecordStatusEnum.Active))
 			throw new ConsentStatusNotValidException(
-					"The Consent Record with Cr Id:" + body.getCrId() + "is not Active");
+					"The Consent Record with Cr Id: " + dataRequest.getCrId() + " is not Active");
 
 		/*
 		 * Get the Authorisation Token locally, if any and it is not expired, otherwise
 		 * call the Consent Manager to get a new one
 		 */
 
-		Optional<AuthorisationTokenResponse> optionalLocalToken = authTokenRepo.findById(body.getCrId());
+		Optional<AuthorisationTokenResponse> optionalLocalToken = authTokenRepo.findById(dataRequest.getCrId());
 		AuthorisationTokenResponse tokenResponse = null;
 		AuthorisationTokenPayload authToken = null;
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -879,14 +879,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		if (optionalLocalToken.isPresent()) {
 			authToken = sdkManager.extractTokenPayloadFromSerializedToken(optionalLocalToken.get().getAuthToken());
 			if (now.isAfter(authToken.getExp())) {
-				tokenResponse = clientService.callGetAuthorisationToken(body.getCrId());
+				tokenResponse = clientService.callGetAuthorisationToken(dataRequest.getCrId());
 				authTokenRepo.delete(optionalLocalToken.get());
 				authTokenRepo.save(tokenResponse);
 			} else {
 				tokenResponse = optionalLocalToken.get();
 			}
 		} else {
-			tokenResponse = clientService.callGetAuthorisationToken(body.getCrId());
+			tokenResponse = clientService.callGetAuthorisationToken(dataRequest.getCrId());
 			authTokenRepo.save(tokenResponse);
 		}
 
@@ -895,10 +895,10 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 */
 		DataRequestAuthorizationPayload authPayload = new DataRequestAuthorizationPayload(tokenResponse.getAuthToken(),
 				now.toInstant().toEpochMilli());
-		body.setDatasetId(datasetId);
+		dataRequest.setDatasetId(datasetId);
 
 		DataTransferResponse dataTransferResponse = clientService
-				.sendDataRequest(sdkManager.prepareDataRequest(authPayload, body));
+				.sendDataRequest(sdkManager.prepareDataRequest(authPayload, dataRequest));
 
 		return ResponseEntity.ok(dataTransferResponse);
 	}
@@ -907,7 +907,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc/send", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<DataTransferResponse> postDataTransfer(@RequestBody @Valid DataTransferRequest body,
+	public ResponseEntity<DataTransferResponse> postDataTransfer(@RequestBody @Valid DataTransferRequest dataRequest,
 			@RequestParam(value = "dataset_id") String datasetId,
 			@RequestHeader("Authorization") String[] authorizationHeader)
 			throws ConsentRecordNotFoundException, JsonMappingException, JsonProcessingException, ParseException,
@@ -918,18 +918,18 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * Check if exists active paired Consent Record for input Cr Id
 		 */
 		ConsentRecordSignedPair consentPair = clientService
-				.callGetConsentRecordPairBySurrogateIdAndCrId(body.getSurrogateId(), body.getCrId()).getBody();
+				.callGetConsentRecordPairBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId()).getBody();
 		@NonNull
 		List<ConsentStatusRecordSigned> consentRecordStatusList = consentPair.getSource().getConsentStatusList();
 		if (!consentRecordStatusList.get(consentRecordStatusList.size() - 1).getPayload().getConsentStatus()
 				.equals(ConsentRecordStatusEnum.Active))
 			throw new ConsentStatusRecordNotValid(
-					"The paired Source Consent Status Record for Cr Id: " + body.getCrId() + " is not active");
+					"The paired Source Consent Status Record for Cr Id: " + dataRequest.getCrId() + " is not active");
 
 		// Get Service Link by input Surrogate Id, to get the ServiceId
-		ServiceLinkRecordDoubleSigned serviceLink = slrRepo.findByPayload_SurrogateId(body.getSurrogateId())
+		ServiceLinkRecordDoubleSigned serviceLink = slrRepo.findByPayload_SurrogateId(dataRequest.getSurrogateId())
 				.orElseThrow(() -> new ServiceLinkRecordNotFoundException(
-						"No Service Link Record with surrogateId: " + body.getSurrogateId() + " was found"));
+						"No Service Link Record with surrogateId: " + dataRequest.getSurrogateId() + " was found"));
 
 		// Check if consent dataset matches with the Dataset id in input
 		List<Dataset> consentDatasets = consentRecordStatusList.size() > 1
@@ -939,7 +939,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 						.getDatasets();
 		if (!consentDatasets.get(consentDatasets.size() - 1).getId().equals(datasetId))
 			throw new DatasetIdNotFoundException(
-					"The dataset with id in input: " + datasetId + "was not found in the existing Consent Record");
+					"The dataset with id in input: " + datasetId + " was not found in the existing Consent Record");
 
 		/*
 		 * Check AuthorisationToken and Data Request signature
@@ -952,9 +952,15 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		if (StringUtils.isBlank(popHeader))
 			throw new CapeSdkManagerException("The PoP Authorization of Data request is not present");
 
-		if (!sdkManager.verifyTokenAndDataRequest(popHeader, consentPair, body))
+		if (!sdkManager.verifyTokenAndDataRequest(popHeader, consentPair, dataRequest))
 			throw new DataRequestNotValid("The Data request signature is not valid");
 
+		
+		// TODO Check ​that​ ​the​ ​potential​ ​constraints​ ​set​ ​in​ ​the​ ​Consent​ ​Record​ ​are​ ​not​ ​violated
+		
+		// TODO ​MUST​ ​include​ ​at​ ​least​ ​verification​ ​that​ ​token’s
+		// audience​ ​includes​ ​the​ ​URL​ ​to​ ​which​ ​the​ ​data​ ​request​ ​was​ ​made.
+		
 		// Depending on serviceId, call the relative API to get the data matching with
 		// dataset
 		String serviceId = serviceLink.getPayload().getServiceId();

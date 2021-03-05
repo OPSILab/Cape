@@ -12,7 +12,7 @@ CaPe is a consent-based and user-centric platform targeted at organizations acti
 CaPe is a software developed by
 [Engineering Ingegneria Informatica SpA](http://www.eng.it) and supported by [EIT Digital](https://www.eitdigital.eu/).
 
-| :books: [Documentation](https://idra.rtfd.io/) | :whale: [Docker Hub](https://hub.docker.com/r/capesuite/cape)|
+| :books: [Documentation](https://cape-suite.readthedocs.io/) | :whale: [Docker Hub](https://hub.docker.com/r/capesuite/cape)|
 |---|---|
 
 ## Content
@@ -47,6 +47,11 @@ A demo instance of CaPe is available at the following link:
 -   [`Cape Suite information site`](https://www.cape-suite.eu)
 -   [`Cape Dashboard instance`](https://www.cape-suite.eu/cape-dashboard)
 
+
+Service integration examples:
+
+- [Cape Playground](https://www.cape-suite.eu/cape-playground)
+- [Cape Online Services](https://www.cape-suite.eu/cape-online-services)
 
 <a name="support"></a>
 

@@ -9,10 +9,10 @@ services:
     environment:
       #- PROFILE=
       - APIDOCS_PATH=/api-docs
-      # - SPRING_LOGGING_LEVEL=DEBUG
-      # - MONGO_LOGGING_LEVEL=DEBUG
-      # - SECURITY_LOGGING_LEVEL=DEBUG
-      # - CAPE_LOGGING_LEVEL=DEBUG
+#      - SPRING_LOGGING_LEVEL=DEBUG
+#      - MONGO_LOGGING_LEVEL=DEBUG
+#      - SECURITY_LOGGING_LEVEL=DEBUG
+#      - CAPE_LOGGING_LEVEL=DEBUG
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -23,8 +23,8 @@ services:
       - CAPE_SDK_MONGODB_USER=root
       - CAPE_SDK_MONGODB_PASSWORD=root
       - CAPE_IDM_HOST=https://www.cape-suite.eu:8002
-      - CAPE_IDM_CLIENTID=c3b0f7d9-412b-4309-ac70-94a5cb04fcf7
-      - CAPE_IDM_CLIENTSECRET=9d2eaac5-b9c1-4a42-bb35-20fa69ef896b
+      - CAPE_IDM_CLIENTID=1c0407c2-b7ee-4117-8a99-c20b3a964cc1
+      - CAPE_IDM_CLIENTSECRET=be308970-4f1b-4990-926a-987c948c462f
       - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
     networks:
       - cape-sdk-network
