@@ -1,5 +1,9 @@
 # Installing CaPe User Self-Service Dashboard
 
+
+<span style="display:block;text-align:center">!['dashboard-logo'](../img/user-dashboard-logo.png)
+</span>
+
 This section covers the steps needed to properly install CaPe User Self-Service Dashboard. 
 It is a Angular portal based on Nebular framework that can be installed in the following ways:
 
@@ -21,7 +25,7 @@ configured:
 
 | Framework                                                                                                      | Version                | Licence                                 |
 | -------------------------------------------------------------------------------------------------------------- | ---------------------- |---------------------------------------- |
-| [NodeJS with NPM](https://nodejs.org/en/) |                                                                    | >=14.15                | MIT                                     |
+| [NodeJS with NPM](https://nodejs.org/en/)                                                                      | >=14.15                | MIT                                     |
 | [Apache](https://httpd.apache.org) or [Nginx](https://nginx.org/en) Web server                                 | 2.4.43 / 1.18.0        | Apache License v.2.0 /  2-clause BSD    |
 
 &nbsp;
@@ -94,7 +98,7 @@ fields of `config.json` configuration file, located in `dist/assets/` folder.
     "accountUrl": "http://localhost:8080/account-manager/api/v2",
 ``` 
 
-- **`system.`**: with **PUBLIC** (as the Dashboard will make HTTP calls from frontend running locally on browser) endpoint (**`host`:`port`/api/v2**) where Cape Server Service Manager is listening (see [Cape Server installation](install-cape-server.md)
+- **`system.serviceManagerUrl`**: with **PUBLIC** (as the Dashboard will make HTTP calls from frontend running locally on browser) endpoint (**`host`:`port`/api/v2**) where Cape Server Service Manager is listening (see [Cape Server installation](install-cape-server.md)
 
 ```  
     "serviceManagerUrl": "http://localhost:8082/service-manager/api/v2",
@@ -204,5 +208,5 @@ The Data User Self-Service Dashboard is available to the endpoint according to i
 
 Open your favourite browser and point to that endpoint.
 
-Go to [Data User Self-Service Dashboard Manual](../dashboards/user-dashboard/index.md) section to learn how to use the Dashboard.
+Go to [User Self-Service Dashboard Manual](../dashboards/user-dashboard/index.md) section to learn how to use the Dashboard.
 

@@ -31,8 +31,11 @@ nav:
           - 'User Self-Service Dashboard': 'install/install-cape-user-dashboard.md'
           - 'Data Controller Dashboard': 'install/install-cape-datacontroller-dashboard.md'
   - 'User Guide & Dashboard Manuals':
-      - 'User Self-Service Dashboard': 'manual/end-user-dashboard.md'
-      - 'Data Controller Dashboard': 'manual/data-controller-dashboard.md'
+      - 'User Self-Service Dashboard':
+          - Introduction: 'dashboards/user-dashboard/index.md'
+      - 'Data Controller Dashboard':
+          - Introduction: 'dashboards/data-controller-dashboard/index.md'
+          - Service Description: 'dashboards/data-controller-dashboard/service-description.md'
   - 'Use Cases & Demo':
       - 'Within Service': 'demo/within-service.md'
       - 'Sharing between Services': 'demo/sharing-services.md'

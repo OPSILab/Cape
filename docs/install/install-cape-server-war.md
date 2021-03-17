@@ -23,9 +23,9 @@ installed on your computer:
 | [Apache Tomcat](https://tomcat.apache.org)                                                                     | >=8.5                | Apache License v.2.0                    |
 | [MongoDB Community Server](www.mongodb.com)                                                                    | >=4.0.9              | Server Side Public License (SSPL)       |
 | [Maven](https://maven.apache.org)                                                                              | >=3.5.0              | Apache License 2.0                      |
+
+
 ---
-
-
 ### Build WAR packages
 
 

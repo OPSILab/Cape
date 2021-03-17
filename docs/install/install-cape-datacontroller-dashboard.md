@@ -1,7 +1,10 @@
 # Installing CaPe Data Controller Dashboard
 
+<span style="display:block;text-align:center">!['dashboard-logo'](../img/data-controller-dashboard-logo.png)
+</span>
+
 This section covers the steps needed to properly install Cape Data Controller Dashboard. 
-It is a Angular portal based on Nebular framework that can be installed in the following ways:
+It is an [Angular](https://angular.io/) Web portal based on [Nebular/Ngx-admin](https://github.com/akveo/nebular) framework that can be installed in the following ways:
 
 -   Build as Angular distribution and deploy natively on a Web Server
 -   Run as Docker containerized environment (recommended)
@@ -21,7 +24,7 @@ configured:
 
 | Framework                                                                                                      | Version                | Licence                                 |
 | -------------------------------------------------------------------------------------------------------------- | ---------------------- |---------------------------------------- |
-| [NodeJS with NPM](https://nodejs.org/en/) |                                                                    | >=14.15                | MIT                                     |
+| [NodeJS with NPM](https://nodejs.org/en/)                                                                      | >=14.15                | MIT                                     |
 | [Apache](https://httpd.apache.org) or [Nginx](https://nginx.org/en) Web server                                 | 2.4.43 / 1.18.0        | Apache License v.2.0 /  2-clause BSD    |
 
 &nbsp;

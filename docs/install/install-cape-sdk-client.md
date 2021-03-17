@@ -68,7 +68,7 @@ the default `value`. This is the wanted behaviour in case of [Installation with 
 
 Modify properties ("value" part after the colon) in **`cape-service-sdk/WEB-INF/classes/application.properties`**.
 
-  - **`cape.serviceSdk.businessId`**: The businessId assigned to the Service Provider running this instance of Cape SDK. This value must match with the ones set in the Service Provider's Service descriptions.
+  - **`cape.serviceSdk.businessId`**: The **Business Id** assigned to the Service Provider running this instance of Cape SDK. This value must match with the ones set in the Service Provider's Service descriptions. At the moment its value is arbitrary but must be unique within the same Cape Server instance.
 
   - **`cape.serviceSdk.`**: The full url (`host`:`port`/service-manager) of deployed Cape SDK client artifact (e.g. `http://localhost:8080/cape-service-sdk`).
 
@@ -217,9 +217,9 @@ the default `value` defined in the properties file.
 
 As other configuration (see next sections) relies on docker networking lookup, the only environment variables to be modified is:
 
- - **`CAPE_IDM_USERINFOURI`**: Idm User Info URI (default for Keyrock: `http(s)://KEYROCK_HOST:3000/user`)
+ - **`CAPE_IDM_USERINFOURI`**: Idm User Info URI (default for Keyrock: `http(s)://IDM_HOST:3000/user`)
 
-**Note.** Change **KEYROCK_HOST** with the real hostname where Keyrock has been deployed.
+**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keyrock) has been deployed.
 
 #### Inter-component communication variables (keep untouched by default)
 
