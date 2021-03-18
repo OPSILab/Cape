@@ -37,7 +37,7 @@ CaPe installation will involve the deployment of different architectural compone
 
 CaPe Suite uses following libraries and frameworks (already included):
 
-| Name                                                                                    | Version       | Licence                           |
+| Name                                                                                    | Version       | License                           |
 |-----------------------------------------------------------------------------------------|---------------|-----------------------------------|
 | [Spring Boot](https://spring.io/projects/spring-boot)                                   | 2.3.4.RELEASE | Apache License 2.0                |
 | [Spring Cloud](https://spring.io/projects/spring-cloud)                                 | Hoxton.SR8    | Apache License 2.0                |
@@ -66,7 +66,7 @@ CaPe Suite uses following libraries and frameworks (already included):
 ---
 ## External Components
 
-CaPe uses [Fiware Keyrock](https://fiware-idm.readthedocs.io/en/latest/) as IdM.
+CaPe uses [Fiware Keyrock](https://fiware-idm.readthedocs.io/en/latest/)(MIT License) as IdM.
 
 ---
 

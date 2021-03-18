@@ -1,708 +1,784 @@
 {
-	"definitions": {},
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://example.com/root.json",
-	"type": "object",
-	"required": [
-		"serviceId",
-		"name",
-		"identifier",
-		"issued",
-		"createdByUserId",
-		"serviceDescriptionVersion",
-		"serviceIconUrl",
-		"status",
-		"supportedProfiles",
-		"spatial",
-		"lifeEvent",
-		"businessEvent",
-		"sector",
-		"type",
-		"thematicArea",
-		"language",
-		"hasCompetentAuthority",
-		"humanReadableDescription",
-		"serviceInstance",
-		"isDescribedAt",
-		"processingBases",
-		"role"
-	],
-	"properties": {
-		"serviceId": {
-			"type": "string",
-			"default": ""
-		},
-		"name": {
-			"type": "string",
-			"default": ""
-		},
-		"identifier": {
-			"type": "string",
-			"default": ""
-		},
-		"issued": {
-			"type": "string",
-			"default": ""
-		},
-		"createdByUserId": {
-			"type": "string",
-			"default": ""
-		},
-		"serviceDescriptionVersion": {
-			"type": "string",
-			"default": ""
-		},
-		"serviceDescriptionSignature": {
-			"type": "string",
-			"default": ""
-		},
-		"serviceIconUrl": {
-			"type": "string",
-			"default": ""
-		},
-		"status": {
-			"type": "string",
-			"default": ""
-		},
-		"supportedProfiles": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"default": "",
-				"enum": [
-					"Consenting",
-					"3rd party re-use",
-					"Notification",
-					"Objection"
-				]
-			}
-		},
-		"spatial": {
-			"type": "string",
-			"default": ""
-		},
-		"lifeEvent": {
-			"type": "string",
-			"default": ""
-		},
-		"businessEvent": {
-			"type": "string",
-			"default": ""
-		},
-		"sector": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"default": ""
-			}
-		},
-		"type": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"default": ""
-			}
-		},
-		"thematicArea": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"default": ""
-			}
-		},
-		"language": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"default": ""
-			}
-		},
-		"hasCompetentAuthority": {
-			"type": "object",
-			"required": [
-				"prefLabel",
-				"spatial"
-			],
-			"properties": {
-				"prefLabel": {
-					"type": "string",
-					"default": ""
-				},
-				"spatial": {
-					"type": "string",
-					"default": ""
-				}
-			}
-		},
-		"humanReadableDescription": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"required": [
-					"locale",
-					"description",
-					"keywords"
-				],
-				"properties": {
-					"locale": {
-						"type": "string",
-						"default": ""
-					},
-					"description": {
-						"type": "string",
-						"default": ""
-					},
-					"keywords": {
-						"type": "array",
-						"items": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				}
-			}
-		},
-		"serviceInstance": {
-			"type": "object",
-			"required": [
-				"serviceProvider",
-				"cert",
-				"serviceUrls",
-				"dataController"
-			],
-			"properties": {
-				"serviceProvider": {
-					"type": "object",
-					"required": [
-						"businessId",
-						"name",
-						"address1",
-						"address2",
-						"postalcode",
-						"city",
-						"state",
-						"country",
-						"email",
-						"phone",
-						"jurisdiction"
-					],
-					"properties": {
-						"businessId": {
-							"type": "string",
-							"default": ""
-						},
-						"name": {
-							"type": "string",
-							"default": ""
-						},
-						"address1": {
-							"type": "string",
-							"default": ""
-						},
-						"address2": {
-							"type": "string",
-							"default": ""
-						},
-						"postalcode": {
-							"type": "string",
-							"default": ""
-						},
-						"city": {
-							"type": "string",
-							"default": ""
-						},
-						"state": {
-							"type": "string",
-							"default": ""
-						},
-						"country": {
-							"type": "string",
-							"default": ""
-						},
-						"email": {
-							"type": "string",
-							"default": ""
-						},
-						"phone": {
-							"type": "string",
-							"default": ""
-						},
-						"jurisdiction": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				},
-				"cert": {
-					"type": "object",
-					"required": [
-						"x5u"
-					],
-					"properties": {
-						"x5u": {
-							"type": "string",
-							"default": ""
-						},
-						"x5c": {
-							"type": "array",
-							"items": {
-								"type": "string"
-						    }
-						}
-					}
-				},
-				"serviceUrls": {
-					"type": "object",
-					"required": [
-						"domain",
-						"libraryDomain",
-						"loginUri",
-						"linkingUri",
-						"linkingRedirectUri",
-						"objectionUri",
-						"notificationUri"
-					],
-					"properties": {
-						"domain": {
-							"type": "string",
-							"default": ""
-						},
-						"libraryDomain": {
-							"type": "string",
-							"default": ""
-						},
-						"loginUri": {
-							"type": "string",
-							"default": ""
-						},
-						"linkingUri": {
-							"type": "string",
-							"default": ""
-						},
-						"linkingRedirectUri": {
-							"type": "string",
-							"default": ""
-						},
-						"objectionUri": {
-							"type": "string",
-							"default": ""
-						},
-						"notificationUri": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				},
-				"dataController": {
-					"type": "object",
-					"required": [
-						"piiController",
-						"onBehalf",
-						"org",
-						"contact",
-						"address",
-						"email",
-						"phone"
-					],
-					"properties": {
-						"piiController": {
-							"type": "string"
-						},
-						"onBehalf": {
-							"type": "boolean"
-						},
-						"org": {
-							"type": "string"
-						},
-						"contact": {
-							"type": "string"
-						},
-						"address": {
-							"type": "string"
-						},
-						"email": {
-							"type": "string"
-						},
-						"phone": {
-							"type": "string"
-						},
-						"operatorName": {
-							"type": "string"
-						}
-					}
-				}
-			}
-		},
-		"isDescribedAt": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"required": [
-					"datasetId",
-					"description",
-					"datasetSchema",
-					"dataStructureSpecification",
-					"distribution",
-					"dataMapping"
-				],
-				"properties": {
-					"datasetId": {
-						"type": "string",
-						"default": ""
-					},
-					"description": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"locale",
-								"description",
-								"keyword"
-							],
-							"properties": {
-								"locale": {
-									"type": "string",
-									"default": ""
-								},
-								"description": {
-									"type": "string",
-									"default": ""
-								},
-								"keyword": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"default": ""
-									}
-								}
-							}
-						}
-					},
-					"datasetSchema": {
-						"type": "object",
-						"required": [
-							"context",
-							"type",
-							"id"
-						],
-						"properties": {
-							"context": {
-								"type": "string",
-								"default": ""
-							},
-							"type": {
-								"type": "string",
-								"default": ""
-							},
-							"id": {
-								"type": "string",
-								"default": ""
-							}
-						}
-					},
-					"dataStructureSpecification": {
-						"type": "string",
-						"default": ""
-					},
-					"distribution": {
-						"type": "object",
-						"required": [
-							"distributionId",
-							"accessUrl",
-							"description",
-							"format"
-						],
-						"properties": {
-							"distributionId": {
-								"type": "string",
-								"default": ""
-							},
-							"accessUrl": {
-								"type": "string",
-								"default": ""
-							},
-							"description": {
-								"type": "array",
-								"items": {
-									"type": "object",
-									"required": [
-										"locale",
-										"description"
-									],
-									"properties": {
-										"locale": {
-											"type": "string",
-											"default": ""
-										},
-										"description": {
-											"type": "string",
-											"default": ""
-										}
-									}
-								}
-							},
-							"format": {
-								"type": "string",
-								"default": ""
-							}
-						}
-					},
-					"dataMapping": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"property",
-								"conceptId",
-								"name",
-								"type",
-								"required"
-							],
-							"properties": {
-								"property": {
-									"type": "string",
-									"default": ""
-								},
-								"conceptId": {
-									"type": "string",
-									"default": ""
-								},
-								"name": {
-									"type": "string",
-									"default": ""
-								},
-								"type": {
-									"type": "string",
-									"default": ""
-								},
-								"required": {
-									"type": "boolean",
-									"default": false
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"processingBases": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"required": [
-					"purposeId",
-					"purposeName",
-					"legalBasis",
-					"purposeCategory",
-					"processingCategories",
-					"description",
-					"requiredDatasets",
-					"storage",
-					"recipients",
-					"shareWith",
-					"obligations",
-					"policyRef",
-					"collectionMethod",
-					"termination"
-				],
-				"properties": {
-					"purposeId": {
-						"type": "string",
-						"default": ""
-					},
-					"purposeName": {
-						"type": "string",
-						"default": ""
-					},
-					"legalBasis": {
-						"type": "string",
-						"default": "Consent",
-						"enum": [
-							"Consent",
-							"Contract",
-							"Legal obligation",
-							"Vital interest",
-							"Public interest",
-							"Legitimate interest"
-						]
-					},
-					"purposeCategory": {
-						"type": "string",
-						"default": ""
-					},
-					"processingCategories": {
-						"type": "array",
-						"items": {
-							"type": "string",
-							"enum": [
-								"Aggregate",
-								"Analyse",
-								"Anonymize",
-								"Collect",
-								"Copy",
-								"Derive",
-								"Move",
-								"Query",
-								"Transfer"
-							]
-						}
-					},
-					"description": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"locale",
-								"title",
-								"description",
-								"descriptionUrl",
-								"iconUrl"
-							],
-							"properties": {
-								"locale": {
-									"type": "string",
-									"default": ""
-								},
-								"title": {
-									"type": "string",
-									"default": ""
-								},
-								"description": {
-									"type": "string",
-									"default": ""
-								},
-								"descriptionUrl": {
-									"type": "string",
-									"default": ""
-								},
-								"iconUrl": {
-									"type": "string",
-									"default": ""
-								}
-							}
-						}
-					},
-					"requiredDatasets": {
-						"type": "array",
-						"items": {
-							"type": "string",
-							"default": ""
-						}
-					},
-					"storage": {
-						"type": "object",
-						"required": [
-							"location",
-							"duration"
-						],
-						"properties": {
-							"location": {
-								"type": "string",
-								"enum": [
-									"Controller servers",
-									"Eu",
-									"Third countries",
-									"Our servers",
-									"Processor servers",
-									"Third party"
-								]
-							},
-							"duration": {
-								"type": "string",
-								"enum": [
-									"Business practices",
-									"Legal requirement",
-									"Stated purpose",
-									"Indefinitely"
-								]
-							}
-						}
-					},
-					"recipients": {
-						"type": "array",
-						"items": {
-							"type": "string",
-							"enum": [
-								"Ours",
-								"Delivery",
-								"Same",
-								"Other recipient",
-								"Unrelated",
-								"Public"
-							]
-						}
-					},
-					"shareWith": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"orgName",
-								"orgUrl",
-								"businessType",
-								"required"
-							],
-							"properties": {
-								"orgName": {
-									"type": "string",
-									"default": ""
-								},
-								"orgUrl": {
-									"type": "string",
-									"default": ""
-								},
-								"businessType": {
-									"type": "string",
-									"enum": [
-										"Profit",
-										"No profit"
-									]
-								},
-								"required": {
-									"type": "boolean",
-									"default": ""
-								}
-							}
-						}
-					},
-					"obligations": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"event",
-								"activity"
-							],
-							"properties": {
-								"event": {
-									"type": "string",
-									"default": ""
-								},
-								"activity": {
-									"type": "string",
-									"default": ""
-								}
-							}
-						}
-					},
-					"policyRef": {
-						"type": "string",
-						"default": ""
-					},
-					"collectionMethod": {
-						"type": "string",
-						"default": ""
-					},
-					"termination": {
-						"type": "string",
-						"default": ""
-					}
-				}
-			}
-		},
-		"role": {
-		    "type": "string",
-		    "enum": ["Sink","Source"]
-		}
-	}
+   "definitions": {},
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "$id": "http://example.com/root.json",
+   "type": "object",
+   "required": [
+      "serviceId",
+      "name",
+      "identifier",
+      "issued",
+      "createdByUserId",
+      "serviceDescriptionVersion",
+      "serviceIconUrl",
+      "status",
+      "supportedProfiles",
+      "spatial",
+      "lifeEvent",
+      "businessEvent",
+      "sector",
+      "type",
+      "thematicArea",
+      "language",
+      "hasCompetentAuthority",
+      "humanReadableDescription",
+      "serviceInstance",
+      "isDescribedAt",
+      "processingBases",
+      "role"
+   ],
+   "properties": {
+      "serviceId": {
+         "type": "string",
+         "default": ""
+      },
+      "name": {
+         "type": "string",
+         "default": ""
+      },
+      "identifier": {
+         "type": "string",
+         "default": ""
+      },
+      "issued": {
+         "type": "string",
+         "default": ""
+      },
+      "createdByUserId": {
+         "type": "string",
+         "default": ""
+      },
+      "serviceDescriptionVersion": {
+         "type": "string",
+         "default": ""
+      },
+      "serviceDescriptionSignature": {
+         "type": "string",
+         "default": ""
+      },
+      "serviceIconUrl": {
+         "type": "string",
+         "default": ""
+      },
+      "status": {
+         "type": "string",
+         "default": ""
+      },
+      "supportedProfiles": {
+         "type": "array",
+         "items": {
+            "type": "string",
+            "default": "",
+            "enum": [
+               "Contract",
+               "Consenting",
+               "3rd party re-use",
+               "Notification",
+               "Objection"
+            ]
+         }
+      },
+      "spatial": {
+         "type": "string",
+         "default": ""
+      },
+      "lifeEvent": {
+         "type": "string",
+         "default": ""
+      },
+      "businessEvent": {
+         "type": "string",
+         "default": ""
+      },
+      "sector": {
+         "type": "array",
+         "items": {
+            "type": "string",
+            "default": ""
+         }
+      },
+      "type": {
+         "type": "array",
+         "items": {
+            "type": "string",
+            "default": ""
+         }
+      },
+      "thematicArea": {
+         "type": "array",
+         "items": {
+            "type": "string",
+            "default": ""
+         }
+      },
+      "language": {
+         "type": "array",
+         "items": {
+            "type": "string",
+            "default": ""
+         }
+      },
+      "hasCompetentAuthority": {
+         "type": "object",
+         "required": [
+            "prefLabel",
+            "spatial"
+         ],
+         "properties": {
+            "prefLabel": {
+               "type": "string",
+               "default": ""
+            },
+            "spatial": {
+               "type": "string",
+               "default": ""
+            }
+         }
+      },
+      "humanReadableDescription": {
+         "type": "array",
+         "items": {
+            "type": "object",
+            "required": [
+               "locale",
+               "description",
+               "keywords"
+            ],
+            "properties": {
+               "locale": {
+                  "type": "string",
+                  "default": ""
+               },
+               "description": {
+                  "type": "string",
+                  "default": ""
+               },
+               "keywords": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "default": ""
+                  }
+               }
+            }
+         }
+      },
+      "serviceInstance": {
+         "type": "object",
+         "required": [
+            "serviceProvider",
+            "cert",
+            "serviceUrls",
+            "dataController"
+         ],
+         "properties": {
+            "serviceProvider": {
+               "type": "object",
+               "required": [
+                  "businessId",
+                  "name",
+                  "address1",
+                  "address2",
+                  "postalcode",
+                  "city",
+                  "state",
+                  "country",
+                  "email",
+                  "phone",
+                  "jurisdiction"
+               ],
+               "properties": {
+                  "businessId": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "name": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "address1": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "address2": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "postalcode": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "city": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "state": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "country": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "email": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "phone": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "jurisdiction": {
+                     "type": "string",
+                     "default": ""
+                  }
+               }
+            },
+            "cert": {
+               "type": "object",
+               "required": [
+                  "x5u"
+               ],
+               "properties": {
+                  "x5u": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "x5c": {
+                     "type": "array",
+                     "items": {
+                        "type": "string"
+                     }
+                  }
+               }
+            },
+            "serviceUrls": {
+               "type": "object",
+               "required": [
+                  "domain",
+                  "libraryDomain",
+                  "loginUri",
+                  "linkingUri",
+                  "linkingRedirectUri",
+                  "objectionUri",
+                  "notificationUri"
+               ],
+               "properties": {
+                  "domain": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "libraryDomain": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "loginUri": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "linkingUri": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "linkingRedirectUri": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "objectionUri": {
+                     "type": "string",
+                     "default": ""
+                  },
+                  "notificationUri": {
+                     "type": "string",
+                     "default": ""
+                  }
+               }
+            },
+            "dataController": {
+               "type": "object",
+               "required": [
+                  "piiController",
+                  "onBehalf",
+                  "org",
+                  "contact",
+                  "address",
+                  "email",
+                  "phone"
+               ],
+               "properties": {
+                  "piiController": {
+                     "type": "string"
+                  },
+                  "onBehalf": {
+                     "type": "boolean"
+                  },
+                  "org": {
+                     "type": "string"
+                  },
+                  "contact": {
+                     "type": "string"
+                  },
+                  "address": {
+                     "type": "string"
+                  },
+                  "email": {
+                     "type": "string"
+                  },
+                  "phone": {
+                     "type": "string"
+                  },
+                  "operatorName": {
+                     "type": "string"
+                  }
+               }
+            }
+         }
+      },
+      "isDescribedAt": {
+         "type": "array",
+         "items": {
+            "type": "object",
+            "required": [
+               "datasetId",
+               "description",
+               "datasetSchema",
+               "dataStructureSpecification",
+               "distribution",
+               "dataMapping"
+            ],
+            "properties": {
+               "datasetId": {
+                  "type": "string",
+                  "default": ""
+               },
+               "description": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "required": [
+                        "locale",
+                        "description",
+                        "keyword"
+                     ],
+                     "properties": {
+                        "locale": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "description": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "keyword": {
+                           "type": "array",
+                           "items": {
+                              "type": "string",
+                              "default": ""
+                           }
+                        }
+                     }
+                  }
+               },
+               "datasetSchema": {
+                  "type": "object",
+                  "required": [
+                     "context",
+                     "type",
+                     "id"
+                  ],
+                  "properties": {
+                     "context": {
+                        "type": "string",
+                        "default": ""
+                     },
+                     "type": {
+                        "type": "string",
+                        "default": ""
+                     },
+                     "id": {
+                        "type": "string",
+                        "default": ""
+                     }
+                  }
+               },
+               "dataStructureSpecification": {
+                  "type": "string",
+                  "default": ""
+               },
+               "distribution": {
+                  "type": "object",
+                  "required": [
+                     "distributionId",
+                     "accessUrl",
+                     "description",
+                     "format"
+                  ],
+                  "properties": {
+                     "distributionId": {
+                        "type": "string",
+                        "default": ""
+                     },
+                     "accessUrl": {
+                        "type": "string",
+                        "default": ""
+                     },
+                     "description": {
+                        "type": "array",
+                        "items": {
+                           "type": "object",
+                           "required": [
+                              "locale",
+                              "description"
+                           ],
+                           "properties": {
+                              "locale": {
+                                 "type": "string",
+                                 "default": ""
+                              },
+                              "description": {
+                                 "type": "string",
+                                 "default": ""
+                              }
+                           }
+                        }
+                     },
+                     "format": {
+                        "type": "string",
+                        "default": ""
+                     }
+                  }
+               },
+               "dataMapping": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "required": [
+                        "property",
+                        "conceptId",
+                        "name",
+                        "type",
+                        "required"
+                     ],
+                     "properties": {
+                        "property": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "conceptId": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "name": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "type": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "required": {
+                           "type": "boolean",
+                           "default": false
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "processingBases": {
+         "type": "array",
+         "items": {
+            "type": "object",
+            "required": [
+               "purposeId",
+               "purposeName",
+               "legalBasis",
+               "purposeCategory",
+               "processingCategories",
+               "description",
+               "requiredDatasets",
+               "storage",
+               "recipients",
+               "shareWith",
+               "obligations",
+               "policyRef",
+               "collectionMethod",
+               "termination"
+            ],
+            "properties": {
+               "purposeId": {
+                  "type": "string",
+                  "default": ""
+               },
+               "purposeName": {
+                  "type": "string",
+                  "default": ""
+               },
+               "legalBasis": {
+                  "type": "string",
+                  "default": "Consent",
+                  "enum": [
+                     "Consent",
+                     "Contract",
+                     "Legal obligation",
+                     "Vital interest",
+                     "Public interest",
+                     "Legitimate interest"
+                  ]
+               },
+               "purposeCategory": {
+                  "type": "string",
+                  "default": "",
+                  "enum": [
+                     "Academic Research",
+                     "Access Control",
+                     "Advertising ",
+                     "CommercialInterest",
+                     "CommercialResearch",
+                     "CommunicationForCustomerCare",
+                     "CreateEventRecommendations",
+                     "CreatePersonalizedRecommendations",
+                     "CreateProductRecommendations",
+                     "CustomerCare",
+                     "DeliveryOfGoods",
+                     "DirectMarketing",
+                     "FraudPreventionAndDetection",
+                     "IdentityVerification",
+                     "ImproveExistingProductsAndServices",
+                     "ImproveInternalCRMProcesses",
+                     "IncreaseServiceRobustness",
+                     "InternalResourceOptimisation",
+                     "LegalCompliance",
+                     "Marketing",
+                     "NonCommercialResearch",
+                     "OptimisationForConsumer",
+                     "OptimisationForController",
+                     "OptimiseUserInterface",
+                     "Payment",
+                     "PersonalisedAdvertising",
+                     "PersonalisedBenefits",
+                     "RegistrationAuthentication",
+                     "ResearchAndDevelopment",
+                     "Security",
+                     "SellDataToThirdParties",
+                     "SellInsightsFromData",
+                     "SellProductsToDataSubject",
+                     "SellTargettedAdvertisements",
+                     "ServiceOptimization",
+                     "ServicePersonalization",
+                     "ServiceProvision",
+                     "SocialMediaMarketing",
+                     "UsageAnalytics",
+                     "UserInterfacePersonalisation"
+                  ]
+               },
+               "processingCategories": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "enum": [
+                        "Acquire",
+                        "Adapt",
+                        "Align",
+                        "Alter",
+                        "Analyse",
+                        "Anonymise",
+                        "AutomatedDecisionMaking",
+                        "Collect",
+                        "Combine",
+                        "Consult",
+                        "Copy",
+                        "DataSource",
+                        "Derive",
+                        "Destruct",
+                        "Disclose",
+                        "DiscloseByTransmission",
+                        "Disseminate",
+                        "Erase",
+                        "EvaluationScoring",
+                        "InnovativeUseOfNewTechnologies",
+                        "LargeScaleProcessing",
+                        "MakeAvailable",
+                        "MatchingCombining",
+                        "Move",
+                        "Obtain",
+                        "Organise",
+                        "Profiling",
+                        "Pseudo-Anonymise",
+                        "Record",
+                        "Remove",
+                        "Restrict",
+                        "Retrieve",
+                        "Share",
+                        "Store",
+                        "Structure",
+                        "Systematic Monitoring",
+                        "Transfer",
+                        "Transform",
+                        "Transmit"
+                     ]
+                  }
+               },
+               "description": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "required": [
+                        "locale",
+                        "title",
+                        "description",
+                        "descriptionUrl",
+                        "iconUrl"
+                     ],
+                     "properties": {
+                        "locale": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "title": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "description": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "descriptionUrl": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "iconUrl": {
+                           "type": "string",
+                           "default": ""
+                        }
+                     }
+                  }
+               },
+               "requiredDatasets": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "default": ""
+                  }
+               },
+               "storage": {
+                  "type": "object",
+                  "required": [
+                     "location",
+                     "duration"
+                  ],
+                  "properties": {
+                     "location": {
+                        "type": "string",
+                        "enum": [
+                           "Controller servers",
+                           "Eu",
+                           "Third countries",
+                           "Our servers",
+                           "Processor servers",
+                           "Third party"
+                        ]
+                     },
+                     "duration": {
+                        "type": "string",
+                        "enum": [
+                           "Business practices",
+                           "Legal requirement",
+                           "Stated purpose",
+                           "Indefinitely"
+                        ]
+                     }
+                  }
+               },
+               "recipients": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "enum": [
+                        "Ours",
+                        "Delivery",
+                        "Same",
+                        "Other recipient",
+                        "Unrelated",
+                        "Public"
+                     ]
+                  }
+               },
+               "shareWith": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "required": [
+                        "orgName",
+                        "orgUrl",
+                        "businessType",
+                        "required"
+                     ],
+                     "properties": {
+                        "orgName": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "orgUrl": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "businessType": {
+                           "type": "string",
+                           "enum": [
+                              "Profit",
+                              "No profit"
+                           ]
+                        },
+                        "required": {
+                           "type": "boolean",
+                           "default": ""
+                        }
+                     }
+                  }
+               },
+               "obligations": {
+                  "type": "array",
+                  "items": {
+                     "type": "object",
+                     "required": [
+                        "event",
+                        "activity"
+                     ],
+                     "properties": {
+                        "event": {
+                           "type": "string",
+                           "default": ""
+                        },
+                        "activity": {
+                           "type": "string",
+                           "default": ""
+                        }
+                     }
+                  }
+               },
+               "policyRef": {
+                  "type": "string",
+                  "default": ""
+               },
+               "collectionMethod": {
+                  "type": "string",
+                  "default": ""
+               },
+               "termination": {
+                  "type": "string",
+                  "default": ""
+               }
+            }
+         }
+      },
+      "role": {
+         "type": "string",
+         "enum": [
+            "Sink",
+            "Source"
+         ]
+      }
+   }
 }

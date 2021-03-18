@@ -1,22 +1,22 @@
 {
-	"type": "object",
-	"format": "categories",
-	"title": "Purpose",
-	"headerTemplate": "{{ self.purposeName }}",
+  "type": "object",
+  "format": "categories",
+  "title": "Purpose",
+  "headerTemplate": "{{ self.purposeName }}",
   "properties": {
     "purposeId": {
       "type": "string",
       "title": "Purpose ID",
       "options": {
         "infoText": "Purpose's ID, must be unique within the service description"
-        }
+      }
     },
     "purposeName": {
       "type": "string",
       "title": "Purpose Name",
       "options": {
         "infoText": "Human readeable Purpose's Name, Short name that identifies the purpose"
-        }
+      }
     },
     "legalBasis": {
       "type": "string",
@@ -30,7 +30,14 @@
         "Legitimate interest"
       ],
       "options": {
-        "enum_titles": [ "Consent", "Contract", "Legal Obligation", "Vital Interest", "Public Interest", "Legitimate Interest" ]
+        "enum_titles": [
+          "Consent",
+          "Contract",
+          "Legal Obligation",
+          "Vital Interest",
+          "Public Interest",
+          "Legitimate Interest"
+        ]
       }
     },
 
@@ -38,23 +45,47 @@
       "type": "string",
       "title": "Purpose Category",
       "enum": [
-        "1 - Core Function",
-        "2 - Contracted Service",
-        "3 - Delivery",
-        "4 - Contact Requested",
-        "5 - Personalized Experience",
-        "6 - Marketing",
-        "7 - Marketing Third Parties",
-        "8 - Use for Delivery",
-        "9 - Disclosure for Marketing",
-        "10 - 3rd Party Disclosure for Core Function",
-        "11 - Legally Required Data Retention",
-        "12 - Required by Law Enforcement or Government",
-        "13 - Protecting Your Health",
-        "14 - Protecting Our Interests",
-        "15 - Improve Performance"
+        "Academic Research",
+        "Access Control",
+        "Advertising ",
+        "CommercialInterest",
+        "CommercialResearch",
+        "CommunicationForCustomerCare",
+        "CreateEventRecommendations",
+        "CreatePersonalizedRecommendations",
+        "CreateProductRecommendations",
+        "CustomerCare",
+        "DeliveryOfGoods",
+        "DirectMarketing",
+        "FraudPreventionAndDetection",
+        "IdentityVerification",
+        "ImproveExistingProductsAndServices",
+        "ImproveInternalCRMProcesses",
+        "IncreaseServiceRobustness",
+        "InternalResourceOptimisation",
+        "LegalCompliance",
+        "Marketing",
+        "NonCommercialResearch",
+        "OptimisationForConsumer",
+        "OptimisationForController",
+        "OptimiseUserInterface",
+        "Payment",
+        "PersonalisedAdvertising",
+        "PersonalisedBenefits",
+        "RegistrationAuthentication",
+        "ResearchAndDevelopment",
+        "Security",
+        "SellDataToThirdParties",
+        "SellInsightsFromData",
+        "SellProductsToDataSubject",
+        "SellTargettedAdvertisements",
+        "ServiceOptimization",
+        "ServicePersonalization",
+        "ServiceProvision",
+        "SocialMediaMarketing",
+        "UsageAnalytics",
+        "UserInterfacePersonalisation"
       ]
-
     },
     "processingCategories": {
       "type": "array",
@@ -63,20 +94,50 @@
       "uniqueItems": true,
       "options": {
         "infoText": "Actions related to a specific purpose"
-        },
+      },
       "items": {
         "type": "string",
         "title": "Action",
         "enum": [
-          "Aggregate",
+          "Acquire",
+          "Adapt",
+          "Align",
+          "Alter",
           "Analyse",
-          "Anonymize",
+          "Anonymise",
+          "AutomatedDecisionMaking",
           "Collect",
+          "Combine",
+          "Consult",
           "Copy",
+          "DataSource",
           "Derive",
+          "Destruct",
+          "Disclose",
+          "DiscloseByTransmission",
+          "Disseminate",
+          "Erase",
+          "EvaluationScoring",
+          "InnovativeUseOfNewTechnologies",
+          "LargeScaleProcessing",
+          "MakeAvailable",
+          "MatchingCombining",
           "Move",
-          "Query",
-          "Transfer"
+          "Obtain",
+          "Organise",
+          "Profiling",
+          "Pseudo-Anonymise",
+          "Record",
+          "Remove",
+          "Restrict",
+          "Retrieve",
+          "Share",
+          "Store",
+          "Structure",
+          "Systematic Monitoring",
+          "Transfer",
+          "Transform",
+          "Transmit"
         ]
       }
     },
@@ -118,14 +179,9 @@
             "title": "icon URL",
             "format": "link"
           }
-
         },
-        "required": [
-          "locale",
-          "description"
-        ]
+        "required": ["locale", "description"]
       }
-
     },
     "requiredDatasets": {
       "type": "array",
@@ -133,7 +189,7 @@
       "uniqueItems": true,
       "title": "Required Datasets",
       "items": {
-       "type":"any",
+        "type": "any",
         "title": "Dataset",
         "watch": {
           "possible_datasets": "root.isDescribedAt"
@@ -141,12 +197,10 @@
         "enumSource": [
           {
             "source": "possible_datasets",
-            "value": "{{item.datasetId}}"            
+            "value": "{{item.datasetId}}"
           }
         ]
-        
       }
-
     },
     "storage": {
       "type": "object",
@@ -195,7 +249,6 @@
           "Public"
         ]
       }
-
     },
     "shareWith": {
       "type": "array",
@@ -218,18 +271,14 @@
           "businessType": {
             "type": "string",
             "title": "Business Type",
-            "enum": [
-              "Profit",
-              "No profit"
-            ]
+            "enum": ["Profit", "No profit"]
           },
           "required": {
             "type": "boolean",
             "title": "Required"
           }
-       }
+        }
       }
-
     },
     "obligations": {
       "type": "array",

@@ -1,8 +1,8 @@
 # Data Controller Dashboard - Introduction
 
-Data Controller Dashboard is the Web Portal for Service Providers wanting to manage Data Usage and Consents of their own services with CaPe.
+Data Controller Dashboard is the Web Portal for Service Providers (actings as Data Controllers) wanting to manage Data Usage and Consents of their own services with CaPe.
 
-<span style="display:block;text-align:center">!['dashboard-logo'](../../img/user-dashboard-logo.png)
+<span style="display:block;text-align:center">!['dashboard-logo'](../../img/data-controller-dashboard-logo.png)
 </span>
 
 ![overview](data-controller-dashboard-services.png)
@@ -125,7 +125,7 @@ The popup shows following information:
  
  - **Consent History**: history of the status and data concepts changes made by End User during Consent lifecycle.
  
- - **Consent hash and Notariazation**: visualize the value of the JWS signature of that Consent Record, made with the private key of the Cape User Account.
+ - **Consent hash and Notarization**: visualize the value of the JWS signature of that Consent Record, made with the private key of the Cape User Account.
                                        The Account's key public part (retrieved through Account Manager API) can be used with the Consent Record Payload to verify that signature.
  
  - **Consent raw data**: visualize the whole Consent Record in JSON format.									   

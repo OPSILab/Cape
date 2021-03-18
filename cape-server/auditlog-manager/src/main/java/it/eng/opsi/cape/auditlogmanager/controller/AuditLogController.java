@@ -1,24 +1,18 @@
 /*******************************************************************************
- * CaPe - a Consent Based Personal Data Suite
- *   Copyright (C) 2020 Engineering Ingegneria Informatica S.p.A.
+ * CaPe - A Consent Based Personal Data Suite
+ *  Copyright (C) 2021 Engineering Ingegneria Informatica S.p.A.
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * at your option) any later version.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package it.eng.opsi.cape.auditlogmanager.controller;
 
@@ -56,6 +50,7 @@ import it.eng.opsi.cape.auditlogmanager.repository.EventLogRepository;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.AuditLogNotFoundException;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.Storage.Location;
 import lombok.extern.slf4j.Slf4j;
@@ -261,7 +256,7 @@ public class AuditLogController implements IAuditLogController {
 					@ApiResponse(description = "Returns the updated Audit Log.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuditLog.class))) })
 	@PutMapping(value = "/auditLogs/accounts/{accountId}/purposeCategoryPersonalData/{purposeCategory}/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<AuditLog> addPurposeCategoryPersonalDataToAuditLog(String accountId, String purposeCategory) {
+	public ResponseEntity<AuditLog> addPurposeCategoryPersonalDataToAuditLog(String accountId, PurposeCategory purposeCategory) {
 
 		Optional<AuditLog> updatedAuditLog = auditLogsRepo.addPurposeCategory(accountId, purposeCategory);
 
@@ -275,7 +270,7 @@ public class AuditLogController implements IAuditLogController {
 	@PutMapping(value = "/auditLogs/accounts/{accountId}/purposeCategoryPersonalData/{purposeCategory}/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<AuditLog> subtractPurposeCategoryPersonalDataToAuditLog(String accountId,
-			String purposeCategory) {
+			PurposeCategory purposeCategory) {
 
 		Optional<AuditLog> updatedAuditLog = auditLogsRepo.subtractPurposeCategory(accountId, purposeCategory);
 

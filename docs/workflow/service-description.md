@@ -24,7 +24,8 @@ Service Description refers to a specific metamodel, defined by extending MyData 
 
 !['service-description'](service-description-model.png)
 
-See the [Service Registry Apiary]('') for further details on Service Description metamodel and [here]() for Service Description examples (JSON body to be issued to Service Registry API or imported in Service Editor section of Data Controller Dashboard).
+**Note**. 
+See the [Service Registry Apiary]('') and [Service Description section of Data Controller Dashboard](../dashboards/data-controller-dashboard/service-description.md) for further information on Service Description metamodel and examples (JSON body to be issued to Service Registry API or imported in Service Editor section of Data Controller Dashboard).
 
 ----
 
