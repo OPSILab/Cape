@@ -1,5 +1,7 @@
-# Data Controller Dashboard - Introduction
+# Data Controller Dashboard
 
+---
+## Introduction
 Data Controller Dashboard is the Web Portal for Service Providers (actings as Data Controllers) wanting to manage Data Usage and Consents of their own services with CaPe.
 
 <span style="display:block;text-align:center">!['dashboard-logo'](../../img/data-controller-dashboard-logo.png)
@@ -70,20 +72,20 @@ The table can be filtered out by following column values:
 
 
 ### Service Description overview
-Images below show the popup shown by Dashboard when clicking the (i) button on a Service Row.
+Images below show the popup shown by Dashboard when clicking the (i) button on a Service row.
 
 ![service-details](data-controller-dashboard-service-details.png)
-
-
-
 
 ![service-details-1](data-controller-dashboard-service-details-1.png)
 
 Images above show the overview of all the Service Description fields, in particular Data Processing purposes, processed dataset for each purpose and contained Data Concepts for each dataset.
-The details highligths following aspects of the Service:
+The details highlights following aspects of the Service:
 
-  - Which are the processing purpose cateogory, processing Categories (e.g. aggregate, query, collect)
-  - For each purpose which are the processed data
+  - Which are the processing purpose, processing Categories (e.g. aggregate, query, collect)
+    - For each purpose which are the processed data
+  - Legal Basis supported by this Service
+  - Link to the related Policy Statement
+  - Storage, Recipients and Share With details	
 
 ### Actions on Service Descriptions
 

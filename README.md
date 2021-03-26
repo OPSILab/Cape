@@ -2,7 +2,7 @@
 <img width="400" height="200" src="https://www.cape-suite.eu/cape-dashboard/assets/images/app/cape-logo.png">
 </p>
 
-# CaPE - A Consent Based Personal Data Suite
+# CaPe - A Consent Based Personal Data Suite
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/capesuite/cape)](https://hub.docker.com/r/capesuite/cape)
 [![Documentation badge](https://img.shields.io/readthedocs/cape-suite)](https://cape-suite.readthedocs.io/)

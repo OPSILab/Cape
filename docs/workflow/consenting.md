@@ -78,17 +78,19 @@ The Figure above depicts the steps involved in the consenting phase of CaPe work
      **Note**. Consent Form are stored for further notarization (SOON implementation).
 
 
- 2. CaPe (Consent Manager & Account Manager) creates the signed JWSs representing the Consent Record (**CR**) and the first Consent Staus Record (**CSR**, set to active), in detail:
+ 2. CaPe (Consent Manager & Account Manager) creates the signed JWSs representing the Consent Record (**CR**) and the first Consent Status Record (**CSR**, set to active), in detail:
     
 	 - 2a. The partial JWS payloads of CR and CSR are initializiated by Consent Manager.
 	 - 2b. CR and CSR payloads are signed by Account Manager with User's account private key (RSA). 
 
 
- 3. Copies of CR and CSR are forwarded and stored to the service(s) through the SDK APis.
+ 3. Copies of CR and CSR are forwarded and stored to the service(s) through the SDK APIs.
     Services​ ​MUST​ ​verify​ ​the​ ​signature​ ​of​ ​the​ ​CSR​ ​and​ ​reject​ ​status​ ​changes​ ​that​ ​are​ ​not​ ​signed​ ​with​ ​one of​ ​the​ ​keys​ ​contained​ ​in the relative​ ​Service​ ​Link​ ​Record.
 	
-	  - 3b. In​ the​ ​the​ ​sharing between services case, ​Sink service ​can​ ​then​ ​request​ ​the​ ​**Authorisation​ ​Token**​ ​from​ ​CaPe​ ​before​ ​a​ ​data​ ​request​ ​can​ ​take​ ​place.
+	  - **OPTIONAL** Further notarization of the CR and CSR can be made by sending their signatures towards an external Notarization system (e.g. blockchain based hashing).
+	  - In​​ ​the​ ​sharing between services case, ​Sink service ​can​ ​then​ ​request​ ​the​ ​**Authorisation​ ​Token**​ ​from​ ​CaPe​ ​before​ ​a​ ​data​ ​request​ ​can​ ​take​ ​place.
 	    This token is signed by CaPe (Service Manager) with its private Operator Key.
+  
   
  4. CR and CSR are saved in CaPe and the related Consent is shown as active in the CaPe User Dashboard. 
     End User through the User Self-Service Dashboard can:
