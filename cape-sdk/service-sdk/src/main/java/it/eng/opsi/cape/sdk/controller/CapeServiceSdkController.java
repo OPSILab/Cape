@@ -85,6 +85,7 @@ import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
 import it.eng.opsi.cape.sdk.model.OperatorDescription;
 import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
+import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.CommonPart;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
@@ -581,8 +582,10 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@GetMapping(value = "/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentForm> fetchConsentForm(@PathVariable String surrogateId,
-			@PathVariable String serviceId, @PathVariable String purposeId, @RequestParam String sourceDatasetId,
-			@RequestParam String sourceServiceId) throws ServiceManagerException, CapeSdkManagerException {
+			@PathVariable String serviceId, @PathVariable String purposeId,
+			@RequestParam(required = false, name = "sourceDatasetId") String sourceDatasetId,
+			@RequestParam(required = false, name = "sourceServiceId") String sourceServiceId)
+			throws ServiceManagerException, CapeSdkManagerException {
 
 		return clientService.callFetchConsentForm(surrogateId, serviceId, purposeId, sourceDatasetId, sourceServiceId);
 
@@ -734,26 +737,40 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
 			@RequestBody @Valid ConsentForm consentForm) {
 
-		ConsentRecordSigned createdCr = clientService.callGiveConsent(surrogateId, consentForm);
-		String crId = createdCr.getPayload().getCommonPart().getCrId();
+		ResponseEntity<ConsentRecordSigned> giveConsentResponse = clientService.callGiveConsent(surrogateId,
+				consentForm);
+		ConsentRecordSigned responseCr = giveConsentResponse.getBody();
+
+		String crId = responseCr.getPayload().getCommonPart().getCrId();
 
 		/*
-		 * Store Signed CR and CSR
+		 * If the Response Status from Consent Manager is 201 Created (is a new
+		 * ConsentRecord)
 		 */
-		createdCr.set_id(new ObjectId(createdCr.getPayload().getCommonPart().getCrId()));
-		consentRecordRepo.insert(createdCr);
+		if (giveConsentResponse.getStatusCode().equals(HttpStatus.CREATED)) {
+			/*
+			 * 1. Store Signed CR and CSR
+			 */
+			responseCr.set_id(new ObjectId(responseCr.getPayload().getCommonPart().getCrId()));
+			consentRecordRepo.insert(responseCr);
 
-		/*
-		 * Get and save the (serialized) authorisation Token from Consent Manager
-		 */
-		AuthorisationTokenResponse tokenResponse = clientService.callGetAuthorisationToken(crId);
-		authTokenRepo.save(tokenResponse);
+			/*
+			 * 2. If both sourceId and sourceName are not blank, we are in 3rd party
+			 * consenting case Get and save the (serialized) authorisation Token from
+			 * Consent Manager
+			 */
+			if (!StringUtils.isAnyBlank(consentForm.getSourceId(), consentForm.getSourceName())) {
+				AuthorisationTokenResponse tokenResponse = clientService.callGetAuthorisationToken(crId);
+				authTokenRepo.save(tokenResponse);
+			}
 
-		CommonPart crCommonPart = createdCr.getPayload().getCommonPart();
+		}
+		
+		CommonPart crCommonPart = responseCr.getPayload().getCommonPart();
 		return ResponseEntity.created(UriComponentsBuilder
 				.fromHttpUrl(
 						appProperty.getCape().getServiceSdk().getHost() + "/api/v2/users/{surrogateId}/consents/{crId}")
-				.build(crCommonPart.getSurrogateId(), crCommonPart.getCrId())).body(createdCr);
+				.build(crCommonPart.getSurrogateId(), crCommonPart.getCrId())).body(responseCr);
 
 	}
 
@@ -771,7 +788,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId));
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id and Purpose Id.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id and Purpose Id", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/purpose/{purposeId}/consent", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -821,7 +838,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 					@ApiResponse(description = "Returns 201 Created with the new Consent Status Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
 	@PostMapping(value = "/users/{surrogateId}/servicelinks/{slrId}/consents/{crId}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentStatusRecordSigned> changeConsentStatusFromService(@PathVariable String surrogateId,
+	public ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(@PathVariable String surrogateId,
 			@PathVariable String slrId, @PathVariable String crId, @RequestBody ChangeConsentStatusRequest request)
 			throws ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkRecordNotFoundException,
 			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException {
@@ -829,8 +846,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return clientService.callChangeConsentStatus(surrogateId, slrId, crId, request);
 	}
 
-	@Operation(summary = "End point that initialises Data Transfer flow from Sink.", tags = { "Data Request" }, responses = {
-			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
+	@Operation(summary = "End point that initialises Data Transfer flow from Sink.", tags = {
+			"Data Request" }, responses = {
+					@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<DataTransferResponse> startDataTransfer(@RequestBody @Valid DataTransferRequest dataRequest,
@@ -843,9 +861,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * Consent Record introspection (sink)
 		 */
 		ConsentRecordSigned consentRecord;
-		consentRecord = checkConsentAtOperator
-				? clientService.callGetConsentRecordBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId())
-						.getBody()
+		consentRecord = checkConsentAtOperator ? clientService
+				.callGetConsentRecordBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId()).getBody()
 				: consentRecordRepo
 						.findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(dataRequest.getSurrogateId(),
 								dataRequest.getCrId())
@@ -912,7 +929,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * Check if exists active paired Consent Record for input Cr Id
 		 */
 		ConsentRecordSignedPair consentPair = clientService
-				.callGetConsentRecordPairBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId()).getBody();
+				.callGetConsentRecordPairBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId())
+				.getBody();
 		@NonNull
 		List<ConsentStatusRecordSigned> consentRecordStatusList = consentPair.getSource().getConsentStatusList();
 		if (!consentRecordStatusList.get(consentRecordStatusList.size() - 1).getPayload().getConsentStatus()
@@ -949,12 +967,13 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		if (!sdkManager.verifyTokenAndDataRequest(popHeader, consentPair, dataRequest))
 			throw new DataRequestNotValid("The Data request signature is not valid");
 
-		
-		// TODO Check ​that​ ​the​ ​potential​ ​constraints​ ​set​ ​in​ ​the​ ​Consent​ ​Record​ ​are​ ​not​ ​violated
-		
+		// TODO Check ​that​ ​the​ ​potential​ ​constraints​ ​set​ ​in​ ​the​ ​Consent​
+		// ​Record​ ​are​ ​not​ ​violated
+
 		// TODO ​MUST​ ​include​ ​at​ ​least​ ​verification​ ​that​ ​token’s
-		// audience​ ​includes​ ​the​ ​URL​ ​to​ ​which​ ​the​ ​data​ ​request​ ​was​ ​made.
-		
+		// audience​ ​includes​ ​the​ ​URL​ ​to​ ​which​ ​the​ ​data​ ​request​ ​was​
+		// ​made.
+
 		// Depending on serviceId, call the relative API to get the data matching with
 		// dataset
 		String serviceId = serviceLink.getPayload().getServiceId();
@@ -964,6 +983,16 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		// TODO Get Data depending on Specific Service implementation (use aud from
 		// token?)
 		return null;
+	}
+
+	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
+			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
+	@Override
+	@PostMapping(value = "/accounts")
+	public ResponseEntity<Account> createAccount(@RequestBody @Valid Account account) {
+
+		return clientService.createCapeAccount(account);
+
 	}
 
 }

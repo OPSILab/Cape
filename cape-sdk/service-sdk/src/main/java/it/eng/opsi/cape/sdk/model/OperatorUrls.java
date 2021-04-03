@@ -31,7 +31,7 @@ import lombok.ToString;
 @ToString
 public class OperatorUrls {
 
-	@NotBlank(message = "domain field is mandatory")
+//	@NotBlank(message = "domain field is mandatory")
 	private String domain;
 
 	@NotBlank(message = "linkingUri field is mandatory")

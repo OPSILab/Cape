@@ -42,7 +42,7 @@ public class SinkUsageRules {
 	@NotBlank(message = "purposeId field is mandatory")
 	private String purposeId;
 
-	@NotBlank(message = "purposeCategory field is mandatory")
+	@NotNull(message = "purposeCategory field is mandatory")
 	private PurposeCategory purposeCategory;
 
 	@NotNull(message = "purposeDescription field is mandatory")

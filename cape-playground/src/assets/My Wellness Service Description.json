@@ -62,10 +62,8 @@
 			"x5c": []
 		},
 		"serviceUrls": {
-			"domain": "http://localhost82/cape-playground",
 			"libraryDomain": "http://service-sdk:8085/cape-service-sdk",
 			"loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
-			"linkingUri": "http://service-sdk:8085/cape-service-sdk/api/v2/slr/linking",
 			"linkingRedirectUri": "http://localhost:82/cape-playground",
 			"objectionUri": "",
 			"notificationUri": ""
@@ -188,12 +186,12 @@
 			"purposeId": "1",
 			"purposeName": "MyCholesterol",
 			"legalBasis": "Consent",
-			"purposeCategory": "1 - Core Function",
+			"purposeCategory": "CommercialInterest",
 			"processingCategories": [
-				"Aggregate",
-				"Collect",
-				"Derive",
-				"Query"
+			   "Copy",
+			   "Analyse",
+			   "Profiling",
+			   "Store"
 			],
 			"description": [
 				{
@@ -244,13 +242,12 @@
 			"purposeId": "2",
 			"purposeName": "MyWeight",
 			"legalBasis": "Consent",
-			"purposeCategory": "1 - Core Function",
+			"purposeCategory": "CommercialInterest",
 			"processingCategories": [
-				"Aggregate",
-				"Analyse",
-				"Collect",
-				"Derive",
-				"Query"
+					   "Copy",
+			   "Analyse",
+			   "Profiling",
+			   "Store"
 			],
 			"description": [
 				{

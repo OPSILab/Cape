@@ -26,7 +26,7 @@ export class ConsentFormComponent implements OnInit {
 
     this.userConsentForm = this.fb.group({
       dataMapping: new FormGroup(Object.fromEntries(this.consentForm.resource_set.datasets[0].dataMappings.map(concept =>
-        [concept.name, new FormControl({ value: true, disabled: concept.required })]))),
+        [concept.name, new FormControl({ value: concept.required, disabled: concept.required })]))),
       shareWith: new FormGroup(Object.fromEntries(this.consentForm.usage_rules.shareWith.map(shareWith => [shareWith.orgName, new FormControl({ value: true, disabled: shareWith.required })])))
     });
 

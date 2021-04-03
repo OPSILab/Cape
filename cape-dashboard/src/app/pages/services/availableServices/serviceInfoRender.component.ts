@@ -18,8 +18,8 @@ export class ServiceInfoRenderComponent {
     this.modalService.open(this.serviceInfoModalRef, {
       context: {
         modalHeader: this.value.name,
-        description: this.value.humanReadableDescription[0].description,
-        keywords: this.value.humanReadableDescription[0].keywords,
+        description: this.value.humanReadableDescription[0]?.description,
+        keywords: this.value.humanReadableDescription[0]?.keywords,
         serviceUri: this.value.identifier,
         iconUrl: this.value.serviceIconUrl !== '' ? this.value.serviceIconUrl : 'assets/images/app/no_image.png',
         provider: this.value.serviceInstance.serviceProvider.name,

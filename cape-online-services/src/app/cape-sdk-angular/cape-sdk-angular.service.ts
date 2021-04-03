@@ -21,7 +21,7 @@ import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecord
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
 import { ServiceEntry } from './model/service-link/serviceEntry';
-
+import { Account } from './model/account/account.model';
 
 export interface UserSurrogateIdLink {
   userId: string;
@@ -32,9 +32,8 @@ export interface UserSurrogateIdLink {
 
 export enum LinkingFromEnum {
   Service = 'Service',
-  Operator = 'Operator'
+  Operator = 'Operator',
 }
-
 
 export interface ServiceLinkEvent {
   serviceId: string;
@@ -50,10 +49,8 @@ export interface ConsentRecordEvent {
   consentRecord?: ConsentRecordSigned;
 }
 
-
 @Injectable()
 export class CapeSdkAngularService {
-
   private registeredSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
   public isRegisteredService$ = this.registeredSubject.asObservable();
   private linkSubject: BehaviorSubject<ServiceLinkEvent> = new BehaviorSubject<ServiceLinkEvent>(undefined);
@@ -61,22 +58,31 @@ export class CapeSdkAngularService {
   private consentSubject: BehaviorSubject<ConsentRecordEvent> = new BehaviorSubject<ConsentRecordEvent>(undefined);
   public consentRecordStatus$ = this.consentSubject.asObservable();
 
+  constructor(
+    private http: HttpClient,
+    private errorDialogService: ErrorDialogService,
+    private toastrService: NbToastrService,
+    private translateService: TranslateService
+  ) {}
 
-  constructor(private http: HttpClient, private errorDialogService: ErrorDialogService,
-    private toastrService: NbToastrService, private translateService: TranslateService) { }
-
-
-  async linkWithOperator(sdkUrl: string, locale: string, operatorId: string, serviceId: string, serviceName: string, userId: string, returnUrl: string, cdr: ChangeDetectorRef) {
-
-    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, userId);
+  async linkWithOperator(
+    sdkUrl: string,
+    locale: string,
+    operatorId: string,
+    serviceId: string,
+    serviceName: string,
+    serviceUserId: string,
+    returnUrl: string,
+    cdr: ChangeDetectorRef
+  ) {
+    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
     const operatorDescription = await this.getOperatorDescription(sdkUrl, operatorId);
 
     const operatorLinkingUrl = operatorDescription.operatorUrls.linkingUri;
 
-    if (operatorLinkingUrl === undefined || operatorLinkingUrl === '')
-      throw new Error("The Operator Linking Url is not valid or empty");
+    if (operatorLinkingUrl === undefined || operatorLinkingUrl === '') throw new Error('The Operator Linking Url is not valid or empty');
 
     /*
      * Operator returned Message
@@ -90,304 +96,342 @@ export class CapeSdkAngularService {
 
       if (resSurrogateId !== surrogateId || resServiceId !== serviceId || resReturnUrl !== returnUrl)
         this.errorDialogService.openErrorDialog(new Error(this.translateService.instant('general.services.linkingParamMismatch')));
-
       else if (result === 'SUCCESS') {
         this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
 
         // link userId - surrogateId
-        const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, userId, surrogateId, serviceId, operatorId);
+        const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
 
         // Trigger components subscribed to the Linking Completed event
         this.linkSubject.next({ serviceId: resServiceId, status: SlStatusEnum.Active, surrogateId: resSurrogateId } as ServiceLinkEvent);
         cdr.detectChanges();
-
-      } else if (result === 'CANCELLED')
-        this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
+      } else if (result === 'CANCELLED') this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
     };
 
-    window.open(`${operatorLinkingUrl}?surrogateId=${surrogateId}&serviceId=${serviceId}&serviceName=${serviceName}&returnUrl=${returnUrl}&locale=${locale}&linkingFrom=Service`, "_blank");
+    window.open(
+      `${operatorLinkingUrl}?surrogateId=${surrogateId}&serviceId=${serviceId}&serviceName=${serviceName}&returnUrl=${returnUrl}&locale=${locale}&linkingFrom=Service`,
+      '_blank'
+    );
   }
 
-
-  async linkFromOperator(sdkUrl: string, code: string, operatorId: string, serviceId: string, serviceName: string, userId: string, returnUrl: string) {
-
-    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, userId);
+  async linkFromOperator(sdkUrl: string, code: string, operatorId: string, serviceId: string, serviceName: string, serviceUserId: string, returnUrl: string) {
+    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
     const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
 
-    const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, userId, surrogateId, serviceId, operatorId);
+    const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
   }
 
-
-  async automaticLinkFromService(sdkUrl: string, operatorId: string, serviceId: string, serviceName: string, userId: string, accountId: string, returnUrl: string) {
-
-    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, userId);
+  async automaticLinkFromService(sdkUrl: string, operatorId: string, serviceId: string, serviceUserId: string, returnUrl: string) {
+    const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const code = await this.getServiceLinkingSessionCode(sdkUrl, accountId, surrogateId, serviceId, returnUrl);
+    // Get Linking Session Code for automatic Linking
+    const code = await this.getServiceLinkingSessionCode(sdkUrl, serviceUserId, surrogateId, serviceId, returnUrl);
     console.log(code);
 
+    // Start Service Linking with retrieved Linking Session Code
     const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
 
-    const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, userId, surrogateId, serviceId, operatorId);
+    // Once the Service Link is done, save the userId - surrogateId association
+    const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
 
     return userSurrogateLink;
   }
 
-
   /*
-   * 
-   * Get Session Code for  background linking from service and transparent to User ( automatic acceptance of service linking)
+   *
+   * Get Session Code for background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
 
-
-  async getServiceLinkingSessionCode(sdkUrl: string, accountId: string, surrogateId: string, serviceId: string, returnUrl: string) {
-
-
-    return this.http.get(`${sdkUrl}/slr/linking/code?serviceId=${serviceId}&userId=${accountId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`, { responseType: 'text' }).toPromise();
-
+  async getServiceLinkingSessionCode(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, returnUrl: string) {
+    return this.http
+      .get(`${sdkUrl}/slr/linking/code?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`, {
+        responseType: 'text',
+      })
+      .toPromise();
   }
-
-
 
   /*
    * Used when linking was started at Operator and after Service Login
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
-
   public startServiceLinking(sdkUrl: string, code: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
-
     const startLinkingBody: StartLinkingRequest = {
       code: code,
       surrogate_id: surrogateId,
       service_id: serviceId,
       operator_id: operatorId,
-      return_url: returnUrl
+      return_url: returnUrl,
     };
 
     return this.http.post<LinkingResponseData>(`${sdkUrl}/slr/linking`, startLinkingBody).toPromise();
-
   }
 
+  public generateSurrogateId(sdkUrl: string, operatorId: string, serviceUserId: string): Promise<SurrogateIdResponse> {
+    return this.http.get<SurrogateIdResponse>(`${sdkUrl}/slr/surrogate_id?operatorId=${operatorId}&userId=${serviceUserId}`).toPromise();
+  }
 
-  public generateSurrogateId(sdkUrl: string, operatorId: string, userId: string): Promise<SurrogateIdResponse> {
-
+  public linkSurrogateId(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, operatorId: string): Promise<UserSurrogateIdLink> {
     return this.http
-      .get<SurrogateIdResponse>(`${sdkUrl}/slr/surrogate_id?operatorId=${operatorId}&userId=${userId}`).toPromise();
+      .post<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink`, {
+        userId: serviceUserId,
+        surrogateId: surrogateId,
+        serviceId: serviceId,
+        operatorId: operatorId,
+      })
+      .toPromise();
   }
 
-
-  public linkSurrogateId(sdkUrl: string, userId: string, surrogateId: string, serviceId: string, operatorId: string): Promise<UserSurrogateIdLink> {
-
-    return this.http.post<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink`, { userId: userId, surrogateId: surrogateId, serviceId: serviceId, operatorId: operatorId }).toPromise();
-
-  }
-
-
-  public async enableServiceLink(sdkUrl: string, slrId: string, surrogateId: string, serviceId: string, serviceName: string): Promise<ServiceLinkStatusRecordSigned> {
-
+  public async enableServiceLink(
+    sdkUrl: string,
+    slrId: string,
+    surrogateId: string,
+    serviceId: string,
+    serviceName: string
+  ): Promise<ServiceLinkStatusRecordSigned> {
     const newServiceStatusRecord = await this.http
-      .put<ServiceLinkStatusRecordSigned>(
-        `${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
+      .put<ServiceLinkStatusRecordSigned>(`${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
       .toPromise();
 
-    this.toastrService.primary('', this.translateService.instant('general.services.enableSuccessfulMessage', { serviceName: serviceName }),
-      { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 4500 });
+    this.toastrService.primary('', this.translateService.instant('general.services.enableSuccessfulMessage', { serviceName: serviceName }), {
+      position: NbGlobalLogicalPosition.BOTTOM_END,
+      duration: 4500,
+    });
     this.emitServiceLinkEvent({ serviceId: serviceId, status: SlStatusEnum.Active, surrogateId: surrogateId, slrId: slrId } as ServiceLinkEvent);
 
     return newServiceStatusRecord;
   }
 
-
-  public async disableServiceLink(sdkUrl: string, slrId: string, surrogateId: string, serviceId: string, serviceName: string): Promise<ServiceLinkStatusRecordSigned> {
-
+  public async disableServiceLink(
+    sdkUrl: string,
+    slrId: string,
+    surrogateId: string,
+    serviceId: string,
+    serviceName: string
+  ): Promise<ServiceLinkStatusRecordSigned> {
     const newServiceStatusRecord = await this.http
-      .delete<ServiceLinkStatusRecordSigned>(
-        `${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
+      .delete<ServiceLinkStatusRecordSigned>(`${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
       .toPromise();
 
-    this.toastrService.primary('', this.translateService.instant('general.services.disableSuccessfulMessage', { serviceName: serviceName }),
-      { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 4500 });
+    this.toastrService.primary('', this.translateService.instant('general.services.disableSuccessfulMessage', { serviceName: serviceName }), {
+      position: NbGlobalLogicalPosition.BOTTOM_END,
+      duration: 4500,
+    });
 
     this.emitServiceLinkEvent({ serviceId: serviceId, status: SlStatusEnum.Removed, surrogateId: surrogateId, slrId: slrId } as ServiceLinkEvent);
 
     return newServiceStatusRecord;
   }
 
-
-  public getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl: string, userId, serviceId: string, operatorId: string): Promise<UserSurrogateIdLink> {
-
-    return this.http.get<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink?userId=${userId}&serviceId=${serviceId}&operatorId=${operatorId}`).toPromise();
+  public getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(
+    sdkUrl: string,
+    serviceUserId,
+    serviceId: string,
+    operatorId: string
+  ): Promise<UserSurrogateIdLink> {
+    return this.http
+      .get<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink?userId=${serviceUserId}&serviceId=${serviceId}&operatorId=${operatorId}`)
+      .toPromise();
   }
-
 
   public getOperatorDescription(sdkUrl: string, operatorId: string): Promise<OperatorDescription> {
-
-    return this.http
-      .get<OperatorDescription>(`${sdkUrl}/operatorDescriptions/${operatorId}`).toPromise();
+    return this.http.get<OperatorDescription>(`${sdkUrl}/operatorDescriptions/${operatorId}`).toPromise();
   }
 
-
   public getServiceLinkRecordBySurrogateIdAndServiceId(sdkUrl: string, surrogateId: string, serviceId: string): Promise<ServiceLinkRecordDoubleSigned> {
-
     return this.http.get<ServiceLinkRecordDoubleSigned>(`${sdkUrl}/slr/surrogate/${surrogateId}/services/${serviceId}`).toPromise();
   }
 
-
-  public async getServiceLinkRecordByUserIdAndServiceId(sdkUrl: string, userId: string, serviceId: string, operatorId: string): Promise<ServiceLinkRecordDoubleSigned> {
-
-    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, userId, serviceId, operatorId);
+  public async getServiceLinkRecordByUserIdAndServiceId(
+    sdkUrl: string,
+    serviceUserId: string,
+    serviceId: string,
+    operatorId: string
+  ): Promise<ServiceLinkRecordDoubleSigned> {
+    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
     return this.getServiceLinkRecordBySurrogateIdAndServiceId(sdkUrl, userSurrogateLink.surrogateId, serviceId);
   }
 
-
-  public async getServiceLinkStatus(sdkUrl: string, userId: string, serviceId: string, operatorId: string): Promise<SlStatusEnum> {
+  public async getServiceLinkStatus(sdkUrl: string, serviceUserId: string, serviceId: string, operatorId: string): Promise<SlStatusEnum> {
     try {
-      const serviceLink: ServiceLinkRecordDoubleSigned = await this.getServiceLinkRecordByUserIdAndServiceId(sdkUrl, userId, serviceId, operatorId);
+      const serviceLink: ServiceLinkRecordDoubleSigned = await this.getServiceLinkRecordByUserIdAndServiceId(sdkUrl, serviceUserId, serviceId, operatorId);
 
       return serviceLink?.serviceLinkStatuses?.pop().payload.sl_status;
-
     } catch (error) {
       return null;
     }
   }
 
+  public async fetchConsentForm(
+    sdkUrl: string,
+    serviceUserId: string,
+    serviceId: string,
+    operatorId: string,
+    purposeId: string,
+    sourceServiceId?: string,
+    sourceDatasetId?: string
+  ): Promise<ConsentForm> {
+    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
 
-  public async fetchConsentForm(sdkUrl: string, userId: string, serviceId: string, operatorId: string, purposeId: string, sourceServiceId?: string, sourceDatasetId?: string): Promise<ConsentForm> {
+    let fetchConsentFormUrl = `${sdkUrl}/users/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
 
-    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, userId, serviceId, operatorId);
-
-    return this.http.get<ConsentForm>(`${sdkUrl}/users/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`).toPromise();
+    if (sourceServiceId && sourceDatasetId) fetchConsentFormUrl += `?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`;
+    return this.http.get<ConsentForm>(fetchConsentFormUrl).toPromise();
   }
 
-
   public async giveConsent(sdkUrl: string, consentForm: ConsentForm): Promise<ConsentRecordSigned> {
-
     return this.http.post<ConsentRecordSigned>(`${sdkUrl}/users/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
   }
 
   public async getConsentsBySurrogateId(sdkUrl: string, surrogateId: string): Promise<ConsentRecordSigned> {
-
     return this.http.get<ConsentRecordSigned>(`${sdkUrl}/users/${surrogateId}/consent`).toPromise();
   }
 
-
-  public async getConsentsBySurrogateIdAndPurposeId(sdkUrl: string, surrogateId: string, purposeId: string, checkConsentAtOperator: boolean): Promise<ConsentRecordSigned[]> {
-
-    return this.http.get<ConsentRecordSigned[]>(`${sdkUrl}/users/${surrogateId}/purpose/${purposeId}/consent?checkConsentAtOperator=${checkConsentAtOperator}`).toPromise();
+  public async getConsentsBySurrogateIdAndPurposeId(
+    sdkUrl: string,
+    surrogateId: string,
+    purposeId: string,
+    checkConsentAtOperator: boolean
+  ): Promise<ConsentRecordSigned[]> {
+    return this.http
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/${surrogateId}/purpose/${purposeId}/consent?checkConsentAtOperator=${checkConsentAtOperator}`)
+      .toPromise();
   }
 
-
-  public async getConsentsByUserIdAndServiceIdAndPurposeId(sdkUrl: string, userId: string, serviceId: string, purposeId: string, operatorId: string, checkConsentAtOperator: boolean): Promise<ConsentRecordSigned[]> {
-
-    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, userId, serviceId, operatorId);
+  public async getConsentsByUserIdAndServiceIdAndPurposeId(
+    sdkUrl: string,
+    serviceUserId: string,
+    serviceId: string,
+    purposeId: string,
+    operatorId: string,
+    checkConsentAtOperator: boolean
+  ): Promise<ConsentRecordSigned[]> {
+    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
     return this.getConsentsBySurrogateIdAndPurposeId(sdkUrl, userSurrogateLink.surrogateId, purposeId, checkConsentAtOperator);
   }
 
-
-  public async getConsentStatus(sdkUrl: string, userId: string, serviceId: string, purposeId: string, operatorId: string, checkConsentAtOperator: boolean): Promise<ConsentStatusEnum> {
-
-    const consentRecords = await this.getConsentsByUserIdAndServiceIdAndPurposeId(sdkUrl, userId, serviceId, purposeId, operatorId, checkConsentAtOperator);
+  public async getConsentStatus(
+    sdkUrl: string,
+    serviceUserId: string,
+    serviceId: string,
+    purposeId: string,
+    operatorId: string,
+    checkConsentAtOperator: boolean
+  ): Promise<ConsentStatusEnum> {
+    const consentRecords = await this.getConsentsByUserIdAndServiceIdAndPurposeId(
+      sdkUrl,
+      serviceUserId,
+      serviceId,
+      purposeId,
+      operatorId,
+      checkConsentAtOperator
+    );
     return consentRecords[0].consentStatusList.pop().payload.consent_status;
   }
 
-
   private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentStatusRecordSigned> {
-
     const url = `${sdkUrl}/users/${consent.payload.common_part.surrogate_id}/servicelinks/${consent.payload.common_part.slr_id}/consents/${consent.payload.common_part.cr_id}/statuses`;
 
     return this.http
-      .post<ConsentStatusRecordSigned>(url,
-        {
-          resource_set: consent.consentStatusList.length > 1 ?
-            consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_resource_set
+      .post<ConsentStatusRecordSigned>(url, {
+        resource_set:
+          consent.consentStatusList.length > 1
+            ? consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_resource_set
             : consent.payload.common_part.rs_description.resource_set,
 
-          status: newStatus,
+        status: newStatus,
 
-          usage_rules: consent.consentStatusList.length > 1 ?
-            consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_usage_rules
+        usage_rules:
+          consent.consentStatusList.length > 1
+            ? consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_usage_rules
             : (consent.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules,
-          request_from: ChangeConsentStatusRequestFrom.Service
-        } as ChangeConsentStatusRequest).toPromise();
+        request_from: ChangeConsentStatusRequestFrom.Service,
+      } as ChangeConsentStatusRequest)
+      .toPromise();
   }
-
 
   public async disableConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-
     const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Disabled);
 
-    this.toastrService.primary('', this.translateService.instant('general.consent.disableSuccessfulMessage'),
-      { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 4500 });
+    this.toastrService.primary('', this.translateService.instant('general.consent.disableSuccessfulMessage'), {
+      position: NbGlobalLogicalPosition.BOTTOM_END,
+      duration: 4500,
+    });
 
     this.emitConsentRecordEvent({
       crId: consent.payload.common_part.cr_id,
       serviceId: consent.payload.common_part.subject_id,
-      status: newConsentStatusRecord.payload
+      status: newConsentStatusRecord.payload,
     } as ConsentRecordEvent);
 
     return newConsentStatusRecord;
   }
-
 
   public async enableConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-
     const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Active);
 
-    this.toastrService.primary('', this.translateService.instant('general.consent.enableSuccessfulMessage'),
-      { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 4500 });
+    this.toastrService.primary('', this.translateService.instant('general.consent.enableSuccessfulMessage'), {
+      position: NbGlobalLogicalPosition.BOTTOM_END,
+      duration: 4500,
+    });
 
     this.emitConsentRecordEvent({
       crId: consent.payload.common_part.cr_id,
       serviceId: consent.payload.common_part.subject_id,
-      status: newConsentStatusRecord.payload
+      status: newConsentStatusRecord.payload,
     } as ConsentRecordEvent);
 
     return newConsentStatusRecord;
   }
 
-
   public async withdrawConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-
     const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Withdrawn);
 
-    this.toastrService.primary('', this.translateService.instant('general.consent.withdrawSuccessfulMessage'),
-      { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 4500 });
+    this.toastrService.primary('', this.translateService.instant('general.consent.withdrawSuccessfulMessage'), {
+      position: NbGlobalLogicalPosition.BOTTOM_END,
+      duration: 4500,
+    });
 
     this.emitConsentRecordEvent({
       crId: consent.payload.common_part.cr_id,
       serviceId: consent.payload.common_part.subject_id,
-      status: newConsentStatusRecord.payload
+      status: newConsentStatusRecord.payload,
     } as ConsentRecordEvent);
 
     return newConsentStatusRecord;
   }
 
   public emitIsRegisteredValue(isRegistered: boolean): boolean {
-
     this.registeredSubject.next(isRegistered);
     return this.registeredSubject.getValue();
   }
 
   public emitConsentRecordEvent(event: ConsentRecordEvent): void {
-
     this.consentSubject.next(event);
   }
 
-
   public emitServiceLinkEvent(event: ServiceLinkEvent): SlStatusEnum {
-
     this.linkSubject.next(event);
     return this.linkSubject.getValue().status;
   }
 
-
   public getRegisteredService(sdkUrl: string, serviceId: string): Promise<ServiceEntry> {
-
     return this.http.get<ServiceEntry>(`${sdkUrl}/services/${serviceId}?onlyRegistered=true`).toPromise();
   }
 
+  public createCapeAccount(sdkUrl: string, accountId: string, accountEmail: string, locale: string): Promise<Account> {
+    return this.http
+      .post<Account>(`${sdkUrl}/accounts`, {
+        username: localStorage.serviceAccountId as string,
+        account_info: {
+          email: localStorage.serviceAccountEmail as string,
+        },
+        language: locale,
+      } as Account)
+      .toPromise();
+  }
 }

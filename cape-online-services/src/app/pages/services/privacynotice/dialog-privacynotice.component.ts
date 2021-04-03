@@ -12,21 +12,21 @@ import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 })
 export class DialogPrivacyNoticeComponent {
   sdkUrl: string;
-  accountId:string;
+  accountId: string;
   operatorId: string;
   dashboardUrl: string;
   serviceId: string;
   purposeId: string;
-  sourceDatasetId: string;
-  sourceServiceId: string;
-  
-  isSubmitDisabled=true;
 
- 
+  isSubmitDisabled = true;
 
-
-
-  constructor(private errorDialogService: ErrorDialogService,protected ref: NbDialogRef<DialogPrivacyNoticeComponent>, private translateService: TranslateService, private dialogService: NbDialogService, private capeService: CapeSdkAngularService) {}
+  constructor(
+    private errorDialogService: ErrorDialogService,
+    protected ref: NbDialogRef<DialogPrivacyNoticeComponent>,
+    private translateService: TranslateService,
+    private dialogService: NbDialogService,
+    private capeService: CapeSdkAngularService
+  ) {}
 
   cancel() {
     this.ref.close();
@@ -36,26 +36,21 @@ export class DialogPrivacyNoticeComponent {
     this.ref.close(true);
   }
 
-
   toggle(checked: boolean) {
     this.isSubmitDisabled = !checked;
   }
 
   async openConsentForm() {
-
     try {
-      this.dialogService.open(ConsentFormComponent,
-        {
-          hasScroll: true,
-          autoFocus: true,
-          closeOnBackdropClick: true,
-          context: {
-            sdkUrl: this.sdkUrl,
-            consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId, this.sourceServiceId, this.sourceDatasetId)
-          }
-        });
-              
-     
+      this.dialogService.open(ConsentFormComponent, {
+        hasScroll: true,
+        autoFocus: true,
+        closeOnBackdropClick: true,
+        context: {
+          sdkUrl: this.sdkUrl,
+          consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId),
+        },
+      });
     } catch (error) {
       this.errorDialogService.openErrorDialog(error);
     }

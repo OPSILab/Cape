@@ -47,7 +47,6 @@ public class ConsentEventLog extends EventLog {
 	@NotBlank(message = "sinkId field is mandatory")
 	private String sinkId;
 
-	@NotBlank(message = "sourceId field is mandatory")
 	private String sourceId;
 
 	@NotNull(message = "dataConcepts field is mandatory")

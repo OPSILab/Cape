@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
@@ -43,6 +44,7 @@ import it.eng.opsi.cape.exception.SessionNotFoundException;
 import it.eng.opsi.cape.sdk.ApplicationProperties;
 import it.eng.opsi.cape.sdk.model.OperatorDescription;
 import it.eng.opsi.cape.sdk.model.ServicePopKey;
+import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
@@ -63,7 +65,9 @@ import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 public class ClientService {
 
 	private ApplicationProperties appProperty;
+
 	private final String serviceRegistryHost;
+	private final String accountManagerHost;
 	private final String serviceManagerHost;
 	private final String consentManagerHost;
 	private final ApplicationProperties.Idm idm;
@@ -76,6 +80,7 @@ public class ClientService {
 
 		this.appProperty = appProperty;
 		serviceRegistryHost = this.appProperty.getCape().getServiceRegistry().getHost();
+		accountManagerHost = this.appProperty.getCape().getAccountManager().getHost();
 		serviceManagerHost = this.appProperty.getCape().getServiceManager().getHost();
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
 		idm = this.appProperty.getIdm();
@@ -283,7 +288,8 @@ public class ClientService {
 
 	/*
 	 * Call Get Linking Code to start service link session from service in automatic
-	 * mode-> Service Manager
+	 * mode. Use the Service UserId as accountId parameter SDK Service -> Service
+	 * Manager
 	 */
 	public String callGetLinkingCode(String serviceId, String userId, String surrogateId, String returnUrl,
 			Boolean forceLinking) throws SessionNotFoundException, ServiceManagerException {
@@ -338,27 +344,30 @@ public class ClientService {
 			String sourceDatasetId, String sourceServiceId) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost
-				+ "/api/v2/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm?sourceDatasetId="
-				+ sourceDatasetId + "&sourceServiceId=" + sourceServiceId, ConsentForm.class, surrogateId, serviceId,
-				purposeId);
+
+		String url = consentManagerHost
+				+ "/api/v2/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm"
+				+ (StringUtils.isAnyBlank(sourceDatasetId, sourceServiceId) ? ""
+						: "?sourceDatasetId=" + sourceDatasetId + "&sourceServiceId=" + sourceServiceId);
+
+		return restTemplate.getForEntity(url, ConsentForm.class, surrogateId, serviceId, purposeId);
 	}
 
-	public ConsentRecordSigned callGiveConsent(String surrogateId, ConsentForm consentForm) {
+	public ResponseEntity<ConsentRecordSigned> callGiveConsent(String surrogateId, ConsentForm consentForm) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.postForEntity(URI.create(consentManagerHost + "/api/v2/users/" + surrogateId + "/consents"),
-				consentForm, ConsentRecordSigned.class).getBody();
+				consentForm, ConsentRecordSigned.class);
 	}
 
-	public ResponseEntity<ConsentStatusRecordSigned> callChangeConsentStatus(String surrogateId, String slrId,
+	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String surrogateId, String slrId,
 			String crId, ChangeConsentStatusRequest request) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.postForEntity(UriComponentsBuilder
 				.fromHttpUrl(consentManagerHost
 						+ "/api/v2/accounts/{surrogateId}/servicelinks/{slrId}/consents/{crId}/statuses")
-				.build(surrogateId, slrId, crId), request, ConsentStatusRecordSigned.class);
+				.build(surrogateId, slrId, crId), request, ConsentRecordSigned.class);
 	}
 
 	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsBySurrogateId(String surrogateId) {
@@ -434,6 +443,12 @@ public class ClientService {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.exchange(dataRequest, DataTransferResponse.class).getBody();
+	}
+
+	public ResponseEntity<Account> createCapeAccount(Account account) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+		return restTemplate.postForEntity(accountManagerHost + "/api/v2/accounts", account, Account.class);
 	}
 
 }

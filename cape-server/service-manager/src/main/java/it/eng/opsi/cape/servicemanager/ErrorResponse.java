@@ -111,6 +111,7 @@ public class ErrorResponse {
 		private Object rejectedValue;
 		private String message;
 
+		
 		@JsonCreator(mode = JsonCreator.Mode.DEFAULT)
 		ApiValidationError(String object, String message) {
 			this.object = object;

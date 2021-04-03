@@ -53,7 +53,7 @@ public interface IConsentManagerController {
 
 	public abstract ResponseEntity<ConsentRecordSigned> giveConsentFromService(String surrogateId,
 			ConsentForm consentForm) throws ResourceSetIdNotFoundException, ConsentManagerException,
-			ServiceLinkRecordNotFoundException, AccountNotFoundException;
+			ServiceLinkRecordNotFoundException, AccountNotFoundException, ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountId(String accountId);
 
@@ -92,7 +92,7 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<ConsentStatusRecordSigned> getLastConsentStatusRecordByAccountIdAndSlrIdAndCrId(
 			String accountId, String slrId, String crId) throws ConsentRecordNotFoundException;
 
-	public abstract ResponseEntity<ConsentStatusRecordSigned> changeConsentStatus(String accountId, String slrId,
+	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatus(String accountId, String slrId,
 			String crId, ChangeConsentStatusRequest request)
 			throws ConsentRecordNotFoundException, ConsentManagerException, ConsentStatusNotValidException,
 			ResourceSetIdNotFoundException, ServiceLinkRecordNotFoundException, ServiceLinkStatusNotValidException,

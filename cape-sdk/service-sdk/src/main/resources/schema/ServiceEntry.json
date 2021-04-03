@@ -21,7 +21,6 @@
       "thematicArea",
       "language",
       "hasCompetentAuthority",
-      "humanReadableDescription",
       "serviceInstance",
       "isDescribedAt",
       "processingBases",
@@ -531,8 +530,8 @@
                   "type": "string",
                   "default": "",
                   "enum": [
-                     "Academic Research",
-                     "Access Control",
+                     "AcademicResearch",
+                     "AccessControl",
                      "Advertising ",
                      "CommercialInterest",
                      "CommercialResearch",
@@ -763,6 +762,10 @@
                   "default": ""
                },
                "collectionMethod": {
+                  "type": "string",
+                  "default": ""
+               },
+               "collectionOperator": {
                   "type": "string",
                   "default": ""
                },

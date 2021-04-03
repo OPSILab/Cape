@@ -1,6 +1,5 @@
 <form [formGroup]="userConsentForm" (ngSubmit)="giveConsent();dialogRef.close()">
-  <nb-card style="width:60vw;height:auto;max-width: 95vw;
-  max-height: 95vh;">
+  <nb-card>
     <nb-card-header class="d-flex justify-content-between">
       <h5 class="h5 mr-3">{{ 'general.consent.form.header' | translate}}</h5>
       <button nbButton ghost shape="rectangle" size="small" (click)="dialogRef.close()">

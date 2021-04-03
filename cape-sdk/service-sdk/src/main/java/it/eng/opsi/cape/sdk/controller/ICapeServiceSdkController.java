@@ -23,6 +23,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,6 +50,7 @@ import it.eng.opsi.cape.exception.UserSurrogateIdLinkNotFoundException;
 import it.eng.opsi.cape.sdk.model.OperatorDescription;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
 import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
+import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
@@ -145,7 +147,7 @@ public interface ICapeServiceSdkController {
 
 	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecords(Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<ConsentStatusRecordSigned> changeConsentStatusFromService(String surrogateId,
+	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(String surrogateId,
 			String slrId, String crId, ChangeConsentStatusRequest request)
 			throws ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkRecordNotFoundException,
 			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException;
@@ -171,4 +173,5 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<String> getLinkSessionCode(String serviceId, String userId, String surrogateId,
 			String returnUrl, Boolean forceLinking) throws ServiceManagerException, SessionNotFoundException;
 
+	public abstract ResponseEntity<Account> createAccount(Account account);
 }

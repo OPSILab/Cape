@@ -93,16 +93,6 @@ public class CommonPart {
 	@NonNull
 	@NotBlank
 	private String operator;
-	
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "source_id")
-	private String sourceId;
-	
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "source_name")
-	private String sourceName;
 
 	@NonNull
 	@NotBlank

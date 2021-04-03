@@ -117,13 +117,13 @@ public class ClientService {
 	 * Operator Login) Service Manager -> Service SDK
 	 */
 	public FinalStoreSlrResponse callStartServiceLinking(String code, String surrogateId, String operatorId,
-			String serviceId, String returnUrl, String serviceSdkUrl) throws ServiceManagerException {
+			String serviceId, String returnUrl, String serviceLinkingUri) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		ResponseEntity<FinalStoreSlrResponse> linkingResponse = restTemplate
 				.exchange(
-						RequestEntity.post(URI.create(serviceSdkUrl + "/api/v2/slr/linking"))
+						RequestEntity.post(URI.create(serviceLinkingUri))
 								.body(StartLinkingRequest.builder().code(code).surrogateId(surrogateId)
 										.operatorId(operatorId).serviceId(serviceId).returnUrl(returnUrl).build()),
 						FinalStoreSlrResponse.class);

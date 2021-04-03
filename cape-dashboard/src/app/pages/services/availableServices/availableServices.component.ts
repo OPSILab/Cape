@@ -136,7 +136,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
             type: 'textarea',
           },
           width: '65%',
-          valuePrepareFunction: (cell, row: AvailableServiceRow) => row.humanReadableDescription[0].description,
+          valuePrepareFunction: (cell, row: AvailableServiceRow) => row.humanReadableDescription[0]?.description,
         },
         details: {
           title: this.detailsLabel,

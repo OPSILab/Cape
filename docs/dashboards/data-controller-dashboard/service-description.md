@@ -112,12 +112,12 @@ These Urls depends on how the Cape SDK is installed.
 
 | Property Name      | Type   | Description                                                         |
 |--------------------|--------|---------------------------------------------------------------------|
-| domain             | string | Service's domain BASE URL (http(s)://host:port) (e.g. http://localhost/cape-playground )  |
-| libraryDomain      | string | Service's integration library (CAPE SDK) url (http(s)://host:port)  |
-| linkingUri         | string | URI for Service Linking                                             |
-| linkingRedirectURI | string | Redirect URI after service linking                                  |
-| objectionURI       | string | URI for objection                                                   |
-| notificationURI    | string | URI for subscribing notifications                                   |
+| libraryDomain      | string | Service's integration library url. Endpoint where Cape SDK is publicly reachable (http(s)://host:port)  |
+| loginUri           | string | Url of Service Login Page where User will be redirected when start service linking from Operator (Cape User Dashboard |
+| linkingRedirectUri | string | ​URI where ​User​ ​will​ ​be redirected​ ​after​ ​service has​ ​been​ ​linked.​ ​Used
+in​ ​service​ ​linking starting​ ​from​ ​the service.                  |
+| objectionUri       | string | URI for objection (SOON)                                            |
+| notificationUri    | string | URI for subscribing notifications (SOON)                            |
 
 ---
 ## Service Dataset Description

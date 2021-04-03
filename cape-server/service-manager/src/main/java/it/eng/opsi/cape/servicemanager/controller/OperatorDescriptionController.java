@@ -18,8 +18,12 @@ package it.eng.opsi.cape.servicemanager.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cert.CertIOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -73,6 +77,13 @@ public class OperatorDescriptionController implements IOperatorDescriptionContro
 		 */
 		cryptoService.createOperatorKeyPairAndCert(operator);
 
+		// Derive domain Url from Base Url of LinkingUri
+		if (StringUtils.isBlank(operator.getOperatorUrls().getDomain())) {
+			Matcher matcher = Pattern.compile("^.+?[^\\/:](?=[?\\/]|$)").matcher(operator.getOperatorUrls().getLinkingUri());
+			if (matcher.find())
+				operator.getOperatorUrls().setDomain(matcher.group(0));
+		}
+		
 		OperatorDescription storedDescription = repository.insert(operator);
 
 		return ResponseEntity.created(URI.create(

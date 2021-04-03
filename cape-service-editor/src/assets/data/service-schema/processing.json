@@ -45,9 +45,9 @@
       "type": "string",
       "title": "Purpose Category",
       "enum": [
-        "Academic Research",
-        "Access Control",
-        "Advertising ",
+        "AcademicResearch",
+        "AccessControl",
+        "Advertising",
         "CommercialInterest",
         "CommercialResearch",
         "CommunicationForCustomerCare",
@@ -314,7 +314,13 @@
       "type": "string",
       "title": "Collection Method",
       "default": "",
-      "description": "Collection method of consent"
+      "description": "Collection method of Consents"
+    },
+    "collectionOperator": {
+      "type": "string",
+      "title": "Collection Operator",
+      "default": "",
+      "description": "Operator who collects Consents"
     },
     "termination": {
       "type": "string",

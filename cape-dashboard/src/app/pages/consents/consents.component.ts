@@ -66,7 +66,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private service: ConsentsService,
+    private consentService: ConsentsService,
     private linkedServicesService: LinkedServicesService,
     private router: Router,
     private translate: TranslateService,
@@ -126,7 +126,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.message = '';
 
-      this.consents = await this.service.getConsentPairs(consentId, serviceId, status, purposeCategory, processingCategory);
+      this.consents = await this.consentService.getConsentPairs(consentId, serviceId, status, purposeCategory, processingCategory);
 
       if (this.consents.length === 0) this.message = this.translate.instant('general.consents.no_consent_message') as string;
       else
@@ -146,7 +146,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   }
 
   async getServices(): Promise<void> {
-    this.services = await this.service.getServices();
+    this.services = await this.consentService.getServices();
   }
 
   getNowDateTime(): string {
@@ -249,7 +249,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     } as ResourceSet;
 
     try {
-      const updatedStatus = await this.service.updateConsentStatus(
+      const updatedConsentRecord = await this.consentService.updateConsentStatus(
         consent.payload.common_part.slr_id,
         consent.payload.common_part.cr_id,
         newResourceSet,
@@ -261,7 +261,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
         duration: 4500,
       });
 
-      consent.consentStatusList.push(updatedStatus);
+      consent.consentStatusList = updatedConsentRecord.consentStatusList;
       this.changedDataMapping[consentIndex] = false;
       this.changedShareWith[consentIndex] = false;
       void this.openDetails(consentIndex, false);
@@ -345,7 +345,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     const sourceServiceId = consent.source?.payload.common_part.subject_id;
     const sourceDatasetId = consentDataset.dataset_id;
 
-    const matchingDataMappings: DataMapping[] = await this.service.getMatchingDatasets(serviceId, purposeId, sourceDatasetId, sourceServiceId);
+    const matchingDataMappings: DataMapping[] = await this.consentService.getMatchingDatasets(serviceId, purposeId, sourceDatasetId, sourceServiceId);
 
     const matchingDataMappingMap: Map<string, DataMapping> = new Map(matchingDataMappings.map((dataMapping) => [dataMapping.conceptId, dataMapping]));
     const consentDataMappingMap: Map<string, DataMapping> = new Map(
@@ -389,7 +389,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
         : (consent.sink.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules.shareWith;
 
     const purposeId: string = consentDataset.purposeId;
-    const sinkShareWith: ShareWith[] = (await this.service.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))
+    const sinkShareWith: ShareWith[] = (await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))
       .shareWith;
 
     const consentShareWithMap: Map<string, ShareWith> = new Map(consentShareWith.map((consentShare) => [consentShare.orgName, consentShare]));

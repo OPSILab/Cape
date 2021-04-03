@@ -47,4 +47,35 @@ public class ResourceSet {
 	@JsonProperty(value = "datasets")
 	private List<Dataset> datasets;
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((datasets == null) ? 0 : datasets.hashCode());
+		result = prime * result + ((rsId == null) ? 0 : rsId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ResourceSet other = (ResourceSet) obj;
+		if (datasets == null) {
+			if (other.datasets != null)
+				return false;
+		} else if (!datasets.equals(other.datasets))
+			return false;
+		if (rsId == null) {
+			if (other.rsId != null)
+				return false;
+		} else if (!rsId.equals(other.rsId))
+			return false;
+		return true;
+	}
+
 }

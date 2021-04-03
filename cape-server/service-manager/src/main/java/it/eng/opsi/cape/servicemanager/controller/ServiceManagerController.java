@@ -185,6 +185,9 @@ public class ServiceManagerController implements IServiceManagerController {
 
 		} catch (SessionNotFoundException e) {
 
+			/*
+			 * No Linking Session found, create a new one
+			 */
 			String code = serviceManager.generateCode(accountId, serviceId);
 
 			String serviceLoginUri = serviceDescription.getServiceInstance().getServiceUrls().getLoginUri();
@@ -208,7 +211,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	}
 
 	/**
-	 * (Linking started from Service) Initiate linking after Operator login ---->
+	 * (Linking started from Service) Initiate linking after Operator login or with forceCode automatically from Service ---->
 	 * Service Manager
 	 * 
 	 * @throws OperatorDescriptionNotFoundException
@@ -227,7 +230,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			@RequestParam("surrogateId") String surrogateId, @PathVariable("serviceId") String serviceId,
 			@RequestParam("returnUrl") String returnUrl,
 			@RequestParam(name = "forceLinking", defaultValue = "false") Boolean forceLinking,
-	        @RequestParam(name = "forceLinkCode", defaultValue = "false") Boolean forceCode)
+			@RequestParam(name = "forceLinkCode", defaultValue = "false") Boolean forceCode)
 			throws ServiceManagerException, ServiceDescriptionNotFoundException, ConflictingSessionFoundException,
 			ServiceLinkingRedirectUriMismatchException {
 
@@ -270,10 +273,12 @@ public class ServiceManagerController implements IServiceManagerController {
 
 		} catch (SessionNotFoundException e) {
 
+			/*
+			 * No Linking Session found, create a new one
+			 */
 			String code = serviceManager.generateCode(accountId, serviceId);
 
-			String serviceSdkUrl = serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain();
-			// or use linkingUri including the full path ("/api/v2/slr/linking) ?
+			String serviceLinkingUri = serviceDescription.getServiceInstance().getServiceUrls().getLinkingUri();
 
 			String serviceLinkingReturnUrl = serviceDescription.getServiceInstance().getServiceUrls()
 					.getLinkingRedirectUri();
@@ -283,18 +288,25 @@ public class ServiceManagerController implements IServiceManagerController {
 			if (!returnUrl.startsWith(serviceLinkingReturnUrl))
 				throw new ServiceLinkingRedirectUriMismatchException(
 						"The Return Url in input mismatches with the one present in the Service description");
-			// startSession
+			/*
+			 *  startSession
+			 */
 			// TODO Check if Account corresponding to AccountId exists (call Account
 			// Manager)
+			// TODO In case of automatic linking (forceCode=true) the accountId in input is instead the Service User Id
 			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")));
 
+			/*
+			 * If forceCode is true, return directly the Linking Session code in order to let the Service to perform
+			 * automatic linking without performing redirect to Operator (Cape Dashboard)
+			 */
 			if (forceCode)
 				return ResponseEntity.ok(code);
 			else {
-				clientService.callStartServiceLinking(code, surrogateId, operatorId, serviceId, returnUrl, serviceSdkUrl);
+				clientService.callStartServiceLinking(code, surrogateId, operatorId, serviceId, returnUrl,
+						serviceLinkingUri);
 				return ResponseEntity.ok(null);
-			}	
-			
+			}
 
 		}
 	}
@@ -748,10 +760,10 @@ public class ServiceManagerController implements IServiceManagerController {
 		 * Call to Audit
 		 */
 
-		clientService.callAddEventLog(new ServiceLinkEventLog(now, EventType.SERVICE_LINK, accountOrSurrogateId,
-				LegalBasis.CONSENT, "Service Link Status Updated", slrId, serviceId,
-				existingSlr.getPayload().getServiceName(), existingSlr.getPayload().getServiceUri(), actionType,
-				requestFrom));
+		clientService.callAddEventLog(
+				new ServiceLinkEventLog(now, EventType.SERVICE_LINK, accountOrSurrogateId, LegalBasis.CONSENT,
+						"Service Link Status Updated", slrId, serviceId, existingSlr.getPayload().getServiceName(),
+						existingSlr.getPayload().getServiceUri(), actionType, requestFrom));
 
 		return ResponseEntity.created(newSsrLocation).body(signedSsr);
 	}

@@ -62,4 +62,5 @@ public class ConsentRecordSigned {
 			this.consentStatusList = new ArrayList<ConsentStatusRecordSigned>();
 		this.consentStatusList.add(consentStatusRecords);
 	}
+
 }

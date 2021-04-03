@@ -61,7 +61,6 @@ import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jose.util.X509CertUtils;
 
 import it.eng.opsi.cape.accountmanager.model.Account;
-import it.eng.opsi.cape.accountmanager.model.OperatorDescription;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordPayload;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordPayload;
@@ -406,21 +405,6 @@ public class CryptoService {
 		return sw.toString();
 	}
 
-	/*
-	 * Get Operator Public key (JWK) from Operator X509 certificate
-	 */
-	public JWK getPublicKeyFromCertificate(OperatorDescription operator) throws JOSEException {
-
-		/*
-		 * Get the Certificate PEM encoding from x5c field TODO Alternatively GET the
-		 * PEM Certificate from the URI in the x5u field
-		 */
-
-		X509Certificate cert = X509CertUtils.parse(operator.getCert().getX5c().get(0));
-
-		return RSAKey.parse(cert);
-//		RSAKey.parseFromPEMEncodedX509Cert(operator.getCert().getX5c());
-	}
 
 	public Boolean verifyServiceSignature(ServiceLinkRecordDoubleSigned serviceSignedSlr, Base64 encodedServiceCert)
 			throws JOSEException, JsonProcessingException, ParseException {

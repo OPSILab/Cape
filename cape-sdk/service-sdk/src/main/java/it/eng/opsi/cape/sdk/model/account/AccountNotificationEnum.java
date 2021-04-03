@@ -14,26 +14,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package it.eng.opsi.cape.accountmanager.model;
+package it.eng.opsi.cape.sdk.model.account;
 
-import javax.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public enum AccountNotificationEnum {
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class OperatorUrls {
+	DASHBOARD("Dashboard"), EMAIL("Email"), PHONE("Phone");
 
-	@NotBlank(message = "domain field is mandatory")
-	private String domain;
+	private final String text;
 
-	@NotBlank(message = "linkingUri field is mandatory")
-	private String linkingUri;
+	private AccountNotificationEnum(final String text) {
+		this.text = text;
+	}
 
-	@NotBlank(message = "linkingRedirectUri field is mandatory")
-	private String linkingRedirectUri;
+	@JsonValue
+	public String getText() {
+		return text;
+	}
+
+	@Override
+	public String toString() {
+		return text;
+	}
 
 }

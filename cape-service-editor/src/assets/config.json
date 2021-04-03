@@ -2,7 +2,7 @@
   "serviceRegistry": {
     "url": "http://localhost:8088/service-registry/api/v2"
   },
-  
+
   "system": {
     "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
     "serviceEditorUrl": "http://localhost:81/cape-service-editor",
@@ -11,9 +11,9 @@
     "loginPopupUrl": "/loginPopup",
     "disable_auth": "false",
     "assetsDataDir": "/assets/data",
-    "editorSchemaPath": "/assets/data/service-schema/service-entry2.json"
+    "editorSchemaPath": "/assets/data/service-schema/service-entry.json"
   },
   "i18n": {
-    "locale": "en" 
+    "locale": "en"
   }
 }

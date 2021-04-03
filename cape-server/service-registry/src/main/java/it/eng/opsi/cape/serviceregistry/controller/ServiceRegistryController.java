@@ -19,6 +19,8 @@ package it.eng.opsi.cape.serviceregistry.controller;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +155,20 @@ public class ServiceRegistryController implements IServiceRegistryController {
 		// Set Service Cert to null, it will be created by Sdk when registering
 		// Service to Cape
 		service.getServiceInstance().setCert(null);
+
+		// Derive Domain Uri from Base Url of Service Login Uri
+		if (StringUtils.isBlank(service.getServiceInstance().getServiceUrls().getDomain())) {
+			service.getServiceInstance().getServiceUrls()
+					.setDomain(extractBaseUrl(service.getServiceInstance().getServiceUrls().getLoginUri()));
+		}
+		
+		// Derive Linking Uri from Library domain
+		if(StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
+			service.getServiceInstance().getServiceUrls().setLinkingUri(service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
+		}
+
+		
+
 		ServiceEntry result = serviceRepo.insert(service);
 
 		return ResponseEntity.created(URI.create(serviceRegistryPublicUrl + "/services/" + result.getServiceId()))
@@ -170,6 +186,7 @@ public class ServiceRegistryController implements IServiceRegistryController {
 		ServiceEntry existingService = serviceRepo.findByServiceId(serviceId).orElseThrow(
 				() -> new ServiceNotFoundException("No Service description found for Service Id: " + serviceId));
 		ServiceEntry result;
+
 		// Check if Service has Cert -> then is registered on Cape, reject Description
 		// update
 		if (existingService.getServiceInstance().getCert() != null
@@ -178,11 +195,33 @@ public class ServiceRegistryController implements IServiceRegistryController {
 						|| StringUtils.isNotBlank(existingService.getServiceInstance().getCert().getX5u())))
 			throw new ServiceNotEditableException("The Service description with Service Id: " + serviceId
 					+ " is registered on Cape and then can't be updated. First unregister from CaPe using SDK API.");
-		else
+		else {
+
+			// Derive Domain Uri from Base Url of Service Login Uri
+			if (StringUtils.isBlank(service.getServiceInstance().getServiceUrls().getDomain())) {
+				service.getServiceInstance().getServiceUrls()
+						.setDomain(extractBaseUrl(service.getServiceInstance().getServiceUrls().getLoginUri()));
+			}
+			
+			// Derive Linking Uri from Library domain
+			if(StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
+				service.getServiceInstance().getServiceUrls().setLinkingUri(service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
+			}
+			
+			
 			result = serviceRepo.updateService(serviceId, service).orElseThrow(
 					() -> new ServiceNotFoundException("No Service description found for Service Id: " + serviceId));
-
+		}
 		return ResponseEntity.ok(result);
+	}
+
+	private String extractBaseUrl(String url) {
+
+		Matcher matcher = Pattern.compile("^.+?[^\\/:](?=[?\\/]|$)").matcher(url);
+		if (matcher.find())
+			return matcher.group(0);
+		else
+			return null;
 	}
 
 	@Operation(summary = "Delete CaPe Account by Id or Username. Optionally deletes only the Cert field, in order to be considered unregistered by CaPe.", tags = {

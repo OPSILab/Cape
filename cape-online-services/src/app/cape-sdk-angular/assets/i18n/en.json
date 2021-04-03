@@ -1,7 +1,6 @@
 {
   "general": {
     "welcome": "Welcome to CaPe!",
-    "logo_text": "CaPe",
     "home": "Home",
     "goToDashboard": "Go to CaPe Dashboard",
     "login": {
@@ -29,7 +28,7 @@
       "closeAndReturnToOperatorButton": "Close and return to CaPe",
       "forceLinkingButton": "Force Linking",
       "linkingCancelledMessage": "Service Linking has been cancelled",
-      "linkingSuccessfulHeader": "Service linked yo your Cape Account",
+      "linkingSuccessfulHeader": "Service linked to your Cape Account",
       "linkingSuccessfulMessage": "The Service {{serviceName}} with Id: {{serviceId}} has been linked successfully to your Cape Account",
       "enableSuccessfulMessage": "The Link for Service {{serviceName}} has been enabled successfully",
       "disableSuccessfulMessage": "The Link for Service {{serviceName}} has been disabled successfully",

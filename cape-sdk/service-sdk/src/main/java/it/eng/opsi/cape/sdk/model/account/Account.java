@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package it.eng.opsi.cape.accountmanager.model;
+package it.eng.opsi.cape.sdk.model.account;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -30,49 +31,59 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkRecordDoubleSigned;
-import it.eng.opsi.cape.serviceregistry.data.Cert;
-import it.eng.opsi.cape.serviceregistry.data.ServiceProvider;
-import it.eng.opsi.cape.serviceregistry.data.SupportedProfile;
+import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordDoubleSigned;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class OperatorDescription {
+@Document("accounts")
+public class Account {
 
 	@Id
 	@JsonIgnore
 	private ObjectId _id;
 
-	@NotBlank(message = "operatorId field is mandatory")
-	private String operatorId;
+	private boolean activated;
 
-	private ServiceProvider serviceProvider;
+	private ZonedDateTime created;
+	private ZonedDateTime modified;
 
-	private String operatorServiceDescriptionVersion;
+	@Valid
+	@JsonProperty(value = "account_info")
+	private AccountInfo accountInfo;
 
-	private List<SupportedProfile> supportedProfiles;
+	@NotBlank(message = "username field is mandatory")
+	@Indexed(unique = true)
+	private String username;
 
-	private Cert cert;
+	private Locale language;
 
+	private List<AccountNotificationEnum> notification = new ArrayList<AccountNotificationEnum>();
+
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	@JsonIgnore
 	private RSAKey keyPair;
 
-	@Valid
-	@NotNull(message = "operatorUrls field is mandatory")
-	private OperatorUrls operatorUrls;
+	@JsonIgnore
+	private List<ServiceLinkRecordDoubleSigned> serviceLinkRecords;
 
-	private ZonedDateTime createdOnDate;
+	@JsonIgnore
+	public void setKeyPair(RSAKey keyPair) {
+		this.keyPair = keyPair;
+	}
 
-	private String createdByUserId;
+	@JsonProperty
+	public RSAKey getKeyPair() {
+		return keyPair;
+	}
 
 }

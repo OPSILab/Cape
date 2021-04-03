@@ -4,11 +4,8 @@ import { NgxConfigureService } from 'ngx-configure';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 
-
-
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-
   environment;
   onlineServicesUrl: string;
   capeHost: string;
@@ -22,8 +19,13 @@ export class LoginService {
 
   dialogRef: NbDialogRef<unknown>;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private configService: NgxConfigureService,
-    private http: HttpClient, private dialogService: NbDialogService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private configService: NgxConfigureService,
+    private http: HttpClient,
+    private dialogService: NbDialogService
+  ) {
     this.environment = configService.config.system;
     this.onlineServicesUrl = this.environment.onlineServicesUrl;
     this.capeHost = this.environment.capeHost;
@@ -43,26 +45,22 @@ export class LoginService {
   closeLoginPopup = () => {
     window.opener.document.location.href = this.serviceUrl;
     window.close();
-  }
+  };
 
   cancel = async (errorDialogRef: TemplateRef<unknown>) => {
-
     try {
       this.dialogRef.close();
       await this.logout();
       this.closeLoginPopup();
-
     } catch (err) {
       console.log(err);
       this.openDialog(errorDialogRef, {
-        error: err
+        error: err,
       });
     }
-  }
+  };
 
   completeLogin = async (noAccountDialogRef: TemplateRef<unknown>, errorDialogRef: TemplateRef<unknown>, prevQueryParams: Params) => {
-
-
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     let token: string = queryParams.token;
@@ -74,63 +72,57 @@ export class LoginService {
       //   this.openDialog(errorDialogRef, { error: new Error('Token or login State are empty or invalid') });
 
       if (token && token !== '') {
-
         console.log(`token: ${token}`);
         localStorage.setItem('token', token);
         sessionStorage.removeItem('loginState');
-
       } else if (code && code !== '') {
-
         let params = new HttpParams();
-        params = params.append('grant_type', 'authorization_code')
+        params = params
+          .append('grant_type', 'authorization_code')
           .append('code', code)
           .append('redirect_uri', this.onlineServicesUrl + this.loginPopupUrl);
 
-        const resp: any = await this.http.post(`${this.sdkUrl}/idm/oauth2/token`, params.toString(), {
-          responseType: "json", headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
-        }).toPromise();
+        const resp: any = await this.http
+          .post(`${this.sdkUrl}/idm/oauth2/token`, params.toString(), {
+            responseType: 'json',
+            headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+          })
+          .toPromise();
 
         token = resp.body.access_token;
         localStorage.setItem('token', token);
         sessionStorage.removeItem('loginState');
       }
 
-
-      // Get Idm User Details to create the associated Cape Account
+      // Get Idm User Details to create the associated Service Account
       const resp: any = await this.http.get(`${this.sdkUrl}/idm/user?token=${token}`).toPromise();
-      localStorage.setItem('accountId', resp.username);
-      localStorage.setItem('accountEmail', resp.email);
+      localStorage.setItem('serviceAccountId', resp.username);
+      localStorage.setItem('serviceAccountEmail', resp.email);
       this.closeLoginPopup();
-
     } catch (err) {
-
       console.log(err);
       this.openDialog(errorDialogRef, {
-        error: err
+        error: err,
       });
     }
-
-  }
-
+  };
 
   logout = async () => {
-    
-    localStorage.removeItem('accountId');
-    localStorage.removeItem('accountEmail');
+    localStorage.removeItem('serviceAccountId');
+    localStorage.removeItem('serviceAccountEmail');
     localStorage.removeItem('token');
-    const logout_redirect = await this.http.get<any>(`${this.idmHost}/auth/external_logout?client_id=${this.clientId}&_method=DELETE`, { withCredentials: true }).toPromise();
+    const logout_redirect = await this.http
+      .get<any>(`${this.idmHost}/auth/external_logout?client_id=${this.clientId}&_method=DELETE`, { withCredentials: true })
+      .toPromise();
     location.href = logout_redirect.redirect_sign_out_uri;
-  }
+  };
 
   openDialog = (dialogTemplate: TemplateRef<unknown>, ctx: unknown) => {
-
-    this.dialogRef = this.dialogService.open(dialogTemplate,
-      {
-        context: ctx,
-        hasScroll: false,
-        closeOnBackdropClick: false,
-        closeOnEsc: false
-      });
-  }
-
+    this.dialogRef = this.dialogService.open(dialogTemplate, {
+      context: ctx,
+      hasScroll: false,
+      closeOnBackdropClick: false,
+      closeOnEsc: false,
+    });
+  };
 }

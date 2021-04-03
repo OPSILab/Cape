@@ -78,11 +78,11 @@ export class ConsentsService {
     resourceSet: ResourceSet,
     status: ConsentStatusEnum,
     usageRules: SinkUsageRules
-  ): Promise<ConsentStatusRecordSigned> {
+  ): Promise<ConsentRecordSigned> {
     const url = `${this.consentsApiPath}/accounts/${this.accountId}/servicelinks/${slrId}/consents/${crId}/statuses`;
 
     return this.http
-      .post<ConsentStatusRecordSigned>(url, {
+      .post<ConsentRecordSigned>(url, {
         resource_set: resourceSet,
         status: status,
         usage_rules: usageRules,

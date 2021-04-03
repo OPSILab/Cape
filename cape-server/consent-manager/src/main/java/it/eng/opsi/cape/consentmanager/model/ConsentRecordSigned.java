@@ -81,4 +81,19 @@ public class ConsentRecordSigned {
 			this.consentStatusList.remove(index);
 	}
 
+	@JsonIgnore
+	public boolean isActive() {
+		return this.consentStatusList.get(this.consentStatusList.size() -1).getPayload().getConsentStatus().equals(ConsentRecordStatusEnum.Active);
+	}
+	
+	@JsonIgnore
+	public boolean isDisabled() {
+		return this.consentStatusList.get(this.consentStatusList.size() -1).getPayload().getConsentStatus().equals(ConsentRecordStatusEnum.Disabled);
+	}
+	
+	@JsonIgnore
+	public boolean isWithdrawn() {
+		return this.consentStatusList.get(this.consentStatusList.size() -1).getPayload().getConsentStatus().equals(ConsentRecordStatusEnum.Withdrawn);
+	}
+	
 }

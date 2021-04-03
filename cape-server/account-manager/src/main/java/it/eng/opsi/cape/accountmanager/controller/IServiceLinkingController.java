@@ -76,20 +76,5 @@ public interface IServiceLinkingController {
 			String slrId, @Valid ServiceLinkStatusRecordSigned newSsr)
 			throws ServiceLinkRecordNotFoundException, AccountNotFoundException, JsonProcessingException, JOSEException;
 
-	public abstract ResponseEntity<WithinServiceConsentSignResponse> signWithinServiceConsent(String surrogateId,
-			String slrId, WithinServiceConsentSignRequest request)
-			throws AccountNotFoundException, JsonProcessingException, JOSEException;
-
-	public abstract ResponseEntity<ThirdPartyReuseConsentSignResponse> signThirdPartyReuseConsent(String surrogateId,
-			String sinkSlrId, String sourceSlrId, ThirdPartyReuseConsentSignRequest request)
-			throws AccountNotFoundException, ServiceLinkRecordNotFoundException, JsonProcessingException, JOSEException;
-
-	public abstract ResponseEntity<ConsentStatusRecordSigned> signConsentStatusRecord(String accountId, String slrId,
-			ConsentStatusRecordPayload consentStatusRecord)
-			throws AccountNotFoundException, JsonProcessingException, JOSEException, ServiceLinkRecordNotFoundException;
-
-	ResponseEntity<Base64> signConsentStatusRecordsList(String accountId, String slrId,
-			@Valid List<ConsentStatusRecordSigned> consentStatusRecord)
-			throws AccountNotFoundException, JsonProcessingException, JOSEException, ServiceLinkRecordNotFoundException;
 
 }

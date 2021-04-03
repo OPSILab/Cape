@@ -64,7 +64,7 @@ services:
     image: capesuite/auditlog-manager
     build: ./auditlog-manager
     ports:
-      - "8081:8081"
+      - "8081:8080"
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs
@@ -104,7 +104,7 @@ services:
     image: capesuite/consent-manager
     build: ./consent-manager
     ports:
-      - "8083:8083"
+      - "8083:8080"
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs
@@ -145,7 +145,7 @@ services:
     image: capesuite/service-manager
     build: ./service-manager
     ports:
-      - "8082:8082"
+      - "8082:8080"
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs
@@ -186,7 +186,7 @@ services:
     image: capesuite/service-registry
     build: ./service-registry
     ports:
-      - "8088:8088"
+      - "8088:8080"
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs

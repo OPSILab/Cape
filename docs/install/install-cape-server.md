@@ -67,13 +67,12 @@ Following table describes the **Service Provider** model (intended as **Cape Pro
 
 
 Following table describes the fields of **OperatorUrls** class:			
-These Urls depends on how the Cape SDK is installed,
+These Urls depends on how Cape Server is installed,
 
 | Property Name      | Type   | Description                                                         |
 |--------------------|--------|---------------------------------------------------------------------|
-| domain             | string | Cape Server's domain BASE URL (http(s)://host:port) . E.g. ``               |
-| linkingUri         | string | URL user should be redirected when Service Linking started from the Service (must be `http(s)://CAPE_DASHBOARD_URL/serviceLinking`) |
-| linkingRedirectURI | string | URL​ ​user​ ​should​ ​be redirected​ ​after​ ​service​ ​has been​ ​linked.​ ​Used​ ​in​ ​Service Linking​ ​starting​ ​from​ User Self-Service Dashboard  (must be `http(s)://CAPE_DASHBOARD_URL/pages/services/linkedServices)` |
+| linkingUri         | string | URL where user should be redirected when Service Linking started from the Service (must be `http(s)://CAPE_DASHBOARD_URL/serviceLinking`) |
+| linkingRedirectURI | string | URL​ ​where user​ ​should​ ​be redirected​ ​after​ ​service​ ​has been​ ​linked.​ ​Used​ ​in​ ​Service Linking​ ​starting​ ​from​ User Self-Service Dashboard  (must be `http(s)://CAPE_DASHBOARD_URL/pages/services/linkedServices)` |
 
 ---
 
