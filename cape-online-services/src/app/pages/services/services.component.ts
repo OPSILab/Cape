@@ -223,7 +223,7 @@ export class ServicesComponent implements OnInit {
     }
   }
 
-  //fake data processing. It store on localstorage the data according to consent
+  //fake data processing. It stores on localstorage the data according to consent
   testPDProcessingByConsent(consent: ConsentRecordSigned) {
     var dataset = consent.payload.common_part.rs_description.resource_set.datasets[0].dataMappings;
     console.log(dataset);

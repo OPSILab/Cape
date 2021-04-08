@@ -333,11 +333,11 @@ export class CapeSdkAngularService {
     return consentRecords[0].consentStatusList.pop().payload.consent_status;
   }
 
-  private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentStatusRecordSigned> {
+  private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentRecordSigned> {
     const url = `${sdkUrl}/users/${consent.payload.common_part.surrogate_id}/servicelinks/${consent.payload.common_part.slr_id}/consents/${consent.payload.common_part.cr_id}/statuses`;
 
     return this.http
-      .post<ConsentStatusRecordSigned>(url, {
+      .post<ConsentRecordSigned>(url, {
         resource_set:
           consent.consentStatusList.length > 1
             ? consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_resource_set
@@ -355,7 +355,8 @@ export class CapeSdkAngularService {
   }
 
   public async disableConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-    const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Disabled);
+    const newConsentRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Disabled);
+    const newConsentStatusRecord = newConsentRecord.consentStatusList.pop();
 
     this.toastrService.primary('', this.translateService.instant('general.consent.disableSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
@@ -372,7 +373,8 @@ export class CapeSdkAngularService {
   }
 
   public async enableConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-    const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Active);
+    const newConsentRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Active);
+    const newConsentStatusRecord = newConsentRecord.consentStatusList.pop();
 
     this.toastrService.primary('', this.translateService.instant('general.consent.enableSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
@@ -389,7 +391,8 @@ export class CapeSdkAngularService {
   }
 
   public async withdrawConsent(sdkUrl: string, consent: ConsentRecordSigned): Promise<ConsentStatusRecordSigned> {
-    const newConsentStatusRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Withdrawn);
+    const newConsentRecord = await this.changeConsentStatus(sdkUrl, consent, ConsentStatusEnum.Withdrawn);
+    const newConsentStatusRecord = newConsentRecord.consentStatusList.pop();
 
     this.toastrService.primary('', this.translateService.instant('general.consent.withdrawSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,

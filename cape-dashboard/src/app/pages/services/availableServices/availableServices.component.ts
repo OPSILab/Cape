@@ -36,7 +36,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
   private availableServices: ServiceEntry[];
 
   constructor(
-    private service: AvailableServicesService,
+    private availableServicesService: AvailableServicesService,
     private route: ActivatedRoute,
     private translate: TranslateService,
     private configService: NgxConfigureService,
@@ -50,7 +50,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     try {
-      this.availableServices = await this.service.getRegisteredServices();
+      this.availableServices = await this.availableServicesService.getRegisteredServices();
       void this.source.load(
         this.availableServices.map((availableServiceDescr) => {
           /* Get Localized Human readable description of the Service, default en */
@@ -136,7 +136,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
             type: 'textarea',
           },
           width: '65%',
-          valuePrepareFunction: (cell, row: AvailableServiceRow) => row.humanReadableDescription[0]?.description,
+          valuePrepareFunction: (cell: HumanReadableDescription[]) => cell[0]?.description,
         },
         details: {
           title: this.detailsLabel,

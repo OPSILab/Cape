@@ -1,19 +1,22 @@
 <nb-card>
   <nb-card-header class="h3">
-    {{'general.menu.availableservices'|translate}}
+    {{ 'general.menu.availableservices' | translate }}
   </nb-card-header>
 
   <nb-card-body>
-      <div class="row mb-2">
-        <div class="col-12 col-md-12 text-right">
-          <button nbButton ghost shape="rectangle" size="small" (click)="resetfilters()">
-            <i class="material-icons">cancel</i>&nbsp;{{'general.services.clear_filters'|translate}}
-          </button>
-        </div>
+    <div class="g-0 row mb-2">
+      <div class="col-6 col-md-6 text-left">
+        <button nbButton class="" shape="rectangle" size="medium" status="primary" routerLink="/pages/services/service-editor">
+          <i class="material-icons">add</i>&nbsp;{{ 'general.services.add_new' | translate }}
+        </button>
       </div>
-    <ng2-smart-table [settings]="settings" [source]="source" (create)="onCreate($event)" (edit)="onEdit($event)">
-    </ng2-smart-table> 
+
+      <div class="col-6 col-md-6 text-right">
+        <button nbButton ghost shape="rectangle" size="small" (click)="resetfilters()">
+          <i class="material-icons">cancel</i>&nbsp;{{ 'general.services.clear_filters' | translate }}
+        </button>
+      </div>
+    </div>
+    <ng2-smart-table [settings]="settings" [source]="source" (create)="onCreate($event)" (edit)="onEdit($event)"> </ng2-smart-table>
   </nb-card-body>
 </nb-card>
-
-

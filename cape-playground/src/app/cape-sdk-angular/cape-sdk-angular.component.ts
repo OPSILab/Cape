@@ -76,7 +76,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   private unsubscribe: Subject<void> = new Subject();
 
   get consentStatus(): ConsentStatusEnum {
-    return this.consentRecord?.consentStatusList[this.consentRecord.consentStatusList.length - 1]?.payload.consent_status;
+    return this.consentRecord?.consentStatusList[this.consentRecord?.consentStatusList.length - 1]?.payload.consent_status;
   }
 
   get serviceLinkStatus(): SlStatusEnum {
@@ -247,7 +247,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         this.capeService.emitConsentRecordEvent({
           serviceId: this.consentRecord?.payload.common_part.subject_id,
           crId: this.consentRecord?.payload.common_part.cr_id,
-          status: this.consentRecord?.consentStatusList[this.consentRecord.consentStatusList.length - 1]?.payload,
+          status: this.consentRecord?.consentStatusList[this.consentRecord?.consentStatusList.length - 1]?.payload,
         } as ConsentRecordEvent);
       } catch (error) {
         if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
@@ -406,7 +406,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         },
       });
 
-      this.capeService.consentRecordStatus$.subscribe((event) => {
+      this.capeService.consentRecordStatus$.pipe(takeUntil(this.unsubscribe)).subscribe((event) => {
         if (event?.consentRecord) {
           this.consentRecord = event.consentRecord;
           this.menuItems = [
@@ -676,7 +676,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         this.capeService.emitConsentRecordEvent({
           serviceId: this.consentRecord?.payload.common_part.subject_id,
           crId: this.consentRecord?.payload.common_part.cr_id,
-          status: this.consentRecord?.consentStatusList[this.consentRecord.consentStatusList.length - 1]?.payload,
+          status: this.consentRecord?.consentStatusList[this.consentRecord?.consentStatusList.length - 1]?.payload,
         } as ConsentRecordEvent);
       } catch (error) {
         if (error.status !== 404) this.errorDialogService.openErrorDialog(error);

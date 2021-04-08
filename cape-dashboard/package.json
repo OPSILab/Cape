@@ -1,7 +1,7 @@
 {
   "name": "cape-dashboard",
   "version": "2.0.0",
-  "license": "MIT",
+  "license": "AGPLv3",
   "scripts": {
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",

@@ -25,7 +25,7 @@ export class ServiceLinkingComponent implements OnInit, AfterViewInit {
   private initialLocale: string;
   private accountId: string;
   private serviceId: string;
-  private serviceName: string;
+  public serviceName: string;
   private surrogateId: string;
   private returnUrl: string;
 

@@ -1,49 +1,73 @@
 <nb-card accent="primary" class="">
-  <nb-card-header> <h3> {{ 'general.services.mymeasurements.cholesterol.title' | translate }} </h3></nb-card-header>
+  <nb-card-header>
+    <h3>{{ 'general.services.mymeasurements.cholesterol.title' | translate }}</h3></nb-card-header
+  >
 
   <nb-card-body>
-    <pre class="h5 m-1 row lead">{{ 'general.services.mymeasurements.cholesterol.intro' | translate: { 'name' : accountId } }}</pre>
+    <pre class="h5 m-1 row lead">{{ 'general.services.mymeasurements.cholesterol.intro' | translate: { name: accountId } }}</pre>
     <hr />
-    <pre class="m-2 row" style="font-family: Roboto;font-size:1.0rem">{{ 'general.services.mymeasurements.cholesterol.text' | translate }}</pre>
+    <pre class="m-2 row" style="font-family: Roboto; font-size: 1rem">{{ 'general.services.mymeasurements.cholesterol.text' | translate }}</pre>
     <div class="row mt-2 justify-content-center">
-      <ngx-charts-line-chart [view]="view"
-                             [scheme]="colorScheme"
-                             [results]="multi"
-                             [gradient]="gradient"
-                             [xAxis]="showXAxis"
-                             [yAxis]="showYAxis"
-                             [legend]="showLegend"
-                             [showXAxisLabel]="showXAxisLabel"
-                             [showYAxisLabel]="showYAxisLabel"
-                             [xAxisLabel]="xAxisLabel"
-                             [yAxisLabel]="yAxisLabel"
-                             [autoScale]="autoScale"
-                             [timeline]="timeline"
-                             [animations]="animations"
-                             (select)="onSelect($event)">
+      <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="multi"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [autoScale]="autoScale"
+        [timeline]="timeline"
+        [animations]="animations"
+        (select)="onSelect($event)"
+      >
       </ngx-charts-line-chart>
     </div>
-    <div class="col-md-auto m-3 text-center"><strong>{{ 'general.services.mymeasurements.cholesterol.additionalInfoText' | translate }}</strong></div>
+    <div class="col-md-auto m-3 text-center">
+      <strong>{{ 'general.services.mymeasurements.cholesterol.additionalInfoText' | translate }}</strong>
+    </div>
 
     <div class="row m-2 justify-content-center">
-      <div class="col-md-auto m-1 p-3 border border-primary"><strong>{{ 'general.services.mymeasurements.cholesterol.ageText' | translate }}&nbsp;</strong>{{sampleAge}}</div>
-      <div class="col-md-auto m-1 p-3 border border-primary"><strong>{{ 'general.services.mymeasurements.cholesterol.sexText' | translate }}&nbsp;</strong>{{sampleSex}}</div>
+      <div class="col-md-auto m-1 p-3 border border-primary">
+        <strong>{{ 'general.services.mymeasurements.cholesterol.ageText' | translate }}&nbsp;</strong>{{ sampleAge }}
+      </div>
+      <div class="col-md-auto m-1 p-3 border border-primary">
+        <strong>{{ 'general.services.mymeasurements.cholesterol.sexText' | translate }}&nbsp;</strong>{{ sampleSex }}
+      </div>
     </div>
 
     <nb-card accent="info">
       <nb-card-header></nb-card-header>
       <nb-card-body class="text-center h6">
-        <pre *ngIf="!capeLinkStatus || capeLinkStatus === 'Removed'; else linked;" style="font-family: Roboto;font-size:1.0rem;line-height: 1.6;">
-           {{'general.services.mymeasurements.cholesterol.no_cape_linked' | translate }}
+        <pre *ngIf="!capeLinkStatus || capeLinkStatus === 'Removed'; else linked" style="font-family: Roboto; font-size: 1rem; line-height: 1.6">
+           {{ 'general.services.mymeasurements.cholesterol.no_cape_linked' | translate }}
         </pre>
         <ng-template #linked>
-          <pre style="font-family: Roboto;font-size:1.0rem;line-height: 1.6;"> {{'general.services.mymeasurements.cholesterol.cape_linked' | translate }} </pre>
+          <pre style="font-family: Roboto; font-size: 1rem; line-height: 1.6">
+ {{ 'general.services.mymeasurements.cholesterol.cape_linked' | translate }} </pre
+          >
         </ng-template>
       </nb-card-body>
     </nb-card>
   </nb-card-body>
 
   <nb-card-footer class="d-flex justify-content-center">
-    <cape-sdk-angular [locale]="locale" [operatorId]="operatorId" [dashboardUrl]="dashboardUrl" [sdkUrl]="sdkUrl" [userId]="accountId" [serviceId]="serviceId" [serviceName]="serviceName" [returnUrl]="returnUrl" [purposeId]="purposeId" [checkConsentAtOperator]="checkConsentAtOperator" class="row"></cape-sdk-angular>
+    <cape-sdk-angular
+      [locale]="locale"
+      [operatorId]="operatorId"
+      [dashboardUrl]="dashboardUrl"
+      [sdkUrl]="sdkUrl"
+      [userId]="accountId"
+      [serviceId]="serviceId"
+      [serviceName]="serviceName"
+      [returnUrl]="returnUrl"
+      [purposeId]="purposeId"
+      [checkConsentAtOperator]="checkConsentAtOperator"
+      class="row"
+    ></cape-sdk-angular>
   </nb-card-footer>
 </nb-card>

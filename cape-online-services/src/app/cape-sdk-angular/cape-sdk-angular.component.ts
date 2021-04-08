@@ -406,7 +406,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         },
       });
 
-      this.capeService.consentRecordStatus$.subscribe((event) => {
+      this.capeService.consentRecordStatus$.pipe(takeUntil(this.unsubscribe)).subscribe((event) => {
         if (event?.consentRecord) {
           this.consentRecord = event.consentRecord;
           this.menuItems = [

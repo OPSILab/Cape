@@ -21,7 +21,7 @@ export class ServiceInfoRenderComponent {
         description: this.value.humanReadableDescription[0]?.description,
         keywords: this.value.humanReadableDescription[0]?.keywords,
         serviceUri: this.value.identifier,
-        iconUrl: this.value.serviceIconUrl !== '' ? this.value.serviceIconUrl : 'assets/images/app/no_image.png',
+        iconUrl: this.value.serviceIconUrl !== '' ? this.value.serviceIconUrl : 'favicon.png',
         provider: this.value.serviceInstance.serviceProvider.name,
         processings: this.value.processingBases,
         datasetsMap: this.mapDatasetsConcept(this.value.isDescribedAt),

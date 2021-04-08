@@ -199,6 +199,7 @@
       "no_type": "Type not provided"
     },
     "services": {
+      "add_new": "Add new",
       "all": "all",
       "service": "Service",
       "status": "Status",
@@ -236,11 +237,14 @@
       "delete": "Delete",
       "consents": "View consents",
       "register_service": "Service Registration",
-      "register_services_message": "Are you sure to register and activate the service?\n Once registered, you will not be able to edit it anymore.",
-      "service_registered_message": "Registration was successful!",
+      "register_service_message": "Are you sure to register and activate the service <strong>{{serviceName}}</strong><br>Once registered, you will not be able to edit it until you disabled it first.",
+      "service_registered_message": "Service {{serviceName}} registered successfully!",
       "deregister_service": "Disable service",
-      "deregister_services_message": "Are you sure to disable the service?\n",
-      "service_deregistered_message": "Service disabled!"
+      "deregister_service_message": "Are you sure to disable the service <strong>{{serviceName}}</strong>?\n",
+      "service_deregistered_message": "Service {{serviceName}} disabled successfully!",
+      "delete_service": "Delete service",
+      "delete_service_message": "Are you sure to delete permanently the service <strong>{{serviceName}}</strong>?\n",
+      "service_deleted_message": "Service {{serviceName}} deleted successfully!"
     },
     "editor": {
       "title": "Service Description",
@@ -255,12 +259,12 @@
       "delete": "Delete",
       "selected": "Selected",
       "enter_filename": "Enter Filename",
-      "confirm_save" : "Service {{name}} will be saved, proceed?",
+      "confirm_save": "Service {{name}} will be saved, proceed?",
       "save_success": "Service {{name}} successfully saved!",
-      "confirm_update" : "Service {{name}} will be updated, proceed?",
+      "confirm_update": "Service {{name}} will be updated, proceed?",
       "update_success": "Service {{name}} successfully updated!",
       "download": "Download",
-      "confirm_delete" : "Service {{name}} will be deleted, proceed?",
+      "confirm_delete": "Service {{name}} will be deleted, proceed?",
       "delete_success": "Service {{name}} successfully deleted!"
     },
     "connectors": {

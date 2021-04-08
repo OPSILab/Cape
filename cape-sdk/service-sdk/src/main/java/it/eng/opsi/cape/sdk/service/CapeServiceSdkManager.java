@@ -162,6 +162,9 @@ public class CapeServiceSdkManager {
 		serviceDescription.setServiceDescriptionSignature(
 				cryptoService.signServiceDescription(serviceSignKey, serviceDescription).toString());
 
+		/*
+		 * Update the Service Description at Registry
+		 */
 		clientService.updateServiceDescriptionAtRegistry(serviceDescription);
 
 		/*

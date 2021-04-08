@@ -198,6 +198,7 @@
       "no_type": "Type not provided"
     },
     "services": {
+      "add_new": "Aggiungi nuovo",
       "all": "all",
       "service": "Servizio",
       "status": "Stato",
@@ -235,11 +236,14 @@
       "delete": "Rimuovi",
       "consents": "Vedi consensi",
       "register_service": "Registrazione servizio",
-      "register_services_message": "Sei sicuro di registrare il servizio?\n Una volta registrato il servizio sarà attivo e visibile e non potrai più modificarlo.",
-      "service_registered_message": "Registrazione avvenuta con successo!",
-      "deregister_service": "Disattiva servizio",
-      "deregister_services_message": "Sei sicuro di disattivare il servizio?\n",
-      "service_deregistered_message": "Disattivazione avvenuta con successo!"
+      "register_service_message": "Sei sicuro di registrare il servizio <strong>{{serviceName}}</strong>?<br><div class=\"mt-2\">Una volta registrato il servizio sarà attivo e visibile e non potrai più modificarlo fino a quando non lo disabiliti.</div>",
+      "service_registered_message": "Servizio {{serviceName}} registrato con successo!",
+      "deregister_service": "Disabilita servizio",
+      "deregister_service_message": "Sei sicuro di disabilitare il servizio <strong>{{serviceName}}</strong>?\n",
+      "service_deregistered_message": "Servizio {{serviceName}} disabilitato con successo!",
+      "delete_service": "Elimina servizio",
+      "delete_service_message": "Sei sicuro di eliminare definitivamente il servizio <strong>{{serviceName}}</strong> <strong>?",
+      "service_deleted_message": "Servizio {{serviceName}} eliminato con successo!"
     },
     "editor": {
       "title": "Descrizione servizio e processamento dati",
@@ -254,12 +258,12 @@
       "delete": "Elimina",
       "selected": "Selezionato",
       "enter_filename": "Inserisci nome file",
-      "confirm_save" : "Il Servizio {{name}} verrà salvato, procedere?",
+      "confirm_save": "Il Servizio {{name}} verrà salvato, procedere?",
       "save_success": "Il Servizio {{name}} è stato salvato con successo!",
-      "confirm_update" : "Il Servizio {{name}} verrà salvato, procedere?",
+      "confirm_update": "Il Servizio {{name}} verrà salvato, procedere?",
       "update_success": "Il Servizio {{name}} è stato salvato con successo!",
       "download": "Download",
-      "confirm_delete" : "Il Servizio {{name}} verrà eliminato, procedere?",
+      "confirm_delete": "Il Servizio {{name}} verrà eliminato, procedere?",
       "delete_success": "Il Servizio {{name}} è stato eliminato con successo!"
     },
     "connectors": {
