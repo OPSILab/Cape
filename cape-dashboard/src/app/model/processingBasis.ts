@@ -18,7 +18,7 @@ export interface ProcessingBasis {
   purposeId?: string;
   purposeName?: string;
   legalBasis?: ProcessingBasisLegalBasis;
-  purposeCategory?: string;
+  purposeCategory?: ProcessingBasisPurposeCategory;
   processingCategories?: Array<ProcessingBasisProcessingCategories>;
   description?: Array<Description2>;
   requiredDatasets?: Array<string>;
@@ -28,27 +28,101 @@ export interface ProcessingBasis {
   obligations?: Array<Obligation>;
   policyRef?: string;
   collectionMethod?: string;
+  collectionOperator?: string;
   termination?: string;
 }
+
 export enum ProcessingBasisLegalBasis {
-  Consent = 'CONSENT',
-  Contract = 'CONTRACT',
-  LegalObligation = 'LEGAL_OBLIGATION',
-  VitalInterest = 'VITAL_INTEREST',
-  PublicInterest = 'PUBLIC_INTEREST',
-  LegitimateInterest = 'LEGITIMATE_INTEREST',
+  Consent = 'Consent',
+  Contract = 'Contract',
+  LegalObligation = 'Legal obligation',
+  VitalInterest = 'Vital interest',
+  PublicInterest = 'Public interest',
+  LegitimateInterest = 'Legitimate interest',
 }
 
+export enum ProcessingBasisPurposeCategory {
+  AcademicResearch = 'AcademicResearch',
+  AccessControl = 'AccessControl',
+  Advertising = 'Advertising ',
+  CommercialInterest = 'CommercialInterest',
+  CommercialResearch = 'CommercialResearch',
+  CommunicationForCustomerCare = 'CommunicationForCustomerCare',
+  CreateEventRecommendations = 'CreateEventRecommendations',
+  CreatePersonalizedRecommendations = 'CreatePersonalizedRecommendations',
+  CreateProductRecommendations = 'CreateProductRecommendations',
+  CustomerCare = 'CustomerCare',
+  DeliveryOfGoods = 'DeliveryOfGoods',
+  DirectMarketing = 'DirectMarketing',
+  FraudPreventionAndDetection = 'FraudPreventionAndDetection',
+  IdentityVerification = 'IdentityVerification',
+  ImproveExistingProductsAndServices = 'ImproveExistingProductsAndServices',
+  ImproveInternalCRMProcesses = 'ImproveInternalCRMProcesses',
+  IncreaseServiceRobustness = 'IncreaseServiceRobustness',
+  InternalResourceOptimisation = 'InternalResourceOptimisation',
+  LegalCompliance = 'LegalCompliance',
+  Marketing = 'Marketing',
+  NonCommercialResearch = 'NonCommercialResearch',
+  OptimisationForConsumer = 'OptimisationForConsumer',
+  OptimisationForController = 'OptimisationForController',
+  OptimiseUserInterface = 'OptimiseUserInterface',
+  Payment = 'Payment',
+  PersonalisedAdvertising = 'PersonalisedAdvertising',
+  PersonalisedBenefits = 'PersonalisedBenefits',
+  RegistrationAuthentication = 'RegistrationAuthentication',
+  ResearchAndDevelopment = 'ResearchAndDevelopment',
+  Security = 'Security',
+  SellDataToThirdParties = 'SellDataToThirdParties',
+  SellInsightsFromData = 'SellInsightsFromData',
+  SellProductsToDataSubject = 'SellProductsToDataSubject',
+  SellTargettedAdvertisements = 'SellTargettedAdvertisements',
+  ServiceOptimization = 'ServiceOptimization',
+  ServicePersonalization = 'ServicePersonalization',
+  ServiceProvision = 'ServiceProvision',
+  SocialMediaMarketing = 'SocialMediaMarketing',
+  UsageAnalytics = 'UsageAnalytics',
+  UserInterfacePersonalisation = 'UserInterfacePersonalisation',
+}
 export enum ProcessingBasisProcessingCategories {
-  Aggregate = 'AGGREGATE',
-  Analyse = 'ANALYSE',
-  Anonymize = 'ANONYMIZE',
-  Collect = 'COLLECT',
-  Copy = 'COPY',
-  Derive = 'DERIVE',
-  Move = 'MOVE',
-  Query = 'QUERY',
-  Transfer = 'TRANSFER',
+  Acquire = 'Acquire',
+  Adapt = 'Adapt',
+  Align = 'Align',
+  Alter = 'Alter',
+  Analyse = 'Analyse',
+  Anonymise = 'Anonymise',
+  AutomatedDecisionMaking = 'AutomatedDecisionMaking',
+  Collect = 'Collect',
+  Combine = 'Combine',
+  Consult = 'Consult',
+  Copy = 'Copy',
+  DataSource = 'DataSource',
+  Derive = 'Derive',
+  Destruct = 'Destruct',
+  Disclose = 'Disclose',
+  DiscloseByTransmission = 'DiscloseByTransmission',
+  Disseminate = 'Disseminate',
+  Erase = 'Erase',
+  EvaluationScoring = 'EvaluationScoring',
+  InnovativeUseOfNewTechnologies = 'InnovativeUseOfNewTechnologies',
+  LargeScaleProcessing = 'LargeScaleProcessing',
+  MakeAvailable = 'MakeAvailable',
+  MatchingCombining = 'MatchingCombining',
+  Move = 'Move',
+  Obtain = 'Obtain',
+  Organise = 'Organise',
+  Profiling = 'Profiling',
+  PseudoAnonymise = 'Pseudo-Anonymise',
+  Record = 'Record',
+  Remove = 'Remove',
+  Restrict = 'Restrict',
+  Retrieve = 'Retrieve',
+  Share = 'Share',
+  Store = 'Store',
+  Structure = 'Structure',
+  SystematicMonitoring = 'Systematic Monitoring',
+  Transfer = 'Transfer',
+  Transform = 'Transform',
+  Transmit = 'Transmit',
 }
 
 export enum ProcessingBasisRecipients {

@@ -83,7 +83,7 @@ import { LoginService } from '../../../login/login.service';
           [innerHTML]="'general.services.delete_service_message' | translate: { serviceName: data.serviceName }"
         ></nb-card-body>
         <nb-card-footer class="d-flex justify-content-center">
-          <button nbButton status="primary" size="small" (click)="data.callback()">
+          <button nbButton status="danger" size="small" (click)="data.callback()">
             {{ 'general.editor.delete' | translate }}
           </button>
           <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">

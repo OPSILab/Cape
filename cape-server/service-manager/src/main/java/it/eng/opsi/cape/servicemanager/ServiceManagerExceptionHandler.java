@@ -126,7 +126,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	@ExceptionHandler(ServiceLinkingRedirectUriMismatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> ServiceLinkingRedirectUriMismatchException(
-			ConflictingSessionFoundException ex) {
+			ServiceLinkingRedirectUriMismatchException ex) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
 	}

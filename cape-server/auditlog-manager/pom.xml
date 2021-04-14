@@ -220,7 +220,7 @@
 
 				</executions>
 				<configuration>
-					<apiDocsUrl>http://localhost:8080/auditlog-manager/api-docs</apiDocsUrl>
+					<apiDocsUrl>http://localhost:8081/auditlog-manager/api-docs</apiDocsUrl>
 					<outputFileName>openapi.yaml</outputFileName>
 					<!-- <outputDir>/home/springdoc/maven-output</outputDir> -->
 				</configuration>

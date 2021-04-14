@@ -18,8 +18,10 @@ package it.eng.opsi.cape.auditlogmanager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
@@ -29,10 +31,12 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -45,12 +49,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.util.Base64URL;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -164,6 +163,25 @@ public class AuditLogManagerApplication extends SpringBootServletInitializer {
 		};
 	}
 
+	@Configuration
+	public class EnumConfig implements WebMvcConfigurer {
+
+		@Autowired
+		private ListableBeanFactory beanFactory;
+
+		@Override
+		public void addFormatters(FormatterRegistry registry) {
+			Map<String, Object> components = beanFactory.getBeansWithAnnotation(RequestParameterConverter.class);
+			components.values().parallelStream().forEach(c -> {
+				if (c instanceof Converter) {
+					registry.addConverter((Converter) c);
+				}
+			});
+		}
+
+	}
+
+	
 //	@Bean
 //	public CommonsRequestLoggingFilter requestLoggingFilter() {
 //	    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();

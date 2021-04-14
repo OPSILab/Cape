@@ -14,57 +14,51 @@ interface CardSettings {
   value: string;
 }
 
-
 @Component({
   selector: 'ngx-d3',
   styleUrls: ['./dashboard.component.scss'],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-
-
   private unsubscribe: Subject<void> = new Subject();
   public auditLog: AuditLog;
   public auditCardSet: CardSettings[] = [];
-
 
   availableServicesCard: CardSettings = {
     title: 'Available Services',
     iconClass: 'nb-grid-b-outline',
     type: 'primary',
-    value: ''
+    value: '',
   };
   linkedServicesCard: CardSettings = {
     title: 'Service linked with you',
     iconClass: 'nb-checkmark-circle',
     type: 'success',
-    value: ''
+    value: '',
   };
   consentsCard: CardSettings = {
     title: 'Given Consents',
     iconClass: 'nb-compose',
     type: 'info',
-    value: ''
+    value: '',
   };
   personalDataCard: CardSettings = {
     title: 'Personal data processed',
     iconClass: 'nb-gear',
     type: 'warning',
-    value: ''
+    value: '',
   };
 
-
-
-  constructor(private service: DashboardService, private router: Router, private loginService: LoginService, private errorDialogService: ErrorDialogService) {
-
-
-  }
-
+  constructor(
+    private service: DashboardService,
+    private router: Router,
+    private loginService: LoginService,
+    private errorDialogService: ErrorDialogService
+  ) {}
 
   ngOnInit(): void {
-
     // TODO get Services;
-  /*
+    /*
   this.service.getAuditLog().pipe(takeUntil(this.unsubscribe)).subscribe(
       (audit: AuditLog) => {
 
@@ -95,7 +89,4 @@ export class DashboardComponent implements OnInit {
       });
       */
   }
-
 }
-
-

@@ -1,46 +1,47 @@
 <nb-card>
   <nb-card-header class="h3">
-    {{'general.editor.title'|translate}}
+    {{ 'general.editor.title' | translate }}
   </nb-card-header>
 
-  <nb-card-body>
-
-    <ng-container *ngIf="onEdit; then editButton; else createButton">
-    </ng-container>
+  <nb-card-body class="row justify-content-center">
+    <ng-container *ngIf="onEdit; then editButton; else createButton"> </ng-container>
 
     <ng-template #createButton>
-      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary"
-        (click)="openSaveToRegistryDialog()">{{'general.editor.save'|translate}}</button>
+      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary" (click)="openSaveToRegistryDialog()">
+        {{ 'general.editor.save' | translate }}
+        <i class="mx-1 material-icons">save</i>
+      </button>
     </ng-template>
     <ng-template #editButton>
-      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary"
-        (click)="openUpdateToRegistryDialog()">{{'general.editor.update'|translate}}</button>
+      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary" (click)="openUpdateToRegistryDialog()">
+        {{ 'general.editor.update' | translate }}
+        <i class="mx-1 material-icons">save</i>
+      </button>
     </ng-template>
-    <button nbButton class="mx-4" shape="rectangle" size="medium" status="warning"
-      (click)="saveAsFile()">{{'general.editor.export'|translate}}</button>
-    <button nbButton class="mx-4" shape="rectangle" size="medium" status="danger"
-      (click)="importAsFile()">{{'general.editor.import'|translate}}</button>
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="warning" (click)="saveAsFile()">
+      {{ 'general.editor.export' | translate }}
+      <i class="mx-1 fas fa-file-export fa-lg"></i>
+    </button>
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="danger" (click)="importAsFile()">
+      {{ 'general.editor.import' | translate }}
+      <i class="mx-1 fas fa-file-import fa-lg"></i>
+    </button>
   </nb-card-body>
-
-</nb-card>
-<nb-card>
-  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success">
-    <div class="form-group">
-      <div id="editor"></div>
-    </div>
-  </nb-card-body>
+  <nb-card-footer [nbSpinner]="loading" nbSpinnerStatus="primary">
+    <div id="editor"></div>
+  </nb-card-footer>
 </nb-card>
 
 <!-- Save Service modal ng-template -->
 <ng-template #confirmSaveDialog let-data let-ref="dialogRef">
   <nb-card status="primary">
-    <nb-card-body class="p-5">{{ 'general.editor.confirm_save'|translate :{name:data.name} }}</nb-card-body>
+    <nb-card-body class="p-5">{{ 'general.editor.confirm_save' | translate: { name: data.name } }}</nb-card-body>
     <nb-card-footer class="d-flex justify-content-center">
       <button nbButton status="primary" size="small" (click)="data.callback()">
-        {{'general.editor.save'|translate}}
+        {{ 'general.editor.save' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{'general.editor.cancel' | translate}}
+        {{ 'general.editor.cancel' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -49,13 +50,13 @@
 <!-- Update Service modal ng-template -->
 <ng-template #confirmUpdateDialog let-data let-ref="dialogRef">
   <nb-card status="primary">
-    <nb-card-body class="p-5">{{ 'general.editor.confirm_update'|translate :{name:data.name} }}</nb-card-body>
+    <nb-card-body class="p-5">{{ 'general.editor.confirm_update' | translate: { name: data.name } }}</nb-card-body>
     <nb-card-footer class="d-flex justify-content-center">
       <button nbButton status="primary" size="small" (click)="data.callback()">
-        {{'general.editor.update'|translate}}
+        {{ 'general.editor.update' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{'general.editor.cancel' | translate}}
+        {{ 'general.editor.cancel' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>

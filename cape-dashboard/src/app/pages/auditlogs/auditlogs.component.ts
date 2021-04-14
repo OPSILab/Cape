@@ -24,10 +24,10 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
   dateRangeFilter: DateRange;
   eventLogs: unknown[];
 
-  private processingCategoryEnum = ProcessingBasisProcessingCategories;
-  public processingCategoryOptions;
-  private legalBasisEnum = ProcessingBasisLegalBasis;
-  public legalBasisOptions;
+  public processingCategoryEnum = ProcessingBasisProcessingCategories;
+  public processingCategoryOptions: string[];
+  public legalBasisEnum = ProcessingBasisLegalBasis;
+  public legalBasisOptions: string[];
 
   public filtersForm = new FormGroup({
     legalBasis: new FormControl(),

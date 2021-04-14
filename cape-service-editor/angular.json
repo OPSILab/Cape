@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-admin-demo": {
+    "cape-service-editor": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -12,17 +12,12 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "preserveSymlinks": true,
-            "rebaseRootRelativeCssUrls": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": [
-              "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png"
-            ],
+            "assets": ["src/assets", "src/favicon.ico", "src/favicon.png"],
             "styles": [
               "src/index.css",
               "node_modules/material-design-icons/iconfont/material-icons.css",
@@ -33,16 +28,11 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/socicon/css/socicon.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
-              "node_modules/angular-tree-component/dist/angular-tree-component.css",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/select2/dist/css/select2.min.css"      
+              "node_modules/select2/dist/css/select2.min.css"
             ],
-            "scripts": [
-              "node_modules/pace-js/pace.min.js",
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/select2/dist/js/select2.js"
-            ]
+            "scripts": ["node_modules/pace-js/pace.min.js", "node_modules/jquery/dist/jquery.js", "node_modules/select2/dist/js/select2.js"]
           },
           "configurations": {
             "production": {
@@ -67,18 +57,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "cape-service-editor:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-admin-demo:build:production"
+              "browserTarget": "cape-service-editor:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "cape-service-editor:build"
           }
         },
         "test": {
@@ -88,9 +78,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/pace-js/pace.min.js"
-            ],
+            "scripts": ["node_modules/pace-js/pace.min.js"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/typeface-exo/index.css",
@@ -101,29 +89,20 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss"
-              
             ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png"
-            ]
+            "assets": ["src/assets", "src/favicon.ico", "src/favicon.png"]
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "typeCheck": true,
-            "exclude": []
+            "eslintConfig": ".eslintrc.js",
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
     },
-    "ngx-admin-demo-e2e": {
+    "cape-service-editor-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -132,22 +111,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ngx-admin-demo:serve"
+            "devServerTarget": "cape-service-editor:serve"
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": []
+            "lintFilePatterns": ["src/**/*/.ts", "src/**/*.html"]
           }
         }
       }
     }
   },
-  "defaultProject": "ngx-admin-demo",
+  "defaultProject": "cape-service-editor",
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss"
@@ -155,4 +131,3 @@
     "@schematics/angular:directive": {}
   }
 }
-

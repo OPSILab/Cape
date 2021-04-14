@@ -19,7 +19,6 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'plugin:@angular-eslint/recommended',
-        'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
       ],
       rules: {
@@ -41,7 +40,7 @@ module.exports = {
     },
     {
       files: ['*.html'],
-      extends: ['plugin:@angular-eslint/template/recommended', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
+      extends: ['plugin:@angular-eslint/template/recommended', 'plugin:prettier/recommended'],
       rules: {},
     },
   ],

@@ -23,6 +23,7 @@ import {
   NbInputModule,
 } from '@nebular/theme';
 import { ActionsServiceMenuRenderComponent } from './availableServices/actionsServiceMenuRender.component';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 @NgModule({
   imports: [

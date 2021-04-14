@@ -49,7 +49,7 @@
       </div>
       <div class="row justify-content-center">
         <div class="col-sm py-1">
-          <div class="accent">
+          <div class="">
             <i
               ><b>{{ 'general.services.link' | translate }}: </b>
               <a href="{{ data.serviceUri }}" target="_blank"><nb-icon icon="external-link-outline"></nb-icon></a
@@ -62,7 +62,7 @@
       <h4 class="h4 text-hint">{{ 'general.services.data_processing' | translate }}</h4>
 
       <div class="accordion-container">
-        <nb-accordion class="my-2 shadow-none border border-success" *ngFor="let processing of data.processings; let i = index" [attr.data-index]="i">
+        <nb-accordion class="my-2 shadow-none border border-primary" *ngFor="let processing of data.processings; let i = index" [attr.data-index]="i">
           <nb-accordion-item>
             <nb-accordion-item-header>
               <h5 class="h6 pr-3">{{ processing.purposeName }}</h5>

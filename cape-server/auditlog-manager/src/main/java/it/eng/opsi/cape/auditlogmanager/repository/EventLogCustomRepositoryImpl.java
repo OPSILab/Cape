@@ -48,7 +48,7 @@ public class EventLogCustomRepositoryImpl implements EventLogCustomRepository {
 					Criteria.where("created").lt(end)));
 		} else if (start != null) {
 			q.addCriteria(Criteria.where("created").gte(start));
-		} else {
+		} else if (end != null) {
 			q.addCriteria(Criteria.where("created").lt(end));
 		}
 
@@ -56,7 +56,9 @@ public class EventLogCustomRepositoryImpl implements EventLogCustomRepository {
 			q.addCriteria(Criteria.where("legalBasis").in(legalBasis));
 
 		if (processingCategories != null && !processingCategories.isEmpty())
-			q.addCriteria(Criteria.where("usageRules.processingCategories").in(processingCategories));
+			q.addCriteria(Criteria.where("usageRules.processingCategories").in(processingCategories.stream().map(p ->
+
+			p.name()).toArray()));
 
 		return Optional.of(template.find(q, EventLog.class));
 	}

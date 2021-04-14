@@ -29,7 +29,8 @@ import {
   NbToastrModule,
   NbWindowModule,
   NbCardModule,
-  NbBadgeModule
+  NbBadgeModule,
+  NbIconModule,
 } from '@nebular/theme';
 import { RememberMeResolve } from './loginPopup/loginPopup.resolve';
 import { ErrorDialogModule } from './pages/error-dialog/error-dialog.module';
@@ -52,7 +53,7 @@ export function createTranslateLoader(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient]
+        deps: [HttpClient],
       },
     }),
     ThemeModule.forRoot(),
@@ -70,7 +71,7 @@ export function createTranslateLoader(http: HttpClient) {
     NgbModule,
     ErrorDialogModule,
     NbBadgeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     { provide: NgxConfigureOptions, useClass: AppOptions },
@@ -79,10 +80,9 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

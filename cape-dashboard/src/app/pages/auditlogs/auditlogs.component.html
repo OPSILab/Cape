@@ -10,7 +10,7 @@
             multiple
             placeholder="{{ 'general.auditlogs.filter_by_legal_basis' | translate }}"
           >
-            <nb-option *ngFor="let key of legalBasisOptions" value="{{ legalBasisEnum[key] }}">{{ key }}</nb-option>
+            <nb-option *ngFor="let key of legalBasisOptions" value="{{ legalBasisEnum[key] }}">{{ legalBasisEnum[key] }}</nb-option>
           </nb-select>
         </div>
 
@@ -132,7 +132,7 @@
                                         nbButton
                                         shape="semi-round"
                                         size="medium"
-                                        status="success"
+                                        status="primary"
                                         (click)="openConsent(event.consent_id, event.message)"
                                       >
                                         <i class="ion-android-checkmark-circle">&nbsp;{{ 'general.auditlogs.view_consent' | translate }}</i>
@@ -162,7 +162,7 @@
                                         nbButton
                                         shape="semi-round"
                                         size="medium"
-                                        status="success"
+                                        status="primary"
                                         (click)="openServiceLink(event.serviceId, event.serviceName)"
                                       >
                                         <i class="ion-information-circled">&nbsp;{{ 'general.auditlogs.view_service' | translate }}</i>
@@ -206,8 +206,8 @@
                                         nbButton
                                         shape="semi-round"
                                         size="medium"
-                                        status="success"
-                                        (click)="openConsents(event.consent_id, event.message)"
+                                        status="primary"
+                                        (click)="openConsent(event.consent_id, event.message)"
                                       >
                                         <i class="ion-android-checkmark-circle">{{ 'general.auditlogs.view_consent' | translate }}</i>
                                       </button>

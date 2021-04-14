@@ -382,7 +382,7 @@ nb-toggle {
 /*Bootstrap table*/
 .table .thead-light th {
   color: nb-theme(color-basic-100);
-  background-color: nb-theme(color-success-500);
+  background-color: nb-theme(color-secondary-500);
   border-color: nb-theme(color-basic-300);
 }
 
@@ -400,7 +400,7 @@ nb-toggle {
 
 /*Angular smart-table*/
 ng2-smart-table table thead tr {
-  background-color: nb-theme(color-success-500);
+  background-color: nb-theme(color-secondary-500);
 }
 
 ng2-smart-table table thead tr:nth-child(2) {
@@ -423,8 +423,8 @@ ng2-smart-table table tr.ng2-smart-titles th a:visited {
 }
 
 .gridTableHeaders {
-  background-color: nb-theme(color-success-500);
-  border: 1px solid nb-theme(color-success-500);
+  background-color: nb-theme(color-secondary-500);
+  border: 1px solid nb-theme(color-secondary-500);
   padding: 5px 5px 0;
   grid-area: gridTableHeaders;
   display: grid;
