@@ -4,6 +4,10 @@
     "logo_text": "CaPe",
     "home": "Home",
     "error": "Error",
+    "save": "Save",
+    "submit": "Submit",
+    "close": "Close",
+    "cancel": "Cancel",
     "login": {
       "enter_button": "Enter",
       "logout_button": "Logout",
@@ -21,7 +25,6 @@
         "do_not_authorize": "Do not authorize",
         "error_message": "There was an error while contacting Cape!",
         "no_cape_account": "Sorry! No CaPe Account Associated to You! Create?",
-        "cancel_button": "Cancel",
         "create_button": "Create"
       }
     },
@@ -130,9 +133,9 @@
       "first_name_errors_minlength": "First name must be at least 2 characters long.",
       "last_name_errors_required": "Lastname is required.",
       "last_name_errors_minlength": "Last name must be at least 3 characters long.",
-      "no_email": "No Email",
+      "email_errors_required": "Email is required",
       "email": "Email",
-      "email_errors_message": "Email must be regular.",
+      "email_errors_message": "Email format must be regular.",
       "no_phone": "No Phone",
       "phone": "Phone",
       "phone_errors_message": "Phone format must be regular. \n Example 999-999-9999.",
@@ -157,9 +160,6 @@
       "tutorials_and_documentations": "Tutorials and Documentations",
       "report_the_problem": "Report the Problem",
       "report_message": "Message",
-      "save_button": "Save",
-      "submit_button": "Submit",
-      "close_button": "Close",
       "account_updated_message": "Account successfully updated"
     },
     "services": {
@@ -172,7 +172,6 @@
       "provider": "Provider",
       "purpose": "Purpose",
       "data_processed": "Data Processed",
-      "close": "Close",
       "url": "Url",
       "created": "Created",
       "data_consent": "Data Consent",
@@ -195,8 +194,6 @@
       "service_linking_successful": "Service Linking Successful",
       "linkingTitle": "Link a Service to Cape",
       "linkingMessage": "Do you want to link the Service &nbsp;<strong>{{serviceName}}</strong>&nbsp; with your Cape Account?",
-      "cancelButton": "Cancel",
-      "closeButton": "Close",
       "linkButton": "Link",
       "closeAndReturnToServiceButton": "Close and return to the Service",
       "forceLinkingButton": "Force Linking",
@@ -211,8 +208,9 @@
     "linked_services": {
       "services_linked_to_me": "Services linked to me",
       "view_consents": "View Consents associated with this Service",
-      "notify": "Notify",
-      "send_objection": "Send Objection"
+      "enable_notifications": "Enable notifications",
+      "send_request": "Send a request",
+      "request_message": "Request message"
     },
     "auditlogs": {
       "ServiceLink": "Link to service",
@@ -270,7 +268,6 @@
       "purpose": "Purpose",
       "url_link": "Link",
       "data_processed": "Data Processed",
-      "close": "Close",
       "url": "repository",
       "created": "Created",
       "data_consent": "Data Consent",

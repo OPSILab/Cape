@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ActivatedRoute } from '@angular/router';
 import { LinkedServiceInfoRenderComponent } from './linkedServiceInfoRender.component';
@@ -29,18 +29,11 @@ export interface LinkedServiceRow extends ServiceLinkRecordPayload {
   styleUrls: ['./linkedServices.component.scss'],
 })
 export class LinkedServicesComponent implements OnInit, OnDestroy {
-  serviceLabel: string;
-  createdLabel: string;
-  serviceUriLabel: string;
-  serviceEnabledLabel: string;
-  actionsMenuLabel: string;
-  detailsLabel: string;
-
   settings: Record<string, unknown>;
   private locale: string;
   source: LocalDataSource = new LocalDataSource();
 
-  @ViewChild('linkedServiceInfoModal', { static: true }) linkedServiceInfoModal;
+  @ViewChild('linkedServiceInfoModal', { static: true }) linkedServiceInfoModal: TemplateRef<unknown>;
 
   constructor(
     private service: LinkedServicesService,
@@ -98,13 +91,6 @@ export class LinkedServicesComponent implements OnInit, OnDestroy {
   }
 
   private loadTableSettings(): Record<string, unknown> {
-    this.serviceLabel = this.translate.instant('general.services.service') as string;
-    this.createdLabel = this.translate.instant('general.services.created') as string;
-    this.serviceUriLabel = this.translate.instant('general.services.url') as string;
-    this.serviceEnabledLabel = this.translate.instant('general.services.enabled') as string;
-    this.actionsMenuLabel = this.translate.instant('general.services.actions') as string;
-    this.detailsLabel = this.translate.instant('general.services.details') as string;
-
     return {
       mode: 'external',
       attr: {
@@ -117,13 +103,13 @@ export class LinkedServicesComponent implements OnInit, OnDestroy {
       },
       columns: {
         serviceName: {
-          title: this.serviceLabel,
+          title: this.translate.instant('general.services.service') as string,
           type: 'text',
           width: '50%',
           valuePrepareFunction: (cell, row: LinkedServiceRow) => row.service_name,
         },
         serviceUri: {
-          title: this.serviceUriLabel,
+          title: this.translate.instant('general.services.url') as string,
           sort: false,
           width: '5%',
           type: 'custom',
@@ -132,12 +118,12 @@ export class LinkedServicesComponent implements OnInit, OnDestroy {
           renderComponent: ServiceUrlButtonRenderComponent,
         },
         created: {
-          title: this.createdLabel,
+          title: this.translate.instant('general.services.created') as string,
           type: 'text',
           width: '20%',
         },
         details: {
-          title: this.detailsLabel,
+          title: this.translate.instant('general.services.details') as string,
           filter: false,
           class: 'text-center',
           width: '5%',
@@ -147,7 +133,7 @@ export class LinkedServicesComponent implements OnInit, OnDestroy {
           renderComponent: LinkedServiceInfoRenderComponent,
         },
         status: {
-          title: this.serviceEnabledLabel,
+          title: this.translate.instant('general.services.enabled') as string,
           width: '5%',
           filter: false,
           sort: false,
@@ -156,7 +142,7 @@ export class LinkedServicesComponent implements OnInit, OnDestroy {
           renderComponent: EnableServiceLinkButtonRenderComponent,
         },
         actions: {
-          title: this.actionsMenuLabel,
+          title: this.translate.instant('general.services.actions') as string,
           sort: false,
           width: '5%',
           filter: false,

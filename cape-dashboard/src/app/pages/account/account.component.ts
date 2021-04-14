@@ -2,15 +2,21 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AccountService } from './account.service';
-import { NbDialogService, NbWindowService, NbDialogRef, NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
+import {
+  NbDialogService,
+  NbWindowService,
+  NbDialogRef,
+  NbToastrService,
+  NbComponentStatus,
+  NbToastrConfig,
+  NbGlobalPhysicalPosition,
+} from '@nebular/theme';
 import { Validators, FormControl, FormGroup, ValidationErrors, FormArray, AbstractControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { NgxConfigureService } from 'ngx-configure';
 import { Account, AccountNotificationEnum } from '../../model/account/account.model';
 import { LoginService } from '../../login/login.service';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
-import { Router } from '@angular/router';
 import { saveAs as importedSaveAs } from 'file-saver';
 
 @Component({
@@ -26,21 +32,36 @@ export class AccountComponent implements OnInit {
   @ViewChild('reportProblemWindowTemplate', { static: false })
   reportProblemWindowTemplate: TemplateRef<unknown>;
   languages = [
-    { key: 'IT', value: 'Italian' },
+    { key: 'IT', value: 'Italiano' },
     { key: 'EN', value: 'English' },
   ];
 
   private accountNotificationsEnum = AccountNotificationEnum;
   public accountNotificationsKeys: string[];
 
-  generalInformationForm = this.fb.group({
-    firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+  constructor(
+    private accountService: AccountService,
+    private dialogService: NbDialogService,
+    private formBuilder: FormBuilder,
+    private windowService: NbWindowService,
+    private translateService: TranslateService,
+    private toastrService: NbToastrService,
+    private loginService: LoginService,
+    private errorDialogService: ErrorDialogService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.accountNotificationsKeys = Object.keys(this.accountNotificationsEnum);
+    this.reportTitle = this.translateService.instant('general.account.report_the_problem') as string;
+  }
+
+  generalInformationForm = this.formBuilder.group({
+    firstName: new FormControl('', [Validators.minLength(2)]),
+    lastName: new FormControl('', [Validators.minLength(3)]),
     email: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('^[(]{0,1}[0-9]{3}[)]{0,1}[-s.]{0,1}[0-9]{3}[-s.]{0,1}[0-9]{4}$')]),
+    phone: new FormControl('', [Validators.pattern('^[(]{0,1}[0-9]{3}[)]{0,1}[-s.]{0,1}[0-9]{3}[-s.]{0,1}[0-9]{4}$')]),
   });
 
-  passwordForm = this.fb.group(
+  passwordForm = this.formBuilder.group(
     {
       newPassword: new FormControl('', [
         Validators.required,
@@ -59,12 +80,12 @@ export class AccountComponent implements OnInit {
     }
   );
 
-  configurationForm = this.fb.group({
+  configurationForm = this.formBuilder.group({
     language: new FormControl(''),
-    notification: this.fb.array(Object.entries(this.accountNotificationsEnum).map(() => new FormControl(false))),
+    notification: this.formBuilder.array(Object.entries(this.accountNotificationsEnum).map(() => new FormControl(false))),
   });
 
-  reportProblemForm = this.fb.group({
+  reportProblemForm = this.formBuilder.group({
     reportProblemText: [''],
   });
 
@@ -88,23 +109,6 @@ export class AccountComponent implements OnInit {
   }
   get notificationFormArray(): AbstractControl {
     return this.configurationForm.controls.notification as FormArray;
-  }
-
-  constructor(
-    private accountService: AccountService,
-    private dialogService: NbDialogService,
-    private fb: FormBuilder,
-    private windowService: NbWindowService,
-    private translateService: TranslateService,
-    private router: Router,
-    private configService: NgxConfigureService,
-    private toastrService: NbToastrService,
-    private loginService: LoginService,
-    private errorDialogService: ErrorDialogService,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.accountNotificationsKeys = Object.keys(this.accountNotificationsEnum);
-    this.reportTitle = this.translateService.instant('general.account.report_the_problem') as string;
   }
 
   async ngOnInit(): Promise<void> {
@@ -205,10 +209,8 @@ export class AccountComponent implements OnInit {
         email: this.generalInformationForm.get('email').value as string,
         phone: this.generalInformationForm.get('phone').value as number,
       });
-      this.toastrService.primary('', this.translateService.instant('general.account.account_updated_message'), {
-        position: NbGlobalLogicalPosition.BOTTOM_END,
-        duration: 3500,
-      });
+
+      this.showToast('primary', this.translateService.instant('general.account.account_updated_message'), '');
 
       this.generalInformationForm.markAsPristine();
     } catch (error) {
@@ -235,10 +237,8 @@ export class AccountComponent implements OnInit {
 
       await this.accountService.saveConfiguration(this.account);
 
-      this.toastrService.primary('', this.translateService.instant('general.account.account_updated_message'), {
-        position: NbGlobalLogicalPosition.BOTTOM_END,
-        duration: 3500,
-      });
+      this.showToast('primary', this.translateService.instant('general.account.account_updated_message'), '');
+
       this.configurationForm.markAsPristine();
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -248,4 +248,17 @@ export class AccountComponent implements OnInit {
       } else this.errorDialogService.openErrorDialog(error);
     }
   };
+
+  private showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 2500,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+      preventDuplicates: false,
+    } as Partial<NbToastrConfig>;
+
+    this.toastrService.show(body, title, config);
+  }
 }

@@ -4,6 +4,10 @@
     "logo_text": "CaPe",
     "home": "Home",
     "error": "Errore",
+    "save": "Salva",
+    "submit": "Invia",
+    "close": "Chiudi",
+    "cancel": "Annulla",
     "login": {
       "enter_button": "Entra",
       "logout_button": "Disconnetti",
@@ -21,7 +25,6 @@
         "do_not_authorize": "Non autorizzo",
         "no_cape_account": "Spiacente! Nessun CaPe account associato a te! Crearlo?",
         "error_message": "E' avvenuto un errore contattando Cape!",
-        "cancel_button": "Annulla",
         "create_button": "Crea"
       }
     },
@@ -130,14 +133,14 @@
       "first_name_errors_minlength": "Nome deve essere lungo almeno 2 caratteri.",
       "last_name_errors_required": "Cognome è obbligatorio.",
       "last_name_errors_minlength": "Cognome deve essere lungo almeno 3 caratteri.",
-      "no_email": "No Email",
+      "email_errors_required": "Email è obbligatoria",
       "email": "Email",
       "email_errors_message": "Inserisci formato email corretto.",
       "no_phone": "No Telefono",
       "phone": "Telefono",
       "phone_errors_message": "Inserisci formato telefono corretto.\n Esempio 999-999-9999.",
       "change_password": "Cambia Password",
-      "new_password": "Nuova  Password",
+      "new_password": "Nuova Password",
       "confirm_password": "Conferma Password",
       "newpassword_errors_required": "Password è obbligatoria.",
       "newpassword_errors_minlength": "Password deve essere lunga almeno 8 caratteri.",
@@ -157,9 +160,6 @@
       "tutorials_and_documentations": "Documentazione e guida",
       "report_the_problem": "Segnala un problema",
       "report_message": "Messaggio",
-      "save_button": "Salva",
-      "submit_button": "Invia",
-      "close_button": "Chiudi",
       "account_updated_message": "Account aggiornato correttamente"
     },
     "services": {
@@ -172,7 +172,6 @@
       "provider": "Fornitore",
       "purpose": "Finalità",
       "data_processed": "Dati processati",
-      "close": "Chiudi",
       "url": "Url",
       "created": "Creato",
       "data_consent": "Consenso",
@@ -194,8 +193,6 @@
       "data_concept_optional": "Opzionale",
       "linkingTitle": "Collega un Servizio a Cape",
       "linkingMessage": "Vuoi collegare il Servizio &nbsp;<strong>{{serviceName}}</strong>&nbsp; con il tuo Cape Account?",
-      "cancelButton": "Annulla",
-      "closeButton": "Chiudi",
       "linkButton": "Collega",
       "closeAndReturnToServiceButton": "Chiudi e ritorna al servizio",
       "forceLinkingButton": "Forza collegamento",
@@ -210,8 +207,9 @@
     "linked_services": {
       "services_linked_to_me": "Servizi collegati a me",
       "view_consents": "Vai ai Consensi associati a questo Servizio",
-      "notify": "Notifica",
-      "send_objection": "Invia Obiezione"
+      "enable_notifications": "Abilita notifiche",
+      "send_request": "Invia una richiesta",
+      "request_message": "Messaggio richiesta"
     },
     "auditlogs": {
       "ServiceLink": "Collegamento al servizio",
@@ -269,7 +267,6 @@
       "purpose": "Finalità",
       "url_link": "Link",
       "data_processed": "Dato processati",
-      "close": "Chiudi",
       "url": "Sorgente Dati",
       "created": "Creato",
       "data_consent": "Consenso",

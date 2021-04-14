@@ -21,9 +21,11 @@ import {
   NbContextMenuModule,
   NbIconModule,
   NbToastrModule,
+  NbWindowModule,
 } from '@nebular/theme';
 import { ActionsServiceLinkMenuRenderComponent } from './linkedServices/actionsServiceLinkMenuRender.component';
 import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButtonRender.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -39,6 +41,8 @@ import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButt
     NbContextMenuModule,
     ServicesRoutingModule,
     TranslateModule.forChild({}),
+    NbWindowModule.forChild(),
+    ReactiveFormsModule,
   ],
   declarations: [
     AvailableServicesComponent,

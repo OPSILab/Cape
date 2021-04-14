@@ -62,7 +62,7 @@
       <h4 class="h4 text-hint">{{ 'general.services.data_processing' | translate }}</h4>
 
       <div class="accordion-container">
-        <nb-accordion class="my-2 shadow-none border border-success" *ngFor="let processing of data.processings; let i = index" [attr.data-index]="i">
+        <nb-accordion class="my-2 shadow-none border border-primary" *ngFor="let processing of data.processings; let i = index" [attr.data-index]="i">
           <nb-accordion-item>
             <nb-accordion-item-header>
               <h5 class="h6 pr-3">{{ processing.purposeName }}</h5>
@@ -129,7 +129,7 @@
     <nb-card-footer>
       <div class="row justify-content-center">
         <button nbButton ghost shape="rectangle" size="medium" status="primary" (click)="ref.close()">
-          {{ 'general.services.close' | translate }}
+          {{ 'general.close' | translate }}
         </button>
       </div>
     </nb-card-footer>

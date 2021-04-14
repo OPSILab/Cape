@@ -45,7 +45,7 @@
           <input nbInput type="email" id="email" formControlName="email" name="email" />
           <div *ngIf="email.invalid && (email.dirty || email.touched)" class="mt-2 text-danger d-flex justify-content-center">
             <div *ngIf="email.errors?.required">
-              {{ 'general.account.first_name_errors_required' | translate }}
+              {{ 'general.account.email_errors_required' | translate }}
             </div>
             <div *ngIf="email.errors?.pattern">
               {{ 'general.account.email_errors_message' | translate }}
@@ -57,9 +57,6 @@
           <label class="m-3" for="phone"><span class="m-2 material-icons">phone</span>{{ 'general.account.phone' | translate }}</label>
           <input nbInput type="text" id="phone" formControlName="phone" name="phone" />
           <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="mt-2 text-danger d-flex justify-content-center">
-            <div *ngIf="phone.errors?.required">
-              {{ 'general.account.first_name_errors_required' | translate }}
-            </div>
             <div *ngIf="phone.errors?.pattern">
               {{ 'general.account.phone_errors_message' | translate }}
             </div>
@@ -69,7 +66,7 @@
     </nb-card-body>
     <nb-card-footer class="row justify-content-center">
       <button nbButton shape="rectangle" status="primary" [disabled]="!generalInformationForm.dirty || generalInformationForm.invalid" type="submit">
-        {{ 'general.account.save_button' | translate }}
+        {{ 'general.save' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -102,7 +99,7 @@
     </nb-card-body>
     <nb-card-footer class="row justify-content-center">
       <button nbButton shape="rectangle" status="primary" style="float: right" type="submit" [disabled]="!configurationForm?.dirty">
-        {{ 'general.account.save_button' | translate }}
+        {{ 'general.save' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -175,10 +172,10 @@
           [disabled]="!passwordForm.valid"
           (click)="onSubmitPassword(ref)"
         >
-          {{ 'general.account.save_button' | translate }}
+          {{ 'general.save' | translate }}
         </button>
         <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-          {{ 'general.services.close' | translate }}
+          {{ 'general.close' | translate }}
         </button>
       </nb-card-footer>
     </nb-card>
@@ -200,7 +197,7 @@
         {{ 'general.account.regenerate_key' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{ 'general.services.close' | translate }}
+        {{ 'general.close' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -221,7 +218,7 @@
         {{ 'general.account.delete_account' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{ 'general.services.close' | translate }}
+        {{ 'general.close' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -267,7 +264,7 @@
         </div>
         <div class="row justify-content-center">
           <button nbButton type="submit" status="primary" size="medium">
-            {{ 'general.account.submit_button' | translate }}
+            {{ 'general.submit_button' | translate }}
           </button>
         </div>
       </form>

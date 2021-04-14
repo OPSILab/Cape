@@ -8,11 +8,10 @@ import {
   NbMenuService,
   NbToastrService,
   NbDialogService,
-  NbDialogRef,
-  NbGlobalLogicalPosition,
   NbComponentStatus,
   NbGlobalPhysicalPosition,
   NbToastrConfig,
+  NbMenuItem,
 } from '@nebular/theme';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { AvailableServicesService } from './availableServices.service';
@@ -99,7 +98,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
   @Output() updateResult = new EventEmitter<any>();
 
   private unsubscribe: Subject<void> = new Subject();
-  actions: { title: string }[];
+  actions: NbMenuItem[];
   registered: boolean = true;
 
   @ViewChild('confirmDeleteDialog', { static: false }) confirmDeleteDialogTemplate: TemplateRef<any>;
@@ -158,7 +157,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  translatedActionLabels() {
+  translatedActionLabels(): NbMenuItem[] {
     if (this.registered) {
       return [
         {
