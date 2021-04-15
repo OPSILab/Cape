@@ -30,6 +30,17 @@ import it.eng.opsi.cape.serviceregistry.model.ServiceReportGroupingCriteria;
 
 public interface ServiceEntryCustomRepository {
 
+	public List<ServiceEntry> getServices(Boolean onlyRegistered, Boolean withSignature, Boolean withCertificate);
+
+	public Optional<ServiceEntry> getServiceByServiceName(String serviceName, Boolean onlyRegistered,
+			Boolean withSignature, Boolean withCertificate);
+
+	public Optional<ServiceEntry> getServiceByServiceUrl(String serviceUrl, Boolean onlyRegistered,
+			Boolean withSignature, Boolean withCertificate);
+
+	public List<ServiceEntry> getServicesByBusinessId(String businessId, Boolean onlyRegistered, Boolean withSignature,
+			Boolean withCertificate);
+
 	public Long getServicesCount(Boolean onlyRegistered);
 
 	public Optional<ServiceEntry> updateService(String serviceId, ServiceEntry service);
@@ -44,4 +55,5 @@ public interface ServiceEntryCustomRepository {
 
 	public ProcessingBasis getProcessingBasisByServiceIdAndPurposeId(String serviceId, String purposeId)
 			throws ServiceNotFoundException, PurposeIdNotFoundException;
+
 }

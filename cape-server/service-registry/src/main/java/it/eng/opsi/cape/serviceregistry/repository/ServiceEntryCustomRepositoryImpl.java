@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
@@ -137,6 +139,71 @@ public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepos
 
 		AggregationResults<ServiceReport> result = template.aggregate(agg, ServiceEntry.class, ServiceReport.class);
 		return result.getMappedResults();
+	}
+
+	@Override
+	public Optional<ServiceEntry> getServiceByServiceName(String serviceName, Boolean onlyRegistered,
+			Boolean withSignature, Boolean withCertificate) {
+
+		Query q = query(where("name").is(serviceName));
+
+		if (onlyRegistered)
+			q.addCriteria(where("serviceInstance.cert").ne(null));
+		if (!withSignature)
+			q.fields().exclude("serviceDescriptionSignature");
+		if (!withCertificate)
+			q.fields().exclude("serviceInstance.cert");
+
+		return Optional.ofNullable(template.findOne(q, ServiceEntry.class));
+	}
+
+	@Override
+	public List<ServiceEntry> getServices(Boolean onlyRegistered, Boolean withSignature, Boolean withCertificate) {
+
+		Query q = new Query();
+
+		if (onlyRegistered)
+			q.addCriteria(where("serviceInstance.cert").ne(null));
+		if (!withSignature)
+			q.fields().exclude("serviceDescriptionSignature");
+		if (!withCertificate)
+			q.fields().exclude("serviceInstance.cert");
+
+		return template.find(q, ServiceEntry.class);
+
+	}
+
+	@Override
+	public Optional<ServiceEntry> getServiceByServiceUrl(String serviceUrl, Boolean onlyRegistered,
+			Boolean withSignature, Boolean withCertificate) {
+
+		Query q = query(where("identifier").is(serviceUrl));
+
+		if (onlyRegistered)
+			q.addCriteria(where("serviceInstance.cert").ne(null));
+		if (!withSignature)
+			q.fields().exclude("serviceDescriptionSignature");
+		if (!withCertificate)
+			q.fields().exclude("serviceInstance.cert");
+
+		return Optional.ofNullable(template.findOne(q, ServiceEntry.class));
+	}
+
+	@Override
+	public List<ServiceEntry> getServicesByBusinessId(String businessId, Boolean onlyRegistered, Boolean withSignature,
+			Boolean withCertificate) {
+
+		Query q = query(where("serviceInstance.serviceProvider.businessId").is(businessId));
+
+		if (onlyRegistered)
+			q.addCriteria(where("serviceInstance.cert").ne(null));
+		if (!withSignature)
+			q.fields().exclude("serviceDescriptionSignature");
+		if (!withCertificate)
+			q.fields().exclude("serviceInstance.cert");
+
+		return template.find(q, ServiceEntry.class);
+
 	}
 
 }

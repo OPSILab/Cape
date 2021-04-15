@@ -40,7 +40,7 @@ import { LoginService } from '../../../login/login.service';
             {{ 'general.services.register' | translate }}
           </button>
           <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-            {{ 'general.services.close' | translate }}
+            {{ 'general.close' | translate }}
           </button>
         </nb-card-footer>
       </nb-card>
@@ -63,7 +63,7 @@ import { LoginService } from '../../../login/login.service';
             {{ 'general.services.deregister' | translate }}
           </button>
           <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-            {{ 'general.services.close' | translate }}
+            {{ 'general.close' | translate }}
           </button>
         </nb-card-footer>
       </nb-card>
@@ -86,7 +86,7 @@ import { LoginService } from '../../../login/login.service';
             {{ 'general.editor.delete' | translate }}
           </button>
           <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-            {{ 'general.editor.cancel' | translate }}
+            {{ 'general.cancel' | translate }}
           </button>
         </nb-card-footer>
       </nb-card>
@@ -99,7 +99,6 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
   actions: NbMenuItem[];
-  registered: boolean = true;
 
   @ViewChild('confirmDeleteDialog', { static: false }) confirmDeleteDialogTemplate: TemplateRef<any>;
   @ViewChild('confirmRegisterDialog', { static: false }) confirmRegisterDialog: TemplateRef<any>;
@@ -117,12 +116,11 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
     private loginService: LoginService
   ) {}
 
-  ngOnInit() {
-    var cert = this.value.serviceInstance.cert?.x5c;
-    if (cert == undefined || cert == null || cert.length == 0) {
-      this.registered = false;
-    }
+  get registered(): boolean {
+    return this.value.serviceInstance.cert?.x5c ? true : false;
+  }
 
+  ngOnInit() {
     this.actions = this.translatedActionLabels();
     this.menuService
       .onItemClick()

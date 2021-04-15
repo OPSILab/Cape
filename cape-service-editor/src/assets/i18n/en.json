@@ -3,6 +3,12 @@
     "welcome": "Welcome to Cape Dashboard for Data Controller!",
     "logo_text": "CaPe",
     "home": "Home",
+    "error": "Error",
+    "save": "Save",
+    "submit": "Submit",
+    "close": "Close",
+    "cancel": "Cancel",
+    "edit": "Edit",
     "dashboard": {
       "pdataCategories": "Personal Data Categories",
       "services": "Service Available",
@@ -164,7 +170,6 @@
       "assistance_and_support": "Assistance and Support",
       "tutorials_and_documentations": "Tutorials and Documentations",
       "report_the_problem": "Report the Problem",
-      "save_button": "Save",
       "name_errors_minlength": "First name must be at least 2 characters long.",
       "email_errors_pattern": "Email must be regular.",
       "lastName_errors_minlength": "Last name must be at least 3 characters long.",
@@ -199,6 +204,7 @@
       "no_type": "Type not provided"
     },
     "services": {
+      "view_editor": "See more info",
       "add_new": "Add new",
       "all": "all",
       "service": "Service",
@@ -248,14 +254,12 @@
     },
     "editor": {
       "title": "Service Description",
-      "save": "Save",
       "update": "Update",
       "import": "Import",
       "export": "Export",
       "select_file": "Select a local JSON file to import",
       "browse": "Browse",
       "upload": "Upload",
-      "cancel": "Cancel",
       "delete": "Delete",
       "selected": "Selected",
       "enter_filename": "Enter Filename",

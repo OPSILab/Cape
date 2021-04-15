@@ -3,12 +3,12 @@
     {{ 'general.editor.title' | translate }}
   </nb-card-header>
 
-  <nb-card-body class="row justify-content-center">
+  <nb-card-body *ngIf="!readOnly" class="row justify-content-center">
     <ng-container *ngIf="onEdit; then editButton; else createButton"> </ng-container>
 
     <ng-template #createButton>
       <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary" (click)="openSaveToRegistryDialog()">
-        {{ 'general.editor.save' | translate }}
+        {{ 'general.save' | translate }}
         <i class="mx-1 material-icons">save</i>
       </button>
     </ng-template>
@@ -38,10 +38,10 @@
     <nb-card-body class="p-5">{{ 'general.editor.confirm_save' | translate: { name: data.name } }}</nb-card-body>
     <nb-card-footer class="d-flex justify-content-center">
       <button nbButton status="primary" size="small" (click)="data.callback()">
-        {{ 'general.editor.save' | translate }}
+        {{ 'general.save' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{ 'general.editor.cancel' | translate }}
+        {{ 'general.cancel' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>
@@ -56,7 +56,7 @@
         {{ 'general.editor.update' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
-        {{ 'general.editor.cancel' | translate }}
+        {{ 'general.cancel' | translate }}
       </button>
     </nb-card-footer>
   </nb-card>

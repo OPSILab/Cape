@@ -1,21 +1,21 @@
 <nb-card>
   <nb-card-header class="d-flex align-content-center justify-content-between">
-    <h5 class=""> {{'general.editor.enter_filename'|translate}}</h5>
-    <button nbButton appearance="outline" shape="semi-round" size="tiny" status="info" (click)="cancel();">
+    <h5 class="">{{ 'general.editor.enter_filename' | translate }}</h5>
+    <button nbButton appearance="outline" shape="semi-round" size="tiny" status="info" (click)="cancel()">
       <i class="material-icons">close</i>
     </button>
   </nb-card-header>
   <nb-card-body>
     <div class="row m-2">
-      <input #name nbInput placeholder="Name">
+      <input #name nbInput placeholder="Name" />
     </div>
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-center">
     <button nbButton status="primary" size="small" (click)="submit(name.value)">
-      {{'general.editor.download'|translate}}
+      {{ 'general.editor.download' | translate }}
     </button>
     <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="cancel()">
-      {{'general.editor.cancel' | translate}}
+      {{ 'general.cancel' | translate }}
     </button>
   </nb-card-footer>
 </nb-card>

@@ -22,7 +22,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
   @ViewChild('inputrange', { static: true }) inputRange: ElementRef;
 
   dateRangeFilter: DateRange;
-  eventLogs: unknown[];
+  eventLogs: Record<string, unknown>[];
 
   public processingCategoryEnum = ProcessingBasisProcessingCategories;
   public processingCategoryOptions: string[];
@@ -108,8 +108,8 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     void this.onFilterSubmit();
   }
 
-  groupEventLogsByMonthDays(eventLogs: EventLog[]): unknown[] {
-    const groupedEvents: unknown[] = [];
+  groupEventLogsByMonthDays(eventLogs: EventLog[]): Record<string, unknown>[] {
+    const groupedEvents: Record<string, unknown>[] = [];
     const map: Map<string, Map<string, EventLog[]>> = new Map<string, Map<string, EventLog[]>>();
 
     for (const event of eventLogs) {

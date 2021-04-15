@@ -21,6 +21,7 @@ import {
   NbToastrModule,
   NbContextMenuModule,
   NbInputModule,
+  NbTabsetModule,
 } from '@nebular/theme';
 import { ActionsServiceMenuRenderComponent } from './availableServices/actionsServiceMenuRender.component';
 import { ActivatedRouteSnapshot } from '@angular/router';
@@ -39,6 +40,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
     NbToastrModule,
     NbContextMenuModule,
     NbInputModule,
+    NbTabsetModule,
     TranslateModule.forChild({}),
   ],
   declarations: [

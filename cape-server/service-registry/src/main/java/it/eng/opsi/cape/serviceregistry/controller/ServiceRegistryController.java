@@ -88,32 +88,29 @@ public class ServiceRegistryController implements IServiceRegistryController {
 	@Override
 	public ResponseEntity<List<ServiceEntry>> getServices(@RequestParam(required = false) String serviceName,
 			@RequestParam(required = false) String serviceUrl, @RequestParam(required = false) String businessId,
-			@RequestParam(defaultValue = "false") Boolean onlyRegistered) throws ServiceNotFoundException {
+			@RequestParam(defaultValue = "false") Boolean onlyRegistered,
+			@RequestParam(defaultValue = "false") Boolean withSignature,
+			@RequestParam(defaultValue = "false") Boolean withCertificate) throws ServiceNotFoundException {
 
 		List<ServiceEntry> result = null;
 
-		if (!onlyRegistered) {
-			if (StringUtils.isNotBlank(serviceName))
-				result = Arrays.asList(
-						serviceRepo.findByServiceName(serviceName).orElseThrow(() -> new ServiceNotFoundException(
-								"No Service description found for Service Name: " + serviceName)));
-			else if (StringUtils.isNotBlank(serviceUrl))
-				result = Arrays
-						.asList(serviceRepo.findByServiceUrl(serviceUrl).orElseThrow(() -> new ServiceNotFoundException(
-								"No Service description found for Service Url: " + serviceUrl)));
-			else if (StringUtils.isNotBlank(businessId))
-				result = serviceRepo.findByServiceProviderBusinessId(businessId);
-			else
-				result = serviceRepo.findAll();
-
-		} else {
-			result = StringUtils.isNotBlank(businessId)
-					? serviceRepo.findRegisteredServicesByServiceProviderBusinessId(businessId)
-					: serviceRepo.findAllRegisteredServices();
-
-		}
+		if (StringUtils.isNotBlank(serviceName))
+			result = Arrays.asList(
+					serviceRepo.getServiceByServiceName(serviceName, onlyRegistered, withSignature, withCertificate)
+							.orElseThrow(() -> new ServiceNotFoundException("No " + (onlyRegistered ? "registered " : "")
+									+ "Service description found for Service Name: " + serviceName)));
+		else if (StringUtils.isNotBlank(serviceUrl))
+			result = Arrays.asList(serviceRepo
+					.getServiceByServiceUrl(serviceUrl, onlyRegistered, withSignature, withCertificate)
+					.orElseThrow(() -> new ServiceNotFoundException("No " + (onlyRegistered ? "registered " : "")
+							+ "Service description found for Service Url: " + serviceUrl)));
+		else if (StringUtils.isNotBlank(businessId))
+			result = serviceRepo.getServicesByBusinessId(businessId, onlyRegistered, withSignature, withCertificate);
+		else
+			result = serviceRepo.getServices(onlyRegistered, withSignature, withCertificate);
 
 		return ResponseEntity.ok(result);
+
 	}
 
 	@Operation(summary = "Get the Service Entry description by Service Id. (Registered to CaPe or not)", tags = {
@@ -161,13 +158,12 @@ public class ServiceRegistryController implements IServiceRegistryController {
 			service.getServiceInstance().getServiceUrls()
 					.setDomain(extractBaseUrl(service.getServiceInstance().getServiceUrls().getLoginUri()));
 		}
-		
-		// Derive Linking Uri from Library domain
-		if(StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
-			service.getServiceInstance().getServiceUrls().setLinkingUri(service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
-		}
 
-		
+		// Derive Linking Uri from Library domain
+		if (StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
+			service.getServiceInstance().getServiceUrls().setLinkingUri(
+					service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
+		}
 
 		ServiceEntry result = serviceRepo.insert(service);
 
@@ -202,13 +198,13 @@ public class ServiceRegistryController implements IServiceRegistryController {
 				service.getServiceInstance().getServiceUrls()
 						.setDomain(extractBaseUrl(service.getServiceInstance().getServiceUrls().getLoginUri()));
 			}
-			
+
 			// Derive Linking Uri from Library domain
-			if(StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
-				service.getServiceInstance().getServiceUrls().setLinkingUri(service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
+			if (StringUtils.isNotBlank(service.getServiceInstance().getServiceUrls().getLibraryDomain())) {
+				service.getServiceInstance().getServiceUrls().setLinkingUri(
+						service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
 			}
-			
-			
+
 			result = serviceRepo.updateService(serviceId, service).orElseThrow(
 					() -> new ServiceNotFoundException("No Service description found for Service Id: " + serviceId));
 		}

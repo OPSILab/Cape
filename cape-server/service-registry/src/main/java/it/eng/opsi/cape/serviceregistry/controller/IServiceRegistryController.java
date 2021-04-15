@@ -34,7 +34,7 @@ import it.eng.opsi.cape.serviceregistry.model.ServiceReportGroupingCriteria;
 public interface IServiceRegistryController {
 
 	public abstract ResponseEntity<List<ServiceEntry>> getServices(String serviceName, String serviceUrl,
-			String businessId, Boolean onlyRegistered) throws ServiceNotFoundException;
+			String businessId, Boolean onlyRegistered, Boolean withSignature, Boolean withCert) throws ServiceNotFoundException;
 
 	public abstract ResponseEntity<ServiceEntry> getServiceById(String serviceId, Boolean onlyRegistered) throws ServiceNotFoundException;
 

@@ -48,6 +48,7 @@ export class LinkedServiceInfoRenderComponent {
         provider: serviceDescription.serviceInstance.serviceProvider.name,
         processings: serviceDescription.processingBases,
         datasetsMap: this.mapDatasetsConcept(serviceDescription.isDescribedAt),
+        dataController: serviceDescription.serviceInstance.dataController,
       },
       hasScroll: true,
     });

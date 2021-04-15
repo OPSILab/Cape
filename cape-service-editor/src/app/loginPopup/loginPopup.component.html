@@ -10,7 +10,7 @@
           {{ 'general.login.loginPopup.authorize_account_data' | translate }}
         </p>
         <div class="row justify-content-center my-2">
-          <nb-checkbox #check (checkedChange)="oncheck()" id="check" [value]="rememberMe">
+          <nb-checkbox #check (checkedChange)="oncheck()" id="check" [checked]="rememberMe">
             {{ 'general.login.loginPopup.dont_ask_again' | translate }}</nb-checkbox
           >
         </div>

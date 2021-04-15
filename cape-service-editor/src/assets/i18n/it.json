@@ -3,6 +3,12 @@
     "welcome": "Benvenuto sulla Dashboard di Cape per il Data Controller!",
     "logo_text": "CaPe",
     "home": "Home",
+    "error": "Errore",
+    "save": "Salva",
+    "submit": "Invia",
+    "close": "Chiudi",
+    "cancel": "Annulla",
+    "edit": "Modifica",
     "dashboard": {
       "pdataCategories": "Categorie di Dati Personali",
       "services": "Servizi",
@@ -198,6 +204,7 @@
       "no_type": "Type not provided"
     },
     "services": {
+      "view_editor": "Vedi altre info",
       "add_new": "Aggiungi nuovo",
       "all": "all",
       "service": "Servizio",

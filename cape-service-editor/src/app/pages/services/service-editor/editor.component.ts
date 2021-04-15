@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { JSONEditor } from '@json-editor/json-editor/dist/jsoneditor.js';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -24,12 +24,13 @@ import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
   private doc: any;
   private editor: any;
   private serviceId: string;
   private serviceData: ServiceEntry = {};
   loading = false;
+  public readOnly = false;
   private config: AppConfig;
   private systemConfig: System;
   apiRoot: string;
@@ -58,11 +59,17 @@ export class EditorComponent implements OnInit {
     this.loading = true;
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy(): void {
+    if (this.readOnly) sessionStorage.removeItem('readOnly');
+  }
+
+  ngAfterContentInit(): void {
+    if (this.readOnly) sessionStorage.setItem('readOnly', 'true');
+  }
 
   async ngOnInit() {
     this.serviceId = this.route.snapshot.params['serviceId'];
-
+    this.readOnly = <boolean>this.route.snapshot.params['readOnly'];
     if (this.serviceId) {
       this.serviceData = await this.availablesServicesService.getService(this.serviceId);
       this.onEdit = true;
@@ -122,6 +129,7 @@ export class EditorComponent implements OnInit {
       editor.getEditor('root.serviceInstance.cert.x5c').disable();
       this.loading = false;
       $('nb-spinner').remove();
+      if (sessionStorage.getItem('readOnly') === 'true') editor.disable();
     });
   }
 

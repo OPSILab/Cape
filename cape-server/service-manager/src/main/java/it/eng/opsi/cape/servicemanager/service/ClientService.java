@@ -472,13 +472,13 @@ public class ClientService {
 	/*
 	 * callChangeConsentStatus Service Manager ---> Consent Manager
 	 */
-	public ResponseEntity<ConsentStatusRecordSigned> callChangeConsentStatus(String accountId, String slrId,
+	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String accountId, String slrId,
 			String crId, ConsentRecordPayload existingCrPayload, ConsentRecordStatusEnum newStatus,
 			ChangeConsentStatusRequestFrom requestFrom) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
-		ResponseEntity<ConsentStatusRecordSigned> response = restTemplate
+		ResponseEntity<ConsentRecordSigned> response = restTemplate
 				.exchange(
 						RequestEntity.post(UriComponentsBuilder
 								.fromHttpUrl(consentManagerHost
@@ -494,7 +494,7 @@ public class ClientService {
 																.getRoleSpecificPart()).getUsageRules()
 														: null)
 										.requestFrom(requestFrom).build()),
-						ConsentStatusRecordSigned.class);
+						ConsentRecordSigned.class);
 
 		HttpStatus status = response.getStatusCode();
 		if (!status.is2xxSuccessful())

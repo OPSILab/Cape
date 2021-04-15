@@ -58,11 +58,11 @@ export class LoginPopupComponent implements AfterViewInit {
     localStorage.setItem('rememberMe', String(checked));
   };
 
-  cancelCreateAccount(): void {
+  cancelCreateAccount = (): void => {
     void this.loginService.cancelCreateAccount(this.errorDialogTemplateRef);
-  }
+  };
 
-  submitCreateAccount(queryParams: unknown): void {
+  submitCreateAccount = (queryParams: unknown): void => {
     this.loginService.submitCreateAccount(this.errorDialogTemplateRef, queryParams);
-  }
+  };
 }

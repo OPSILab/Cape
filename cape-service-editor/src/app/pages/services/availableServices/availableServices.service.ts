@@ -18,7 +18,7 @@ export class AvailableServicesService {
   }
 
   getServices(): Promise<ServiceEntry[]> {
-    return this.http.get<ServiceEntry[]>(`${this.serviceRegistryUrl}/services`).toPromise();
+    return this.http.get<ServiceEntry[]>(`${this.serviceRegistryUrl}/services?withCertificate=true`).toPromise();
   }
 
   getServicesCount(): Promise<number> {

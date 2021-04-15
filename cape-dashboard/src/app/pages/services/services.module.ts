@@ -22,6 +22,7 @@ import {
   NbIconModule,
   NbToastrModule,
   NbWindowModule,
+  NbTabsetModule,
 } from '@nebular/theme';
 import { ActionsServiceLinkMenuRenderComponent } from './linkedServices/actionsServiceLinkMenuRender.component';
 import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButtonRender.component';
@@ -38,6 +39,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     NbToggleModule,
     NbToastrModule,
     NbIconModule,
+    NbTabsetModule,
     NbContextMenuModule,
     ServicesRoutingModule,
     TranslateModule.forChild({}),

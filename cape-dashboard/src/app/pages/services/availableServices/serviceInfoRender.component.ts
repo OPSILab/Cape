@@ -26,6 +26,7 @@ export class ServiceInfoRenderComponent {
         processings: this.value.processingBases,
         datasetsMap: this.mapDatasetsConcept(this.value.isDescribedAt),
         locale: this.value.locale,
+        dataController: this.value.serviceInstance.dataController,
       },
       hasScroll: true,
     });
