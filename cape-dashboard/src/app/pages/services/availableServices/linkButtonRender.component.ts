@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../../../error-dialog/error-dialog.service';
 import { LinkedServicesService } from '../linkedServices/linkedServices.service';
 import { LinkingFromEnum } from '../../../model/service-linking/LinkingFromEnum';
 import { AvailableServiceRow } from './availableServices.component';

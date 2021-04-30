@@ -32,6 +32,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.xml.crypto.KeySelector.Purpose;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
@@ -110,6 +111,7 @@ import it.eng.opsi.cape.serviceregistry.data.IsDescribedAt;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.ServiceInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -576,8 +578,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		List<ConsentRecordSigned> existingCrList = consentRecordRepo
 				.findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
-						surrogateId, proposedResourceSet.getDatasets().stream().findFirst().get().getPurposeId())
-				.get();
+						surrogateId, proposedResourceSet.getDatasets().stream().findFirst().get().getPurposeId());
 
 		if (!existingCrList.isEmpty()) {
 
@@ -591,7 +592,7 @@ public class ConsentManagerController implements IConsentManagerController {
 				 ************************************/
 				proposedResourceSet
 						.setRsId(existingCr.getPayload().getCommonPart().getRsDescription().getResourceSet().getRsId());
-				
+
 				existingCr = this.changeConsentStatus(surrogateId, slrId, existingCr.get_id().toString(),
 						new ChangeConsentStatusRequest(
 								existingCr.isDisabled() ? ConsentRecordStatusEnum.Active
@@ -602,6 +603,7 @@ public class ConsentManagerController implements IConsentManagerController {
 				return ResponseEntity.ok(existingCr);
 			}
 		}
+
 		/******************************************************
 		 * Start creating Consent Record and Consent Status Record for Service/Sink
 		 ******************************************************/
@@ -764,7 +766,8 @@ public class ConsentManagerController implements IConsentManagerController {
 			consentRecordRepo.insert(signedSourceCr);
 
 			/******************************************************
-			 * Send the signed Consent Record (with CSR) to the Source Service
+			 * Send the signed Consent Record (with CSR) to the Source Service (Sink will
+			 * receive its with the response of this API)
 			 ******************************************************/
 			try {
 				clientService.sendConsentRecordToService(consentForm.getSourceLibraryDomainUrl(), signedSourceCr);
@@ -797,26 +800,64 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and optional query parameters.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountId(@PathVariable String accountId) {
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndQuery(
+			@PathVariable String accountId, @RequestParam(required = false) String consentId,
+			@RequestParam(required = false) String serviceId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory) {
 
-		return ResponseEntity.ok(consentRecordRepo.findByAccountId(accountId));
+		List<ConsentRecordSigned> result = null;
+
+		if (consentId != null || serviceId != null || status != null || purposeCategory != null
+				|| processingCategory != null)
+			result = consentRecordRepo.findByAccountIdAndQuery(accountId, consentId, serviceId, status, purposeCategory,
+					processingCategory);
+		else
+			result = consentRecordRepo.findByAccountId(accountId);
+
+		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Account Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Consent Record Id.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input CrId.", responseCode = "200") })
+	@GetMapping(value = "/accounts/{accountId}/consents/{consentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned> getConsentRecordByAccountIdAndCrId(@PathVariable String accountId,
+			@PathVariable String consentId) throws ConsentRecordNotFoundException {
+
+		return ResponseEntity.ok(consentRecordRepo.findByAccountIdAndPayload_commonPart_crId(accountId, consentId)
+				.orElseThrow(() -> new ConsentRecordNotFoundException("No Consent Record found for Account Id: "
+						+ accountId + " and Consent Record Id: " + consentId)));
+	}
+
+	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Service Link Record Id.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input Slr Id.", responseCode = "200") })
+	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndSlrId(
+			@PathVariable String accountId, @PathVariable String slrId) {
+
+		return ResponseEntity.ok(consentRecordRepo.findByAccountIdAndPayload_commonPart_slrId(accountId, slrId));
+	}
+
+	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Account Id and optional query parameters.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Account Id.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountId(
+	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndQuery(
 			@PathVariable String accountId, @RequestParam(required = false) String consentId,
 			@RequestParam(required = false) String serviceId,
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
-			@RequestParam(required = false) String purposeCategory,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
@@ -881,21 +922,37 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id and optional query parameters.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id.", responseCode = "200") })
+	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(
+			@PathVariable String surrogateId, @RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory) {
+
+		List<ConsentRecordSigned> result = null;
+
+		if (status != null || purposeCategory != null || processingCategory != null)
+			result = consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, surrogateId, status, purposeCategory,
+					processingCategory);
+		else
+			result = consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId);
+
+		return ResponseEntity.ok(result);
+	}
+
 	@Operation(summary = "Get the signed Consent Record for the input SurrogateId and CrId.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the signed Consent Record belonging to the input Account Id  and SlrId (for service linked and actin in the consent either as sink or source).", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents/{crId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned> getConsentRecordBySurrogateIdAndConsentRecordId(
-			@PathVariable String surrogateId, @PathVariable String crId)
-			throws ConsentRecordNotFoundException, ConsentManagerException {
+	public ResponseEntity<ConsentRecordSigned> getConsentRecordBySurrogateIdAndCrId(@PathVariable String surrogateId,
+			@PathVariable String crId) throws ConsentRecordNotFoundException, ConsentManagerException {
 
 		ConsentRecordSigned consent = consentRecordRepo.findById(crId).orElseThrow(
 				() -> new ConsentRecordNotFoundException("The Consent Record with Cr Id: " + crId + " was not found"));
-//		CommonPart commonPart = consent.getPayload().getCommonPart();
-
-//		ConsentRecordSigned pairedCr = getPairedConsentRecordByCrPairId(surrogateId, commonPart.getCrPairId(),
-//				commonPart.getRole(), ChangeConsentStatusRequestFrom.SERVICE);
 
 		return ResponseEntity.ok(consent);
 
@@ -906,7 +963,7 @@ public class ConsentManagerController implements IConsentManagerController {
 					@ApiResponse(description = "Returns the signed Consent Record pair belonging to the input Surrogate Id and with Cr Id.", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents/{crId}/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSignedPair> getConsentRecordPairBySurrogateIdAndConsentRecordId(
+	public ResponseEntity<ConsentRecordSignedPair> getConsentRecordPairBySurrogateIdAndCrId(
 			@PathVariable String surrogateId, @PathVariable String crId)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
@@ -958,73 +1015,104 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Service Link Record Id.", tags = {
-			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input Slr Id.", responseCode = "200") })
-	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndSlrId(
-			@PathVariable String accountId, @PathVariable String slrId) {
+	private ConsentRecordSigned getPairedConsentRecordByCrPairId(String accountOrSurrogateId, String crPairId,
+			ConsentRecordRoleEnum role, ChangeConsentStatusRequestFrom requestFrom)
+			throws ConsentRecordNotFoundException, ConsentManagerException {
 
-		return ResponseEntity.ok(consentRecordRepo.findByAccountIdAndPayload_commonPart_slrId(accountId, slrId));
+		ConsentRecordSigned[] crPair;
+
+		if (requestFrom.equals(ChangeConsentStatusRequestFrom.OPERATOR))
+			crPair = consentRecordRepo.findByAccountIdAndPayload_commonPart_crPairId(accountOrSurrogateId, crPairId)
+					.orElseThrow(() -> new ConsentRecordNotFoundException(
+							"No Consent Record pair was found for crPairId: " + crPairId));
+		else
+			crPair = consentRecordRepo.findByPayload_commonPart_crPairId(crPairId)
+					.orElseThrow(() -> new ConsentRecordNotFoundException(
+							"No Consent Record pair was found for crPairId: " + crPairId));
+
+		if (crPair.length != 2)
+			throw new ConsentManagerException("The found Consent Record Pair is incorrect");
+
+		ConsentRecordSigned otherCr = Arrays.asList(crPair).stream()
+				.filter(pair -> pair.getPayload().getCommonPart().getRole()
+						.equals(role.equals(ConsentRecordRoleEnum.SINK) ? ConsentRecordRoleEnum.SOURCE
+								: ConsentRecordRoleEnum.SINK))
+				.findFirst().get();
+
+		if (otherCr == null)
+			throw new ConsentRecordNotFoundException(
+					"No paired Consent Record found for the crPairId: " + crPairId + " with role: " + role);
+		return otherCr;
+
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Consent Record Id.", tags = {
-			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input CrId.", responseCode = "200") })
-	@GetMapping(value = "/accounts/{accountId}/consents/{consentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override
-	public ResponseEntity<ConsentRecordSigned> getConsentRecordByAccountIdAndCrId(@PathVariable String accountId,
-			@PathVariable String consentId) throws ConsentRecordNotFoundException {
+	private ConsentRecordSignedPair getConsentRecordPairByCrPairId(String accountId, String crPairId)
+			throws ConsentRecordNotFoundException, ConsentManagerException {
 
-		return ResponseEntity.ok(consentRecordRepo.findByAccountIdAndPayload_commonPart_crId(accountId, consentId)
-				.orElseThrow(() -> new ConsentRecordNotFoundException("No Consent Record found for Account Id: "
-						+ accountId + " and Consent Record Id: " + consentId)));
-	}
-
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
-			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id.", responseCode = "200") })
-	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateId(@PathVariable String surrogateId) {
-		return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId));
-	}
-
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
-			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id and Purpose Id.", responseCode = "200") })
-	@GetMapping(value = "/users/{surrogateId}/purpose/{purposeId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndPurposeId(
-			@PathVariable String surrogateId, @PathVariable String purposeId) throws ConsentRecordNotFoundException {
-
-		return ResponseEntity.ok(consentRecordRepo
-				.findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
-						surrogateId, purposeId)
+		ConsentRecordSigned[] crPair = consentRecordRepo
+				.findByAccountIdAndPayload_commonPart_crPairId(accountId, crPairId)
 				.orElseThrow(() -> new ConsentRecordNotFoundException(
-						"No Consent Record found for Surrogate Id: " + surrogateId + " and Purpose Id: " + purposeId)));
+						"No Consent Record pair was found for crPairId: " + crPairId));
+
+		if (crPair.length != 2)
+			throw new ConsentManagerException("The found Consent Record Pair is incorrect");
+
+		ConsentRecordSigned sink = null, source = null;
+		for (ConsentRecordSigned consent : crPair) {
+			if (consent.getPayload().getCommonPart().getRole().equals(ConsentRecordRoleEnum.SINK))
+				sink = consent;
+			else
+				source = consent;
+		}
+
+		return new ConsentRecordSignedPair(sink, source);
+
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id and optional query parameters.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with the input Service Id.", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceId(@PathVariable String serviceId) {
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(
+			@PathVariable String serviceId, @RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory) {
 
-		return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_subjectId(serviceId));
+		List<ConsentRecordSigned> result = null;
+
+		if (datasetId != null || status != null || purposeCategory != null || processingCategory != null)
+			result = consentRecordRepo.findByServiceIdAndQuery(serviceId, datasetId, status, purposeCategory,
+					processingCategory);
+		else
+			result = consentRecordRepo.findByPayload_commonPart_subjectId(serviceId);
+
+		return ResponseEntity.ok(result);
 	}
 
 	@Operation(summary = "Get the list of signed Consent Records for the input Service Provider Business Id.", tags = {
-			"Consent Record" }, responses = {
+			"Consent Record", "Data Controller" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with services provided by the input Business Id.", responseCode = "200") })
-	@GetMapping(value = "/services/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/dataControllers/{businessId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceProviderBusinessId(
-			@RequestParam String businessId) {
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceProviderBusinessIdAndQuery(
+			@PathVariable String businessId, @RequestParam(required = false) String serviceId,
+			@RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory) {
 
-		return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId));
+		List<ConsentRecordSigned> result = null;
+
+		if (serviceId != null || datasetId != null || status != null || purposeCategory != null
+				|| processingCategory != null)
+			result = consentRecordRepo.findByBusinessIdAndQuery(businessId, serviceId, datasetId, status,
+					purposeCategory, processingCategory);
+		else
+			result = consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId);
+
+		return ResponseEntity.ok(result);
 	}
 
 	@Operation(summary = "Get the list of signed Consent Status Records for the input Account Id, Slr Id and Cr Id.", tags = {
@@ -1379,71 +1467,6 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	private ConsentRecordSigned getPairedConsentRecordByCrPairId(String accountOrSurrogateId, String crPairId,
-			ConsentRecordRoleEnum role, ChangeConsentStatusRequestFrom requestFrom)
-			throws ConsentRecordNotFoundException, ConsentManagerException {
-
-		ConsentRecordSigned[] crPair;
-
-		if (requestFrom.equals(ChangeConsentStatusRequestFrom.OPERATOR))
-			crPair = consentRecordRepo.findByAccountIdAndPayload_commonPart_crPairId(accountOrSurrogateId, crPairId)
-					.orElseThrow(() -> new ConsentRecordNotFoundException(
-							"No Consent Record pair was found for crPairId: " + crPairId));
-		else
-			crPair = consentRecordRepo.findByPayload_commonPart_crPairId(crPairId)
-					.orElseThrow(() -> new ConsentRecordNotFoundException(
-							"No Consent Record pair was found for crPairId: " + crPairId));
-
-		if (crPair.length != 2)
-			throw new ConsentManagerException("The found Consent Record Pair is incorrect");
-
-		ConsentRecordSigned otherCr = Arrays.asList(crPair).stream()
-				.filter(pair -> pair.getPayload().getCommonPart().getRole()
-						.equals(role.equals(ConsentRecordRoleEnum.SINK) ? ConsentRecordRoleEnum.SOURCE
-								: ConsentRecordRoleEnum.SINK))
-				.findFirst().get();
-
-		if (otherCr == null)
-			throw new ConsentRecordNotFoundException(
-					"No paired Consent Record found for the crPairId: " + crPairId + " with role: " + role);
-		return otherCr;
-
-	}
-
-	private ConsentRecordSignedPair getConsentRecordPairByCrPairId(String accountId, String crPairId)
-			throws ConsentRecordNotFoundException, ConsentManagerException {
-
-		ConsentRecordSigned[] crPair = consentRecordRepo
-				.findByAccountIdAndPayload_commonPart_crPairId(accountId, crPairId)
-				.orElseThrow(() -> new ConsentRecordNotFoundException(
-						"No Consent Record pair was found for crPairId: " + crPairId));
-
-		if (crPair.length != 2)
-			throw new ConsentManagerException("The found Consent Record Pair is incorrect");
-
-		ConsentRecordSigned sink = null, source = null;
-		for (ConsentRecordSigned consent : crPair) {
-			if (consent.getPayload().getCommonPart().getRole().equals(ConsentRecordRoleEnum.SINK))
-				sink = consent;
-			else
-				source = consent;
-		}
-
-		return new ConsentRecordSignedPair(sink, source);
-
-	}
-
-	private Boolean newStatusIsValid(ConsentRecordStatusEnum lastStatus, ConsentRecordStatusEnum newStatus) {
-
-		return (!lastStatus.equals(ConsentRecordStatusEnum.Withdrawn) && !lastStatus.equals(newStatus));
-//						&& (newStatus.equals(ConsentRecordStatusEnum.Disabled)
-//								|| newStatus.equals(ConsentRecordStatusEnum.Withdrawn)))
-//				|| (lastStatus.equals(ConsentRecordStatusEnum.Disabled)
-//						&& (newStatus.equals(ConsentRecordStatusEnum.Active)
-//								|| newStatus.equals(ConsentRecordStatusEnum.Withdrawn)));
-
-	}
-
 	@Operation(summary = "Delete all the Consent Records Signed for the Account Id in input.", tags = {
 			"Consent Record" }, responses = { @ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@DeleteMapping(value = "/accounts/{accountId}/consents")
@@ -1508,6 +1531,17 @@ public class ConsentManagerController implements IConsentManagerController {
 				.body(clientService.callSignAuthorisationToken(operatorId, new AuthorisationTokenPayload(operatorId,
 						new AuthorisationTokenPayloadPopKid(sinkPopKey.getJwk().getKeyID()), new String[] { "/data" },
 						now.plus(consentExpiration, ChronoUnit.SECONDS), null, now, new ObjectId().toString(), crId)));
+
+	}
+
+	private Boolean newStatusIsValid(ConsentRecordStatusEnum lastStatus, ConsentRecordStatusEnum newStatus) {
+
+		return (!lastStatus.equals(ConsentRecordStatusEnum.Withdrawn) && !lastStatus.equals(newStatus));
+//						&& (newStatus.equals(ConsentRecordStatusEnum.Disabled)
+//								|| newStatus.equals(ConsentRecordStatusEnum.Withdrawn)))
+//				|| (lastStatus.equals(ConsentRecordStatusEnum.Disabled)
+//						&& (newStatus.equals(ConsentRecordStatusEnum.Active)
+//								|| newStatus.equals(ConsentRecordStatusEnum.Withdrawn)));
 
 	}
 

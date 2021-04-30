@@ -7,12 +7,12 @@ import { LinkedServicesService } from './linkedServices.service';
 
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
-import { LoginService } from '../../../login/login.service';
+import { LoginService } from '../../../auth/login/login.service';
 import { ActionsServiceLinkMenuRenderComponent } from './actionsServiceLinkMenuRender.component';
 import { ServiceUrlButtonRenderComponent } from './serviceUrlButtonRender.component';
 import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { ServiceLinkRecordDoubleSigned } from '../../../model/service-linking/serviceLinkRecordDoubleSigned';
-import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../../../error-dialog/error-dialog.service';
 import { SlStatusEnum } from '../../../model/service-linking/serviceLinkStatusRecordPayload';
 import { AppConfig } from '../../../model/appConfig';
 import { ServiceLinkRecordPayload } from '../../../model/service-linking/serviceLinkRecordPayload';

@@ -33,6 +33,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 @Service
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
@@ -67,28 +68,38 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 			throw new IOException("There was an error while calling external API/URI: " + body);
 
 		} else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
-			if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
+			ErrorResponse error = null;
+			if (httpResponse.getStatusCode().equals(HttpStatus.UNAUTHORIZED))
+				error = new ErrorResponse(HttpStatus.UNAUTHORIZED, body,
+						new Exception("Invalid token: access token is invalid"));
+			else
+				error = mapper.readValue(body, ErrorResponse.class);
+			Exception cause = null;
 
-				ErrorResponse error = mapper.readValue(body, ErrorResponse.class);
-				Exception cause = null;
+			try {
+				Class<?> clazz = Class.forName(error.getCause());
+				Constructor<?> constructor = clazz.getConstructor(String.class);
+				cause = (Exception) constructor.newInstance(error.getMessage());
 
-				try {
-					Class<?> clazz = Class.forName(error.getCause());
-					Constructor<?> constructor = clazz.getConstructor(String.class);
-					cause = (Exception) constructor.newInstance(error.getMessage());
-
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-						| NoSuchMethodException | SecurityException | IllegalArgumentException
-						| InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					cause = new Exception(error.getMessage());
-				}
-
-				throw new IOException("The external API/URI returned 404 NOT FOUND", cause);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException
+					| SecurityException | IllegalArgumentException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				cause = new Exception(error.getMessage());
 			}
-			throw new IOException("There was an error with status: " + httpResponse.getStatusCode()
-					+ " while calling external API/URI: " + body);
+
+			switch (httpResponse.getStatusCode()) {
+
+			case NOT_FOUND:
+				throw new IOException("The external API/URI returned 404 NOT FOUND", cause);
+			case BAD_REQUEST:
+				throw new IOException("The external API/URI returned 400 BAD REQUEST", cause);
+			case CONFLICT:
+				throw new IOException("The external API/URI returned 409 CONFLICT", cause);
+			default:
+				throw new IOException("There was an error with status: " + httpResponse.getStatusCode()
+						+ " while calling external API/URI: " + body);
+			}
 		}
 	}
 

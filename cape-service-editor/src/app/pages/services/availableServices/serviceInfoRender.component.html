@@ -170,30 +170,24 @@
         </nb-tab>
       </nb-tabset>
     </nb-card-body>
+
     <nb-card-footer>
       <div class="row justify-content-center">
-        <button nbButton ghost shape="rectangle" size="medium" status="primary" (click)="ref.close()">
+        <button
+          nbButton
+          class="mx-4"
+          shape="rectangle"
+          size="large"
+          status="primary"
+          [routerLink]="['/pages/services/service-editor', { serviceId: data.serviceId, readOnly: true }]"
+          (click)="ref.close()"
+        >
+          <i class="material-icons">info</i>&nbsp;{{ 'general.services.view_editor' | translate }}
+        </button>
+        <button nbButton class="mx-4" ghost shape="rectangle" size="large" status="primary" (click)="ref.close()">
           {{ 'general.close' | translate }}
         </button>
       </div>
-      <nb-card-footer>
-        <div class="row justify-content-center">
-          <button
-            nbButton
-            class="mx-4"
-            shape="rectangle"
-            size="large"
-            status="primary"
-            [routerLink]="['/pages/services/service-editor', { serviceId: data.serviceId, readOnly: true }]"
-            (click)="ref.close()"
-          >
-            <i class="material-icons">done_all</i>&nbsp;{{ 'general.services.view_editor' | translate }}
-          </button>
-          <button nbButton class="mx-4" ghost shape="rectangle" size="large" status="primary" (click)="ref.close()">
-            {{ 'general.close' | translate }}
-          </button>
-        </div>
-      </nb-card-footer>
     </nb-card-footer>
   </nb-card>
 </ng-template>

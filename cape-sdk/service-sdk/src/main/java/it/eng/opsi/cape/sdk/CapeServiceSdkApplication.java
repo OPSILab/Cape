@@ -21,17 +21,15 @@ import java.util.List;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
@@ -78,6 +76,15 @@ public class CapeServiceSdkApplication extends SpringBootServletInitializer {
 
 	private static ConfigurableApplicationContext applicationContext;
 
+	@Value("${spring.profiles.active:Unknown}")
+	private String activeProfile;
+
+	@Value("${cape.cors.allowed-origin-patterns}")
+	private String[] corsAllowedOriginPatterns;
+
+	@Value("${cape.cors.allowed-origins}")
+	private String[] corsAllowedOrigins;
+	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(CapeServiceSdkApplication.class);
@@ -168,7 +175,7 @@ public class CapeServiceSdkApplication extends SpringBootServletInitializer {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-						/* .allowedOrigins("*") */
+						.allowedOriginPatterns(corsAllowedOriginPatterns).allowedOrigins(corsAllowedOrigins)
 						.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
 						.allowCredentials(true).maxAge(3600);
 			}

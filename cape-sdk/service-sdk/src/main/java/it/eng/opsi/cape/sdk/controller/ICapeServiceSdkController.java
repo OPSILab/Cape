@@ -22,10 +22,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
@@ -54,7 +50,7 @@ import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
-import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferRequest;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferResponse;
 import it.eng.opsi.cape.sdk.model.linking.FinalLinkingResponse;
@@ -64,7 +60,9 @@ import it.eng.opsi.cape.sdk.model.linking.ServiceSignSlrRequest;
 import it.eng.opsi.cape.sdk.model.linking.ServiceSignSlrResponse;
 import it.eng.opsi.cape.sdk.model.linking.StartLinkingRequest;
 import it.eng.opsi.cape.sdk.model.linking.UserSurrogateIdLink;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 public interface ICapeServiceSdkController {
 
@@ -136,19 +134,24 @@ public interface ICapeServiceSdkController {
 			throws ConsentStatusRecordNotValid, ConsentRecordNotFoundException, ServiceLinkRecordNotFoundException,
 			JsonProcessingException, ParseException, JOSEException, ConsentRecordNotValid;
 
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateId(String surrogateId,
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(String surrogateId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
 			Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateIdAndPurposeId(String surrogateId,
-			String purposeId, Boolean checkConsentAtOperator);
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
+			String userId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceId(String serviceId,
-			Boolean checkConsentAtOperator);
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServicePairAndQuery(String sinkServiceId, String sourceServiceId,
+			String userId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecords(Boolean checkConsentAtOperator);
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(String serviceId,
+			String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(String surrogateId,
-			String slrId, String crId, ChangeConsentStatusRequest request)
+	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(String surrogateId, String slrId,
+			String crId, ChangeConsentStatusRequest request)
 			throws ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkRecordNotFoundException,
 			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException;
 

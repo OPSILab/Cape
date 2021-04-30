@@ -34,21 +34,7 @@
               ><i>{{ 'general.consents.reset' | translate }}</i>
             </nb-option>
             <nb-option disabled>------</nb-option>
-            <nb-option value="1 - Core Function">Core Function</nb-option>
-            <nb-option value="2 - Contracted Service">Contracted Service</nb-option>
-            <nb-option value="3 - Delivery">Delivery</nb-option>
-            <nb-option value="4 - Contact Requested">Contact Requested</nb-option>
-            <nb-option value="5 - Personalized Experience">Personalized Experience</nb-option>
-            <nb-option value="6 - Marketing">Marketing</nb-option>
-            <nb-option value="7 - Marketing Third Parties">Marketing Third Parties</nb-option>
-            <nb-option value="8 - Use for Delivery">Use for Delivery</nb-option>
-            <nb-option value="9 - Disclosure for Marketing">Disclosure for Marketing</nb-option>
-            <nb-option value="10 - 3rd Party Disclosure for Core Function">3rd Party Disclosure for Core Function</nb-option>
-            <nb-option value="11 - Legally Required Data Retention">Legally Required Data Retention</nb-option>
-            <nb-option value="12 - Required by Law Enforcement or Government">Required by Law Enforcement or Government</nb-option>
-            <nb-option value="13 - Protecting Your Health">Protecting Your Health</nb-option>
-            <nb-option value="14 - Protecting Our Interests">Protecting Our Interests</nb-option>
-            <nb-option value="15 - Improve Performance">Improve Performance</nb-option>
+            <nb-option *ngFor="let key of purposeCategoryOptions" value="{{ purposeCategoryEnum[key] }}">{{ key }}</nb-option>
           </nb-select>
         </div>
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
@@ -166,6 +152,8 @@
                 <th scope="row">{{ 'general.consents.purpose' | translate }}</th>
                 <td>{{ consent.sink.payload.common_part.rs_description.resource_set.datasets[0].purposeName }}</td>
               </tr>
+
+              <!-- Status Details --->
               <tr>
                 <th scope="row">{{ 'general.consents.status' | translate }}</th>
                 <td>
@@ -203,7 +191,8 @@
           >
             <div class="row justify-content-center">
               <div class="col-sm-12">
-                <nb-tabset status="success" class="row">
+                <nb-tabset status="success" class="row" fullWidth>
+                  <!-- Personal Data Tab -->
                   <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.personal_data' | translate }}">
                     <table class="table table-hover">
                       <thead class="thead-light">
@@ -244,6 +233,56 @@
                     </div>
                   </nb-tab>
 
+                  <!-- Processing Bases Tab-->
+                  <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.processing_bases' | translate }}">
+                    <nb-accordion>
+                      <nb-accordion-item [expanded]="true">
+                        <nb-accordion-item-header class="bg-light bg-gradient">
+                          <h5 class="h6 pr-3">{{ consent.sink.payload.role_specific_part.usage_rules.purposeName }}</h5>
+                        </nb-accordion-item-header>
+                        <nb-accordion-item-body>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.purpose_category' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.purposeCategory }}
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.processing_categories' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.processingCategories }}
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.legal_basis' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.legalBasis }}
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.policy_refs' | translate }}: </span>
+                            <a href="{{ consent.sink.payload.role_specific_part.usage_rules.policy.policyRef }}" target="_blank"
+                              ><nb-icon icon="external-link-outline"></nb-icon
+                            ></a>
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.storage' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.storage.location }} ({{
+                              consent.sink.payload.role_specific_part.usage_rules.storage.duration
+                            }})
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.services.recipients' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.recipients }}
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.consents.termination' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.termination }}
+                          </div>
+                          <div class="my-1">
+                            <span class="subtitle">{{ 'general.consents.collectionmethod' | translate }}: </span>
+                            {{ consent.sink.payload.role_specific_part.usage_rules.collectionMethod }}
+                          </div>
+                        </nb-accordion-item-body>
+                      </nb-accordion-item>
+                    </nb-accordion>
+                  </nb-tab>
+
+                  <!-- Share With Tab -->
                   <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.sharedwith' | translate }}">
                     <table class="table table-hover">
                       <thead class="thead-light">
@@ -288,6 +327,7 @@
                     </table>
                   </nb-tab>
 
+                  <!-- Data Controller Tab -->
                   <nb-tab tabTitle="{{ 'general.consents.datacontroller' | translate }}">
                     <table class="table table-hover">
                       <tbody>
@@ -319,25 +359,6 @@
                         <tr>
                           <th scope="row">{{ 'general.consents.phone' | translate }}</th>
                           <td>{{ consent.sink.payload.common_part.data_controller.phone }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </nb-tab>
-
-                  <nb-tab tabTitle="{{ 'general.consents.otherinfo' | translate }}">
-                    <table class="table table-hover">
-                      <tbody>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.termination' | translate }}</th>
-                          <td>{{ consent.sink.payload.role_specific_part.usage_rules.termination }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.collectionmethod' | translate }}</th>
-                          <td>{{ consent.sink.payload.role_specific_part.usage_rules.collectionMethod }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.privacypolicy' | translate }}</th>
-                          <td>{{ consent.sink.payload.role_specific_part.usage_rules.policy.policyRef }}</td>
                         </tr>
                       </tbody>
                     </table>

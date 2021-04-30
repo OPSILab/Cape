@@ -11,12 +11,13 @@ export interface System {
   dashUrl: string;
   idmHost: string;
   clientId: string;
-  loginPopupUrl: string;
   accountUrl: string;
   serviceManagerUrl: string;
   auditLogUrl: string;
   consentManagerUrl: string;
-  disable_auth: string;
+  disableAuth: string;
+  authProfile: string;
+  authRealm: string;
 }
 
 export interface I18n {

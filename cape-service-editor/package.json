@@ -40,6 +40,7 @@
     "@angular/router": "11.2.9",
     "@fortawesome/fontawesome-svg-core": "1.2.35",
     "@json-editor/json-editor": "2.5.3",
+    "@nebular/auth": "7.0.0",
     "@nebular/date-fns": "7.0.0",
     "@nebular/eva-icons": "7.0.0",
     "@nebular/theme": "7.0.0",

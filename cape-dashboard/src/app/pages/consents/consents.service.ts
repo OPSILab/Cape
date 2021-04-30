@@ -7,7 +7,6 @@ import { ServiceLinkRecordDoubleSigned } from '../../model/service-linking/servi
 import { ResourceSet } from '../../model/consents/resourceSet';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
 import { SinkUsageRules } from '../../model/consents/sinkUsageRules';
-import { ConsentStatusRecordSigned } from '../../model/consents/consentStatusRecordSigned';
 import { ChangeConsentStatusRequest } from '../../model/consents/changeConsentStatusRequest';
 import { DataMapping } from '../../model/dataMapping';
 import { ProcessingBasis, ProcessingBasisProcessingCategories } from '../../model/processingBasis';
@@ -35,7 +34,7 @@ export class ConsentsService {
   }
 
   getConsents(): Promise<ConsentRecordSigned[]> {
-    return this.http.get<ConsentRecordSigned[]>(`${this.consentsApiPath}/accounts/${this.accountId}/consents`).toPromise();
+    return this.http.get<ConsentRecordSigned[]>(`${this.consentsApiPath}/api/v2/accounts/${this.accountId}/consents`).toPromise();
   }
 
   getConsentPairs(
@@ -61,11 +60,13 @@ export class ConsentsService {
       params: queryParams,
     };
 
-    return this.http.get<ConsentRecordSignedPair[]>(`${this.consentsApiPath}/accounts/${this.accountId}/consents/pair`, httpOptions).toPromise();
+    return this.http
+      .get<ConsentRecordSignedPair[]>(`${this.consentsApiPath}/api/v2/accounts/${this.accountId}/consents/pair`, httpOptions)
+      .toPromise();
   }
 
   getServiceLinks(): Promise<ServiceLinkRecordDoubleSigned[]> {
-    return this.http.get<ServiceLinkRecordDoubleSigned[]>(`${this.accountManagerUrl}/${this.accountId}/serviceLinks`).toPromise();
+    return this.http.get<ServiceLinkRecordDoubleSigned[]>(`${this.accountManagerUrl}/api/v2/accounts/${this.accountId}/serviceLinks`).toPromise();
   }
 
   getServices(): Promise<ServiceEntry[]> {
@@ -79,7 +80,7 @@ export class ConsentsService {
     status: ConsentStatusEnum,
     usageRules: SinkUsageRules
   ): Promise<ConsentRecordSigned> {
-    const url = `${this.consentsApiPath}/accounts/${this.accountId}/servicelinks/${slrId}/consents/${crId}/statuses`;
+    const url = `${this.consentsApiPath}/api/v2/accounts/${this.accountId}/servicelinks/${slrId}/consents/${crId}/statuses`;
 
     return this.http
       .post<ConsentRecordSigned>(url, {
@@ -92,13 +93,13 @@ export class ConsentsService {
   }
 
   getMatchingDatasets(serviceId: string, purposeId: string, sourceDatasetId?: string, sourceServiceId?: string): Promise<DataMapping[]> {
-    let url = `${this.consentsApiPath}/service/${serviceId}/purpose/${purposeId}/matchingDataset`;
+    let url = `${this.consentsApiPath}/api/v2/service/${serviceId}/purpose/${purposeId}/matchingDataset`;
     if (sourceDatasetId && sourceServiceId) url = url.concat(`?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`);
 
     return this.http.get<DataMapping[]>(url).toPromise();
   }
 
   getServiceProcessingBasis(serviceId: string, purposeId: string): Promise<ProcessingBasis> {
-    return this.http.get<ProcessingBasis>(`${this.serviceRegistryUrl}/services/${serviceId}/purposes/${purposeId}`).toPromise();
+    return this.http.get<ProcessingBasis>(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}/purposes/${purposeId}`).toPromise();
   }
 }

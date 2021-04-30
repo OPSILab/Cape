@@ -21,19 +21,19 @@ export class LinkedServicesService {
   }
 
   getServiceLinks(): Promise<ServiceLinkRecordDoubleSigned[]> {
-    return this.http.get<ServiceLinkRecordDoubleSigned[]>(`${this.accountUrl}/accounts/${this.accountId}/servicelinks`).toPromise();
+    return this.http.get<ServiceLinkRecordDoubleSigned[]>(`${this.accountUrl}/api/v2/accounts/${this.accountId}/servicelinks`).toPromise();
   }
 
   getServiceLinkByServiceId(serviceId: string): Promise<ServiceLinkRecordDoubleSigned> {
     return this.http
-      .get<ServiceLinkRecordDoubleSigned>(`${this.accountUrl}/accounts/${this.accountId}/services/${serviceId}/servicelink`)
+      .get<ServiceLinkRecordDoubleSigned>(`${this.accountUrl}/api/v2/accounts/${this.accountId}/services/${serviceId}/servicelink`)
       .toPromise();
   }
 
   disableServiceLink(serviceId: string, slrId: string): Promise<ServiceLinkStatusRecordSigned> {
     return this.http
       .delete<ServiceLinkStatusRecordSigned>(
-        `${this.serviceManagerUrl}/slr/account/${this.accountId}/services/${serviceId}/slr/${slrId}?requestFrom=${ChangeSlrStatusRequestFrom.Operator}`,
+        `${this.serviceManagerUrl}/api/v2/slr/account/${this.accountId}/services/${serviceId}/slr/${slrId}?requestFrom=${ChangeSlrStatusRequestFrom.Operator}`,
         {}
       )
       .toPromise();
@@ -42,7 +42,7 @@ export class LinkedServicesService {
   enableServiceLink(serviceId: string, slrId: string): Promise<ServiceLinkStatusRecordSigned> {
     return this.http
       .put<ServiceLinkStatusRecordSigned>(
-        `${this.serviceManagerUrl}/slr/account/${this.accountId}/services/${serviceId}/slr/${slrId}?requestFrom=${ChangeSlrStatusRequestFrom.Operator}`,
+        `${this.serviceManagerUrl}/api/v2/slr/account/${this.accountId}/services/${serviceId}/slr/${slrId}?requestFrom=${ChangeSlrStatusRequestFrom.Operator}`,
         {}
       )
       .toPromise();

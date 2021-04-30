@@ -20,23 +20,16 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import it.eng.opsi.cape.exception.CapeSdkManagerException;
 import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceManagerException;
@@ -49,7 +42,7 @@ import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
-import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenResponse;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferRequest;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferResponse;
@@ -57,9 +50,10 @@ import it.eng.opsi.cape.sdk.model.linking.ContinueLinkingRequest;
 import it.eng.opsi.cape.sdk.model.linking.ContinueSinkLinkingRequest;
 import it.eng.opsi.cape.sdk.model.linking.FinalLinkingResponse;
 import it.eng.opsi.cape.sdk.model.linking.LinkingSession;
-import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordSigned;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 @Service
 public class ClientService {
@@ -70,7 +64,6 @@ public class ClientService {
 	private final String accountManagerHost;
 	private final String serviceManagerHost;
 	private final String consentManagerHost;
-	private final ApplicationProperties.Idm idm;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -83,45 +76,44 @@ public class ClientService {
 		accountManagerHost = this.appProperty.getCape().getAccountManager().getHost();
 		serviceManagerHost = this.appProperty.getCape().getServiceManager().getHost();
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
-		idm = this.appProperty.getIdm();
 	}
 
-	public Object getIdmUserDetail(String token) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/user")
-				.queryParam("access_token", token).toUriString(), Object.class);
-
-	}
-
-	public Object postCodeForToken(String grantType, String redirectUri, String code) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("grant_type", grantType);
-		body.add("redirect_uri", redirectUri);
-		body.add("code", code);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
-
-		return restTemplate.exchange(
-				RequestEntity.post(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/oauth2/token").build().toUri())
-						.headers(headers).body(body),
-				Object.class);
-
-	}
-
-	public Object externalLogout(String clientId) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate
-				.exchange(RequestEntity.delete(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/auth/external_logout")
-						.queryParam("clientId", clientId).build().toUri()).build(), Object.class);
-
-	}
+//	public Object getIdmUserDetail(String token) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//		return restTemplate.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/user")
+//				.queryParam("access_token", token).toUriString(), Object.class);
+//
+//	}
+//
+//	public Object postCodeForToken(String grantType, String redirectUri, String code) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//
+//		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+//		body.add("grant_type", grantType);
+//		body.add("redirect_uri", redirectUri);
+//		body.add("code", code);
+//
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
+//
+//		return restTemplate.exchange(
+//				RequestEntity.post(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/oauth2/token").build().toUri())
+//						.headers(headers).body(body),
+//				Object.class);
+//
+//	}
+//
+//	public Object externalLogout(String clientId) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//		return restTemplate
+//				.exchange(RequestEntity.delete(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/auth/external_logout")
+//						.queryParam("clientId", clientId).build().toUri()).build(), Object.class);
+//
+//	}
 
 	public OperatorDescription fetchOperatorDescription(String operatorId)
 			throws ServiceManagerException, OperatorDescriptionNotFoundException {
@@ -360,21 +352,14 @@ public class ClientService {
 				consentForm, ConsentRecordSigned.class);
 	}
 
-	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String surrogateId, String slrId,
-			String crId, ChangeConsentStatusRequest request) {
+	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String surrogateId, String slrId, String crId,
+			ChangeConsentStatusRequest request) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.postForEntity(UriComponentsBuilder
 				.fromHttpUrl(consentManagerHost
 						+ "/api/v2/accounts/{surrogateId}/servicelinks/{slrId}/consents/{crId}/statuses")
 				.build(surrogateId, slrId, crId), request, ConsentRecordSigned.class);
-	}
-
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsBySurrogateId(String surrogateId) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/users/{surrogateId}/consents",
-				ConsentRecordSigned[].class, surrogateId);
 	}
 
 	public ResponseEntity<ConsentRecordSigned> callGetConsentRecordBySurrogateIdAndCrId(String surrogateId,
@@ -393,42 +378,28 @@ public class ClientService {
 				ConsentRecordSignedPair.class, surrogateId, crId);
 	}
 
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsBySurrogateId(String surrogateId, String crId) {
+	public ConsentRecordSigned[] callGetConsentRecordsBySurrogateIdAndQuery(String surrogateId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/users/{surrogateId}/consents/{crId}",
-				ConsentRecordSigned[].class, surrogateId, crId);
+		return restTemplate.getForEntity(consentManagerHost + "/api/v2/users/{surrogateId}/consents?status={status}",
+				ConsentRecordSigned[].class, surrogateId, status).getBody();
 	}
 
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsBySurrogateIdAndPurposeId(String surrogateId,
-			String purposeId) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(
-				consentManagerHost + "/api/v2/users/{surrogateId}/purpose/{purposeId}/consents",
-				ConsentRecordSigned[].class, surrogateId, purposeId);
-	}
-
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsByServiceId(String serviceId) {
+	public ConsentRecordSigned[] callGetConsentRecordsByServiceIdAndQuery(String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.getForEntity(consentManagerHost + "/api/v2/services/{serviceId}/consents",
-				ConsentRecordSigned[].class, serviceId);
+				ConsentRecordSigned[].class, serviceId).getBody();
 	}
 
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordsByBusinessId(String businessId) {
+	public ConsentRecordSigned[] callGetConsentRecordsByBusinessIdandQuery(String businessId, String surrogateId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/services/consents?businessId=" + businessId,
-				ConsentRecordSigned[].class);
-	}
-
-	public ResponseEntity<ConsentRecordSigned[]> callGetConsentRecordBySurrogateIdAndResourceSetId(String surrogateId,
-			String rsId) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/users/{surrogateId}/consents/resourceSet/{rsId}",
-				ConsentRecordSigned[].class, surrogateId, rsId);
+		return restTemplate.getForEntity(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents",
+				ConsentRecordSigned[].class, businessId).getBody();
 	}
 
 	public AuthorisationTokenResponse callGetAuthorisationToken(String crId) {

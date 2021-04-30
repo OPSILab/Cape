@@ -45,6 +45,7 @@ import com.sun.mail.imap.protocol.Item;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSigned;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRepository {
 
@@ -53,7 +54,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 
 	@Override
 	public List<ConsentRecordSigned> findByAccountIdAndQuery(String accountId, String consentId, String serviceId,
-			ConsentRecordStatusEnum status, String purposeCategory, ProcessingCategory processingCategory) {
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
@@ -66,19 +67,126 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
 		if (purposeCategory != null)
-			pipeline.add(
-					match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
 		if (processingCategory != null)
-			pipeline.add(match(where("payload.roleSpecificPart.usageRules.processingCategories")
-					.is(processingCategory)));
+			pipeline.add(
+					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
 
 		if (status != null) {
 			pipeline.add(new AggregationOperation() {
 				@Override
 				public Document toDocument(AggregationOperationContext aoc) {
 					return new Document("$addFields", new Document("last",
-							new Document("$arrayElemAt", Arrays.asList("$consentStatusList",-1))));
+							new Document("$arrayElemAt", Arrays.asList("$consentStatusList", -1))));
+				}
+			});
+			pipeline.add(match(where("last.payload.consentStatus").is(status)));
+		}
+
+		Aggregation aggregation = Aggregation.newAggregation(pipeline);
+		AggregationResults<ConsentRecordSigned> result = template.aggregate(aggregation, "consentRecords",
+				ConsentRecordSigned.class);
+
+		return result.getMappedResults();
+	}
+
+	@Override
+	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+
+		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
+
+		pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
+
+		if (purposeCategory != null)
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
+
+		if (processingCategory != null)
+			pipeline.add(
+					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+
+		if (status != null) {
+			pipeline.add(new AggregationOperation() {
+				@Override
+				public Document toDocument(AggregationOperationContext aoc) {
+					return new Document("$addFields", new Document("last",
+							new Document("$arrayElemAt", Arrays.asList("$consentStatusList", -1))));
+				}
+			});
+			pipeline.add(match(where("last.payload.consentStatus").is(status)));
+		}
+
+		Aggregation aggregation = Aggregation.newAggregation(pipeline);
+		AggregationResults<ConsentRecordSigned> result = template.aggregate(aggregation, "consentRecords",
+				ConsentRecordSigned.class);
+
+		return result.getMappedResults();
+	}
+
+	@Override
+	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+
+		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
+
+		pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
+
+		if (datasetId != null)
+			pipeline.add(match(where("payload.rsDescription.resourceSet.datasets._id").is(datasetId)));
+
+		if (purposeCategory != null)
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
+
+		if (processingCategory != null)
+			pipeline.add(
+					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+
+		if (status != null) {
+			pipeline.add(new AggregationOperation() {
+				@Override
+				public Document toDocument(AggregationOperationContext aoc) {
+					return new Document("$addFields", new Document("last",
+							new Document("$arrayElemAt", Arrays.asList("$consentStatusList", -1))));
+				}
+			});
+			pipeline.add(match(where("last.payload.consentStatus").is(status)));
+		}
+
+		Aggregation aggregation = Aggregation.newAggregation(pipeline);
+		AggregationResults<ConsentRecordSigned> result = template.aggregate(aggregation, "consentRecords",
+				ConsentRecordSigned.class);
+
+		return result.getMappedResults();
+	}
+
+	@Override
+	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+
+		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
+
+		pipeline.add(match(where("payload.commonPart.serviceProviderBusinessId").is(businessId)));
+
+		if (serviceId != null)
+			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
+
+		if (datasetId != null)
+			pipeline.add(match(where("payload.rsDescription.resourceSet.datasets._id").is(datasetId)));
+
+		if (purposeCategory != null)
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
+
+		if (processingCategory != null)
+			pipeline.add(
+					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+
+		if (status != null) {
+			pipeline.add(new AggregationOperation() {
+				@Override
+				public Document toDocument(AggregationOperationContext aoc) {
+					return new Document("$addFields", new Document("last",
+							new Document("$arrayElemAt", Arrays.asList("$consentStatusList", -1))));
 				}
 			});
 			pipeline.add(match(where("last.payload.consentStatus").is(status)));

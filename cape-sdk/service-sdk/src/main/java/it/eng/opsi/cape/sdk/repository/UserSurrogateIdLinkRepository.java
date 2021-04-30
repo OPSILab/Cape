@@ -28,4 +28,8 @@ public interface UserSurrogateIdLinkRepository extends MongoRepository<UserSurro
 	public Optional<UserSurrogateIdLink> findTopByUserIdAndServiceIdAndOperatorIdOrderByCreatedDesc(String userId,
 			String serviceId, String operatorId);
 
+	public Optional<UserSurrogateIdLink> findTopByUserIdAndServiceIdOrderByCreatedDesc(String userId, String serviceId);
+
+	public List<UserSurrogateIdLink> findByUserIdOrderByCreatedDesc(String userId);
+
 }

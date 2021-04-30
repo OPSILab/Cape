@@ -298,7 +298,7 @@ export class CapeSdkAngularService {
     checkConsentAtOperator: boolean
   ): Promise<ConsentRecordSigned[]> {
     return this.http
-      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/${surrogateId}/purpose/${purposeId}/consent?checkConsentAtOperator=${checkConsentAtOperator}`)
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/${surrogateId}/purpose/${purposeId}/consents?checkConsentAtOperator=${checkConsentAtOperator}`)
       .toPromise();
   }
 

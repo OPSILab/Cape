@@ -15,8 +15,8 @@ import { Validators, FormControl, FormGroup, ValidationErrors, FormArray, Abstra
 import { FormBuilder } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Account, AccountNotificationEnum } from '../../model/account/account.model';
-import { LoginService } from '../../login/login.service';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { LoginService } from '../../auth/login/login.service';
+import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { saveAs as importedSaveAs } from 'file-saver';
 
 @Component({

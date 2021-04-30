@@ -20,9 +20,23 @@ import java.util.List;
 
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 public interface ConsentRecordCustomRepository {
 
-	public ConsentRecordSigned addStatusToCr(String crId, ConsentStatusRecordSigned csr) throws ConsentRecordNotFoundException;
+	public ConsentRecordSigned addStatusToCr(String crId, ConsentStatusRecordSigned csr)
+			throws ConsentRecordNotFoundException;
+
+	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
+	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
+	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
 }

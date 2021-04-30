@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoginService } from '../../login/login.service';
+import { LoginService } from '../../auth/login/login.service';
 import { Router } from '@angular/router';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { AuditLogsService } from '../auditlogs/auditlogs.service';
 import { AvailableServicesService } from '../services/availableServices/availableServices.service';
 import { TranslateService } from '@ngx-translate/core';

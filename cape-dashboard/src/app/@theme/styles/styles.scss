@@ -5,6 +5,7 @@
 
 // framework component themes (styles tied to theme variables)
 @import '~@nebular/theme/styles/globals';
+@import '~@nebular/auth/styles/globals';
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -21,7 +22,7 @@
 @include nb-install() {
   // framework global styles
   @include nb-theme-global();
-  /*  @include nb-auth-global();*/
+  @include nb-auth-global();
 
   @include ngx-layout();
   // loading progress bar

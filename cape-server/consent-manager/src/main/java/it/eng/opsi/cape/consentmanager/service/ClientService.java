@@ -17,7 +17,6 @@
 package it.eng.opsi.cape.consentmanager.service;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,6 @@ public class ClientService {
 	private final String serviceManagerHost;
 	private final String accountManagerHost;
 	private final String auditLogManagerHost;
-	private final ApplicationProperties.Idm idm;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -72,17 +70,16 @@ public class ClientService {
 		auditLogManagerHost = this.appProperty.getCape().getAuditLogManager().getHost();
 		accountManagerHost = this.appProperty.getCape().getAccountManager().getHost();
 		serviceManagerHost = this.appProperty.getCape().getServiceManager().getHost();
-		idm = this.appProperty.getIdm();
 	}
 
-	public Object getIdmUserDetail(String token) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForObject(UriComponentsBuilder
-				.fromHttpUrl(idm.getHost() + "/user")
-				.queryParam("access_token", token).toUriString(), Object.class);
-
-	}
+//	public Object getIdmUserDetail(String token) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//		return restTemplate.getForObject(UriComponentsBuilder
+//				.fromHttpUrl(idm.getHost() + "/user")
+//				.queryParam("access_token", token).toUriString(), Object.class);
+//
+//	}
 
 	public ServiceEntry getServiceDescriptionFromRegistry(String serviceId)
 			throws ConsentManagerException, ServiceDescriptionNotFoundException {

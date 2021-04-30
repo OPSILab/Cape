@@ -20,10 +20,21 @@ import java.util.List;
 
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSigned;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordStatusEnum;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 
 public interface ConsentRecordCustomRepository {
 
 	public List<ConsentRecordSigned> findByAccountIdAndQuery(String accountId, String consentId, String serviceId,
-			ConsentRecordStatusEnum status, String purposeCategory, ProcessingCategory processingCategory);
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
+	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
+	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
+	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId,String serviceId, String datasetId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+
 }

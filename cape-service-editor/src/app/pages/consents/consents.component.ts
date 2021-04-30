@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
+import { LoginService } from '../../login/login.service';
 
 @Component({
   selector: 'consents-smart-table',
@@ -26,33 +27,46 @@ export class ConsentsComponent {
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private service: ConsentsService, private translate: TranslateService, private configService: NgxConfigureService) {
+  constructor(
+    private service: ConsentsService,
+    private translate: TranslateService,
+    private configService: NgxConfigureService,
+    private loginService: LoginService,
+    private errorDialogService: ErrorDialogService
+  ) {
     this.settings = this.loadTableSettings();
   }
 
   async ngOnInit() {
-    this.consents = await this.service.getConsents();
+    try {
+      this.consents = await this.service.getConsents();
 
-    this.locale = this.configService.config.i18n.locale; // TODO change with user language preferences
+      this.locale = this.configService.config.i18n.locale; // TODO change with user language preferences
 
-    this.source.load(
-      this.consents.reduce((filtered, elem) => {
-        if (elem.payload.common_part.role === 'Sink') {
-          var date = new Date(elem.payload.common_part.iat).toLocaleString();
-          filtered.push({
-            id: elem.payload.common_part.cr_id,
-            serviceName: elem.payload.common_part.subject_name,
-            serviceSource: elem.payload.common_part.source_name,
-            userId: elem.payload.common_part.surrogate_id,
-            purpose: elem.payload.role_specific_part.usage_rules.purposeName,
-            issued: date,
-            status: elem.payload.common_part.consent_status,
-            viewInfo: elem,
-          });
-        }
-        return filtered;
-      }, [])
-    );
+      this.source.load(
+        this.consents.reduce((filtered, elem) => {
+          if (elem.payload.common_part.role === 'Sink') {
+            var date = new Date(elem.payload.common_part.iat).toLocaleString();
+            filtered.push({
+              id: elem.payload.common_part.cr_id,
+              serviceName: elem.payload.common_part.subject_name,
+              serviceSource: elem.payload.common_part.source_name,
+              userId: elem.payload.common_part.surrogate_id,
+              purpose: elem.payload.role_specific_part.usage_rules.purposeName,
+              issued: date,
+              status: elem.payload.common_part.consent_status,
+              viewInfo: elem,
+            });
+          }
+          return filtered;
+        }, [])
+      );
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error?.error?.statusCode === '401') {
+        this.loginService.logout().catch((error) => this.errorDialogService.openErrorDialog(error));
+      } else this.errorDialogService.openErrorDialog(error);
+    }
   }
 
   loadTableSettings() {

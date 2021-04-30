@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { AuditLogsService } from './auditlogs.service';
 import { NbRangepickerComponent } from '@nebular/theme';
 import { NgxConfigureService } from 'ngx-configure';
-import { LoginService } from '../../login/login.service';
+import { LoginService } from '../../auth/login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { EventLog, EventType, DateRange, ConsentEventLog, ServiceLinkEventLog } from '../../model/auditlogs/auditlogs.model';
 import { ProcessingBasisLegalBasis, ProcessingBasisProcessingCategories } from '../../model/processingBasis';
 import { FormGroup, FormControl } from '@angular/forms';

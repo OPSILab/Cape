@@ -39,8 +39,8 @@ public class ApplicationProperties {
 	@Valid
 	private Cape cape = new Cape();
 
-	@Valid
-	private Idm idm = new Idm();
+//	@Valid
+//	private Idm idm = new Idm();
 
 	@Getter
 	@Setter
@@ -69,6 +69,9 @@ public class ApplicationProperties {
 		private ServiceRegistry serviceRegistry = new ServiceRegistry();
 
 		@Valid
+		private Cors cors = new Cors();
+		
+		@Valid
 		private Http http = new Http();
 
 		@NotBlank
@@ -80,6 +83,16 @@ public class ApplicationProperties {
 		@NotBlank
 		private String operatorId;
 
+		@Getter
+		@Setter
+		@NoArgsConstructor
+		public class Cors {
+
+			private String[] allowedOriginPatterns;
+			private String[] allowedOrigins;
+
+		}
+		
 		@Getter
 		@Setter
 		@NoArgsConstructor

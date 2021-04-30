@@ -68,7 +68,12 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
 		} else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
 
-			ErrorResponse error = mapper.readValue(body, ErrorResponse.class);
+			ErrorResponse error = null;
+			if (httpResponse.getStatusCode().equals(HttpStatus.UNAUTHORIZED))
+				error = new ErrorResponse(HttpStatus.UNAUTHORIZED, body,
+						new Exception("Invalid token: access token is invalid"));
+			else
+				error = mapper.readValue(body, ErrorResponse.class);
 			Exception cause = null;
 
 			try {

@@ -23,11 +23,11 @@ export class AuditLogsService {
   }
 
   getAuditLog(): Promise<AuditLog> {
-    return this.http.get<AuditLog>(`${this.auditLogUrl}/auditLogs/accounts/${this.accountId}`).toPromise();
+    return this.http.get<AuditLog>(`${this.auditLogUrl}/api/v2/auditLogs/accounts/${this.accountId}`).toPromise();
   }
 
   getEventLogs(): Promise<EventLog[]> {
-    return this.http.get<EventLog[]>(`${this.auditLogUrl}/eventLogs/accounts/${this.accountId}`).toPromise();
+    return this.http.get<EventLog[]>(`${this.auditLogUrl}/api/v2/eventLogs/accounts/${this.accountId}`).toPromise();
   }
 
   getFilteredEventLogs(
@@ -49,6 +49,6 @@ export class AuditLogsService {
       params: queryParams,
     };
 
-    return this.http.get<EventLog[]>(`${this.auditLogUrl}/eventLogs/accounts/${this.accountId}`, httpOptions).toPromise();
+    return this.http.get<EventLog[]>(`${this.auditLogUrl}/api/v2/eventLogs/accounts/${this.accountId}`, httpOptions).toPromise();
   }
 }

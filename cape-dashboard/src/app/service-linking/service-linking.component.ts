@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ServiceLinkingService } from './service-linking.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from '../pages/error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';

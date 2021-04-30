@@ -1,3 +1,4 @@
+<!-- Event Logs Filtering-->
 <form [formGroup]="filtersForm" (ngSubmit)="onFilterSubmit()">
   <nb-card>
     <nb-card-header>{{ 'general.auditlogs.filters' | translate }}</nb-card-header>
@@ -68,6 +69,7 @@
   </nb-card>
 </form>
 
+<!--Event Logs timeline-->
 <div *ngIf="loading" class="loader"></div>
 <div *ngIf="!loading" id="forHiding">
   <div class="row">

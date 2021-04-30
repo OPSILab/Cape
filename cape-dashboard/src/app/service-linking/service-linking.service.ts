@@ -20,7 +20,7 @@ export class ServiceLinkingService {
     forceLinking: boolean = false
   ): Promise<HttpResponse<unknown>> {
     return this.http
-      .get(`${this.serviceManagerApiPath}/slr/account/${accountId}/service/${serviceId}?forceLinking=${forceLinking.toString()}`, {
+      .get(`${this.serviceManagerApiPath}/api/v2/slr/account/${accountId}/service/${serviceId}?forceLinking=${forceLinking.toString()}`, {
         observe: 'response',
       })
       .toPromise();
@@ -38,7 +38,7 @@ export class ServiceLinkingService {
       .get(
         `${
           this.serviceManagerApiPath
-        }/slr/service/${serviceId}/account/${accountId}?surrogateId=${surrogateId}&returnUrl=${returnUrl}&linkingFrom=${linkingFrom}&forceLinking=${forceLinking.toString()}`,
+        }/api/v2/slr/service/${serviceId}/account/${accountId}?surrogateId=${surrogateId}&returnUrl=${returnUrl}&linkingFrom=${linkingFrom}&forceLinking=${forceLinking.toString()}`,
         { observe: 'response' }
       )
       .toPromise();

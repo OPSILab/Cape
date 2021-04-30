@@ -22,16 +22,16 @@
 
     <nb-action class="user-action">
       <nb-user
-        *ngIf="user; else elseBlock"
         [nbContextMenu]="loggedUserMenu"
         [onlyPicture]="userPictureOnly"
         [name]="user?.name"
-        [picture]="user?.picture"
+        [title]="user?.roles.join(' | ')"
+        [picture]="'assets/images/app/default_user.png'"
       >
       </nb-user>
       <ng-template #elseBlock>
         <button outline nbButton>
-          <a routerLink="/login" routerLinkActive="button-outline-basic-active-background-color">{{ 'general.login.enter_button' | translate }}</a>
+          <a routerLink="/login" routerLinkActive="button-outline-basic-active-background-color">{{ 'login.enter_button' | translate }}</a>
         </button>
       </ng-template>
     </nb-action>

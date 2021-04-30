@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LinkedServicesService } from './linkedServices.service';
 import { SlStatusEnum } from '../../../model/service-linking/serviceLinkStatusRecordPayload';
-import { LoginService } from '../../../login/login.service';
-import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
+import { LoginService } from '../../../auth/login/login.service';
+import { ErrorDialogService } from '../../../error-dialog/error-dialog.service';
 import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { LinkedServiceRow } from './linkedServices.component';

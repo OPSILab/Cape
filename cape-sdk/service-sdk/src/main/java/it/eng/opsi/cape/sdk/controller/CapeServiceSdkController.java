@@ -20,6 +20,7 @@ import java.net.URI;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,9 @@ import it.eng.opsi.cape.sdk.repository.UserSurrogateIdLinkRepository;
 import it.eng.opsi.cape.sdk.service.CapeServiceSdkManager;
 import it.eng.opsi.cape.sdk.service.ClientService;
 import it.eng.opsi.cape.sdk.service.CryptoService;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -309,7 +312,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get services (optionally only the ones registered to CaPe) managed by this SDK", description = "Get services managed by this SDK", tags = {
+	@Operation(summary = "Get services (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get services managed by this SDK", tags = {
 			"Service Management" }, responses = {
 					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
@@ -320,7 +323,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getServices(onlyRegistered, businessId));
 	}
 
-	@Operation(summary = "Get service by ServiceId (optionally only the ones registered to CaPe) managed by this SDK", description = "Get service managed by this SDK", tags = {
+	@Operation(summary = "Get service by ServiceId (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get service managed by this SDK", tags = {
 			"Service Management" }, responses = {
 					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
@@ -765,7 +768,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			}
 
 		}
-		
+
 		CommonPart crCommonPart = responseCr.getPayload().getCommonPart();
 		return ResponseEntity.created(UriComponentsBuilder
 				.fromHttpUrl(
@@ -774,63 +777,98 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by ", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateId(@PathVariable String surrogateId,
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(
+			@PathVariable String surrogateId, ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
 		if (checkConsentAtOperator)
-			return clientService.callGetConsentRecordsBySurrogateId(surrogateId);
+			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsBySurrogateIdAndQuery(surrogateId,
+					status, purposeCategory, processingCategory)));
 		else
-			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId));
+
+			return ResponseEntity.ok(consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, surrogateId, status,
+					purposeCategory, processingCategory));
+
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id and Purpose Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Sink-Source Service Ids. Optionally can be filtered by User Id, Dataset Id, status, purposeCategory and processingCategory.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id and Purpose Id", responseCode = "200") })
-	@GetMapping(value = "/users/{surrogateId}/purpose/{purposeId}/consent", produces = MediaType.APPLICATION_JSON_VALUE)
+					@ApiResponse(description = "Returns the list of signed Consent Records for the input Sink-Source ServiceIds", responseCode = "200") })
+	@GetMapping(value = "/services/consents/usageRules", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsBySurrogateIdAndPurposeId(
-			@PathVariable String surrogateId, @PathVariable String purposeId,
-			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
-
-		if (checkConsentAtOperator)
-			return clientService.callGetConsentRecordsBySurrogateIdAndPurposeId(surrogateId, purposeId);
-		else
-			return ResponseEntity.ok(consentRecordRepo
-					.findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
-							surrogateId, purposeId));
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServicePairAndQuery(
+			@RequestParam(required = false) String sinkServiceId,
+			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String userId,
+			@RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory, Boolean checkConsentAtOperator) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by User Id, Dataset Id, status, purposeCategory and processingCategory.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users linked with the input ServiceId", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of signed Consent Records for the input ServiceId", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceId(@PathVariable String serviceId,
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(
+			@PathVariable String serviceId, @RequestParam(required = false) String userId,
+			@RequestParam(required = false) String datasetId, ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
-		if (checkConsentAtOperator)
-			return clientService.callGetConsentRecordsByServiceId(serviceId);
-		else
-			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_subjectId(serviceId));
+		/*
+		 * If UserId is specified, retrieve its corresponding SurrogateId, in order to
+		 * query ConsentRecord by SurrogateId
+		 */
+		if (StringUtils.isNotBlank(userId)) {
+			Optional<UserSurrogateIdLink> surrogateIdLink = userSurrogateIdRepo
+					.findTopByUserIdAndServiceIdOrderByCreatedDesc(userId, serviceId);
+
+			if (surrogateIdLink.isEmpty())
+				return ResponseEntity.ok(new ArrayList<ConsentRecordSigned>(0));
+			else
+				return getConsentRecordsBySurrogateIdAndQuery(surrogateIdLink.get().getSurrogateId(), status,
+						purposeCategory, processingCategory, checkConsentAtOperator);
+		} else {
+
+			if (checkConsentAtOperator)
+				return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByServiceIdAndQuery(serviceId,
+						datasetId, status, purposeCategory, processingCategory)));
+			else
+				return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, datasetId, status,
+						purposeCategory, processingCategory));
+		}
+
 	}
 
-	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider.", tags = {
+	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
-	@GetMapping(value = "/services/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned[]> getConsentRecords(
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(
+			@RequestParam(required = false) String serviceId, @RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
 		if (checkConsentAtOperator)
-			return clientService.callGetConsentRecordsByBusinessId(businessId);
+			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdandQuery(serviceId,
+					datasetId, status, purposeCategory, processingCategory)));
 		else
-			return ResponseEntity.ok(consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId));
+			return ResponseEntity.ok(consentRecordRepo.findByBusinessIdAndQuery(datasetId, serviceId, datasetId, status,
+					purposeCategory, processingCategory));
 	}
 
 	@Operation(summary = "Call the Consent Manager to change status (from Service) of a Consent for the input SurrogateId, Slr Id and Cr Id.", tags = {

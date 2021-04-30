@@ -19,6 +19,7 @@ package it.eng.opsi.cape.serviceregistry;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,6 +56,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ServiceRegistryApplication extends SpringBootServletInitializer {
 
 	private static ConfigurableApplicationContext applicationContext;
+
+	@Value("${spring.profiles.active:Unknown}")
+	private String activeProfile;
+
+	@Value("${cape.cors.allowed-origin-patterns}")
+	private String[] corsAllowedOriginPatterns;
+
+	@Value("${cape.cors.allowed-origins}")
+	private String[] corsAllowedOrigins;
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -130,7 +140,7 @@ public class ServiceRegistryApplication extends SpringBootServletInitializer {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-						/* .allowedOrigins("*") */
+						.allowedOriginPatterns(corsAllowedOriginPatterns).allowedOrigins(corsAllowedOrigins)
 						.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
 						.allowCredentials(true).maxAge(3600);
 			}

@@ -1,0 +1,65 @@
+<nb-layout></nb-layout>
+
+<ng-template #noAccountDialog let-data let-ref="dialogRef">
+  <nb-layout>
+    <nb-layout-column class="login-background d-inline-flex justify-content-center align-items-center">
+      <nb-card class="card-badge">
+        <nb-card-body class="justify-content-center">
+          <div class="row justify-content-center my-2">
+            <img class="cm-logo" src="assets/images/app/cape-logo.png" />
+          </div>
+          <p class="font-weight-bold text-center row p-3 justify-content-center">
+            {{ 'login.loginPopup.no_cape_account' | translate }}
+          </p>
+          <p class="h5 row py-4 px-2 text-center">
+            {{ 'login.loginPopup.authorize_new_account_data' | translate }}
+          </p>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row justify-content-center my-2">
+            <div class="col-12 col-sm my-1 text-center">
+              <button
+                nbButton
+                shape="rectangle"
+                status="success"
+                class="button-filled-medium-padding button-filled-success-focus-border-color"
+                (click)="createCapeAccount()"
+              >
+                {{ 'login.loginPopup.authorize_and_create' | translate }}
+              </button>
+            </div>
+            <div class="col-12 col-sm my-1 text-center">
+              <button nbButton shape="rectangle" status="danger" class="button-filled-danger-focus-border-color" (click)="cancelCreateAccount()">
+                {{ 'login.loginPopup.do_not_authorize_and_cancel' | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-center my-2">
+            <p class="font-weight-bold row py-4 px-2 text-center">
+              {{ 'login.loginPopup.new_account_use_data' | translate }} &nbsp;
+              <a target="_blank" href="https://www.cape-suite.eu">Privacy Policy</a>
+            </p>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </nb-layout-column>
+  </nb-layout>
+</ng-template>
+
+<ng-template #errorDialog let-data let-ref="dialogRef">
+  <nb-card status="danger">
+    <nb-card-header>{{ 'login.loginPopup.error_message' | translate }}</nb-card-header>
+    <nb-card-body>
+      <div class="alert alert-danger shadow">
+        <div class="text-center pb-3 subtitle">{{ data.error?.status }}</div>
+        <div class="text-center pb-3">{{ data.error?.message }}</div>
+        <div class="text-center">{{ data.error?.debugMessage }}</div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="col-sm text-center">
+        <button nbButton status="danger" (click)="cancelCreateAccount()">{{ 'general.cancel' | translate }}</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

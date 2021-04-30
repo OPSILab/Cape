@@ -3,23 +3,22 @@ import { ConsentsService } from './consents.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { NgxConfigureService } from 'ngx-configure';
-import { LoginService } from '../../login/login.service';
+import { LoginService } from '../../auth/login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { NbDialogService, NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { ConsentRecordSignedPair } from '../../model/consents/consentRecordSignedPair';
 import { Dataset } from '../../model/consents/dataset';
 import { DataMapping } from '../../model/dataMapping';
 import { ShareWith } from '../../model/shareWith';
-import { ConsentRecordSinkRoleSpecificPart } from '../../model/consents/consentRecordSinkRoleSpecificPart';
 import { HumanReadableDescription } from '../../model/humanReadableDescription';
 import { ConsentRecordSigned } from '../../model/consents/consentRecordSigned';
 import { ResourceSet } from '../../model/consents/resourceSet';
 import { SinkUsageRules } from '../../model/consents/sinkUsageRules';
 import { ServiceEntry } from '../../model/service-linking/serviceEntry';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ProcessingBasisProcessingCategories } from '../../model/processingBasis';
+import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
 import { LinkedServicesService } from '../services/linkedServices/linkedServices.service';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
 
@@ -52,6 +51,8 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   @Input() loading = true;
   public processingCategoryEnum = ProcessingBasisProcessingCategories;
   public processingCategoryOptions;
+  public purposeCategoryEnum = ProcessingBasisPurposeCategory;
+  public purposeCategoryOptions;
 
   public changeStatusButtons;
   public filtersForm = new FormGroup({
@@ -79,6 +80,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   ) {
     this.currentLocale = this.translate.currentLang;
     this.processingCategoryOptions = Object.keys(this.processingCategoryEnum);
+    this.purposeCategoryOptions = Object.keys(this.purposeCategoryEnum);
 
     this.changeStatusButtons = [
       {
@@ -219,7 +221,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     // TODO Change if we will use more datasets per resource set
     const lastDataset: Dataset = consent.payload.common_part.rs_description.resource_set.datasets[0];
 
-    const lastUsageRules: SinkUsageRules = (consent.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules;
+    const lastUsageRules: SinkUsageRules = consent.payload.role_specific_part.usage_rules;
 
     if (this.changedDataMapping[consentIndex])
       lastDataset.dataMappings = this.lastClickedDataMapping.get(consentIndex).reduce((result: DataMapping[], concept: DataMapping) => {
@@ -386,7 +388,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     const consentShareWith: ShareWith[] =
       consentStatusLength > 1
         ? consent.sink.consentStatusList[consentStatusLength - 1].payload.consent_usage_rules.shareWith
-        : (consent.sink.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules.shareWith;
+        : consent.sink.payload.role_specific_part.usage_rules.shareWith;
 
     const purposeId: string = consentDataset.purposeId;
     const sinkShareWith: ShareWith[] = (await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))

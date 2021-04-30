@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { OidcUserInformationService } from '../../../auth/services/oidc-user-information.service';
+import { UserClaims } from '../../../auth/model/oidc';
 
 @Component({
   selector: 'ngx-header',
@@ -14,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly = false;
-  user: { name: string; picture: string };
+  user: UserClaims;
 
   themes = [
     {
@@ -45,22 +47,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private userService: OidcUserInformationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loggedUserMenu.push({
-      title: this.translateService.instant('general.login.logout_button') as string,
+      title: this.translateService.instant('login.logout_button') as string,
       link: '',
     });
     this.currentTheme = this.themeService.currentTheme;
 
-    // this.userService.getUsers()
-    //  .pipe(takeUntil(this.destroy$))
-    //  .subscribe((users: any) => this.user = users.nick);
-
-    const loggedUser = localStorage.accountId as string;
-    if (loggedUser) this.user = { name: loggedUser, picture: '' };
+    this.userService.onUserChange().subscribe((user: UserClaims) => (this.user = user));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
@@ -69,7 +68,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
         takeUntil(this.destroy$)
       )
-      .subscribe((isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl));
+      .subscribe((isLessThanXl: boolean) => {
+        this.userPictureOnly = isLessThanXl;
+        this.cdr.detectChanges();
+      });
 
     this.themeService
       .onThemeChange()

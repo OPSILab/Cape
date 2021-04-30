@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mongodb.DuplicateKeyException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64;
@@ -73,7 +72,6 @@ import it.eng.opsi.cape.servicemanager.model.audit.ServiceLinkActionType;
 import it.eng.opsi.cape.servicemanager.model.audit.ServiceLinkEventLog;
 import it.eng.opsi.cape.servicemanager.model.consenting.ChangeConsentStatusRequest.ChangeConsentStatusRequestFrom;
 import it.eng.opsi.cape.servicemanager.model.consenting.ConsentRecordPayload;
-import it.eng.opsi.cape.servicemanager.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.servicemanager.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.servicemanager.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.servicemanager.model.consenting.ConsentStatusRecordPayload;
@@ -105,7 +103,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v2")
 @Slf4j
-@CrossOrigin(origins = "*", exposedHeaders = "*,Location")
+@CrossOrigin(exposedHeaders = "*,Location")
 public class ServiceManagerController implements IServiceManagerController {
 
 	private final ApplicationProperties appProperty;

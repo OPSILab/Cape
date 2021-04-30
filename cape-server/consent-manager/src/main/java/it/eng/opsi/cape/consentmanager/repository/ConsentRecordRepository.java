@@ -30,12 +30,21 @@ public interface ConsentRecordRepository
 
 	public List<ConsentRecordSigned> findByPayload_commonPart_surrogateId(String surrogateId);
 
-	public ConsentRecordSigned[] findByPayload_commonPart_subjectId(String subjectId);
+	public List<ConsentRecordSigned> findByPayload_commonPart_subjectId(String subjectId);
 
-	public ConsentRecordSigned[] findByPayload_commonPart_serviceProviderBusinessId(String businessId);
+	public List<ConsentRecordSigned> findByPayload_commonPart_serviceProviderBusinessId(String businessId);
+//
+//	public List<ConsentRecordSigned> findByPayload_commonPart_serviceProviderBusinessIdAndPayload_commonPart_surrogateId(
+//			String businessId, String surrogateId);
+//
+//	public List<ConsentRecordSigned> findByPayload_commonPart_serviceProviderBusinessIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
+//			String businessId, String purposeId);
 
-	public Optional<List<ConsentRecordSigned>> findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
+	public List<ConsentRecordSigned> findByPayload_commonPart_surrogateIdAndPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
 			String surrogateId, String purposeId);
+
+	public List<ConsentRecordSigned> findByPayload_commonPart_rsDescription_resourceSet_datasets_purposeIdOrderByPayload_commonPart_iatDesc(
+			String purposeId);
 
 	public Optional<ConsentRecordSigned> findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(
 			String surrogateId, String crId);

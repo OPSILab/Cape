@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ServiceLinkingComponent } from './service-linking.component';
-import { AuthGuard } from '../_guards/auth.guard';
+import { AuthGuard } from '../auth/services/auth.guard';
 
 // noinspection TypeScriptValidateTypes
 export const routes: Routes = [

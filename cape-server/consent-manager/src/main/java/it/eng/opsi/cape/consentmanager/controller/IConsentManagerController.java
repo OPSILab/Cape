@@ -38,6 +38,7 @@ import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 
 public interface IConsentManagerController {
@@ -52,14 +53,19 @@ public interface IConsentManagerController {
 			DatasetIdNotFoundException, ConsentManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<ConsentRecordSigned> giveConsentFromService(String surrogateId,
-			ConsentForm consentForm) throws ResourceSetIdNotFoundException, ConsentManagerException,
-			ServiceLinkRecordNotFoundException, AccountNotFoundException, ConsentRecordNotFoundException, ConsentStatusNotValidException, ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
+			ConsentForm consentForm)
+			throws ResourceSetIdNotFoundException, ConsentManagerException, ServiceLinkRecordNotFoundException,
+			AccountNotFoundException, ConsentRecordNotFoundException, ConsentStatusNotValidException,
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
 
-	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountId(String accountId);
-
-	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountId(String accountId,
-			String consentId, String serviceId, ConsentRecordStatusEnum status, String purposeCategory,
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndQuery(String accountId,
+			String consentId, String serviceId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
 			ProcessingCategory processingCategory) throws ConsentRecordNotFoundException, ConsentManagerException;
+
+	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndQuery(
+			String accountId, String consentId, String serviceId, ConsentRecordStatusEnum status,
+			PurposeCategory purposeCategory, ProcessingCategory processingCategory)
+			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndSlrId(
 			String accountId, String slrId) throws ConsentRecordNotFoundException, ConsentManagerException;
@@ -67,7 +73,8 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsBySurrogateIdAndSlrId(
 			String surrogateId, String slrId) throws ConsentRecordNotFoundException, ConsentManagerException;
 
-	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateId(String surrogateId);
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(String surrogateId,
+			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndSlrId(String accountId,
 			String slrId);
@@ -75,13 +82,13 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<ConsentRecordSigned> getConsentRecordByAccountIdAndCrId(String accountId,
 			String crId) throws ConsentRecordNotFoundException;
 
-	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndPurposeId(
-			String surrogateId, String purposeId) throws ConsentRecordNotFoundException;
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
+			String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory);
 
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceId(String serviceId);
-
-	public abstract ResponseEntity<ConsentRecordSigned[]> getConsentRecordsByServiceProviderBusinessId(
-			String businessId);
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceProviderBusinessIdAndQuery(
+			String businessId, String serviceId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory);
 
 	public abstract ResponseEntity<List<ConsentStatusRecordSigned>> getConsentStatusRecordsByAccountIdAndSlrIdAndCrId(
 			String accountId, String slrId, String crId) throws ConsentRecordNotFoundException;
@@ -92,11 +99,10 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<ConsentStatusRecordSigned> getLastConsentStatusRecordByAccountIdAndSlrIdAndCrId(
 			String accountId, String slrId, String crId) throws ConsentRecordNotFoundException;
 
-	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatus(String accountId, String slrId,
-			String crId, ChangeConsentStatusRequest request)
-			throws ConsentRecordNotFoundException, ConsentManagerException, ConsentStatusNotValidException,
-			ResourceSetIdNotFoundException, ServiceLinkRecordNotFoundException, ServiceLinkStatusNotValidException,
-			ServiceDescriptionNotFoundException, ChangeConsentStatusException;
+	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatus(String accountId, String slrId, String crId,
+			ChangeConsentStatusRequest request) throws ConsentRecordNotFoundException, ConsentManagerException,
+			ConsentStatusNotValidException, ResourceSetIdNotFoundException, ServiceLinkRecordNotFoundException,
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
 
 	public abstract ResponseEntity<ConsentRecordSigned> deleteConsentRecordsByAccountId(String accountId,
 			Boolean deleteConsentForm) throws ConsentRecordNotFoundException, ConsentManagerException;
@@ -106,10 +112,10 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<AuthorisationTokenResponse> getAuthorisationToken(String crId)
 			throws ConsentRecordNotFoundException, ConsentManagerException, ServiceLinkRecordNotFoundException;
 
-	public abstract ResponseEntity<ConsentRecordSigned> getConsentRecordBySurrogateIdAndConsentRecordId(
-			String surrogateId, String crId) throws ConsentRecordNotFoundException, ConsentManagerException;
+	public abstract ResponseEntity<ConsentRecordSigned> getConsentRecordBySurrogateIdAndCrId(String surrogateId,
+			String crId) throws ConsentRecordNotFoundException, ConsentManagerException;
 
-	public abstract ResponseEntity<ConsentRecordSignedPair> getConsentRecordPairBySurrogateIdAndConsentRecordId(
-			String surrogateId, String crId) throws ConsentRecordNotFoundException, ConsentManagerException;
+	public abstract ResponseEntity<ConsentRecordSignedPair> getConsentRecordPairBySurrogateIdAndCrId(String surrogateId,
+			String crId) throws ConsentRecordNotFoundException, ConsentManagerException;
 
 }

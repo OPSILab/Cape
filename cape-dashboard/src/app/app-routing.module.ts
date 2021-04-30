@@ -1,18 +1,10 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { RememberMeResolve } from './loginPopup/loginPopup.resolve';
 
 const routes: Routes = [
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then((m) => m.LoginModule),
-  },
-  {
-    path: 'loginPopup',
-    loadChildren: () => import('./loginPopup/loginPopup.module').then((m) => m.LoginPopupModule),
-    resolve: {
-      rememberMe: RememberMeResolve,
-    },
+    loadChildren: () => import('./auth/login/login.module').then((m) => m.LoginModule),
   },
   {
     path: 'pages',

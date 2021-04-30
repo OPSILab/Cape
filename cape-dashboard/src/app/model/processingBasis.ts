@@ -119,7 +119,7 @@ export enum ProcessingBasisProcessingCategories {
   Share = 'Share',
   Store = 'Store',
   Structure = 'Structure',
-  SystematicMonitoring = 'Systematic Monitoring',
+  SystematicMonitoring = 'SystematicMonitoring',
   Transfer = 'Transfer',
   Transform = 'Transform',
   Transmit = 'Transmit',

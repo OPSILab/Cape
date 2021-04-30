@@ -24,9 +24,13 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,15 +45,12 @@ public class RestTemplateHeaderModifierInterceptor implements ClientHttpRequestI
 			throws IOException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-
+		
 		try {
-			OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-					.getAuthentication().getDetails();
-//		System.out.println("Token: " + details.getTokenValue());
+			
+			Jwt accessToken = ((JwtAuthenticationToken) authentication).getToken();
 
-			if (!request.getURI().toString().contains("/user?access_token"))
-				request.getHeaders().add("Authorization", "Bearer " + details.getTokenValue());
+			request.getHeaders().add("Authorization", "Bearer " + accessToken.getTokenValue());
 
 		} catch (Exception e) {
 			log.warn(e.getClass().getSimpleName() + "Maybe no token provided?");
