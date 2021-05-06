@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): Observable<boolean> {
-    if (this.config.system.disableAuth === 'true') {
+    if (this.config.system.auth.disableAuth === 'true') {
       return Observable.of(true);
     }
 

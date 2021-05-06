@@ -8,6 +8,7 @@ import { HttpResponse } from '@angular/common/http';
 import { NgxConfigureService } from 'ngx-configure';
 import { LinkingFromEnum } from '../model/service-linking/LinkingFromEnum';
 import { AppConfig } from '../model/appConfig';
+import { NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'service-linking',
@@ -36,12 +37,13 @@ export class ServiceLinkingComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private translateService: TranslateService,
     private dialogService: NbDialogService,
-    private errorDialogService: ErrorDialogService
+    private errorDialogService: ErrorDialogService,
+    private authService: NbAuthService
   ) {
     this.operatorId = (this.configService.config as AppConfig).system.operatorId;
   }
 
-  ngOnInit(): void {
+  ngOnInit(): Promise<void> {
     const queryParams = this.route.snapshot.queryParams;
 
     if (queryParams.serviceId === '' || queryParams.surrogateId === '' || queryParams.returnUrl === '') {
@@ -72,12 +74,12 @@ export class ServiceLinkingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public startLinking(forceLinking: boolean = false): void {
+  public startLinking(forceLinking = false): void {
     if (this.linkingFrom === LinkingFromEnum.Service) void this.startLinkingFromServiceAfterOperatorLogin(forceLinking);
     else void this.startLinkingFromOperatorRedirectToServiceLogin(forceLinking);
   }
 
-  public async startLinkingFromOperatorRedirectToServiceLogin(forceLinking: boolean = false): Promise<void> {
+  public async startLinkingFromOperatorRedirectToServiceLogin(forceLinking = false): Promise<void> {
     try {
       const response: HttpResponse<unknown> = await this.service.startLinkingFromOperatorRedirectToServiceLogin(
         this.accountId,
@@ -132,7 +134,7 @@ export class ServiceLinkingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public async startLinkingFromServiceAfterOperatorLogin(forceLinking: boolean = false): Promise<void> {
+  public async startLinkingFromServiceAfterOperatorLogin(forceLinking = false): Promise<void> {
     try {
       await this.service.startLinkingFromServiceAfterOperatorLogin(
         this.accountId,

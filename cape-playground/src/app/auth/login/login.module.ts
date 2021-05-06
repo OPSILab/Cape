@@ -1,12 +1,12 @@
-import { NgModule }      from '@angular/core';
-import { CommonModule }  from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { LoginComponent } from './login.component';
-
 import { LoginRoutingModule } from './login-routing.module';
 import { NbLayoutModule, NbSidebarModule, NbCardModule, NbCheckboxModule, NbButtonModule } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
+import { LoginService } from './login.service';
+import { LoginPopupComponent } from './loginPopup/loginPopup.component';
 
 @NgModule({
   imports: [
@@ -19,10 +19,9 @@ import { TranslateModule } from '@ngx-translate/core';
     NbSidebarModule,
     NbCheckboxModule,
     NbButtonModule,
-    TranslateModule.forChild({})
+    TranslateModule.forChild({}),
   ],
-  declarations: [
-    LoginComponent
-  ]
+  declarations: [LoginComponent, LoginPopupComponent],
+  providers: [LoginService],
 })
 export class LoginModule {}

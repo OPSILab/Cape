@@ -56,8 +56,8 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
 		q.fields().include("accountInfo");
 
 		Account updatedAccount = template.findAndModify(q,
-				new Update().set("modified", ZonedDateTime.now())
-						.set("language", account.getLanguage()).set("notification", account.getNotification()),
+				new Update().set("modified", ZonedDateTime.now()).set("language", account.getLanguage())
+						.set("notification", account.getNotification()),
 				new FindAndModifyOptions().returnNew(true), Account.class);
 
 		return Optional.ofNullable(updatedAccount);
@@ -108,6 +108,26 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
 					"The Service Link Record with id: " + slrPayload.getSlrId() + " is already existing");
 
 		return Optional.of(slrPayload);
+	}
+
+	@Override
+	public Optional<Long> removeSlrPartialPayload(String accountId, String slrId)
+			throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
+
+		Query q = query(new Criteria().orOperator(where("_id").is(accountId), where("username").is(accountId)));
+
+		Account existingAccount = template.findOne(q, Account.class);
+
+		if (existingAccount == null)
+			throw new AccountNotFoundException("The Account with id: " + accountId + " was not found");
+
+		UpdateResult result = template.updateFirst(q, new Update().set("modified", ZonedDateTime.now())
+				.pull("serviceLinkRecords", where("payload._id").is(slrId)), Account.class);
+
+		if (result.getMatchedCount() == 1 && result.getModifiedCount() == 0)
+			throw new ServiceLinkRecordNotFoundException("No Service Link Record with id: " + slrId + " was found");
+
+		return Optional.of(result.getModifiedCount());
 	}
 
 	@Override

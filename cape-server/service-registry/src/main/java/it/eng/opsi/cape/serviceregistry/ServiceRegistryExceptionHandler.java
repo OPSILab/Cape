@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceNotEditableException;
 import it.eng.opsi.cape.exception.ServiceNotFoundException;
 import it.eng.opsi.cape.serviceregistry.ErrorResponse.ApiSubError;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -52,8 +54,7 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String message = "Malformed JSON request";
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, message, ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
@@ -61,21 +62,21 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(ServiceNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleServiceNotFound(ServiceNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(ServiceNotEditableException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	protected ResponseEntity<ErrorResponse> handleServiceNotEditable(ServiceNotEditableException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex));
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 			subErrors.add(new ApiValidationError(fieldError.getObjectName(), fieldError.getField(),
 					fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
 		});
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), subErrors, ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex, subErrors);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
@@ -97,7 +98,7 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -105,7 +106,7 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 	protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
@@ -113,25 +114,23 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@ExceptionHandler(value = Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	protected ResponseEntity<ErrorResponse> handleGenericError(Exception ex) {
+	protected ResponseEntity<ErrorResponse> handleErrorResponseFromRestClient(Exception ex, HttpServletRequest req) {
 
-		if (ex.getCause() instanceof IOException) {
+		if (ex instanceof RestTemplateException) {
 
-			String message = ex.getMessage();
-			if (message.contains("401 UNAUTHORIZED"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.UNAUTHORIZED, message, ex));
-			if (message.contains("404 NOT FOUND"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND,
-						ex.getCause().getCause().getMessage(), ex.getCause().getCause()));
+			ex.printStackTrace();
+			return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex,
+					((RestTemplateException) ex).getInnerError(), req.getRequestURI()));
+
 		}
-
 		ex.printStackTrace();
-		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex, req.getRequestURI()));
+
 	}
 
 	private ResponseEntity<ErrorResponse> buildResponseEntity(ErrorResponse error) {

@@ -30,6 +30,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -385,6 +386,22 @@ public class ServiceLinkingController implements IServiceLinkingController {
 				.build(matchingAccount.getUsername(), slrId, newSsr.getPayload().get_id()))).body(newSsr);
 	}
 
-	
+	/**
+	 *
+	 * Called By Service Manager to compensate failing transaction during Sessione
+	 * Linking
+	 * @throws ServiceLinkRecordAlreadyPresentException 
+	 * @throws AccountNotFoundException 
+	 */
+	@Override
+	@DeleteMapping(value = "/accounts/{accountId}/servicelinks/{slrId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+
+	public ResponseEntity<String> deletePartialSlr(@PathVariable String accountId, @PathVariable String slrId) throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
+
+//		accountRepo.removeSlrPartialPayload(accountId, slrId);
+
+		return ResponseEntity.noContent().build();
+
+	}
 
 }

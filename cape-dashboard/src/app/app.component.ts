@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     /******
      * Set either currentLocale on Local storage or locale in App config as current Translate language
      */
+    this.translateService.setDefaultLang('en');
     this.translateService.use(localStorage.getItem('currentLocale') || this.appConfig.i18n.locale);
 
     /******
@@ -53,37 +54,38 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     oauthStrategy.setOptions({
       name: 'oidc',
-      clientId: this.appConfig.system.clientId,
+      clientId: this.appConfig.system.auth.clientId,
       clientSecret: '',
-      baseEndpoint: this.appConfig.system.idmHost,
+      baseEndpoint: this.appConfig.system.auth.idmHost,
       clientAuthMethod: NbOAuth2ClientAuthMethod.NONE,
       token: {
-        endpoint: `/auth/realms/${this.appConfig.system.authRealm}/protocol/openid-connect/token`,
-        redirectUri: `${this.appConfig.system.dashUrl}/login/loginPopup`,
+        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
+        redirectUri: `${this.appConfig.system.dashboardUrl}/login/loginPopup`,
         class: OidcJWTToken,
         key: 'access_token',
       },
       authorize: {
-        endpoint: `/auth/realms/${this.appConfig.system.authRealm}/protocol/openid-connect/auth`,
+        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/auth`,
         scope: 'openid',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         state: uuidv4(),
-        redirectUri: `${this.appConfig.system.dashUrl}/login/loginPopup`,
+        redirectUri: `${this.appConfig.system.dashboardUrl}/login/loginPopup`,
         responseType: NbOAuth2ResponseType.CODE,
+        params: { aaa: 'bbb' },
       },
       redirect: {
         success: '/pages', // welcome page path
         failure: null, // stay on the same page
       },
       refresh: {
-        endpoint: `/auth/realms/${this.appConfig.system.authRealm}/protocol/openid-connect/token`,
+        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
         grantType: NbOAuth2GrantType.REFRESH_TOKEN,
       },
     });
   }
 
   onContecxtItemSelection(title: string): void {
-    if (title === this.translateService.instant('general.login.logout_button')) {
+    if (title === this.translateService.instant('login.logout_button')) {
       this.loginService.logout().catch((error) => this.errorDialogService.openErrorDialog(error));
     }
   }

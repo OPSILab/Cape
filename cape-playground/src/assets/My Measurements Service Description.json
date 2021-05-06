@@ -8,24 +8,14 @@
   "serviceDescriptionSignature": "",
   "serviceIconUrl": "http://localhost:82/cape-playground/my-measurements/favicon.ico",
   "status": "Completed",
-  "supportedProfiles": [
-    "Consenting"
-  ],
+  "supportedProfiles": ["Consenting"],
   "spatial": "ITA-Italy",
   "lifeEvent": "other",
   "businessEvent": "other",
-  "sector": [
-  "other"
-  ],
-  "type": [
-    "other"
-  ],
-  "thematicArea": [
-    "other"
-  ],
-  "language": [
-    "it","en"
-  ],
+  "sector": ["other"],
+  "type": ["other"],
+  "thematicArea": ["other"],
+  "language": ["it", "en"],
   "hasCompetentAuthority": {
     "prefLabel": "Engineering",
     "spatial": "ITA-Italy"
@@ -56,10 +46,10 @@
       "phone": "",
       "jurisdiction": "EU"
     },
-	"cert": {
-			"x5u": "",
-			"x5c": []
-		},
+    "cert": {
+      "x5u": "",
+      "x5c": []
+    },
     "serviceUrls": {
       "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
       "loginUri": "http://localhost:82/cape-playground/pages/services/my-measurements",
@@ -185,12 +175,7 @@
       "purposeName": "MyCholesterol",
       "legalBasis": "Consent",
       "purposeCategory": "AcademicResearch",
-      "processingCategories": [
-        "Copy",
-		"Store",
-		"Acquire",
-		"Collect"
-      ],
+      "processingCategories": ["Copy", "Store", "Acquire", "Collect"],
       "description": [
         {
           "locale": "en",
@@ -207,16 +192,12 @@
           "iconUrl": ""
         }
       ],
-      "requiredDatasets": [
-        "D_1"
-      ],
+      "requiredDatasets": ["D_1"],
       "storage": {
         "location": "Controller servers",
         "duration": "Business practices"
       },
-      "recipients": [
-        "Ours"
-      ],
+      "recipients": ["Ours"],
       "shareWith": [
         {
           "orgName": "Health Organization",
@@ -241,12 +222,7 @@
       "purposeName": "MyWeight",
       "legalBasis": "Consent",
       "purposeCategory": "AcademicResearch",
-      "processingCategories": [
-        "Copy",
-		"Store",
-		"Acquire",
-		"Collect"
-      ],
+      "processingCategories": ["Copy", "Store", "Acquire", "Collect"],
       "description": [
         {
           "locale": "en",
@@ -263,16 +239,12 @@
           "iconUrl": ""
         }
       ],
-      "requiredDatasets": [
-        "D_2"
-      ],
+      "requiredDatasets": ["D_2"],
       "storage": {
         "location": "Controller servers",
         "duration": "Business practices"
       },
-      "recipients": [
-        "Ours"
-      ],
+      "recipients": ["Ours"],
       "shareWith": [
         {
           "orgName": "Health Organization",

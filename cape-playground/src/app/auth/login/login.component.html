@@ -1,0 +1,121 @@
+<nb-layout>
+  <nb-layout-header fixed>
+    <div class="header-container">
+      <img class="ml-5 logo text-right" src="assets/images/app/cape-logo.png" style="height: 64px" />
+      <div class="ml-5 p-2 h2 text-right">{{ 'general.welcome' | translate }}</div>
+    </div>
+  </nb-layout-header>
+
+  <nb-layout-column class="">
+    <nb-card class="shadow" accent="info">
+      <nb-card-header class="h3 text-center">{{ 'login.select_login' | translate }}</nb-card-header>
+      <nb-card-body class="py-0">
+        <div class="row">
+          <nb-card class="col-lg-6 py-1">
+            <nb-card-header class="">
+              <h2 class="h3 mb-3 font-weight-bold text-center">Accedi con SPID</h2>
+              <p class="text-center">
+                SPID è il sistema di accesso che consente di utilizzare, con un'identità digitale unica, i servizi online della Pubblica Amministrazione e dei
+                privati accreditati.
+              </p>
+            </nb-card-header>
+            <nb-card-body class="text-center">
+              <link type="text/css" rel="stylesheet" href="https://login.agid.gov.it/saml/spid-sp-access-button/css/spid-sp-access-button.min.css" />
+              <!-- AGID - SPID IDP BUTTON LARGE "ENTRA CON SPID" * begin * -->
+              <a
+                class="italia-it-button italia-it-button-size-l button-spid"
+                spid-idp-button="#spid-idp-button-large-get"
+                aria-haspopup="true"
+                aria-expanded="false"
+                (click)="login()"
+              >
+                <span class="italia-it-button-icon"
+                  ><img
+                    src="https://login.agid.gov.it/saml/spid-sp-access-button/img/spid-ico-circle-bb.svg"
+                    onerror="this.src='spid/spid-sp-access-button/img/spid-ico-circle-bb.png'; this.onerror=null;"
+                    alt=""
+                /></span>
+                <span class="italia-it-button-text">Entra con SPID</span>
+              </a>
+            </nb-card-body>
+            <div class="">
+              <p><a target="_blank" href="https://www.spid.gov.it/">Maggiori informazioni su SPID</a></p>
+              <p><a target="_blank" href="https://www.spid.gov.it/richiedi-spid">Non hai SPID?</a></p>
+            </div>
+          </nb-card>
+
+          <nb-card class="col-lg-6 py-1">
+            <nb-card-header>
+              <h2 class="h3 mb-3 font-weight-bold text-center">{{ 'login.login_with_cape_idm' | translate }}</h2>
+              <p class="text-center">{{ 'login.login_with_cape_idm_description' | translate }}</p>
+              <br />
+            </nb-card-header>
+            <nb-card-body class="text-center">
+              <!-- CAPE BUTTON MEDIUM "ENTER WITH EIDAS" * begin * -->
+              <a
+                class="italia-it-button italia-it-button-size-l button-spid"
+                eidas-idp-button="#spid-idp-button-medium-post"
+                aria-haspopup="true"
+                aria-expanded="false"
+                (click)="login()"
+              >
+                <span class="italia-it-button-icon"
+                  ><img src="assets/images/login-logo/cape.png" onerror="this.src='assets\images\login-logo\cape.png'; this.onerror=null;" alt=""
+                /></span>
+                <span class="italia-it-button-text">{{ 'login.login_with_cape_idm' | translate }}</span>
+              </a>
+            </nb-card-body>
+            <div class="mb-2">
+              <p>
+                <a target="_blank" href="https://www.keycloak.org/">{{ 'login.keycloak_idm_link' | translate }}</a>
+              </p>
+            </div>
+          </nb-card>
+        </div>
+
+        <div class="row">
+          <nb-card class="col-lg-6 py-1">
+            <nb-card-header>
+              <h2 class="h3 mb-3 font-weight-bold text-center">{{ 'login.login_with_eidas' | translate }}</h2>
+              <p class="text-center">{{ 'login.login_with_eidas_description' | translate }}</p>
+            </nb-card-header>
+            <nb-card-body class="text-center">
+              <!-- EIDAS IDP BUTTON MEDIUM "ENTER WITH EIDAS" * begin * -->
+              <a
+                href="#"
+                class="italia-it-button italia-it-button-size-l button-spid"
+                eidas-idp-button="#spid-idp-button-medium-post"
+                aria-haspopup="false"
+                aria-expanded="false"
+              >
+                <span class="italia-it-button-icon"
+                  ><img
+                    src="assets\images\login-logo\ficep-it-eidas-ybw.svg"
+                    onerror="this.src='assets\images\login-logo\ficep-it-eidas-ybw.png'; this.onerror=null;"
+                    alt=""
+                /></span>
+                <span class="italia-it-button-text">{{ 'login.login_with_eidas' | translate }}</span>
+              </a>
+            </nb-card-body>
+            <div class="mb-2">
+              <p>
+                <a target="_blank" href="https://www.eid.gov.it/">{{ 'login.eidas_link' | translate }}</a>
+              </p>
+            </div>
+          </nb-card>
+
+          <nb-card class="col-lg-6 py-1">
+            <nb-card-header class="mb-2">
+              <h2 class="h3 mb-3 font-weight-bold text-center">Accedi con CIE</h2>
+              <p class="text-center">Se sei in possesso di una CIE puoi autenticarti ai servizi online con diverse modalità</p>
+            </nb-card-header>
+
+            <nb-card-body class="mb-4 text-center">
+              <a href="#"> <img src="assets\images\login-logo\entra-con-cie-300x60.png" alt="" /></a>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>

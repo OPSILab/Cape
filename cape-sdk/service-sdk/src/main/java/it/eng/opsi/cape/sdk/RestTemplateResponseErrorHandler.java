@@ -22,21 +22,26 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.client.RestClientException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.eng.opsi.cape.exception.RestTemplateException;
 
-
-
+@Service
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
 	private ApplicationContext applicationContext;
@@ -47,8 +52,6 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 	}
 
 	public RestTemplateResponseErrorHandler() {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -59,53 +62,72 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 	}
 
 	@Override
-	public void handleError(ClientHttpResponse httpResponse) throws IOException {
+	public void handleError(ClientHttpResponse response) throws IOException {
+
+	}
+
+	@Override
+	public void handleError(URI url, HttpMethod method, ClientHttpResponse httpResponse) throws IOException {
 
 		InputStream bodyStream = httpResponse.getBody();
 		String body = new BufferedReader(new InputStreamReader(bodyStream)).lines().collect(Collectors.joining("\n"));
 
 		ObjectMapper mapper = applicationContext.getBean(ObjectMapper.class);
+//
+//		if (httpResponse.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR) {
+//
+//			throw new IOException("There was an error while calling external API/URI: " + body);
+//
+//		} else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
 
-		if (httpResponse.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR) {
+		Exception error = null;
+		ErrorResponse errorResponse = null;
+		try {
 
-			throw new IOException("There was an error while calling external API/URI: " + body);
-
-		} else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
-
-
-			ErrorResponse error = null;
 			if (httpResponse.getStatusCode().equals(HttpStatus.UNAUTHORIZED))
-				error = new ErrorResponse(HttpStatus.UNAUTHORIZED, body,
+				errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED,
 						new Exception("Invalid token: access token is invalid"));
 			else
-				error = mapper.readValue(body, ErrorResponse.class);
-			Exception cause = null;
+				errorResponse = mapper.readValue(body, ErrorResponse.class);
 
-			try {
-				Class<?> clazz = Class.forName(error.getCause());
+			Class<?> clazz = Class.forName(errorResponse.getError());
+			if (!clazz.getName().equals("org.apache.http.conn.HttpHostConnectException")) {
+
 				Constructor<?> constructor = clazz.getConstructor(String.class);
-				cause = (Exception) constructor.newInstance(error.getMessage());
-
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException
-					| SecurityException | IllegalArgumentException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				cause = new Exception(error.getMessage());
-			}
-			switch (httpResponse.getStatusCode()) {
-
-			case NOT_FOUND:
-				throw new IOException("The external API/URI returned 404 NOT FOUND", cause);
-			case BAD_REQUEST:
-				throw new IOException("The external API/URI returned 400 BAD REQUEST", cause);
-			case CONFLICT:
-				throw new IOException("The external API/URI returned 409 CONFLICT", cause);
-			default:
-				throw new IOException("There was an error with status: " + httpResponse.getStatusCode()
-						+ " while calling external API/URI: " + body);
+				error = (Exception) constructor.newInstance(errorResponse.getMessage());
+			} else {
+				error = new ResourceAccessException(errorResponse.getMessage());
 			}
 
+		} catch (ClassNotFoundException | SecurityException | IllegalArgumentException | NoSuchMethodException
+				| InvocationTargetException | InstantiationException | IllegalAccessException e) {
+
+			// Unknown Cause class throw generic Exception with message from Response body
+			e.printStackTrace();
+			error = new Exception(errorResponse.getMessage());
+		} catch (JsonProcessingException e) {
+
+			// Unable to map to ErrorResponse, unknown Response body from Rest Client, throw
+			// generic Exception with generic message (created by default case in the switch
+			// below)
+			e.printStackTrace();
 		}
+//
+		throw new RestTemplateException(HttpStatus.valueOf(errorResponse.getStatus()), error, errorResponse,
+				errorResponse.getPath());
+//throw new IOException(errorResponse.getMessage(), error);
+//		switch (httpResponse.getStatusCode()) {
+//
+//		case NOT_FOUND:
+//			throw new RestClientException("The external API/URI returned 404 NOT FOUND", cause);
+//		case BAD_REQUEST:
+//			throw new RestClientException("The external API/URI returned 400 BAD REQUEST", cause);
+//		case CONFLICT:
+//			throw new RestClientException("The external API/URI returned 409 CONFLICT", cause);
+//		default:
+//			throw new RestClientException("The external API/URI returned " + httpResponse.getStatusCode(), cause);
+//		}
+
 	}
 
 }

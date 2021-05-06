@@ -14,11 +14,7 @@ export class ServiceLinkingService {
     this.serviceManagerApiPath = this.config.system.serviceManagerUrl;
   }
 
-  public startLinkingFromOperatorRedirectToServiceLogin(
-    accountId: string,
-    serviceId: string,
-    forceLinking: boolean = false
-  ): Promise<HttpResponse<unknown>> {
+  public startLinkingFromOperatorRedirectToServiceLogin(accountId: string, serviceId: string, forceLinking = false): Promise<HttpResponse<unknown>> {
     return this.http
       .get(`${this.serviceManagerApiPath}/api/v2/slr/account/${accountId}/service/${serviceId}?forceLinking=${forceLinking.toString()}`, {
         observe: 'response',
@@ -32,7 +28,7 @@ export class ServiceLinkingService {
     serviceId: string,
     returnUrl: string,
     linkingFrom: LinkingFromEnum,
-    forceLinking: boolean = false
+    forceLinking = false
   ): Promise<HttpResponse<unknown>> {
     return this.http
       .get(

@@ -144,6 +144,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
                 this.cdr.detectChanges();
               });
+
               await this.capeService.linkWithOperator(
                 this.sdkUrl,
                 this.locale,

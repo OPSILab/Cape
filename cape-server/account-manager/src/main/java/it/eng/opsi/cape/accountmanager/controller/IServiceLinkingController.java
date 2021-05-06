@@ -59,6 +59,8 @@ public interface IServiceLinkingController {
 			SourceServiceLinkInitRequest request) throws SessionNotFoundException, AccountManagerException,
 			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException;
 
+	public abstract ResponseEntity<String> deletePartialSlr(String accountId, String slrId) throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
+
 	public abstract ResponseEntity<AccountSignSlrResponse> accountSignSlr(String accountId, String slrId,
 			AccountSignSlrRequest request) throws SessionNotFoundException, AccountManagerException, JOSEException,
 			AccountNotFoundException, JsonProcessingException, SessionStateNotAllowedException;
@@ -75,6 +77,5 @@ public interface IServiceLinkingController {
 	public abstract ResponseEntity<ServiceLinkStatusRecordSigned> storeSignedServiceLinkStatus(String surrogateId,
 			String slrId, @Valid ServiceLinkStatusRecordSigned newSsr)
 			throws ServiceLinkRecordNotFoundException, AccountNotFoundException, JsonProcessingException, JOSEException;
-
 
 }

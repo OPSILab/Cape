@@ -1,14 +1,12 @@
 <nb-card class="">
   <nb-card-header>
-    <div class="row h3 justify-content-center"> {{ 'general.services.mymeasurements.welcome' | translate: { 'name' : accountId } }} </div>
-    <div class="row justify-content-center"><img src="assets\img\my-measurements.jpg"></div>
-
-
+    <div class="row h3 justify-content-center">{{ 'general.services.mymeasurements.welcome' | translate: { name: accountId } }}</div>
+    <div class="row justify-content-center"><img src="assets\images\my-measurements.jpg" /></div>
   </nb-card-header>
   <nb-card-body>
     <div class="row justify-content-center">
       <div class="col-md-auto justify-content-center">
-        <h5> {{ 'general.services.selectPurpose' | translate }} </h5>
+        <h5>{{ 'general.services.selectPurpose' | translate }}</h5>
       </div>
     </div>
     <div class="row justify-content-center">
@@ -20,5 +18,7 @@
       </div>
     </div>
   </nb-card-body>
-  <nb-card-footer class="d-flex justify-content-center"><button nbButton status="primary" (click)="onClickGo()">{{ 'general.services.goButton' | translate }}</button></nb-card-footer>
+  <nb-card-footer class="d-flex justify-content-center"
+    ><button nbButton status="primary" (click)="onClickGo()">{{ 'general.services.goButton' | translate }}</button></nb-card-footer
+  >
 </nb-card>

@@ -37,6 +37,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
 import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
@@ -46,9 +47,10 @@ import it.eng.opsi.cape.exception.SessionStateNotAllowedException;
 import it.eng.opsi.cape.servicemanager.ErrorResponse.ApiSubError;
 import it.eng.opsi.cape.servicemanager.ErrorResponse.ApiValidationError;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -59,7 +61,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 
 	}
@@ -69,7 +71,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String message = "Malformed JSON request";
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, message, ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
@@ -77,50 +79,52 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(ServiceDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceDescriptionNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(SessionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleSessionNotFound(SessionNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(ServiceLinkRecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleSlrNotFound(ServiceLinkRecordNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(AccountNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
 	}
 
 	@ExceptionHandler(ConflictingSessionFoundException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ConflictingSessionFoundException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT,
-				ex.getMessage() + " - Current State: " + ex.getCurrentState(), ex));
+//		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT,
+//				ex.getMessage() + " - Current State: " + ex.getCurrentState(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex));
+
 	}
 
 	@ExceptionHandler(ServiceLinkStatusConflictingException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ServiceLinkStatusConflictingException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex));
 	}
 
 	@ExceptionHandler(ServiceLinkingRedirectUriMismatchException.class)
@@ -128,7 +132,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	protected ResponseEntity<ErrorResponse> ServiceLinkingRedirectUriMismatchException(
 			ServiceLinkingRedirectUriMismatchException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@Override
@@ -142,7 +146,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 			subErrors.add(new ApiValidationError(fieldError.getObjectName(), fieldError.getField(),
 					fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
 		});
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), subErrors, ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex, subErrors);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
@@ -157,7 +161,7 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 			subErrors.add(new ApiValidationError(fieldError.getObjectName(), fieldError.getField(),
 					fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
 		});
-		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), subErrors, ex);
+		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex, subErrors);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 
 	}
@@ -166,46 +170,37 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@ExceptionHandler(SessionStateNotAllowedException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<ErrorResponse> handleSessionStateNotAllowed(SessionStateNotAllowedException ex) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	@ExceptionHandler(value = Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	protected ResponseEntity<ErrorResponse> handleGenericError(Exception ex) {
+	protected ResponseEntity<ErrorResponse> handleErrorResponseFromRestClient(Exception ex, HttpServletRequest req) {
 
-		if (ex.getCause() instanceof IOException) {
+		if (ex instanceof RestTemplateException) {
 
-			String message = ex.getMessage();
-			if (message.contains("401 UNAUTHORIZED"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.UNAUTHORIZED, message, ex));
-			if (message.contains("404 NOT FOUND"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND,
-						ex.getCause().getCause().getMessage(), ex.getCause().getCause()));
-			if (message.contains("400 BAD REQUEST"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST,
-						ex.getCause().getCause().getMessage(), ex.getCause().getCause()));
-			if (message.contains("409 CONFLICT"))
-				return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex.getCause().getCause().getMessage(),
-						ex.getCause().getCause()));
+			ex.printStackTrace();
+			return buildResponseEntity(new ErrorResponse(((RestTemplateException) ex).getStatusCode(), ex,
+					((RestTemplateException) ex).getInnerError(), req.getRequestURI()));
 
 		}
-
 		ex.printStackTrace();
-		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex, req.getRequestURI()));
+
 	}
 
 	private ResponseEntity<ErrorResponse> buildResponseEntity(ErrorResponse error) {

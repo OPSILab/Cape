@@ -1,0 +1,42 @@
+@import '../../../themes.scss';
+
+@include nb-install-component() {
+  .login-background {
+    background-color: #f5f5f5;
+  }
+
+  .card-badge {
+    background-color: #fefefe;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    width: auto;
+    justify-content: center !important;
+
+    .logo {
+      padding: 0 1.25rem;
+      font-size: 1.75vw;
+      @include nb-ltr(border-right, 3px solid nb-theme(divider-color));
+      @include nb-rtl(border-left, 3px solid nb-theme(divider-color));
+      white-space: nowrap;
+      text-decoration: none;
+    }
+  }
+
+  .cm-login-link:hover {
+    text-decoration: none;
+  }
+
+  .signin-text-login {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}

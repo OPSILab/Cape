@@ -4,27 +4,6 @@
     "home": "Home",
     "error": "Errore",
     "refresh": "Aggiorna",
-    "login": {
-      "enter_button": "Entra",
-      "logout_button": "Disconnetti",
-      "select_login": "Seleziona il tuo gestore di identità digitale",
-      "login_with_cape_idm": "Accedi con CaPe",
-      "login_with_cape_idm_description": "CaPe utilizza nativamente Keyrock IdM di FIWARE",
-      "keyrock_idm_link": "Login con Fiware Keyrock",
-      "login_with_eidas": "Accedi con eIDAS",
-      "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
-      "eidas_link":"Sign in with a digital identity from another European Country",
-      "loginPopup": {
-        "authorize_account_data": "Autorizzi ad usare i dati dal tuo account?",
-        "dont_ask_again": "Non chiedermelo più",
-        "authorize": "Autorizzo",
-        "do_not_authorize": "Non autorizzo",
-        "no_cape_account": "Spiacente! Nessun CaPe account associato a te! Crearlo?",
-        "error_message": "E' avvenuto un errore contattando Cape!",
-        "cancel_button": "Annulla",
-        "create_button": "Crea"
-      }
-    },
     "services": {
       "welcome": " Ciao {{name}}! Benvenuto su Cape Services Playground!",
       "no_name_welcome": "Benvenuto su Cape Services Playground!",
@@ -62,6 +41,21 @@
           "cape_consent_given": "Il servizio è associato al tuo Account CaPe e hai dato il Consenso a fornire i dati delle misurazioni ad un servizio terzo (es. My Wellness)"
         }
       }
+    }
+  },
+  "login": {
+    "enter_button": "Entra",
+    "logout_button": "Disconnetti",
+    "logout_error": "E' avvenuto un errore durante il logout",
+    "select_login": "Seleziona il tuo gestore di identità digitale",
+    "login_with_cape_idm": "Accedi con CaPe",
+    "login_with_cape_idm_description": "CaPe utilizza nativamente Keycloak IdM",
+    "keycloak_idm_link": "Login con Keycloak IdM",
+    "login_with_eidas": "Accedi con eIDAS",
+    "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
+    "eidas_link": "Accedere con un'identità digitale da altro Paese Europeo",
+    "loginPopup": {
+      "error_message": "E' avvenuto un errore contattando CaPe!"
     }
   }
 }

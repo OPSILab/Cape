@@ -6,25 +6,25 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-mymeasurements',
   templateUrl: './mymeasurements.component.html',
-  styleUrls: ['./mymeasurements.component.scss']
+  styleUrls: ['./mymeasurements.component.scss'],
 })
 export class MyMeasurementsComponent implements OnInit {
-
   accountId: string;
   config: any;
   locale: string;
 
   selectedService: string;
 
-  constructor(private configService: NgxConfigureService, private router: Router, private activatedRoute: ActivatedRoute,
-    private translateService: TranslateService) {
-
+  constructor(
+    private configService: NgxConfigureService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private translateService: TranslateService
+  ) {
     this.config = configService.config;
   }
 
   ngOnInit() {
-
-
     this.accountId = localStorage.getItem('accountId');
     const queryParams = this.activatedRoute.snapshot.queryParams;
     this.locale = queryParams.locale || this.config.i18n.locale; // TODO default value taken from User language preferences;
@@ -33,9 +33,7 @@ export class MyMeasurementsComponent implements OnInit {
   }
 
   onClickGo = () => {
-
     switch (this.selectedService) {
-
       case 'cholesterol':
         this.router.navigate(['cholesterol'], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' });
         break;
@@ -45,8 +43,6 @@ export class MyMeasurementsComponent implements OnInit {
         break;
       default:
         break;
-
     }
   };
-
 }

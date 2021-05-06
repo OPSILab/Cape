@@ -5,20 +5,11 @@ import { ErrorDialogService } from './error-dialog.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
-
-@NgModule(
-  {
-    imports: [
-      CommonModule,
-      NbCardModule,
-      NbButtonModule,
-      TranslateModule.forChild({})
-    ],
-    declarations: [ErrorDialogComponent],
-    exports: [ErrorDialogComponent],
-    entryComponents: [
-      ErrorDialogComponent
-    ],
-    providers: [ErrorDialogService]
-  }
-) export class ErrorDialogModule { }
+@NgModule({
+  imports: [CommonModule, NbCardModule, NbButtonModule, TranslateModule.forChild({})],
+  declarations: [ErrorDialogComponent],
+  exports: [ErrorDialogComponent],
+  entryComponents: [ErrorDialogComponent],
+  providers: [ErrorDialogService],
+})
+export class ErrorDialogModule {}

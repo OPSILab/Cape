@@ -2,7 +2,7 @@ import { Component, ViewChild, TemplateRef, OnDestroy, AfterViewInit } from '@an
 import { NgxConfigureService } from 'ngx-configure';
 
 import { LoginService } from '../login.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Params, RouterStateSnapshot } from '@angular/router';
 import { AppConfig } from '../../../model/appConfig';
 import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { Subject } from 'rxjs';
@@ -17,7 +17,7 @@ import { ErrorResponse } from '../../../model/errorResponse';
   templateUrl: './loginPopup.component.html',
 })
 export class LoginPopupComponent implements AfterViewInit, OnDestroy {
-  dashUrl: string;
+  dashboardUrl: string;
   locale: string;
 
   @ViewChild('noAccountDialog', { static: false })
@@ -38,14 +38,16 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private dialogService: NbDialogService
   ) {
-    this.dashUrl = (this.configService.config as AppConfig).system.dashUrl;
+    this.dashboardUrl = (this.configService.config as AppConfig).system.dashboardUrl;
     this.locale = (this.configService.config as AppConfig).i18n.locale;
     this.queryParams = this.activatedRoute.snapshot.queryParams;
   }
 
   async ngAfterViewInit(): Promise<void> {
     if (!(await this.authService.isAuthenticatedOrRefresh().toPromise())) {
-      const authResult = await this.authService.authenticate((this.configService.config as AppConfig).system.authProfile).toPromise();
+      if (!(await this.authService.getToken().toPromise()).isValid() && !this.queryParams['code'])
+        sessionStorage.setItem('queryParamsBeforeLogin', JSON.stringify(this.queryParams));
+      const authResult = await this.authService.authenticate((this.configService.config as AppConfig).system.auth.authProfile).toPromise();
 
       if (authResult.isSuccess() && authResult.getToken()?.isValid()) {
         this.completeLogin(authResult.getToken() as OidcJWTToken);
@@ -88,17 +90,19 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
   };
 
   getCapeAccount = async (): Promise<void> => {
-    const queryParams = this.activatedRoute.snapshot.queryParams;
+    // const queryParams = this.activatedRoute.snapshot.queryParams;
 
     try {
       const account: Account = await this.accountService.getAccount(localStorage.getItem('accountId'));
       localStorage.setItem('currentLocale', account.language);
-      const redirectAfterLogin = queryParams.redirectAfterLogin as string;
+      const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
+      sessionStorage.removeItem('queryParamsBeforeLogin');
+      const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
 
       if (redirectAfterLogin) {
-        const queryString = this.printQueryParamsString(queryParams);
+        const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        window.opener.document.location.href = this.dashUrl + redirectAfterLogin + (queryString ? queryString : '');
+        window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
         window.close();
         //   this.router.navigate([redirectAfterLogin], { relativeTo: this.activatedRoute, queryParams: queryParams });
       } else this.closeLoginPopup();
@@ -125,11 +129,14 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     try {
       await this.accountService.createAccount(account);
 
-      const redirectAfterLogin = this.queryParams.redirectAfterLogin as string;
+      const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
+      const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
+      sessionStorage.removeItem('queryParamsBeforeLogin');
+
       if (redirectAfterLogin) {
-        const queryString = this.printQueryParamsString(this.queryParams);
+        const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        window.opener.document.location.href = this.dashUrl + redirectAfterLogin + (queryString ? queryString : '');
+        window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
         window.close();
       } else this.closeLoginPopup();
     } catch (err) {
@@ -151,7 +158,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     }
   };
 
-  printQueryParamsString = (queryParams: Params): string => {
+  printQueryParamsString = (queryParams: Record<string, string>): string => {
     if (Object.keys(queryParams).length > 0)
       return Object.entries<string>(queryParams).reduce((acc, entry) => {
         return `${acc}&${entry[0]}=${entry[1]}`;
@@ -161,7 +168,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
 
   closeLoginPopup = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    window.opener.document.location.href = this.dashUrl;
+    window.opener.document.location.href = this.dashboardUrl;
     window.close();
   };
 

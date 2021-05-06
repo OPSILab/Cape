@@ -11,7 +11,7 @@ export class LoginService {
   private authProfile: string;
   private authRealm: string;
   private idmHost: string;
-  private dashUrl: string;
+  private dashboardUrl: string;
 
   constructor(
     private configService: NgxConfigureService,
@@ -20,10 +20,10 @@ export class LoginService {
     private translateService: TranslateService
   ) {
     this.environment = (this.configService.config as AppConfig).system;
-    this.idmHost = this.environment.idmHost;
-    this.dashUrl = this.environment.dashUrl;
-    this.authProfile = this.environment.authProfile;
-    this.authRealm = this.environment.authRealm;
+    this.idmHost = this.environment.auth.idmHost;
+    this.dashboardUrl = this.environment.dashboardUrl;
+    this.authProfile = this.environment.auth.authProfile;
+    this.authRealm = this.environment.auth.authRealm;
   }
 
   logout = async (): Promise<void> => {
@@ -32,7 +32,7 @@ export class LoginService {
 
     const authResult = await this.authService.logout(this.authProfile).toPromise();
     if (authResult.isSuccess()) {
-      window.location.href = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashUrl}/login`;
+      window.location.href = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashboardUrl}/login`;
     } else {
       window.alert(this.translateService.instant('login.logout_error'));
     }

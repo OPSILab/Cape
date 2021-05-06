@@ -205,6 +205,18 @@ public class ClientService {
 	}
 
 	/*
+	 * callDeletePartialSlr Service Manager ---> Account Manager
+	 */
+	public void callDeletePartialSlr(String accountId, String slrId) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+
+		restTemplate.delete(accountManagerHost + "/api/v2/accounts/{account_id}/servicelinks/{slr_id}", accountId,
+				slrId);
+
+	}
+
+	/*
 	 * callAccountSignSlr Service Manager ---> Account Manager
 	 */
 	public AccountSignSlrResponse callAccountSignSlr(String accountId, String slrId,
@@ -472,29 +484,26 @@ public class ClientService {
 	/*
 	 * callChangeConsentStatus Service Manager ---> Consent Manager
 	 */
-	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String accountId, String slrId,
-			String crId, ConsentRecordPayload existingCrPayload, ConsentRecordStatusEnum newStatus,
+	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String accountId, String slrId, String crId,
+			ConsentRecordPayload existingCrPayload, ConsentRecordStatusEnum newStatus,
 			ChangeConsentStatusRequestFrom requestFrom) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
-		ResponseEntity<ConsentRecordSigned> response = restTemplate
-				.exchange(
-						RequestEntity.post(UriComponentsBuilder
-								.fromHttpUrl(consentManagerHost
-										+ "/api/v2/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses")
-								.build(accountId, slrId, crId))
-								.body(ChangeConsentStatusRequest.builder()
-										.resourceSet(
-												existingCrPayload.getCommonPart().getRsDescription().getResourceSet())
-										.status(newStatus)
-										.usageRules(existingCrPayload.getCommonPart().getRole()
-												.equals(ConsentRecordRoleEnum.SINK)
-														? ((ConsentRecordSinkRoleSpecificPart) existingCrPayload
-																.getRoleSpecificPart()).getUsageRules()
-														: null)
-										.requestFrom(requestFrom).build()),
-						ConsentRecordSigned.class);
+		ResponseEntity<ConsentRecordSigned> response = restTemplate.exchange(RequestEntity
+				.post(UriComponentsBuilder
+						.fromHttpUrl(consentManagerHost
+								+ "/api/v2/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses")
+						.build(accountId, slrId, crId))
+				.body(ChangeConsentStatusRequest.builder()
+						.resourceSet(existingCrPayload.getCommonPart().getRsDescription().getResourceSet())
+						.status(newStatus)
+						.usageRules(existingCrPayload.getCommonPart().getRole().equals(ConsentRecordRoleEnum.SINK)
+								? ((ConsentRecordSinkRoleSpecificPart) existingCrPayload.getRoleSpecificPart())
+										.getUsageRules()
+								: null)
+						.requestFrom(requestFrom).build()),
+				ConsentRecordSigned.class);
 
 		HttpStatus status = response.getStatusCode();
 		if (!status.is2xxSuccessful())

@@ -6,25 +6,25 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-mywellness',
   templateUrl: './mywellness.component.html',
-  styleUrls: ['./mywellness.component.scss']
+  styleUrls: ['./mywellness.component.scss'],
 })
 export class MyWellnessComponent implements OnInit {
-
   accountId: string;
   config: any;
   locale: string;
 
   selectedService: string;
 
-  constructor(private configService: NgxConfigureService, private router: Router, private activatedRoute: ActivatedRoute,
-    private translateService: TranslateService) {
-
+  constructor(
+    private configService: NgxConfigureService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private translateService: TranslateService
+  ) {
     this.config = configService.config;
   }
 
   ngOnInit() {
-
-
     this.accountId = localStorage.getItem('accountId');
     const queryParams = this.activatedRoute.snapshot.queryParams;
     this.locale = queryParams.locale || this.config.i18n.locale;
@@ -33,9 +33,7 @@ export class MyWellnessComponent implements OnInit {
   }
 
   onClickGo = () => {
-
     switch (this.selectedService) {
-
       case 'cholesterol':
         this.router.navigate(['cholesterol'], { relativeTo: this.activatedRoute, queryParamsHandling: 'preserve' });
         break;
@@ -45,8 +43,6 @@ export class MyWellnessComponent implements OnInit {
         break;
       default:
         break;
-
     }
   };
-
 }

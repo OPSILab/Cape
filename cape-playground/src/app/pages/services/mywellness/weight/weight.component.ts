@@ -3,16 +3,14 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-weight',
   templateUrl: './weight.component.html',
-  styleUrls: ['./weight.component.scss']
+  styleUrls: ['./weight.component.scss'],
 })
 export class WeightComponent implements OnInit {
-
   accountId: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.accountId = localStorage.getItem('accountId');
   }
-
 }

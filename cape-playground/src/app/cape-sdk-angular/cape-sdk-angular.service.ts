@@ -53,7 +53,7 @@ export interface ConsentRecordEvent {
 export class CapeSdkAngularService {
   private registeredSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
   public isRegisteredService$ = this.registeredSubject.asObservable();
-  private linkSubject: BehaviorSubject<ServiceLinkEvent> = new BehaviorSubject<ServiceLinkEvent>(undefined);
+  private linkSubject: Subject<ServiceLinkEvent> = new Subject<ServiceLinkEvent>();
   public serviceLinkStatus$ = this.linkSubject.asObservable();
   private consentSubject: BehaviorSubject<ConsentRecordEvent> = new BehaviorSubject<ConsentRecordEvent>(undefined);
   public consentRecordStatus$ = this.consentSubject.asObservable();
@@ -419,7 +419,7 @@ export class CapeSdkAngularService {
 
   public emitServiceLinkEvent(event: ServiceLinkEvent): SlStatusEnum {
     this.linkSubject.next(event);
-    return this.linkSubject.getValue().status;
+    return event.status;
   }
 
   public getRegisteredService(sdkUrl: string, serviceId: string): Promise<ServiceEntry> {

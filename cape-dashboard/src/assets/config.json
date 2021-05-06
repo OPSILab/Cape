@@ -4,18 +4,20 @@
   },
   "system": {
     "operatorId": "cape",
-    "dashUrl": "http://localhost/cape-dashboard",
-    "idmHost": "https://www.cape-suite.eu",
-    "clientId": "cape-server",
+    "dashboardUrl": "http://localhost/cape-dashboard",
     "accountUrl": "http://localhost:8080/account-manager",
     "serviceManagerUrl": "http://localhost:8082/service-manager",
     "auditLogUrl": "http://localhost:8081/auditlog-manager",
     "consentManagerUrl": "http://localhost:8083/consent-manager",
-    "disableAuth": "false",
-    "authProfile": "oidc",
-    "authRealm": "Cape"
+    "auth": {
+      "idmHost": "https://www.cape-suite.eu",
+      "clientId": "cape-server",
+      "disableAuth": "false",
+      "authProfile": "oidc",
+      "authRealm": "Cape"
+    }
   },
   "i18n": {
-    "locale": "en"
+    "locale": "it"
   }
 }

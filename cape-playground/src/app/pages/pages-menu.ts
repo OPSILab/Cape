@@ -8,11 +8,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'My Wellness Service',
     icon: 'grid-outline',
-    link: '/pages/services/my-wellness'
+    link: '/pages/services/my-wellness',
   },
   {
     title: 'My Measurements Service',
     icon: 'grid-outline',
-    link: '/pages/services/my-measurements'
-  }
+    link: '/pages/services/my-measurements',
+  },
 ];

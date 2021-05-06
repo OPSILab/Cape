@@ -1,304 +1,275 @@
 {
-	"serviceId": "MYW20",
-	"name": "My Wellness",
-	"identifier": "http://localhost:82/cape-playground/pages/services/my-wellness",
-	"issued": "2020-18-06T13:48:00Z",
-	"createdByUserId": "Cape Developers",
-	"serviceDescriptionVersion": "1.0",
-	"serviceDescriptionSignature": "",
-	"serviceIconUrl": "http://localhost:82/cape-playground/my-wellness/favicon.ico",
-	"status": "Completed",
-	"supportedProfiles": [
-		"Consenting"
-	],
-	"spatial": "ITA-Italy",
-	"lifeEvent": "other",
-	"businessEvent": "other",
-	"sector": [
-		"other"
-	],
-	"type": [
-		"other"
-	],
-	"thematicArea": [
-		"other"
-	],
-	"language": [
-		"it",
-		"en"
-	],
-	"hasCompetentAuthority": {
-		"prefLabel": "Engineering",
-		"spatial": "ITA-Italy"
-	},
-	"humanReadableDescription": [
-		{
-			"locale": "en",
-			"description": "The My Wellness Service provides useful suggestions about your diet and workouts, based on your hystorical cholesterol and body weight trends. These measurements will be retrieved from a thir party service, called My Measurements.",
-			"keywords": []
-		},
-		{
-			"locale": "it",
-			"description": "Il Servizio My Wellness fornisce utili suggerimenti sulla tua dieta e i workouts, basati sull'andamento storico del tuo colesterolo e peso corporeo. Tali misurazioni verranno recuperate da un servizio terzo, chiamato My Measurements.",
-			"keywords": []
-		}
-	],
-	"serviceInstance": {
-		"serviceProvider": {
-			"businessId": "ENG",
-			"name": "Engineering",
-			"address1": "",
-			"address2": "",
-			"postalcode": "",
-			"city": "",
-			"state": "",
-			"country": "",
-			"email": "",
-			"phone": "",
-			"jurisdiction": "EU"
-		},
-		"cert": {
-			"x5u": "",
-			"x5c": []
-		},
-		"serviceUrls": {
-			"libraryDomain": "http://service-sdk:8085/cape-service-sdk",
-			"loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
-			"linkingRedirectUri": "http://localhost:82/cape-playground",
-			"objectionUri": "",
-			"notificationUri": ""
-		},
-		"dataController": {
-			"piiController": "John Doe",
-			"onBehalf": false,
-			"org": "ENG",
-			"contact": "",
-			"address": "",
-			"email": "johndoe@example.com",
-			"phone": "+39222222",
-			"operatorName": "John Doe"
-		}
-	},
-	"isDescribedAt": [
-		{
-			"datasetId": "D_1",
-			"description": [
-				{
-					"locale": "en",
-					"description": "This dataset represents data used for the MyCholesterol purpose",
-					"keyword": []
-				},
-				{
-					"locale": "it",
-					"description": "Questo dataset rappresenta i dati utilizzati per il purpose MyCholesterol",
-					"keyword": []
-				}
-			],
-			"datasetSchema": {
-				"context": "",
-				"type": "",
-				"id": ""
-			},
-			"dataStructureSpecification": "",
-			"distribution": {
-				"distributionId": "",
-				"accessUrl": "",
-				"description": [],
-				"format": ""
-			},
-			"dataMapping": [
-				{
-					"property": "sex",
-					"conceptId": "personal_details_sex",
-					"name": "Gender",
-					"type": "text",
-					"required": false
-				},
-				{
-					"property": "cholesterol",
-					"conceptId": "cholesterol_total",
-					"name": "Blood Cholesterol",
-					"type": "text",
-					"required": true
-				},
-				{
-					"property": "age",
-					"conceptId": "personal_details_age",
-					"name": "Age",
-					"type": "text",
-					"required": false
-				}
-			]
-		},
-		{
-			"datasetId": "D_2",
-			"description": [
-				{
-					"locale": "en",
-					"description": "This dataset represents data used for the MyWeight purpose",
-					"keyword": []
-				},
-				{
-					"locale": "it",
-					"description": "Questo dataset rappresenta i dati utilizzati per il purpose MyWeight",
-					"keyword": []
-				}
-			],
-			"datasetSchema": {
-				"context": "",
-				"type": "",
-				"id": ""
-			},
-			"dataStructureSpecification": "",
-			"distribution": {
-				"distributionId": "",
-				"accessUrl": "",
-				"description": [],
-				"format": ""
-			},
-			"dataMapping": [
-				{
-					"property": "sex",
-					"conceptId": "personal_details_sex",
-					"name": "Gender",
-					"type": "text",
-					"required": false
-				},
-				{
-					"property": "weight",
-					"conceptId": "personal_details_body_weight",
-					"name": "Body Weight",
-					"type": "text",
-					"required": true
-				},
-				{
-					"property": "age",
-					"conceptId": "personal_details_age",
-					"name": "Age",
-					"type": "text",
-					"required": false
-				}
-			]
-		}
-	],
-	"processingBases": [
-		{
-			"purposeId": "1",
-			"purposeName": "MyCholesterol",
-			"legalBasis": "Consent",
-			"purposeCategory": "CommercialInterest",
-			"processingCategories": [
-			   "Copy",
-			   "Analyse",
-			   "Profiling",
-			   "Store"
-			],
-			"description": [
-				{
-					"locale": "en",
-					"title": "MyCholesterol",
-					"description": "This purpose enables to visualize your customized diet programs, based on the historical measurements of your blood cholesterol, in addition to your age and gender. These measurements will be retrieved from a third party service, called MyMeasure.",
-					"descriptionUrl": "",
-					"iconUrl": ""
-				},
-				{
-					"locale": "it",
-					"title": "MyCholesterol",
-					"description": "Questo purpose permette di visualizzare dei programmi di dieta personalizzati, basati sullo storico delle misurazioni del tuo colesterolo nel sangue, oltre alla tua età e sesso. Tali misurazioni verrranno recuperate da un servizio terzo, chiamato MyMeasure.",
-					"descriptionUrl": "",
-					"iconUrl": ""
-				}
-			],
-			"requiredDatasets": [
-				"D_1"
-			],
-			"storage": {
-				"location": "Controller servers",
-				"duration": "Business practices"
-			},
-			"recipients": [
-				"Ours"
-			],
-			"shareWith": [
-				{
-					"orgName": "Health Organization",
-					"orgUrl": "www.example.com",
-					"businessType": "Profit",
-					"required": true
-				},
-				{
-					"orgName": "Optional Organization",
-					"orgUrl": "www.example.com",
-					"businessType": "No profit",
-					"required": false
-				}
-			],
-			"obligations": [],
-			"policyRef": "http://mywellness.com/policy",
-			"collectionMethod": "Automatic aggregation",
-			"termination": "None"
-		},
-		{
-			"purposeId": "2",
-			"purposeName": "MyWeight",
-			"legalBasis": "Consent",
-			"purposeCategory": "CommercialInterest",
-			"processingCategories": [
-					   "Copy",
-			   "Analyse",
-			   "Profiling",
-			   "Store"
-			],
-			"description": [
-				{
-					"locale": "en",
-					"title": "MyWeight",
-					"description": "This purpose enables to visualize your customized workout programs, based on the historical measurements of your body weight, in addition to your age and gender. These measurements will be retrieved from a third party service, called MyMeasure.",
-					"descriptionUrl": "",
-					"iconUrl": ""
-				},
-				{
-					"locale": "it",
-					"title": "MyWeight",
-					"description": "Questo purpose permette di visualizzare dei programmi di workout personalizzati, basati sullo storico delle misurazioni del tuo peso corporeo, oltre alla tua età e sesso. Tali misurazioni verrranno recuperate da un servizio terzo, chiamato MyMeasure.",
-					"descriptionUrl": "",
-					"iconUrl": ""
-				}
-			],
-			"requiredDatasets": [
-				"D_2"
-			],
-			"storage": {
-				"location": "Controller servers",
-				"duration": "Business practices"
-			},
-			"recipients": [
-				"Ours"
-			],
-			"shareWith": [
-				{
-					"orgName": "Health Organization",
-					"orgUrl": "http://www.example.com",
-					"businessType": "Profit",
-					"required": true
-				},
-				{
-					"orgName": "Optional Organization",
-					"orgUrl": "www.example.com",
-					"businessType": "No profit",
-					"required": false
-				}
-			],
-			"obligations": [
-				{
-					"event": "",
-					"activity": ""
-				}
-			],
-			"policyRef": "http://mywellness.com/policy",
-			"collectionMethod": "Automatic aggregation",
-			"termination": "None"
-		}
-	],
-	"role": "Sink"
+  "serviceId": "MYW20",
+  "name": "My Wellness",
+  "identifier": "http://localhost:82/cape-playground/pages/services/my-wellness",
+  "issued": "2020-18-06T13:48:00Z",
+  "createdByUserId": "Cape Developers",
+  "serviceDescriptionVersion": "1.0",
+  "serviceDescriptionSignature": "",
+  "serviceIconUrl": "http://localhost:82/cape-playground/my-wellness/favicon.ico",
+  "status": "Completed",
+  "supportedProfiles": ["Consenting"],
+  "spatial": "ITA-Italy",
+  "lifeEvent": "other",
+  "businessEvent": "other",
+  "sector": ["other"],
+  "type": ["other"],
+  "thematicArea": ["other"],
+  "language": ["it", "en"],
+  "hasCompetentAuthority": {
+    "prefLabel": "Engineering",
+    "spatial": "ITA-Italy"
+  },
+  "humanReadableDescription": [
+    {
+      "locale": "en",
+      "description": "The My Wellness Service provides useful suggestions about your diet and workouts, based on your hystorical cholesterol and body weight trends. These measurements will be retrieved from a thir party service, called My Measurements.",
+      "keywords": []
+    },
+    {
+      "locale": "it",
+      "description": "Il Servizio My Wellness fornisce utili suggerimenti sulla tua dieta e i workouts, basati sull'andamento storico del tuo colesterolo e peso corporeo. Tali misurazioni verranno recuperate da un servizio terzo, chiamato My Measurements.",
+      "keywords": []
+    }
+  ],
+  "serviceInstance": {
+    "serviceProvider": {
+      "businessId": "ENG",
+      "name": "Engineering",
+      "address1": "",
+      "address2": "",
+      "postalcode": "",
+      "city": "",
+      "state": "",
+      "country": "",
+      "email": "",
+      "phone": "",
+      "jurisdiction": "EU"
+    },
+    "cert": {
+      "x5u": "",
+      "x5c": []
+    },
+    "serviceUrls": {
+      "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
+      "loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
+      "linkingRedirectUri": "http://localhost:82/cape-playground",
+      "objectionUri": "",
+      "notificationUri": ""
+    },
+    "dataController": {
+      "piiController": "John Doe",
+      "onBehalf": false,
+      "org": "ENG",
+      "contact": "",
+      "address": "",
+      "email": "johndoe@example.com",
+      "phone": "+39222222",
+      "operatorName": "John Doe"
+    }
+  },
+  "isDescribedAt": [
+    {
+      "datasetId": "D_1",
+      "description": [
+        {
+          "locale": "en",
+          "description": "This dataset represents data used for the MyCholesterol purpose",
+          "keyword": []
+        },
+        {
+          "locale": "it",
+          "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyCholesterol",
+          "keyword": []
+        }
+      ],
+      "datasetSchema": {
+        "context": "",
+        "type": "",
+        "id": ""
+      },
+      "dataStructureSpecification": "",
+      "distribution": {
+        "distributionId": "",
+        "accessUrl": "",
+        "description": [],
+        "format": ""
+      },
+      "dataMapping": [
+        {
+          "property": "sex",
+          "conceptId": "personal_details_sex",
+          "name": "Gender",
+          "type": "text",
+          "required": false
+        },
+        {
+          "property": "cholesterol",
+          "conceptId": "cholesterol_total",
+          "name": "Blood Cholesterol",
+          "type": "text",
+          "required": true
+        },
+        {
+          "property": "age",
+          "conceptId": "personal_details_age",
+          "name": "Age",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "datasetId": "D_2",
+      "description": [
+        {
+          "locale": "en",
+          "description": "This dataset represents data used for the MyWeight purpose",
+          "keyword": []
+        },
+        {
+          "locale": "it",
+          "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyWeight",
+          "keyword": []
+        }
+      ],
+      "datasetSchema": {
+        "context": "",
+        "type": "",
+        "id": ""
+      },
+      "dataStructureSpecification": "",
+      "distribution": {
+        "distributionId": "",
+        "accessUrl": "",
+        "description": [],
+        "format": ""
+      },
+      "dataMapping": [
+        {
+          "property": "sex",
+          "conceptId": "personal_details_sex",
+          "name": "Gender",
+          "type": "text",
+          "required": false
+        },
+        {
+          "property": "weight",
+          "conceptId": "personal_details_body_weight",
+          "name": "Body Weight",
+          "type": "text",
+          "required": true
+        },
+        {
+          "property": "age",
+          "conceptId": "personal_details_age",
+          "name": "Age",
+          "type": "text",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "processingBases": [
+    {
+      "purposeId": "1",
+      "purposeName": "MyCholesterol",
+      "legalBasis": "Consent",
+      "purposeCategory": "CommercialInterest",
+      "processingCategories": ["Copy", "Analyse", "Profiling", "Store"],
+      "description": [
+        {
+          "locale": "en",
+          "title": "MyCholesterol",
+          "description": "This purpose enables to visualize your customized diet programs, based on the historical measurements of your blood cholesterol, in addition to your age and gender. These measurements will be retrieved from a third party service, called MyMeasure.",
+          "descriptionUrl": "",
+          "iconUrl": ""
+        },
+        {
+          "locale": "it",
+          "title": "MyCholesterol",
+          "description": "Questo purpose permette di visualizzare dei programmi di dieta personalizzati, basati sullo storico delle misurazioni del tuo colesterolo nel sangue, oltre alla tua età e sesso. Tali misurazioni verrranno recuperate da un servizio terzo, chiamato MyMeasure.",
+          "descriptionUrl": "",
+          "iconUrl": ""
+        }
+      ],
+      "requiredDatasets": ["D_1"],
+      "storage": {
+        "location": "Controller servers",
+        "duration": "Business practices"
+      },
+      "recipients": ["Ours"],
+      "shareWith": [
+        {
+          "orgName": "Health Organization",
+          "orgUrl": "www.example.com",
+          "businessType": "Profit",
+          "required": true
+        },
+        {
+          "orgName": "Optional Organization",
+          "orgUrl": "www.example.com",
+          "businessType": "No profit",
+          "required": false
+        }
+      ],
+      "obligations": [],
+      "policyRef": "http://mywellness.com/policy",
+      "collectionMethod": "Automatic aggregation",
+      "termination": "None"
+    },
+    {
+      "purposeId": "2",
+      "purposeName": "MyWeight",
+      "legalBasis": "Consent",
+      "purposeCategory": "CommercialInterest",
+      "processingCategories": ["Copy", "Analyse", "Profiling", "Store"],
+      "description": [
+        {
+          "locale": "en",
+          "title": "MyWeight",
+          "description": "This purpose enables to visualize your customized workout programs, based on the historical measurements of your body weight, in addition to your age and gender. These measurements will be retrieved from a third party service, called MyMeasure.",
+          "descriptionUrl": "",
+          "iconUrl": ""
+        },
+        {
+          "locale": "it",
+          "title": "MyWeight",
+          "description": "Questo purpose permette di visualizzare dei programmi di workout personalizzati, basati sullo storico delle misurazioni del tuo peso corporeo, oltre alla tua età e sesso. Tali misurazioni verrranno recuperate da un servizio terzo, chiamato MyMeasure.",
+          "descriptionUrl": "",
+          "iconUrl": ""
+        }
+      ],
+      "requiredDatasets": ["D_2"],
+      "storage": {
+        "location": "Controller servers",
+        "duration": "Business practices"
+      },
+      "recipients": ["Ours"],
+      "shareWith": [
+        {
+          "orgName": "Health Organization",
+          "orgUrl": "http://www.example.com",
+          "businessType": "Profit",
+          "required": true
+        },
+        {
+          "orgName": "Optional Organization",
+          "orgUrl": "www.example.com",
+          "businessType": "No profit",
+          "required": false
+        }
+      ],
+      "obligations": [
+        {
+          "event": "",
+          "activity": ""
+        }
+      ],
+      "policyRef": "http://mywellness.com/policy",
+      "collectionMethod": "Automatic aggregation",
+      "termination": "None"
+    }
+  ],
+  "role": "Sink"
 }

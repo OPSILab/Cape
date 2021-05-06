@@ -9,8 +9,6 @@ import { NbCardModule, NbRadioModule, NbButtonModule } from '@nebular/theme';
 import { CapeSdkAngularModule } from '../../../cape-sdk-angular/cape-sdk-angular.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-
-
 @NgModule({
   declarations: [MyWellnessComponent, CholesterolComponent, WeightComponent],
   imports: [
@@ -21,7 +19,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MyWellnessRoutingModule,
     TranslateModule.forChild({}),
     CapeSdkAngularModule,
-    NgxChartsModule
-  ]
+    NgxChartsModule,
+  ],
 })
-export class MyWellnessModule { }
+export class MyWellnessModule {}

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
-import { TranslateService } from '@ngx-translate/core';
-
+import { ActivatedRoute } from '@angular/router';
+import { AppConfig, System } from '../../model/appConfig';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'login',
@@ -9,34 +10,30 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
+  private environment: System;
 
-  environment;
-
-  constructor(private configService: NgxConfigureService) {
-    this.environment = this.configService.config.system;
+  constructor(private dialogService: NbDialogService, private configService: NgxConfigureService, private route: ActivatedRoute) {
+    this.environment = (this.configService.config as AppConfig).system;
   }
 
-
-  public login() {
-
-    // Generate random state since we are using Implicit Oauth2 flow
-    const state = this.randomString(24);
-
-    sessionStorage.setItem('loginState', state);
+  public login = (): void => {
+    // Propagates (if any) queryParams, in order to be propagated also in the redirected URL after authentication
+    const queryParams = this.route.snapshot.queryParams;
+    let queryString = '';
+    if (queryParams && Object.keys(queryParams).length > 0)
+      queryString = Object.entries<string>(queryParams).reduce((acc, entry) => {
+        return `${acc}&${entry[0]}=${entry[1]}`;
+      }, '');
 
     this.popupCenter({
-      url: `${this.environment.idmHost}/oauth2/authorize?response_type=token&client_id=${this.environment.clientId}&state=${state}&redirect_uri=${this.environment.playgroundUrl}${this.environment.loginPopupUrl}`,
+      url: `${this.environment.playgroundUrl}/login/loginPopup?${queryString}`,
       title: 'AuthPopup',
-      w: 900,
-      h: 500
+      w: 780,
+      h: 650,
     });
-  }
+  };
 
-
-  randomString = (length) => {
-    return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
-  }
-
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   popupCenter = ({ url, title, w, h }) => {
     // Fixes dual-screen position                             Most browsers      Firefox
     const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
@@ -46,21 +43,20 @@ export class LoginComponent {
     const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
 
     const systemZoom = width / window.screen.availWidth;
-    const left = (width - w) / 2 / systemZoom + dualScreenLeft
+    const left = (width - w) / 2 / systemZoom + dualScreenLeft;
     const top = (height - h) / 2 / systemZoom + dualScreenTop;
-    const newWindow = window.open(url, title,
+    const newWindow = window.open(
+      url,
+      title,
       `
       toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no,
-      width=${w / systemZoom}, 
-      height=${h / systemZoom}, 
-      top=${top + 50}, 
+      width=${w / systemZoom},
+      height=${h / systemZoom},
+      top=${top + 50},
       left=${left}
       `
-    )
+    );
 
     if (window.focus) newWindow.focus();
-  }
-
-
+  };
 }
-

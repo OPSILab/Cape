@@ -8,13 +8,17 @@ export interface AppConfig {
 
 export interface System {
   operatorId: string;
-  dashUrl: string;
-  idmHost: string;
-  clientId: string;
+  dashboardUrl: string;
   accountUrl: string;
   serviceManagerUrl: string;
   auditLogUrl: string;
   consentManagerUrl: string;
+  auth: Auth;
+}
+
+export interface Auth {
+  idmHost: string;
+  clientId: string;
   disableAuth: string;
   authProfile: string;
   authRealm: string;

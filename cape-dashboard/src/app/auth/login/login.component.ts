@@ -26,7 +26,7 @@ export class LoginComponent {
       }, '');
 
     this.popupCenter({
-      url: `${this.environment.dashUrl}/login/loginPopup?${queryString}`,
+      url: `${this.environment.dashboardUrl}/login/loginPopup?${queryString}`,
       title: 'AuthPopup',
       w: 780,
       h: 650,

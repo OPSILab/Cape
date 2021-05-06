@@ -157,6 +157,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		 * generateCode if there is no pending Linking Session for the accountId -
 		 * serviceId pair
 		 */
+		Boolean toRecover = false; // To be set with the values of eventual existing Linking Session
 
 		try {
 			LinkingSession session = serviceManager.getSessionByAccountIdAndServiceId(accountId, serviceId);
@@ -176,7 +177,10 @@ public class ServiceManagerController implements IServiceManagerController {
 				throw new ConflictingSessionFoundException(
 						"Trying to start an already pending Linking Session for Account - Service combination, try to complete or cancel the pending linking",
 						session.getState());
+
+				// Force Linking -> Delete previous linking session and continue linking
 			} else {
+				toRecover = session.getToRecover(); // TO propagate the value to the new forced Linking Session
 				serviceManager.cancelSessionByAccountIdAndServiceId(accountId, serviceId);
 				throw new SessionNotFoundException("It triggers the catch below to continue linking");
 			}
@@ -198,10 +202,12 @@ public class ServiceManagerController implements IServiceManagerController {
 			headers.add("Location", serviceLoginUri + "?code=" + code + "&operatorId=" + operatorId + "&returnUrl="
 					+ operatorLinkingReturnUrl + "&linkingFrom=Operator");
 
-			// startSession
+			/*
+			 *  startSession
+			 */
 			// TODO Check if Account corresponding to AccountId exists (call Account
 			// Manager)
-			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")));
+			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
 
 			return new ResponseEntity<String>(null, headers, HttpStatus.OK);
 
@@ -209,8 +215,8 @@ public class ServiceManagerController implements IServiceManagerController {
 	}
 
 	/**
-	 * (Linking started from Service) Initiate linking after Operator login or with forceCode automatically from Service ---->
-	 * Service Manager
+	 * (Linking started from Service) Initiate linking after Operator login or with
+	 * forceCode automatically from Service ----> Service Manager
 	 * 
 	 * @throws OperatorDescriptionNotFoundException
 	 * @throws ServiceDescriptionNotFoundException
@@ -242,6 +248,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		 * serviceId pair
 		 */
 
+		Boolean toRecover = false; // To be set with the values of eventual existing Linking Session
 		try {
 			LinkingSession session = serviceManager.getSessionByAccountIdAndServiceId(accountId, serviceId);
 
@@ -259,12 +266,13 @@ public class ServiceManagerController implements IServiceManagerController {
 						LinkingSessionStateEnum.COMPLETED);
 			else if (!forceLinking) {
 				throw new ConflictingSessionFoundException(
-						"Trying to start an already pending Linking Session for Account - Service combination, try to complete or cancel the pending linking",
+						"Trying to start an already pending Linking Session for Account - Service combination, try to complete the pending linking by retrying with forceLinking=true",
 						session.getState());
 
 				// Force Linking -> Delete previous linking session and continue linking
 
 			} else {
+				toRecover = session.getToRecover(); // TO propagate the value to the new forced Linking Session
 				serviceManager.cancelSessionByAccountIdAndServiceId(accountId, serviceId);
 				throw new SessionNotFoundException("It triggers the catch below to continue linking");
 			}
@@ -287,16 +295,18 @@ public class ServiceManagerController implements IServiceManagerController {
 				throw new ServiceLinkingRedirectUriMismatchException(
 						"The Return Url in input mismatches with the one present in the Service description");
 			/*
-			 *  startSession
+			 * startSession
 			 */
 			// TODO Check if Account corresponding to AccountId exists (call Account
 			// Manager)
-			// TODO In case of automatic linking (forceCode=true) the accountId in input is instead the Service User Id
-			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")));
+			// In case of automatic linking (forceCode=true) the accountId in input is
+			// instead the Service User Id
+			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
 
 			/*
-			 * If forceCode is true, return directly the Linking Session code in order to let the Service to perform
-			 * automatic linking without performing redirect to Operator (Cape Dashboard)
+			 * If forceCode is true, return directly the Linking Session code in order to
+			 * let the Service to perform automatic linking without performing redirect to
+			 * Operator (Cape Dashboard)
 			 */
 			if (forceCode)
 				return ResponseEntity.ok(code);
@@ -324,6 +334,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * @throws SessionStateNotAllowedException
 	 * 
 	 */
+	@SuppressWarnings("finally")
 	@Operation(summary = "Inform Operator we're ready to continue creation of SLR.", description = "End point where Service Mgmnt POSTs after user has been authenticated by the Service in order to deliver surrogate id to Operator. This endpoint is part of Service Linking transaction and should not be called independently.", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the created SLR", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = FinalStoreSlrResponse.class))), })
@@ -432,16 +443,45 @@ public class ServiceManagerController implements IServiceManagerController {
 		/*
 		 * Sign SLR with Account Owner key
 		 */
-		AccountSignSlrResponse accountSignResponse = clientService.callAccountSignSlr(accountId, slrId,
-				partialSlrPayload, code);
+		AccountSignSlrResponse accountSignResponse;
+		try {
+			accountSignResponse = clientService.callAccountSignSlr(accountId, slrId, partialSlrPayload, code);
+
+			/*
+			 * In case of Failure, do compensating transaction/rollback (Delete Partial SLR
+			 * on Account Manager)
+			 */
+		} catch (Exception e) {
+			try {
+				clientService.callDeletePartialSlr(accountId, slrId);
+				serviceManager.changeSessionState(session, LinkingSessionStateEnum.STARTED, false);
+
+			} catch (Exception ex) {
+				/*
+				 * If rollback failed, set toRecover, in order to let Account Manager in
+				 * eventual further linking attempts that the partial SLR payload has to be
+				 * restored
+				 * 
+				 */
+				serviceManager.changeSessionState(session, LinkingSessionStateEnum.STARTED, true);
+				throw ex;
+			} finally {
+				throw new ServiceManagerException(
+						"There was an error while contacting Account Manager to sign partial SLR payload: "
+								+ e.getMessage());
+			}
+
+		}
 
 		/*
 		 * Update The Linking Session to the next state: SLR_ID_STORED ->
 		 * ACCOUNT_SIGNED_SLR
 		 */
-		serviceManager.changeSessionState(session, LinkingSessionStateEnum.ACCOUNT_SIGNED_SLR);
+		serviceManager.changeSessionState(session, LinkingSessionStateEnum.ACCOUNT_SIGNED_SLR, false);
 
-		// Sign Account Signed SLR with Service Key
+		/*
+		 * Sign Account Signed SLR with Service Key
+		 */
 		ServiceSignSlrResponse serviceSignResponse = clientService.callServiceSignSlr(serviceSdkHost,
 				accountSignResponse.getAccountSignedSlr(), surrogateId, slrId, code);
 
@@ -466,7 +506,7 @@ public class ServiceManagerController implements IServiceManagerController {
 
 		// Verify Service Signature
 		if (!cryptoService.verifyServiceSignature(serviceSignResponse.getServiceSignedSlr(), encodedCert))
-			throw new ServiceManagerException("Service signature verification failed");
+			throw new ServiceManagerException("Verification of SLR payload (Service signature) failed");
 
 		/*
 		 * generateServiceLinkStatusRecordId
@@ -494,13 +534,12 @@ public class ServiceManagerController implements IServiceManagerController {
 				LegalBasis.CONSENT, "Service Link Created", slrId, serviceId, serviceName, serviceUri,
 				ServiceLinkActionType.CREATE));
 
-		// Send SLR to Service Sdk
-
 		/*
 		 * Update The Linking Session to the next state: FINAL_SLR_STORED -> COMPLETED
 		 */
 		serviceManager.changeSessionState(session, LinkingSessionStateEnum.COMPLETED);
 
+		// Return SLR (to service SDK)
 		return storeSlrResponse;
 
 	}
@@ -528,7 +567,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			@PathVariable LinkingSessionStateEnum newState)
 			throws SessionNotFoundException, SessionStateNotAllowedException {
 
-		LinkingSession updatedSession = serviceManager.changeSessionStatusByCode(code, newState);
+		LinkingSession updatedSession = serviceManager.changeSessionStateByCode(code, newState);
 		return ResponseEntity.ok(updatedSession);
 	}
 
@@ -545,7 +584,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@Operation(summary = "Cancel Linking Session by Code", description = "Used internally by Account Manager to delete all Linking Session of an Account.", tags = {
+	@Operation(summary = "Cancel Linking Session by AccountId", description = "Used internally by Account Manager to delete all Linking Session of an Account.", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Session correctly cancelled", responseCode = "204"),
 					@ApiResponse(description = "No Liking Session found for input code", responseCode = "404") })

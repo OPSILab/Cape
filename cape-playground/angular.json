@@ -23,12 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "src/favicon.ico",
-              "src/favicon.png",
-              "src/assets",
-              "src/app/cape-sdk-angular/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/favicon.png", "src/assets", "src/app/cape-sdk-angular/assets"],
             "styles": [
               "src/index.css",
               "src/styles.scss",
@@ -55,7 +50,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -100,26 +94,15 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/app/cape-sdk-angular/assets"
-            ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/bootstrap/scss/bootstrap.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets", "src/app/cape-sdk-angular/assets"],
+            "styles": ["src/styles.scss", "node_modules/bootstrap/scss/bootstrap.scss"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
             "exclude": ["**/node_modules/**"]
           }
         },

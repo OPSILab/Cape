@@ -18,15 +18,18 @@ package it.eng.opsi.cape.sdk;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+import it.eng.opsi.cape.exception.RestTemplateException;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,55 +42,92 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+//@JsonSubTypes({ @Type(value = ErrorResponse.class, name = "ErrorResponse") })
 public class ErrorResponse {
 
-	private HttpStatus status;
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	private ZonedDateTime timestamp;
+	/** HTTP Status Code */
+	private int status;
+
+	/** HTTP Reason phrase */
+	private String error;
+
+	/** A message that describe the error thrown when calling the downstream API */
 	private String message;
-	private String debugMessage;
-	private String cause;
+
+	/** URI that has been called */
+	private String path;
+
+	private ZonedDateTime timestamp;
+
+	private ErrorResponse innerError = null;
 	private List<? extends ApiSubError> subErrors;
 
 	private ErrorResponse() {
+		super();
 		timestamp = ZonedDateTime.now(ZoneId.of("UTC"));
 	}
 
-	ErrorResponse(HttpStatus status) {
+	ErrorResponse(int status) {
 		this();
 		this.status = status;
 	}
 
-	ErrorResponse(HttpStatus status, Throwable ex) {
+	public ErrorResponse(RestTemplateException ex, String path) {
 		this();
-		this.status = status;
-		this.message = "Unexpected error";
-		this.debugMessage = ex.getLocalizedMessage();
-		this.cause = ex.getClass().getName();
+		this.status = ex.getStatusCode().value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getError();
+		this.path = path;
 	}
 
-	ErrorResponse(HttpStatus status, String message) {
+	public ErrorResponse(HttpStatus status, Throwable ex) {
 		this();
-		this.status = status;
-		this.message = message;
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
 	}
 
-	ErrorResponse(HttpStatus status, String message, Throwable ex) {
+	public ErrorResponse(HttpStatus status, Throwable ex, String path) {
 		this();
-		this.status = status;
-		this.message = message;
-		this.debugMessage = ex.getLocalizedMessage();
-		this.cause = ex.getClass().getName();
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
+		this.path = path;
 	}
 
-	ErrorResponse(HttpStatus status, String message, List<? extends ApiSubError> subErrors, Throwable ex) {
+	public ErrorResponse(HttpStatus status, Throwable ex, ErrorResponse innerError) {
 		this();
-		this.status = status;
-		this.message = message;
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
+		this.innerError = innerError;
+	}
+
+	public ErrorResponse(HttpStatus status, Throwable ex, ErrorResponse innerError, String path) {
+		this();
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
+		this.innerError = innerError;
+		this.path = path;
+	}
+
+	ErrorResponse(HttpStatus status, Throwable ex, List<? extends ApiSubError> subErrors) {
+		this();
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
 		this.subErrors = subErrors;
-		this.debugMessage = ex.getLocalizedMessage();
-		this.cause = ex.getClass().getName();
+	}
 
+	ErrorResponse(HttpStatus status, Throwable ex, List<? extends ApiSubError> subErrors, String path) {
+		this();
+		this.status = status.value();
+		this.error = ex.getClass().getName();
+		this.message = ex.getMessage();
+		this.subErrors = subErrors;
+		this.path = path;
 	}
 
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -106,6 +146,7 @@ public class ErrorResponse {
 		private Object rejectedValue;
 		private String message;
 
+		@JsonCreator(mode = JsonCreator.Mode.DEFAULT)
 		ApiValidationError(String object, String message) {
 			this.object = object;
 			this.message = message;

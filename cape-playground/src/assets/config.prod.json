@@ -3,11 +3,13 @@
     "operatorId": "cape",
     "playgroundUrl": "https://www.cape-suite.eu/cape-playground",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
-    "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "b085d2e2-d41e-489f-89ed-95e4006b7642",
-    "loginPopupUrl": "/loginPopup",
-    "disable_auth": "false",
-    "assetsDataDir": "/assets/data/"
+    "auth": {
+      "idmHost": "https://www.cape-suite.eu",
+      "clientId": "cape-service-sdk",
+      "disableAuth": "false",
+      "authProfile": "oidc",
+      "authRealm": "Cape"
+    }
   },
   "services": {
     "sdkUrl": "https://www.cape-suite.eu/cape-server/cape-service-sdk/api/v2",
@@ -41,7 +43,6 @@
           "purposeId": "2"
         }
       }
-
     }
   },
   "i18n": {
