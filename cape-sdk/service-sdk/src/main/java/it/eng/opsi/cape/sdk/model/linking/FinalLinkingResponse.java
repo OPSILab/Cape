@@ -33,9 +33,9 @@ import lombok.ToString;
 @ToString
 public class FinalLinkingResponse {
 
-	@NotBlank(message = "code is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotBlank(message = "data is mandatory")
 	@JsonProperty(value = "data")

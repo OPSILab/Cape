@@ -35,9 +35,9 @@ import lombok.ToString;
 @ToString
 public class AccountSignSlrResponse {
 
-	@NotBlank(message = "code is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotNull(message = "account_signed_slr is mandatory")
 	@Valid

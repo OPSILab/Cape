@@ -3,7 +3,6 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { AvailableServicesService } from './availableServices.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { ServiceInfoRenderComponent } from './serviceInfoRender.component';
-import { LoginService } from '../../../login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
@@ -17,6 +16,7 @@ import { Description2 } from '../../../model/description2';
 import { HumanReadableDescription } from '../../../model/humanReadableDescription';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LoginService } from '../../../auth/login/login.service';
 
 export interface AvailableServiceRow extends ServiceEntry {
   locale?: string;

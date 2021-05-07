@@ -56,11 +56,11 @@ public interface IServiceManagerController {
 			OperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
 			SessionStateNotAllowedException;
 
-	public abstract ResponseEntity<LinkingSession> getLinkingSessionByCode(String code) throws SessionNotFoundException;
+	public abstract ResponseEntity<LinkingSession> getLinkingSessionByCode(String sessionCode) throws SessionNotFoundException;
 
-	public abstract ResponseEntity<Object> cancelLinkingSessionByCode(String code) throws SessionNotFoundException;
+	public abstract ResponseEntity<Object> cancelLinkingSessionByCode(String sessionCode) throws SessionNotFoundException;
 
-	public abstract ResponseEntity<LinkingSession> changeLinkingSessionStateByCode(String code,
+	public abstract ResponseEntity<LinkingSession> changeLinkingSessionStateByCode(String sessionCode,
 			LinkingSessionStateEnum newState) throws SessionNotFoundException, SessionStateNotAllowedException;
 
 	public abstract ResponseEntity<ServiceLinkStatusRecordSigned> disableServiceLink(String accountId, String serviceId,
@@ -75,6 +75,6 @@ public interface IServiceManagerController {
 			OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException;
 
-	public abstract ResponseEntity<Object> deleteLinkingSessionByAccountId(String accountId);
+	public abstract ResponseEntity<Object> deleteLinkingSessionsByAccountId(String accountId);
 
 }

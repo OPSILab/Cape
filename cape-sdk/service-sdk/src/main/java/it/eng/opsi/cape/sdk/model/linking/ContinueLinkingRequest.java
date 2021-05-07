@@ -47,9 +47,9 @@ import lombok.ToString;
 		})
 public class ContinueLinkingRequest {
 
-	@NotBlank(message = "code is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotBlank(message = "service_id is mandatory")
 	@JsonProperty(value = "service_id")

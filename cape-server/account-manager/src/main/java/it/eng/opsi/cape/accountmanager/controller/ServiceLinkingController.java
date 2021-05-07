@@ -116,18 +116,28 @@ public class ServiceLinkingController implements IServiceLinkingController {
 					@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/init/sink", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceLinkInitResponse> storeSinkSlrId(@PathVariable("account_id") String accountId,
-			@RequestBody @Valid SinkServiceLinkInitRequest request)
-			throws SessionNotFoundException, AccountManagerException, AccountNotFoundException,
-			ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException {
+			@RequestBody @Valid SinkServiceLinkInitRequest request) throws SessionNotFoundException,
+			AccountManagerException, AccountNotFoundException, ServiceLinkRecordAlreadyPresentException,
+			SessionStateNotAllowedException, ServiceLinkRecordNotFoundException {
 
 		/*
-		 * Get session by input code, check if is in an allowed State and if its
+		 * Get session by input sessionCode, check if is in an allowed State and if its
 		 * accountId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
-		if (!session.getState().equals(LinkingSessionStateEnum.STARTED))
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
+		LinkingSessionStateEnum sessionState = session.getState();
+
+		if (!sessionState.equals(LinkingSessionStateEnum.STARTED))
 			throw new SessionStateNotAllowedException(
 					"The Linking Session should be in STARTED state, " + session.getState() + " found instead");
+
+		/*
+		 * If Linking Session is STARTED or SLR_ID_STORED and the Session is toRecover
+		 * then delete the dirty partial SLR payload already present before continuing
+		 */
+		if ((sessionState.equals(LinkingSessionStateEnum.STARTED)
+				|| sessionState.equals(LinkingSessionStateEnum.SLR_ID_STORED)) && session.getToRecover())
+			accountRepo.removeSlrPartialPayloadByAccountIdAndServiceId(accountId, request.getServiceId());
 
 		if (!session.getAccountId().equals(accountId))
 			throw new SessionNotFoundException("The Session Account Id does not match with the input AccountId");
@@ -145,7 +155,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 				.created(UriComponentsBuilder
 						.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 						.build(accountId, partialSlr.getSlrId()))
-				.body(new ServiceLinkInitResponse(request.getCode(), partialSlr.getSlrId().toString()));
+				.body(new ServiceLinkInitResponse(request.getSessionCode(), partialSlr.getSlrId().toString()));
 	}
 
 	@Override
@@ -154,18 +164,27 @@ public class ServiceLinkingController implements IServiceLinkingController {
 					@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/init/source", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceLinkInitResponse> storeSourceSlrId(@PathVariable("account_id") String accountId,
-			@RequestBody @Valid SourceServiceLinkInitRequest request)
-			throws SessionNotFoundException, AccountManagerException, AccountNotFoundException,
-			ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException {
+			@RequestBody @Valid SourceServiceLinkInitRequest request) throws SessionNotFoundException,
+			AccountManagerException, AccountNotFoundException, ServiceLinkRecordAlreadyPresentException,
+			SessionStateNotAllowedException, ServiceLinkRecordNotFoundException {
 
 		/*
 		 * Get session by input code, check if is in an allowed State and if its
 		 * accountId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
-		if (!session.getState().equals(LinkingSessionStateEnum.STARTED))
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
+		LinkingSessionStateEnum sessionState = session.getState();
+		if (!sessionState.equals(LinkingSessionStateEnum.STARTED))
 			throw new SessionStateNotAllowedException(
 					"The Linking Session should be in STARTED state, " + session.getState() + " found instead");
+
+		/*
+		 * If Linking Session is STARTED or SLR_ID_STORED and the Session is toRecover
+		 * then delete the dirty partial SLR payload already present before continuing
+		 */
+		if ((sessionState.equals(LinkingSessionStateEnum.STARTED)
+				|| sessionState.equals(LinkingSessionStateEnum.SLR_ID_STORED)) && session.getToRecover())
+			accountRepo.removeSlrPartialPayloadByAccountIdAndServiceId(accountId, request.getServiceId());
 
 		if (!session.getAccountId().equals(accountId))
 			throw new SessionNotFoundException("The Session Account Id does not match with the input AccountId");
@@ -182,7 +201,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 				.created(UriComponentsBuilder
 						.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 						.build(accountId, partialSlr.getSlrId()))
-				.body(new ServiceLinkInitResponse(request.getCode(), partialSlr.getSlrId().toString()));
+				.body(new ServiceLinkInitResponse(request.getSessionCode(), partialSlr.getSlrId().toString()));
 
 	}
 
@@ -206,7 +225,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 		 * Get session by input code, check if is in an allowed State and if its
 		 * accountId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
 		if (!session.getState().equals(LinkingSessionStateEnum.SLR_ID_STORED))
 			throw new SessionStateNotAllowedException(
 					"The Linking Session should be in SLR_ID_STORED state, " + session.getState() + " found instead");
@@ -230,7 +249,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 				.created(UriComponentsBuilder
 						.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 						.build(accountId, partialSlr.getSlrId()))
-				.body(new AccountSignSlrResponse(request.getCode(), accountSignedSlr));
+				.body(new AccountSignSlrResponse(request.getSessionCode(), accountSignedSlr));
 
 	}
 
@@ -256,7 +275,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 		 * Get session by input code, check if is in an allowed State and if its
 		 * accountId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
 		if (!session.getState().equals(LinkingSessionStateEnum.DOUBLE_SIGNED_SLR))
 			throw new SessionStateNotAllowedException("The Linking Session should be in DOUBLE_SIGNED_SLR state, "
 					+ session.getState() + " found instead");
@@ -287,7 +306,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 				.created(UriComponentsBuilder
 						.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 						.build(accountId, slrPayload.getSlrId()))
-				.body(new FinalStoreSlrResponse(request.getCode(),
+				.body(new FinalStoreSlrResponse(request.getSessionCode(),
 						new LinkingResponseData(slrDoubleSigned, signedSsr)));
 	}
 
@@ -388,17 +407,22 @@ public class ServiceLinkingController implements IServiceLinkingController {
 
 	/**
 	 *
-	 * Called By Service Manager to compensate failing transaction during Sessione
+	 * Called By Service Manager to compensate failing transaction during Service
 	 * Linking
-	 * @throws ServiceLinkRecordAlreadyPresentException 
-	 * @throws AccountNotFoundException 
+	 * 
+	 * @throws ServiceLinkRecordAlreadyPresentException
+	 * @throws AccountNotFoundException
 	 */
+	@Operation(summary = "Delete Partial Service Link Record payload by Account Id and Slr Id.", tags = {
+			"Service Linking" }, responses = {
+					@ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@Override
-	@DeleteMapping(value = "/accounts/{accountId}/servicelinks/{slrId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/accounts/{accountId}/servicelinks/{slrId}")
 
-	public ResponseEntity<String> deletePartialSlr(@PathVariable String accountId, @PathVariable String slrId) throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
+	public ResponseEntity<String> deletePartialSlr(@PathVariable String accountId, @PathVariable String slrId)
+			throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
 
-//		accountRepo.removeSlrPartialPayload(accountId, slrId);
+		accountRepo.removeSlrPartialPayloadByAccountIdAndSlrId(accountId, slrId);
 
 		return ResponseEntity.noContent().build();
 

@@ -15,7 +15,7 @@ import { ErrorResponse } from 'src/app/model/errorResponse';
   templateUrl: './loginPopup.component.html',
 })
 export class LoginPopupComponent implements AfterViewInit, OnDestroy {
-  redirectUrlAfterLogin: string;
+  playgroundUrl: string;
   locale: string;
 
   @ViewChild('errorDialog', { static: false })
@@ -33,13 +33,15 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private dialogService: NbDialogService
   ) {
-    this.redirectUrlAfterLogin = (this.configService.config as AppConfig).system.playgroundUrl;
+    this.playgroundUrl = (this.configService.config as AppConfig).system.playgroundUrl;
     this.locale = (this.configService.config as AppConfig).i18n.locale;
     this.queryParams = this.activatedRoute.snapshot.queryParams;
   }
 
   async ngAfterViewInit(): Promise<void> {
     if (!(await this.authService.isAuthenticatedOrRefresh().toPromise())) {
+      if (!(await this.authService.getToken().toPromise()).isValid() && !this.queryParams['code'])
+        sessionStorage.setItem('queryParamsBeforeLogin', JSON.stringify(this.queryParams));
       const authResult = await this.authService.authenticate((this.configService.config as AppConfig).system.auth.authProfile).toPromise();
 
       if (authResult.isSuccess() && authResult.getToken()?.isValid()) {
@@ -54,7 +56,6 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
   }
 
   // Propagates (if any) queryParams, in order to be propagated also in the redirected URL after authentication
-  // const queryParams: Params = this.route.snapshot.queryParams;
   completeLogin = (token: OidcJWTToken): void => {
     try {
       // Get Idm User Details to create the associated Cape Account
@@ -62,6 +63,10 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
 
       localStorage.setItem('accountId', tokenPayload.email);
       localStorage.setItem('accountEmail', tokenPayload.email);
+
+      /*
+       * Close Login Popup and propagates query Params saved before Login, and eventually append redirectAfterLogin to the Base path
+       */
       this.closeLoginPopup();
     } catch (err) {
       console.log(err);
@@ -76,9 +81,23 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     window.close();
   };
 
+  /*
+   * Close Login Popup and propagates query Params saved before Login, and eventually append redirectAfterLogin to the Base path
+   */
   closeLoginPopup = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    window.opener.document.location.href = this.redirectUrlAfterLogin;
+    const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
+    const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
+    sessionStorage.removeItem('queryParamsBeforeLogin');
+    delete queryParamsBeforeLogin?.redirectAfterLogin;
+
+    if (redirectAfterLogin) {
+      const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      window.opener.document.location.href = this.playgroundUrl + redirectAfterLogin + (queryString ? queryString : '');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    } else window.opener.document.location.href = this.playgroundUrl;
+
     window.close();
   };
 
@@ -89,5 +108,13 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       closeOnBackdropClick: false,
       closeOnEsc: false,
     });
+  };
+
+  printQueryParamsString = (queryParams: Record<string, string>): string => {
+    if (Object.keys(queryParams).length > 0)
+      return Object.entries<string>(queryParams).reduce((acc, entry) => {
+        return `${acc}&${entry[0]}=${entry[1]}`;
+      }, '?');
+    else return undefined;
   };
 }

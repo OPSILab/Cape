@@ -35,8 +35,9 @@ import lombok.ToString;
 @ToString
 public class FinalStoreSlrResponse {
 
-	@NotBlank(message = "code is mandatory")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotNull(message = "data is mandatory")
 	@Valid

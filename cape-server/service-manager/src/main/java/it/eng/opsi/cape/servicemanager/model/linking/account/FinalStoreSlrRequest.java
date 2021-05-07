@@ -45,7 +45,8 @@ public class FinalStoreSlrRequest {
 	@Valid
 	private ServiceLinkStatusRecordPayload ssr;
 
-	@NotBlank(message = "code is mandatory")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 }

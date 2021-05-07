@@ -190,7 +190,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			/*
 			 * No Linking Session found, create a new one
 			 */
-			String code = serviceManager.generateCode(accountId, serviceId);
+			String sessionCode = serviceManager.generateLinkingSessionCode(accountId, serviceId);
 
 			String serviceLoginUri = serviceDescription.getServiceInstance().getServiceUrls().getLoginUri();
 
@@ -199,7 +199,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			String operatorLinkingReturnUrl = operatorDescription.getOperatorUrls().getLinkingRedirectUri();
 
 			HttpHeaders headers = new HttpHeaders();
-			headers.add("Location", serviceLoginUri + "?code=" + code + "&operatorId=" + operatorId + "&returnUrl="
+			headers.add("Location", serviceLoginUri + "?sessionCode=" + sessionCode + "&operatorId=" + operatorId + "&returnUrl="
 					+ operatorLinkingReturnUrl + "&linkingFrom=Operator");
 
 			/*
@@ -207,7 +207,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			 */
 			// TODO Check if Account corresponding to AccountId exists (call Account
 			// Manager)
-			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
+			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
 
 			return new ResponseEntity<String>(null, headers, HttpStatus.OK);
 
@@ -225,7 +225,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * @throws ServiceLinkingRedirectUriMismatchException
 	 */
 	@Operation(summary = "Start Process of creating Service Link Record.", description = "Entrypoint for creating new Service Link Record with service."
-			+ "Will take Service Id to link with as parameter. If forceLinkCode=true return code to finalize service link from service side (sdk). This endpoint will start Service Linking process.", tags = {
+			+ "Will take Service Id to link with as parameter. If forceLinkCode=true return sessionCode to finalize service link from service side (sdk). This endpoint will start Service Linking process.", tags = {
 					"Service Linking" }, responses = {
 							@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 	@Override
@@ -282,7 +282,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			/*
 			 * No Linking Session found, create a new one
 			 */
-			String code = serviceManager.generateCode(accountId, serviceId);
+			String sessionCode = serviceManager.generateLinkingSessionCode(accountId, serviceId);
 
 			String serviceLinkingUri = serviceDescription.getServiceInstance().getServiceUrls().getLinkingUri();
 
@@ -301,17 +301,17 @@ public class ServiceManagerController implements IServiceManagerController {
 			// Manager)
 			// In case of automatic linking (forceCode=true) the accountId in input is
 			// instead the Service User Id
-			serviceManager.startSession(code, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
+			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
 
 			/*
-			 * If forceCode is true, return directly the Linking Session code in order to
+			 * If forceCode is true, return directly the Linking Session Code in order to
 			 * let the Service to perform automatic linking without performing redirect to
 			 * Operator (Cape Dashboard)
 			 */
 			if (forceCode)
-				return ResponseEntity.ok(code);
+				return ResponseEntity.ok(sessionCode);
 			else {
-				clientService.callStartServiceLinking(code, surrogateId, operatorId, serviceId, returnUrl,
+				clientService.callStartServiceLinking(sessionCode, surrogateId, operatorId, serviceId, returnUrl,
 						serviceLinkingUri);
 				return ResponseEntity.ok(null);
 			}
@@ -345,7 +345,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			OperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
 			SessionStateNotAllowedException {
 
-		String code = request.getCode();
+		String sessionCode = request.getSessionCode();
 		String surrogateId = request.getSurrogateId();
 		String serviceId = request.getServiceId();
 
@@ -360,10 +360,10 @@ public class ServiceManagerController implements IServiceManagerController {
 		Cert serviceCertificate = serviceDescription.getServiceInstance().getCert();
 
 		/*
-		 * Get session by input code, check if is in an allowed State and if its
+		 * Get session by input sessionCode, check if is in an allowed State and if its
 		 * serviceId matches the ones in input
 		 */
-		LinkingSession session = serviceManager.getSessionByCode(code);
+		LinkingSession session = serviceManager.getSessionByCode(sessionCode);
 		if (!session.getState().equals(LinkingSessionStateEnum.STARTED))
 			throw new SessionStateNotAllowedException(
 					"The Linking Session should be in STARTED state, " + session.getState() + " found instead");
@@ -415,11 +415,11 @@ public class ServiceManagerController implements IServiceManagerController {
 			popKey = ((ContinueSinkLinkingRequest) request).getPopKey();
 
 			// Call storeSinkSlrId
-			storeSlrIdResponse = clientService.callStoreSinkSlrId(accountId, code, slrId, serviceId, surrogateId,
+			storeSlrIdResponse = clientService.callStoreSinkSlrId(accountId, sessionCode, slrId, serviceId, surrogateId,
 					popKey);
 		} else {
 			// Call storeSourceSlrId
-			storeSlrIdResponse = clientService.callStoreSourceSlrId(accountId, code, slrId, serviceId, surrogateId);
+			storeSlrIdResponse = clientService.callStoreSourceSlrId(accountId, sessionCode, slrId, serviceId, surrogateId);
 		}
 
 		/*
@@ -445,7 +445,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		 */
 		AccountSignSlrResponse accountSignResponse;
 		try {
-			accountSignResponse = clientService.callAccountSignSlr(accountId, slrId, partialSlrPayload, code);
+			accountSignResponse = clientService.callAccountSignSlr(accountId, slrId, partialSlrPayload, sessionCode);
 
 			/*
 			 * In case of Failure, do compensating transaction/rollback (Delete Partial SLR
@@ -483,7 +483,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		 * Sign Account Signed SLR with Service Key
 		 */
 		ServiceSignSlrResponse serviceSignResponse = clientService.callServiceSignSlr(serviceSdkHost,
-				accountSignResponse.getAccountSignedSlr(), surrogateId, slrId, code);
+				accountSignResponse.getAccountSignedSlr(), surrogateId, slrId, sessionCode);
 
 		/*
 		 * Update The Linking Session to the next state: ACCOUNT_SIGNED_SLR ->
@@ -520,7 +520,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		/*
 		 * Call Account Manager to sign and store SSR and final double signed SLR
 		 */
-		ResponseEntity<FinalStoreSlrResponse> storeSlrResponse = clientService.callStoreFinalSlr(accountId, code, slrId,
+		ResponseEntity<FinalStoreSlrResponse> storeSlrResponse = clientService.callStoreFinalSlr(accountId, sessionCode, slrId,
 				serviceSignResponse.getServiceSignedSlr(), ssrPayload);
 
 		/*
@@ -544,53 +544,53 @@ public class ServiceManagerController implements IServiceManagerController {
 
 	}
 
-	@Operation(summary = "Get Linking Session by Code", description = "Used internally by Account and Service Manager to get LinkingSession corresponding to a generated code.", tags = {
+	@Operation(summary = "Get Linking Session by Code", description = "Used internally by Account and Service Manager to get LinkingSession corresponding to a generated sessionCode.", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns corresponding LinkingSession", responseCode = "200"),
-					@ApiResponse(description = "No Liking Session found for input code", responseCode = "404") })
+					@ApiResponse(description = "No Linking Session found for input sessionCode", responseCode = "404") })
 	@Override
-	@GetMapping(value = "/slr/linkingSession/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LinkingSession> getLinkingSessionByCode(@PathVariable String code)
+	@GetMapping(value = "/slr/linkingSession/{sessionCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LinkingSession> getLinkingSessionByCode(@PathVariable String sessionCode)
 			throws SessionNotFoundException {
 
-		LinkingSession session = serviceManager.getSessionByCode(code);
+		LinkingSession session = serviceManager.getSessionByCode(sessionCode);
 		return ResponseEntity.ok(session);
 	}
 
-	@Operation(summary = "Change Linking Session state by Code", description = "Used internally by Account and Service Manager to change LinkingSession state corresponding to a generated code.", tags = {
+	@Operation(summary = "Change Linking Session state by Code", description = "Used internally by Account and Service Manager to change LinkingSession state corresponding to a generated sessionCode.", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns LinkingSession with updated state", responseCode = "200"),
-					@ApiResponse(description = "No Liking Session found for input code", responseCode = "404") })
+					@ApiResponse(description = "No Liking Session found for input sessionCode", responseCode = "404") })
 	@Override
-	@PutMapping(value = "/slr/linkingSession/{code}/state/{newState}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LinkingSession> changeLinkingSessionStateByCode(@PathVariable String code,
+	@PutMapping(value = "/slr/linkingSession/{sessionCode}/state/{newState}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LinkingSession> changeLinkingSessionStateByCode(@PathVariable String sessionCode,
 			@PathVariable LinkingSessionStateEnum newState)
 			throws SessionNotFoundException, SessionStateNotAllowedException {
 
-		LinkingSession updatedSession = serviceManager.changeSessionStateByCode(code, newState);
+		LinkingSession updatedSession = serviceManager.changeSessionStateByCode(sessionCode, newState);
 		return ResponseEntity.ok(updatedSession);
 	}
 
-	@Operation(summary = "Cancel Linking Session by Code", description = "Used internally by Account,Service Manager and Service SDK to cancel Linking Session. (e.g. whetever an error occurred in the Service Linking flow)", tags = {
+	@Operation(summary = "Cancel Linking Session by Session Code", description = "Used internally by Account, Service Manager and Service SDK to cancel Linking Session (e.g. whatever an error occurred in the Service Linking flow).", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Session correctly cancelled", responseCode = "204"),
-					@ApiResponse(description = "No Liking Session found for input code", responseCode = "404") })
+					@ApiResponse(description = "No Liking Session found for input sessionCode", responseCode = "404") })
 	@Override
-	@DeleteMapping(value = "/slr/linkingSession/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> cancelLinkingSessionByCode(@PathVariable String code)
+	@DeleteMapping(value = "/slr/linkingSession/{sessionCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> cancelLinkingSessionByCode(@PathVariable String sessionCode)
 			throws SessionNotFoundException {
 
-		serviceManager.cancelSessionByCode(code);
+		serviceManager.cancelSessionBySessionCode(sessionCode);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@Operation(summary = "Cancel Linking Session by AccountId", description = "Used internally by Account Manager to delete all Linking Session of an Account.", tags = {
+	@Operation(summary = "Cancel Linking Sessions by AccountId", description = "Used internally by Account Manager to delete all Linking Session of an Account.", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Session correctly cancelled", responseCode = "204"),
-					@ApiResponse(description = "No Liking Session found for input code", responseCode = "404") })
+					@ApiResponse(description = "No Liking Session found for input accountId", responseCode = "404") })
 	@Override
 	@DeleteMapping(value = "/slr/accounts/{accountId}/linkingSessions", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> deleteLinkingSessionByAccountId(@PathVariable String accountId) {
+	public ResponseEntity<Object> deleteLinkingSessionsByAccountId(@PathVariable String accountId) {
 
 		serviceManager.deleteSessionByAccountId(accountId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -9,7 +9,6 @@ import { DialogImportPromptComponent } from './dialog-import-prompt/dialog-impor
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { NgxConfigureService } from 'ngx-configure';
-import { LoginService } from '../../../login/login.service';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 
 //import { ToasterConfig } from 'angular2-toaster';
@@ -47,7 +46,6 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     private route: ActivatedRoute,
     private availablesServicesService: AvailableServicesService,
     configService: NgxConfigureService,
-    private loginService: LoginService,
     private errorDialogService: ErrorDialogService,
     private translateService: TranslateService
   ) {

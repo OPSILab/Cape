@@ -35,9 +35,9 @@ import lombok.ToString;
 @Builder
 public class StartLinkingRequest {
 
-	@NotBlank(message = "Name is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotBlank(message = "surrogate_id is mandatory")
 	@JsonProperty(value = "surrogate_id")

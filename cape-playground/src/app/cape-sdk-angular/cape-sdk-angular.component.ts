@@ -62,7 +62,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   private linkingFrom: LinkingFromEnum;
 
   private initialLocale: string;
-  private code: string;
+  private sessionCode: string;
   public menuItems: NbMenuItem[];
 
   @ViewChild('linkingDialog', { static: false })
@@ -292,20 +292,20 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
      * If it comes from a linking started from Cape, go to the linking dialog
      */
     if (queryParams.linkingFrom === LinkingFromEnum.Operator) {
-      if (queryParams.code === undefined || '' || queryParams.returnUrl === undefined || '') {
+      if (queryParams.sessionCode === undefined || '' || queryParams.returnUrl === undefined || '') {
         this.errorDialogService.openErrorDialog(new Error('One or more mandatory linking parameters are missing!'));
         return;
       }
 
       this.openedDialog = this.dialogService.open(this.linkingDialog, {
         context: {
-          code: queryParams.code,
+          sessionCode: queryParams.sessionCode,
           returnUrl: queryParams.returnUrl,
         },
         hasScroll: true,
       });
 
-      this.code = queryParams.code;
+      this.sessionCode = queryParams.sessionCode;
       this.locale = queryParams.locale || 'en';
       this.initialLocale = this.translateService.currentLang;
       this.translateService.use(this.locale);
@@ -324,7 +324,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
   async startLinkingAfterServiceLogin() {
     try {
-      await this.capeService.linkFromOperator(this.sdkUrl, this.code, this.operatorId, this.serviceId, this.serviceName, this.userId, this.returnUrl);
+      await this.capeService.linkFromOperator(this.sdkUrl, this.sessionCode, this.operatorId, this.serviceId, this.serviceName, this.userId, this.returnUrl);
 
       const successMessage: string = this.translateService.instant('general.services.linkingSuccessfulMessage', {
         serviceId: this.serviceId,

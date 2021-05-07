@@ -187,19 +187,19 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok().body(operatorDescription);
 	}
 
-	@Operation(summary = "Get Linking code from Service Manager for automatic linking starting", tags = {
+	@Operation(summary = "Get Linking sessionCode from Service Manager for automatic linking starting", tags = {
 			"Service Linking" }, responses = {
-					@ApiResponse(description = "Returns the requested linking code.", responseCode = "200", content = @Content(mediaType = "application/json")) })
+					@ApiResponse(description = "Returns the requested linking sessionCode.", responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@Override
-	@GetMapping(value = "/slr/linking/code", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/slr/linking/sessionCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getLinkSessionCode(@RequestParam("serviceId") String serviceId,
 			@RequestParam("userId") String userId, @RequestParam("surrogateId") String surrogateId,
 			@RequestParam("returnUrl") String returnUrl, @RequestParam("forceLinking") Boolean forceLinking)
 			throws ServiceManagerException, SessionNotFoundException {
 
-		String code = clientService.callGetLinkingCode(serviceId, userId, surrogateId, returnUrl, forceLinking);
+		String sessionCode = clientService.callGetLinkingCode(serviceId, userId, surrogateId, returnUrl, forceLinking);
 
-		return ResponseEntity.ok(code);
+		return ResponseEntity.ok(sessionCode);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			ServiceDescriptionNotFoundException, SessionNotFoundException {
 
 		ServicePopKey popKey = null;
-		String code = request.getCode();
+		String sessionCode = request.getSessionCode();
 		String operatorId = request.getOperatorId();
 		String serviceId = request.getServiceId();
 		String surrogateId = request.getSurrogateId();
@@ -233,9 +233,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
 
 		/*
-		 * Get session by input code and check its serviceId matches the ones in input
+		 * Get session by input sessionCode and check its serviceId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
 
 		if (!session.getServiceId().equals(serviceId))
 			throw new SessionNotFoundException("The Session serviceId does not match with the one in input");
@@ -246,10 +246,10 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		// If the Service type is SINK (taken from Service Description)
 		if (serviceDescription.getRole().equals(ServiceEntry.Role.SINK)) {
 			popKey = sdkManager.getPopKey(operatorId, serviceId, request.getSurrogateId());
-			operatorLinkingResponse = clientService.callLinkSinkService(code, serviceId, surrogateId, popKey);
+			operatorLinkingResponse = clientService.callLinkSinkService(sessionCode, serviceId, surrogateId, popKey);
 			// else if Source
 		} else {
-			operatorLinkingResponse = clientService.callLinkSourceService(code, serviceId, surrogateId);
+			operatorLinkingResponse = clientService.callLinkSourceService(sessionCode, serviceId, surrogateId);
 		}
 
 		ServiceLinkRecordDoubleSigned slr = operatorLinkingResponse.getData().getSlr();
@@ -346,10 +346,10 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			SessionNotFoundException, ServiceManagerException, SessionStateNotAllowedException {
 
 		/*
-		 * Get session by input code, check if is in an allowed State and if its
+		 * Get session by input sessionCode, check if is in an allowed State and if its
 		 * accountId matches the ones in input
 		 */
-		LinkingSession session = clientService.callGetLinkingSession(request.getCode());
+		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
 		if (!session.getState().equals(LinkingSessionStateEnum.ACCOUNT_SIGNED_SLR))
 			throw new SessionStateNotAllowedException("The Linking Session should be in ACCOUNT_SIGNED_SLR state, "
 					+ session.getState() + " found instead");
@@ -365,7 +365,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 				.verifyAndSignServiceLinkRecordPayload(accountSignedSlr);
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new ServiceSignSlrResponse(request.getCode(), doubleSignedSlr));
+				.body(new ServiceSignSlrResponse(request.getSessionCode(), doubleSignedSlr));
 	}
 
 	@Operation(summary = "Return all the Service Link Records", tags = { "Service Link Record" }, responses = {

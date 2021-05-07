@@ -15,5 +15,5 @@ export interface ServiceSignSlrRequest {
   account_signed_slr: ServiceLinkRecordAccountSigned;
   surrogate_id: string;
   operator_id: string;
-  code: string;
+  sessionCode: string;
 }

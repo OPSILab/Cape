@@ -35,9 +35,9 @@ import lombok.ToString;
 @Builder
 public class AccountSignSlrRequest {
 
-	@NotBlank(message = "code is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NotNull(message = "partial_slr_payload is mandatory")
 	@Valid

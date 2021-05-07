@@ -16,7 +16,7 @@ import {
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { AvailableServicesService } from './availableServices.service';
 import { AvailableServiceRow } from './availableServices.component';
-import { LoginService } from '../../../login/login.service';
+import { LoginService } from '../../../auth/login/login.service';
 @Component({
   template: `
     <button nbButton outline status="basic" [nbContextMenu]="actions" nbContextMenuTag="service-context-menu{{ value.serviceId }}">

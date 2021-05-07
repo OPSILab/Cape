@@ -68,7 +68,6 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
   }
 
   // Propagates (if any) queryParams, in order to be propagated also in the redirected URL after authentication
-  // const queryParams: Params = this.route.snapshot.queryParams;
   completeLogin = (token: OidcJWTToken): void => {
     try {
       // Get Idm User Details to create the associated Cape Account
@@ -95,17 +94,11 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     try {
       const account: Account = await this.accountService.getAccount(localStorage.getItem('accountId'));
       localStorage.setItem('currentLocale', account.language);
-      const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
-      sessionStorage.removeItem('queryParamsBeforeLogin');
-      const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
 
-      if (redirectAfterLogin) {
-        const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
-        window.close();
-        //   this.router.navigate([redirectAfterLogin], { relativeTo: this.activatedRoute, queryParams: queryParams });
-      } else this.closeLoginPopup();
+      /*
+       * Close Login Popup and propagates query Params saved before Login, and eventually append redirectAfterLogin to the Base path
+       */
+      this.closeLoginPopup();
     } catch (err) {
       console.log(err);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -129,16 +122,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     try {
       await this.accountService.createAccount(account);
 
-      const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
-      const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
-      sessionStorage.removeItem('queryParamsBeforeLogin');
-
-      if (redirectAfterLogin) {
-        const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
-        window.close();
-      } else this.closeLoginPopup();
+      this.closeLoginPopup();
     } catch (err) {
       console.log(err);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -166,9 +150,23 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     else return undefined;
   };
 
+  /*
+   * Close Login Popup and propagates query Params saved before Login, and eventually append redirectAfterLogin to the Base path
+   */
   closeLoginPopup = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    window.opener.document.location.href = this.dashboardUrl;
+    const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
+    const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
+    sessionStorage.removeItem('queryParamsBeforeLogin');
+    delete queryParamsBeforeLogin?.redirectAfterLogin;
+
+    if (redirectAfterLogin) {
+      const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    } else window.opener.document.location.href = this.dashboardUrl;
+
     window.close();
   };
 

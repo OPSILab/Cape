@@ -24,11 +24,11 @@ import it.eng.opsi.cape.servicemanager.model.linking.LinkingSession;
 
 public interface LinkingSessionRepository extends MongoRepository<LinkingSession, String> {
 
-	public Optional<LinkingSession> findByCode(String code);
+	public Optional<LinkingSession> findBySessionCode(String sessionCode);
 
 	public Optional<LinkingSession> findFirstByAccountIdAndServiceId(String accountId, String serviceId);
 
-	public Long deleteLinkingSessionByCode(String code);
+	public Long deleteLinkingSessionBySessionCode(String sessionCode);
 
 	public Long deleteLinkingSessionByAccountIdAndServiceId(String accountId, String serviceId);
 	

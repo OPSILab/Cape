@@ -53,11 +53,11 @@ public interface IServiceLinkingController {
 
 	public abstract ResponseEntity<ServiceLinkInitResponse> storeSinkSlrId(String accountId,
 			SinkServiceLinkInitRequest request) throws SessionNotFoundException, AccountManagerException,
-			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException;
+			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException, ServiceLinkRecordNotFoundException;
 
 	public abstract ResponseEntity<ServiceLinkInitResponse> storeSourceSlrId(String accountId,
 			SourceServiceLinkInitRequest request) throws SessionNotFoundException, AccountManagerException,
-			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException;
+			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException, ServiceLinkRecordNotFoundException;
 
 	public abstract ResponseEntity<String> deletePartialSlr(String accountId, String slrId) throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
 

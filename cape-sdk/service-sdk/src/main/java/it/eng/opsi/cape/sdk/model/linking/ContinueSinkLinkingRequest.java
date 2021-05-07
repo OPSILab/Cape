@@ -40,8 +40,8 @@ public class ContinueSinkLinkingRequest extends ContinueLinkingRequest {
 	private ServicePopKey popKey;
 
 	@Builder(builderMethodName = "sinkBuilder")
-	public ContinueSinkLinkingRequest(String code, String serviceId, String surrogateId, ServicePopKey popKey) {
-		super(code, serviceId, surrogateId);
+	public ContinueSinkLinkingRequest(String sessionCode, String serviceId, String surrogateId, ServicePopKey popKey) {
+		super(sessionCode, serviceId, surrogateId);
 		this.popKey = popKey;
 
 	}

@@ -36,7 +36,10 @@ public interface AccountCustomRepository {
 			ServiceLinkRecordPayload slrPayload)
 			throws AccountNotFoundException, ServiceLinkRecordAlreadyPresentException;
 
-	public Optional<Long> removeSlrPartialPayload(String accountId, String slrId)
+	public Optional<Long> removeSlrPartialPayloadByAccountIdAndSlrId(String accountId, String slrId)
+			throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
+
+	public Optional<Long> removeSlrPartialPayloadByAccountIdAndServiceId(String accountId, String serviceId)
 			throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
 
 	public Optional<ServiceLinkRecordDoubleSigned> storeFinalSlr(String accountId,

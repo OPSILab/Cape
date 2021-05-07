@@ -91,7 +91,6 @@ export class ServiceLinkingComponent implements OnInit, AfterViewInit {
 
       const url = new URLSearchParams(location);
 
-      // const code = url.get('code');
       const operatorId = url.get('operatorId');
       const returnUrl = url.get('returnUrl');
       // const linkingFrom = url.get('linkingFrom');

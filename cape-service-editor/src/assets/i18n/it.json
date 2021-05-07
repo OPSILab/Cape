@@ -14,27 +14,6 @@
       "services": "Servizi",
       "consents": "Consensi"
     },
-    "login": {
-      "enter_button": "Entra",
-      "logout_button": "Disconnetti",
-      "select_login": "Seleziona il tuo gestore di identità digitale",
-      "login_with_cape_idm": "Accedi con CaPe",
-      "login_with_cape_idm_description": "CaPe utilizza nativamente Keyrock IdM di FIWARE",
-      "keyrock_idm_link": "Login con Fiware Keyrock",
-      "login_with_eidas": "Accedi con eIDAS",
-      "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
-      "eidas_link": "Accedere con un'identità digitale da altro Paese Europeo",
-      "loginPopup": {
-        "authorize_account_data": "Autorizzi ad utilizzare i tuoi dati di registrazione per accedere a CaPe?",
-        "dont_ask_again": "Non chiedere di nuovo",
-        "authorize": "Autorizza",
-        "do_not_authorize": "Non autorizza",
-        "error_message": "Ci sono problemi a contattare il server CaPe!",
-        "no_cape_account": "Nessun account associato a te! Creare?",
-        "cancel_button": "Annulla",
-        "create_button": "Crea"
-      }
-    },
     "menu": {
       "dashboard": "Cruscotto",
       "consents_logs_group": "REGISTRO CONSENSI",
@@ -288,6 +267,26 @@
       "data_consent": "Data Consent",
       "enabled": "Enabled",
       "disabled": "Disabled"
+    }
+  },
+  "login": {
+    "enter_button": "Entra",
+    "logout_button": "Disconnetti",
+    "logout_error": "E' avvenuto un errore durante il logout",
+    "select_login": "Seleziona il tuo gestore di identità digitale",
+    "login_with_cape_idm": "Accedi con CaPe",
+    "login_with_cape_idm_description": "CaPe utilizza nativamente Keycloak IdM",
+    "keycloak_idm_link": "Login con Keycloak IdM",
+    "login_with_eidas": "Accedi con eIDAS",
+    "login_with_eidas_description": "Il regolamento eIDAS è la base legislativa per le interazioni elettroniche tra imprese, cittadini e autorità pubbliche.",
+    "eidas_link": "Accedere con un'identità digitale da altro Paese Europeo",
+    "loginPopup": {
+      "authorize_new_account_data": "Autorizzi ad usare i tuoi dati personali per creare un nuovo CaPe account?",
+      "new_account_use_data": "Cape userà la tua Email, il tuo Nome e Cognome, per ulteriori informazioni vedi la nostra ",
+      "authorize_and_create": "Autorizza e Crea",
+      "do_not_authorize_and_cancel": "Non autorizzo e annulla",
+      "error_message": "E' avvenuto un errore contattando CaPe!",
+      "no_cape_account": "Spiacente! Nessun CaPe account associata alla tua mail!"
     }
   }
 }

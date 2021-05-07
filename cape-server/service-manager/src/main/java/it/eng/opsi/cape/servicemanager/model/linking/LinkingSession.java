@@ -45,7 +45,7 @@ public class LinkingSession {
 	ObjectId _id;
 
 	@NonNull
-	private String code;
+	private String sessionCode;
 
 	@NonNull
 	private LinkingSessionStateEnum state;
@@ -62,4 +62,6 @@ public class LinkingSession {
 	@NonNull
 	private ZonedDateTime startedAt;
 
+	@NonNull
+	private Boolean toRecover;
 }

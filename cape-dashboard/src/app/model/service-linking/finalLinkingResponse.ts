@@ -12,6 +12,6 @@
 import { LinkingResponseData } from './linkingResponseData';
 
 export interface FinalLinkingResponse {
-  code: string;
+  sessionCode: string;
   data: LinkingResponseData;
 }

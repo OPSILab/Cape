@@ -35,7 +35,8 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
 //				.authorizeRequests(authz -> authz.antMatchers("/api/v2/idm/oauth2/token").permitAll()
 //						.antMatchers("/api/v2/idm/user").permitAll().antMatchers("/api/v2/idm/auth/external_logout")
 //						.permitAll().antMatchers("/api/v2/**", "/api/v2").authenticated())
-				.authorizeRequests(authz -> authz.anyRequest().authenticated())
+				.authorizeRequests(authz -> authz.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**")
+						.permitAll().anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt());
 
 	}

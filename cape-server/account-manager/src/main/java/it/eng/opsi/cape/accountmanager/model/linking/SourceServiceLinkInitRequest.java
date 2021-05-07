@@ -36,9 +36,9 @@ import lombok.ToString;
 public class SourceServiceLinkInitRequest {
 
 	@NonNull
-	@NotBlank(message = "code is mandatory")
-	@JsonProperty(value = "code")
-	private String code;
+	@NotBlank(message = "session_code is mandatory")
+	@JsonProperty(value = "session_code")
+	private String sessionCode;
 
 	@NonNull
 	@NotBlank(message = "slr_id is mandatory")

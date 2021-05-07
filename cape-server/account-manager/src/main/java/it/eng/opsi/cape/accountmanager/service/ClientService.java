@@ -132,18 +132,18 @@ public class ClientService {
 
 	}
 
-	public LinkingSession callGetLinkingSession(String code) throws SessionNotFoundException, AccountManagerException {
+	public LinkingSession callGetLinkingSession(String sessionCode) throws SessionNotFoundException, AccountManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<LinkingSession> response = restTemplate
-				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{code}", LinkingSession.class, code);
+				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
 		if (responseStatus.is2xxSuccessful())
 			return response.getBody();
 		else if (responseStatus == HttpStatus.NOT_FOUND) {
-			throw new SessionNotFoundException("The session with code: " + code + "was not found");
+			throw new SessionNotFoundException("The session with sessionCode: " + sessionCode + " was not found");
 		} else
 			throw new AccountManagerException(
 					"There was an error while retrieving Linking Session from Service Manager");

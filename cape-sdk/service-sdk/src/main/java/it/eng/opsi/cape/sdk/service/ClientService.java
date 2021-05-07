@@ -78,43 +78,6 @@ public class ClientService {
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
 	}
 
-//	public Object getIdmUserDetail(String token) {
-//
-//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-//		return restTemplate.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/user")
-//				.queryParam("access_token", token).toUriString(), Object.class);
-//
-//	}
-//
-//	public Object postCodeForToken(String grantType, String redirectUri, String code) {
-//
-//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-//
-//		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-//		body.add("grant_type", grantType);
-//		body.add("redirect_uri", redirectUri);
-//		body.add("code", code);
-//
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
-//
-//		return restTemplate.exchange(
-//				RequestEntity.post(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/oauth2/token").build().toUri())
-//						.headers(headers).body(body),
-//				Object.class);
-//
-//	}
-//
-//	public Object externalLogout(String clientId) {
-//
-//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-//		return restTemplate
-//				.exchange(RequestEntity.delete(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/auth/external_logout")
-//						.queryParam("clientId", clientId).build().toUri()).build(), Object.class);
-//
-//	}
-
 	public OperatorDescription fetchOperatorDescription(String operatorId)
 			throws ServiceManagerException, OperatorDescriptionNotFoundException {
 
@@ -231,13 +194,13 @@ public class ClientService {
 	/*
 	 * Call Link Sink Service SDK -> Service Manager
 	 */
-	public FinalLinkingResponse callLinkSinkService(String code, String serviceId, String surrogateId,
+	public FinalLinkingResponse callLinkSinkService(String sessionCode, String serviceId, String surrogateId,
 			ServicePopKey popKey) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<FinalLinkingResponse> response = restTemplate.exchange(
 				RequestEntity.post(URI.create(serviceManagerHost + "/api/v2/slr/link")).body(ContinueSinkLinkingRequest
-						.sinkBuilder().code(code).serviceId(serviceId).surrogateId(surrogateId).popKey(popKey).build()),
+						.sinkBuilder().sessionCode(sessionCode).serviceId(serviceId).surrogateId(surrogateId).popKey(popKey).build()),
 				FinalLinkingResponse.class);
 
 		return response.getBody();
@@ -246,13 +209,13 @@ public class ClientService {
 	/*
 	 * Call Link Source Service SDK -> Service Manager
 	 */
-	public FinalLinkingResponse callLinkSourceService(String code, String serviceId, String surrogateId) {
+	public FinalLinkingResponse callLinkSourceService(String sessionCode, String serviceId, String surrogateId) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		ResponseEntity<FinalLinkingResponse> response = restTemplate.exchange(
 				RequestEntity.post(URI.create(serviceManagerHost + "/api/v2/slr/link")).body(ContinueLinkingRequest
-						.builder().code(code).serviceId(serviceId).surrogateId(surrogateId).build()),
+						.builder().sessionCode(sessionCode).serviceId(serviceId).surrogateId(surrogateId).build()),
 				FinalLinkingResponse.class);
 
 		return response.getBody();
@@ -261,18 +224,18 @@ public class ClientService {
 	/*
 	 * Call Get Linking Session by Code Service SDK -> Service Manager
 	 */
-	public LinkingSession callGetLinkingSession(String code) throws SessionNotFoundException, ServiceManagerException {
+	public LinkingSession callGetLinkingSession(String sessionCode) throws SessionNotFoundException, ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<LinkingSession> response = restTemplate
-				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{code}", LinkingSession.class, code);
+				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
 		if (responseStatus.is2xxSuccessful())
 			return response.getBody();
 		else if (responseStatus == HttpStatus.NOT_FOUND) {
-			throw new SessionNotFoundException("The session with code: " + code + "was not found");
+			throw new SessionNotFoundException("The session with sessionCode: " + sessionCode + " was not found");
 		} else
 			throw new ServiceManagerException(
 					"There was an error while retrieving Linking Session from Service Manager");

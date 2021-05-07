@@ -110,33 +110,6 @@ public class AccountController implements IAccountController {
 		this.accountPublicUrl = this.appProperty.getCape().getAccountManager().getHost();
 	}
 
-//	@GetMapping(value = "/idm/user")
-//	public ResponseEntity<Object> getIdmUserDetails(@RequestParam(name = "token") String token) {
-//
-//		Object userDetails = clientService.getIdmUserDetail(token);
-//
-//		return ResponseEntity.ok(userDetails);
-//
-//	}
-//
-//	@PostMapping(value = "/idm/oauth2/token")
-//	public ResponseEntity<Object> postCodeforToken(@RequestParam(name = "grant_type") String grantType,
-//			@RequestParam(name = "redirect_uri") String redirectUri, @RequestParam(name = "code") String code) {
-//
-//		Object token = clientService.postCodeForToken(grantType, redirectUri, code);
-//
-//		return ResponseEntity.ok(token);
-//
-//	}
-//
-//	@DeleteMapping(value = "/idm/auth/external_logout")
-//	public ResponseEntity<Object> externalLogout(@RequestParam(name = "client_id") String clientId) {
-//
-//		Object response = clientService.externalLogout(clientId);
-//
-//		return ResponseEntity.ok(response);
-//
-//	}
 
 	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
 			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })

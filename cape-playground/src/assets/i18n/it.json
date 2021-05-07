@@ -4,6 +4,8 @@
     "home": "Home",
     "error": "Errore",
     "refresh": "Aggiorna",
+    "close": "Chiudi",
+    "cancel": "Annulla",
     "services": {
       "welcome": " Ciao {{name}}! Benvenuto su Cape Services Playground!",
       "no_name_welcome": "Benvenuto su Cape Services Playground!",

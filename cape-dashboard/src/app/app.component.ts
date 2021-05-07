@@ -71,7 +71,6 @@ export class AppComponent implements OnInit, OnDestroy {
         state: uuidv4(),
         redirectUri: `${this.appConfig.system.dashboardUrl}/login/loginPopup`,
         responseType: NbOAuth2ResponseType.CODE,
-        params: { aaa: 'bbb' },
       },
       redirect: {
         success: '/pages', // welcome page path

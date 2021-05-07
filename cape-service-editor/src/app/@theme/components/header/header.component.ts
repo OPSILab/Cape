@@ -1,9 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { OidcUserInformationService } from '../../../auth/services/oidc-user-information.service';
+import { UserClaims } from '../../../auth/model/oidc';
 
 @Component({
   selector: 'ngx-header',
@@ -12,69 +14,68 @@ import { TranslateService } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  user: any;
+  user: UserClaims;
 
   themes = [
     {
       value: 'default',
-      name: 'Light'
+      name: 'Light',
     },
     {
       value: 'cape',
-      name: 'Cape'
+      name: 'Cape',
     },
     {
       value: 'dark',
-      name: 'Dark'
+      name: 'Dark',
     },
     {
       value: 'corporate',
-      name: 'Corporate'
+      name: 'Corporate',
     },
   ];
 
   currentTheme = 'cape';
 
-  loggedUserMenu = [{ title: 'Account', link: "pages/account" }];
+  loggedUserMenu = [{ title: 'Account', link: 'pages/account' }];
   userMenu = [{ title: 'Log in', link: '/login' }];
 
-  constructor(private sidebarService: NbSidebarService,
+  constructor(
+    private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService,
-    private translateService: TranslateService) {
-  }
+    private translateService: TranslateService,
+    private userService: OidcUserInformationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-
-    this.loggedUserMenu.push({ title: this.translateService.instant('general.login.logout_button'), link: '' });
+    this.loggedUserMenu.push({ title: this.translateService.instant('login.logout_button'), link: '' });
     this.currentTheme = this.themeService.currentTheme;
-
-    // this.userService.getUsers()
-    //  .pipe(takeUntil(this.destroy$))
-    //  .subscribe((users: any) => this.user = users.nick);
-
-    const loggedUser = localStorage.accountId;
-    if (loggedUser)
-    this.user = { name: loggedUser, picture: "" };
+    this.userService.onUserChange().subscribe((user: UserClaims) => (this.user = user));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
+    this.themeService
+      .onMediaQueryChange()
       .pipe(
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+      .subscribe((isLessThanXl: boolean) => {
+        this.userPictureOnly = isLessThanXl;
+        this.cdr.detectChanges();
+      });
 
-    this.themeService.onThemeChange()
+    this.themeService
+      .onThemeChange()
       .pipe(
         map(({ name }) => name),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe(themeName => this.currentTheme = themeName);
+      .subscribe((themeName) => (this.currentTheme = themeName));
   }
 
   ngOnDestroy() {
@@ -96,6 +97,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
-
-
 }

@@ -9,12 +9,17 @@ export interface AppConfig {
 export interface System {
   sdkUrl: string;
   serviceEditorUrl: string;
-  idmHost: string;
-  clientId: string;
-  loginPopupUrl: string;
-  disable_auth: string;
   assetsDataDir: string;
   editorSchemaPath: string;
+  auth: Auth;
+}
+
+export interface Auth {
+  idmHost: string;
+  clientId: string;
+  disableAuth: string;
+  authProfile: string;
+  authRealm: string;
 }
 
 export interface I18n {

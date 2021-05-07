@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { DashboardService, AuditLog } from './dashboard.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { LoginService } from '../../login/login.service';
 import { Router } from '@angular/router';
 import { CardSeriesComponent } from '@swimlane/ngx-charts';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { LoginService } from '../../auth/login/login.service';
 
 interface CardSettings {
   title: string;

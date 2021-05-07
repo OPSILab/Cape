@@ -16,45 +16,21 @@
  ******************************************************************************/
 package it.eng.opsi.cape.servicemanager;
 
-import java.security.PublicKey;
-import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.util.Base64;
-import com.nimbusds.jose.util.Base64URL;
-import com.nimbusds.jose.util.X509CertUtils;
-
 import it.eng.opsi.cape.exception.SessionNotFoundException;
 import it.eng.opsi.cape.exception.SessionStateNotAllowedException;
 import it.eng.opsi.cape.servicemanager.model.ServicePopKey;
 import it.eng.opsi.cape.servicemanager.model.linking.LinkingSession;
 import it.eng.opsi.cape.servicemanager.model.linking.LinkingSessionStateEnum;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordPayload;
-import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordPayload;
-import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordDoubleSigned.ServiceLinkRecordSignature;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusEnum;
-import it.eng.opsi.cape.servicemanager.model.linking.service.ServiceSignSlrResponse;
 import it.eng.opsi.cape.servicemanager.repository.LinkingSessionRepository;
 
 @Service
@@ -63,7 +39,7 @@ public class ServiceManager {
 	@Autowired
 	LinkingSessionRepository linkingSessionRepo;
 
-	public String generateCode(String accountId, String serviceId) {
+	public String generateLinkingSessionCode(String accountId, String serviceId) {
 		return RandomStringUtils.randomAlphanumeric(20);
 	}
 
@@ -71,21 +47,21 @@ public class ServiceManager {
 		return operatorId + serviceId + surrogateId + RandomStringUtils.randomAlphanumeric(10);
 	}
 
-	public LinkingSession startSession(String code, String accountId, String serviceId, ZonedDateTime startedAt) {
+	public LinkingSession startSession(String sessionCode, String accountId, String serviceId, ZonedDateTime startedAt, Boolean toRecover) {
 
 		/*
 		 * Initializes surrogateId with serviceId, since that is provided only when
 		 * writing partialSlrPayload
 		 */
-		LinkingSession newSession = new LinkingSession(code, LinkingSessionStateEnum.STARTED, accountId, serviceId,
-				serviceId, startedAt);
+		LinkingSession newSession = new LinkingSession(sessionCode, LinkingSessionStateEnum.STARTED, accountId, serviceId,
+				serviceId, startedAt, toRecover);
 		return linkingSessionRepo.save(newSession);
 	}
 
-	public LinkingSession getSessionByCode(String code) throws SessionNotFoundException {
+	public LinkingSession getSessionByCode(String sessionCode) throws SessionNotFoundException {
 
-		return linkingSessionRepo.findByCode(code)
-				.orElseThrow(() -> new SessionNotFoundException("No active session with code: " + code + " was found"));
+		return linkingSessionRepo.findBySessionCode(sessionCode)
+				.orElseThrow(() -> new SessionNotFoundException("No active session with sessionCode: " + sessionCode + " was found"));
 	}
 
 	public LinkingSession getSessionByAccountIdAndServiceId(String accountId, String serviceId)
@@ -96,11 +72,11 @@ public class ServiceManager {
 						+ " and Service Id: " + serviceId + " was found"));
 	}
 
-	public LinkingSession changeSessionStatusByCode(String code, LinkingSessionStateEnum newState)
+	public LinkingSession changeSessionStateByCode(String sessionCode, LinkingSessionStateEnum newState)
 			throws SessionNotFoundException, SessionStateNotAllowedException {
 
-		LinkingSession currentLinkingSession = linkingSessionRepo.findByCode(code)
-				.orElseThrow(() -> new SessionNotFoundException("No active session with code: " + code + " was found"));
+		LinkingSession currentLinkingSession = linkingSessionRepo.findBySessionCode(sessionCode)
+				.orElseThrow(() -> new SessionNotFoundException("No active session with sessionCode: " + sessionCode + " was found"));
 
 		LinkingSessionStateEnum currentState = currentLinkingSession.getState();
 
@@ -118,6 +94,17 @@ public class ServiceManager {
 		checkStateAllowed(sessionToChange.getState(), newState);
 		sessionToChange.setState(newState);
 
+		return linkingSessionRepo.save(sessionToChange);
+
+	}
+
+	public LinkingSession changeSessionState(LinkingSession sessionToChange, LinkingSessionStateEnum newState,
+			Boolean toRecover) throws SessionNotFoundException, SessionStateNotAllowedException {
+
+		checkStateAllowed(sessionToChange.getState(), newState);
+		sessionToChange.setState(newState);
+		sessionToChange.setToRecover(toRecover);
+		
 		return linkingSessionRepo.save(sessionToChange);
 
 	}
@@ -168,12 +155,12 @@ public class ServiceManager {
 
 	}
 
-	public void cancelSessionByCode(String code) throws SessionNotFoundException {
+	public void cancelSessionBySessionCode(String sessionCode) throws SessionNotFoundException {
 
-		Long deletedItems = linkingSessionRepo.deleteLinkingSessionByCode(code);
+		Long deletedItems = linkingSessionRepo.deleteLinkingSessionBySessionCode(sessionCode);
 
 		if (deletedItems != 1)
-			throw new SessionNotFoundException("No active session with code: " + code + " was found");
+			throw new SessionNotFoundException("No active session with sessionCode: " + sessionCode + " was found");
 
 	}
 

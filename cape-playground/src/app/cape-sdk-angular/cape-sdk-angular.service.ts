@@ -114,11 +114,19 @@ export class CapeSdkAngularService {
     );
   }
 
-  async linkFromOperator(sdkUrl: string, code: string, operatorId: string, serviceId: string, serviceName: string, serviceUserId: string, returnUrl: string) {
+  async linkFromOperator(
+    sdkUrl: string,
+    sessionCode: string,
+    operatorId: string,
+    serviceId: string,
+    serviceName: string,
+    serviceUserId: string,
+    returnUrl: string
+  ) {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
+    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
 
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
   }
@@ -128,11 +136,11 @@ export class CapeSdkAngularService {
     const surrogateId = surrogateIdResponse.surrogate_id;
 
     // Get Linking Session Code for automatic Linking
-    const code = await this.getServiceLinkingSessionCode(sdkUrl, serviceUserId, surrogateId, serviceId, returnUrl);
-    console.log(code);
+    const sessionCode = await this.getServiceLinkingSessionCode(sdkUrl, serviceUserId, surrogateId, serviceId, returnUrl);
+    console.log(sessionCode);
 
     // Start Service Linking with retrieved Linking Session Code
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
+    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
 
     // Once the Service Link is done, save the userId - surrogateId association
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
@@ -148,9 +156,12 @@ export class CapeSdkAngularService {
 
   async getServiceLinkingSessionCode(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, returnUrl: string) {
     return this.http
-      .get(`${sdkUrl}/slr/linking/code?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`, {
-        responseType: 'text',
-      })
+      .get(
+        `${sdkUrl}/slr/linking/sessionCode?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
+        {
+          responseType: 'text',
+        }
+      )
       .toPromise();
   }
 
@@ -159,9 +170,9 @@ export class CapeSdkAngularService {
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
-  public startServiceLinking(sdkUrl: string, code: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
+  public startServiceLinking(sdkUrl: string, sessionCode: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
     const startLinkingBody: StartLinkingRequest = {
-      code: code,
+      session_code: sessionCode,
       surrogate_id: surrogateId,
       service_id: serviceId,
       operator_id: operatorId,

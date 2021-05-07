@@ -111,21 +111,45 @@ public class AccountCustomRepositoryImpl implements AccountCustomRepository {
 	}
 
 	@Override
-	public Optional<Long> removeSlrPartialPayload(String accountId, String slrId)
+	public Optional<Long> removeSlrPartialPayloadByAccountIdAndSlrId(String accountId, String slrId)
 			throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
 
 		Query q = query(new Criteria().orOperator(where("_id").is(accountId), where("username").is(accountId)));
-
 		Account existingAccount = template.findOne(q, Account.class);
 
 		if (existingAccount == null)
 			throw new AccountNotFoundException("The Account with id: " + accountId + " was not found");
 
-		UpdateResult result = template.updateFirst(q, new Update().set("modified", ZonedDateTime.now())
-				.pull("serviceLinkRecords", where("payload._id").is(slrId)), Account.class);
+//		UpdateResult result = template.updateFirst(q, new Update().set("modified", ZonedDateTime.now())
+//				.pull("serviceLinkRecords", Query.query(where("payload._id").is(slrId))), Account.class);
 
+		UpdateResult result = template.updateFirst(q, new Update().pull("serviceLinkRecords",
+				Query.query(Criteria.where("payload._id").is(new ObjectId(slrId)))), Account.class);
 		if (result.getMatchedCount() == 1 && result.getModifiedCount() == 0)
-			throw new ServiceLinkRecordNotFoundException("No Service Link Record with id: " + slrId + " was found");
+			throw new ServiceLinkRecordNotFoundException(
+					"No Service Link Record for AccountId: " + accountId + "and Slr Id: " + slrId  + " was found");
+
+		return Optional.of(result.getModifiedCount());
+	}
+
+	@Override
+	public Optional<Long> removeSlrPartialPayloadByAccountIdAndServiceId(String accountId, String serviceId)
+			throws AccountNotFoundException, ServiceLinkRecordNotFoundException {
+
+		Query q = query(new Criteria().orOperator(where("_id").is(accountId), where("username").is(accountId)));
+		Account existingAccount = template.findOne(q, Account.class);
+
+		if (existingAccount == null)
+			throw new AccountNotFoundException("The Account with id: " + accountId + " was not found");
+
+//		UpdateResult result = template.updateFirst(q, new Update().set("modified", ZonedDateTime.now())
+//				.pull("serviceLinkRecords", Query.query(where("payload._id").is(slrId))), Account.class);
+
+		UpdateResult result = template.updateFirst(q, new Update().pull("serviceLinkRecords",
+				Query.query(Criteria.where("payload.serviceId").is(serviceId))), Account.class);
+		if (result.getMatchedCount() == 1 && result.getModifiedCount() == 0)
+			throw new ServiceLinkRecordNotFoundException("No Service Link Record for AccountId: " + accountId
+					+ "and Service Id: " + serviceId + " was found");
 
 		return Optional.of(result.getModifiedCount());
 	}

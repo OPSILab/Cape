@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
-import { LoginService } from '../../login/login.service';
+import { LoginService } from '../../auth/login/login.service';
 
 @Component({
   selector: 'consents-smart-table',

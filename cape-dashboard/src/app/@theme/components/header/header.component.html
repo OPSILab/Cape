@@ -25,7 +25,7 @@
         [nbContextMenu]="loggedUserMenu"
         [onlyPicture]="userPictureOnly"
         [name]="user?.name"
-        [title]="user?.roles.join(' | ')"
+        [title]="user?.roles?.join(' | ')"
         [picture]="'assets/images/app/default_user.png'"
       >
       </nb-user>

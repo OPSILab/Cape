@@ -12,7 +12,7 @@ import { NbDialogService } from '@nebular/theme';
 export class LoginComponent {
   private environment: System;
 
-  constructor(private dialogService: NbDialogService, private configService: NgxConfigureService, private route: ActivatedRoute) {
+  constructor(private configService: NgxConfigureService, private route: ActivatedRoute) {
     this.environment = (this.configService.config as AppConfig).system;
   }
 

@@ -6,12 +6,15 @@
   "system": {
     "sdkUrl": "https://www.cape-suite.eu/cape-service-sdk/api/v2",
     "serviceEditorUrl": "https://www.cape-suite.eu/cape-service-editor",
-    "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "1c0407c2-b7ee-4117-8a99-c20b3a964cc1",
-    "loginPopupUrl": "/loginPopup",
-    "disable_auth": "false",
     "assetsDataDir": "/assets/data",
-    "editorSchemaPath": "/assets/data/service-schema/service-entry.json"
+    "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
+    "auth": {
+      "idmHost": "https://www.cape-suite.eu",
+      "clientId": "cape-service-sdk",
+      "disableAuth": "false",
+      "authProfile": "oidc",
+      "authRealm": "Cape"
+    }
   },
   "i18n": {
     "locale": "en"

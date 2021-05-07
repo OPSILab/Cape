@@ -116,7 +116,7 @@ public class ClientService {
 	 * Start Service Linking (Linking started from Service and then redirected to
 	 * Operator Login) Service Manager -> Service SDK
 	 */
-	public FinalStoreSlrResponse callStartServiceLinking(String code, String surrogateId, String operatorId,
+	public FinalStoreSlrResponse callStartServiceLinking(String sessionCode, String surrogateId, String operatorId,
 			String serviceId, String returnUrl, String serviceLinkingUri) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
@@ -124,7 +124,7 @@ public class ClientService {
 		ResponseEntity<FinalStoreSlrResponse> linkingResponse = restTemplate
 				.exchange(
 						RequestEntity.post(URI.create(serviceLinkingUri))
-								.body(StartLinkingRequest.builder().code(code).surrogateId(surrogateId)
+								.body(StartLinkingRequest.builder().sessionCode(sessionCode).surrogateId(surrogateId)
 										.operatorId(operatorId).serviceId(serviceId).returnUrl(returnUrl).build()),
 						FinalStoreSlrResponse.class);
 
@@ -155,7 +155,7 @@ public class ClientService {
 	/*
 	 * callStoreSinkSlrId Service Manager ---> Account Manager
 	 */
-	public ServiceLinkInitResponse callStoreSinkSlrId(String accountId, String code, String slrId, String serviceId,
+	public ServiceLinkInitResponse callStoreSinkSlrId(String accountId, String sessionCode, String slrId, String serviceId,
 			String surrogateId, ServicePopKey popKey) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
@@ -167,7 +167,7 @@ public class ClientService {
 										.fromHttpUrl(accountManagerHost
 												+ "/api/v2/accounts/{account_id}/servicelinks/init/sink")
 										.build(accountId))
-								.body(SinkServiceLinkInitRequest.builder().code(code).slrId(slrId).serviceId(serviceId)
+								.body(SinkServiceLinkInitRequest.builder().sessionCode(sessionCode).slrId(slrId).serviceId(serviceId)
 										.surrogateId(surrogateId).popKey(popKey).build()),
 						ServiceLinkInitResponse.class);
 
@@ -181,7 +181,7 @@ public class ClientService {
 	/*
 	 * callSourceSinkSlrId Service Manager ---> Account Manager
 	 */
-	public ServiceLinkInitResponse callStoreSourceSlrId(String accountId, String code, String slrId, String serviceId,
+	public ServiceLinkInitResponse callStoreSourceSlrId(String accountId, String sessionCode, String slrId, String serviceId,
 			String surrogateId) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
@@ -193,7 +193,7 @@ public class ClientService {
 										.fromHttpUrl(accountManagerHost
 												+ "/api/v2/accounts/{account_id}/servicelinks/init/source")
 										.build(accountId))
-								.body(SourceServiceLinkInitRequest.builder().code(code).slrId(slrId)
+								.body(SourceServiceLinkInitRequest.builder().sessionCode(sessionCode).slrId(slrId)
 										.serviceId(serviceId).surrogateId(surrogateId).build()),
 						ServiceLinkInitResponse.class);
 
@@ -220,7 +220,7 @@ public class ClientService {
 	 * callAccountSignSlr Service Manager ---> Account Manager
 	 */
 	public AccountSignSlrResponse callAccountSignSlr(String accountId, String slrId,
-			ServiceLinkRecordPayload partialSlrPayload, String code) throws ServiceManagerException {
+			ServiceLinkRecordPayload partialSlrPayload, String sessionCode) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
@@ -231,7 +231,7 @@ public class ClientService {
 										.fromHttpUrl(accountManagerHost
 												+ "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 										.build(accountId, slrId))
-								.body(AccountSignSlrRequest.builder().code(code).partialSlrPayload(partialSlrPayload)
+								.body(AccountSignSlrRequest.builder().sessionCode(sessionCode).partialSlrPayload(partialSlrPayload)
 										.build()),
 						AccountSignSlrResponse.class);
 
@@ -246,14 +246,14 @@ public class ClientService {
 	 * callServiceSignSlr Service Manager ---> Service SDK
 	 */
 	public ServiceSignSlrResponse callServiceSignSlr(String serviceSdkHost,
-			ServiceLinkRecordAccountSigned accountSignedSlr, String surrogateId, String operatorId, String code)
+			ServiceLinkRecordAccountSigned accountSignedSlr, String surrogateId, String operatorId, String sessionCode)
 			throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		ResponseEntity<ServiceSignSlrResponse> response = restTemplate.exchange(
 				RequestEntity.post(URI.create(serviceSdkHost + "/api/v2/slr/slr"))
-						.body(ServiceSignSlrRequest.builder().accountSignedSlr(accountSignedSlr).code(code)
+						.body(ServiceSignSlrRequest.builder().accountSignedSlr(accountSignedSlr).sessionCode(sessionCode)
 								.surrogateId(surrogateId).operatorId(operatorId).build()),
 				ServiceSignSlrResponse.class);
 
@@ -283,7 +283,7 @@ public class ClientService {
 	/*
 	 * callStoreServiceLink Service Manager ---> Account Manager
 	 */
-	public ResponseEntity<FinalStoreSlrResponse> callStoreFinalSlr(String accountId, String code, String slrId,
+	public ResponseEntity<FinalStoreSlrResponse> callStoreFinalSlr(String accountId, String sessionCode, String slrId,
 			ServiceLinkRecordDoubleSigned slr, ServiceLinkStatusRecordPayload ssrPayload)
 			throws ServiceManagerException {
 
@@ -295,7 +295,7 @@ public class ClientService {
 								.fromHttpUrl(accountManagerHost
 										+ "/api/v2/accounts/{account_id}/servicelinks/{link_id}/store/")
 								.build(accountId, slrId))
-						.body(FinalStoreSlrRequest.builder().slr(slr).ssr(ssrPayload).code(code).build()),
+						.body(FinalStoreSlrRequest.builder().slr(slr).ssr(ssrPayload).sessionCode(sessionCode).build()),
 				FinalStoreSlrResponse.class);
 
 		HttpStatus status = response.getStatusCode();
