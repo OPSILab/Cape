@@ -50,6 +50,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
 
@@ -124,6 +125,7 @@ import it.eng.opsi.cape.sdk.service.ClientService;
 import it.eng.opsi.cape.sdk.service.CryptoService;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.DataMapping;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -162,6 +164,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	private final ApplicationProperties appProperty;
 
 	private final String businessId;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	public CapeServiceSdkController(ApplicationProperties appProperty) {
@@ -233,7 +238,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
 
 		/*
-		 * Get session by input sessionCode and check its serviceId matches the ones in input
+		 * Get session by input sessionCode and check its serviceId matches the ones in
+		 * input
 		 */
 		LinkingSession session = clientService.callGetLinkingSession(request.getSessionCode());
 
@@ -582,7 +588,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@Operation(summary = "Call Consent Manager to generate Consent Form for surrogateId, sinkId and sourceId (if any) in input.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' mappings (3-party reuse) or from the datasets of the service (Within Service)", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
-	@GetMapping(value = "/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/users/surrogates/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentForm> fetchConsentForm(@PathVariable String surrogateId,
 			@PathVariable String serviceId, @PathVariable String purposeId,
@@ -736,7 +742,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@Operation(summary = "Give the Consent for the input ConsentForm. Return Consent Record signed with the Acccount private key.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
-	@PostMapping(value = "/users/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/users/surrogates/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
 			@RequestBody @Valid ConsentForm consentForm) {
 
@@ -780,74 +786,92 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by ", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
-	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/users/surrogates/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(
-			@PathVariable String surrogateId, ConsentRecordStatusEnum status,
+			@PathVariable String surrogateId, @RequestParam(required = false) String serviceId,
+			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String datasetId,
+			ConsentRecordStatusEnum status, @RequestParam(required = false) String purposeId,
+			@RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
 		if (checkConsentAtOperator)
-			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsBySurrogateIdAndQuery(surrogateId,
-					status, purposeCategory, processingCategory)));
+			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
+					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
 		else
 
-			return ResponseEntity.ok(consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, surrogateId, status,
-					purposeCategory, processingCategory));
+			return ResponseEntity.ok(consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, serviceId,
+					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory));
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Sink-Source Service Ids. Optionally can be filtered by User Id, Dataset Id, status, purposeCategory and processingCategory.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input User Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Category and Processing Category.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records for the input Sink-Source ServiceIds", responseCode = "200") })
-	@GetMapping(value = "/services/consents/usageRules", produces = MediaType.APPLICATION_JSON_VALUE)
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+	@GetMapping(value = "/users/{userId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServicePairAndQuery(
-			@RequestParam(required = false) String sinkServiceId,
-			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String userId,
-			@RequestParam(required = false) String datasetId,
-			@RequestParam(required = false) ConsentRecordStatusEnum status,
-			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory, Boolean checkConsentAtOperator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by User Id, Dataset Id, status, purposeCategory and processingCategory.", tags = {
-			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records for the input ServiceId", responseCode = "200") })
-	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Override
-	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(
-			@PathVariable String serviceId, @RequestParam(required = false) String userId,
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByUserIdAndQuery(@PathVariable String userId,
+			@RequestParam(required = false) String serviceId, @RequestParam(required = false) String sourceServiceId,
 			@RequestParam(required = false) String datasetId, ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
 		/*
-		 * If UserId is specified, retrieve its corresponding SurrogateId, in order to
-		 * query ConsentRecord by SurrogateId
+		 * Retrieve SurrogateIds corresponding to the input UserId, in order to query
+		 * ConsentRecord by SurrogateId. In case either the serviceId or the
+		 * sourceServiceId is specified, there will be only one matching surrogateId
 		 */
-		if (StringUtils.isNotBlank(userId)) {
-			Optional<UserSurrogateIdLink> surrogateIdLink = userSurrogateIdRepo
+		List<UserSurrogateIdLink> matchingSurrogateIds = null;
+		List<ConsentRecordSigned> result = new ArrayList<ConsentRecordSigned>(0);
+
+		if (StringUtils.isBlank(serviceId))
+			matchingSurrogateIds = userSurrogateIdRepo.findByUserIdOrderByCreatedDesc(userId);
+		else {
+
+			Optional<UserSurrogateIdLink> matchingLink = userSurrogateIdRepo
 					.findTopByUserIdAndServiceIdOrderByCreatedDesc(userId, serviceId);
 
-			if (surrogateIdLink.isEmpty())
-				return ResponseEntity.ok(new ArrayList<ConsentRecordSigned>(0));
-			else
-				return getConsentRecordsBySurrogateIdAndQuery(surrogateIdLink.get().getSurrogateId(), status,
-						purposeCategory, processingCategory, checkConsentAtOperator);
-		} else {
-
-			if (checkConsentAtOperator)
-				return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByServiceIdAndQuery(serviceId,
-						datasetId, status, purposeCategory, processingCategory)));
-			else
-				return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, datasetId, status,
-						purposeCategory, processingCategory));
+			if (matchingLink.isPresent())
+				matchingSurrogateIds = Arrays.asList(matchingLink.get());
 		}
+
+		if (matchingSurrogateIds != null)
+			for (UserSurrogateIdLink matchingSurrogateId : matchingSurrogateIds) {
+
+				result.addAll(getConsentRecordsBySurrogateIdAndQuery(matchingSurrogateId.getSurrogateId(), serviceId,
+						sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory,
+						checkConsentAtOperator).getBody());
+			}
+
+		return ResponseEntity.ok(result);
+
+	}
+
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Category and Processing Category.", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records for the input ServiceId", responseCode = "200") })
+	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(
+			@PathVariable String serviceId, @RequestParam(required = false) String sourceServiceId,
+			@RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+
+		if (checkConsentAtOperator)
+
+			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
+					null, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
+		else
+			return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId, datasetId,
+					status, purposeId, purposeName, purposeCategory, processingCategory));
 
 	}
 
@@ -857,18 +881,20 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@GetMapping(value = "/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(
-			@RequestParam(required = false) String serviceId, @RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) String surrogateId, @RequestParam(required = false) String serviceId,
+			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String datasetId,
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
 
 		if (checkConsentAtOperator)
-			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdandQuery(serviceId,
-					datasetId, status, purposeCategory, processingCategory)));
+			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
+					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
 		else
-			return ResponseEntity.ok(consentRecordRepo.findByBusinessIdAndQuery(datasetId, serviceId, datasetId, status,
-					purposeCategory, processingCategory));
+			return ResponseEntity.ok(consentRecordRepo.findByBusinessIdAndQuery(businessId, surrogateId, serviceId,
+					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory));
 	}
 
 	@Operation(summary = "Call the Consent Manager to change status (from Service) of a Consent for the input SurrogateId, Slr Id and Cr Id.", tags = {
@@ -1031,6 +1057,51 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 		return clientService.createCapeAccount(account);
 
+	}
+
+	@Operation(summary = "Enforce Consent Usage Rule by filtering input body. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
+			"Data Request" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+	@PostMapping(value = "/services/consents/enforceUsageRules")
+	@Override
+	public ResponseEntity<Object> enforceUsageRulesToPayload(@RequestParam(required = true) String userId,
+			@RequestParam(required = true) String sinkServiceId, @RequestParam(required = false) String sourceServiceId,
+			@RequestParam(required = false) String datasetId, @RequestParam(required = false) String purposeId,
+			@RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestBody Map<String, Object> dataObject) throws ConsentRecordNotFoundException {
+
+		/*
+		 * Get active Consent Records that match with UserId and Sink-Source Service
+		 * pair
+		 */
+		List<ConsentRecordSigned> matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId,
+				sourceServiceId, datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory,
+				processingCategory, checkConsentAtOperator).getBody();
+
+		if (matchingConsents == null || matchingConsents.isEmpty())
+			throw new ConsentRecordNotFoundException(
+					"No Usage Rules or Consent Record found for the input UserId and Sink-Source Service Ids.");
+
+		// If any, there will be only one Active Matching Consent for input UserId and
+		// Sink-Source
+		ConsentRecordSigned consent = matchingConsents.get(0);
+		List<Dataset> conceptDatasets = consent.getPayload().getCommonPart().getRsDescription().getResourceSet()
+				.getDatasets();
+
+		for (Dataset dataset : conceptDatasets) {
+
+			List<String> properties = dataset.getDataMappings().stream().map(concept -> concept.getProperty())
+					.collect(Collectors.toList());
+
+			dataObject = dataObject.entrySet().stream().filter(entry -> properties.contains(entry.getKey()))
+					.collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+
+		}
+
+		return ResponseEntity.ok(dataObject);
 	}
 
 }

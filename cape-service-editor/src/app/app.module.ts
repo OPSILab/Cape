@@ -80,7 +80,10 @@ export function createTranslateLoader(http: HttpClient) {
           view: '*',
         },
         DATA_SUBJECT: {
-          view: [],
+          view: ['dashboard'],
+        },
+        USER: {
+          view: ['dashboard'],
         },
       },
     }),

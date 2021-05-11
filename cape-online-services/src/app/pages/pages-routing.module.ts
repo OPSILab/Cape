@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
-import { AuthGuard } from '../_guards/auth.guard';
+import { AuthGuard } from '../auth/services/auth.guard';
 
 const routes: Routes = [
   {
@@ -10,22 +10,21 @@ const routes: Routes = [
     children: [
       {
         path: 'services',
-        loadChildren: () => import('./services/services.module')
-          .then(m => m.ServicesModule),
-        canActivate: [AuthGuard]
+        loadChildren: () => import('./services/services.module').then((m) => m.ServicesModule),
+        canActivate: [AuthGuard],
       },
       {
         path: '',
         redirectTo: 'services',
         pathMatch: 'full',
-        canActivate: [AuthGuard]
-      }
+        canActivate: [AuthGuard],
+      },
     ],
-  }];
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PagesRoutingModule {
-}
+export class PagesRoutingModule {}

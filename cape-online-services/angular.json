@@ -23,11 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "src/favicon.png",
-              "src/assets",
-              "src/app/cape-sdk-angular/assets"
-            ],
+            "assets": ["src/favicon.png", "src/assets", "src/app/cape-sdk-angular/assets"],
             "styles": [
               "src/index.css",
               "src/styles.scss",
@@ -41,9 +37,7 @@
               "node_modules/socicon/css/socicon.css",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css"
             ],
-            "scripts": [
-              "node_modules/pace-js/pace.min.js"
-            ]
+            "scripts": ["node_modules/pace-js/pace.min.js"]
           },
           "configurations": {
             "production": {
@@ -56,7 +50,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -86,8 +79,7 @@
             "production": {
               "browserTarget": "cape-online-services:build:production"
             }
-          },
-          
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -102,30 +94,16 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.png",
-              "src/assets",
-              "src/app/cape-sdk-angular/assets"
-            ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/bootstrap/scss/bootstrap.scss"
-            ],
-            "scripts": [
-            ]
+            "assets": ["src/favicon.png", "src/assets", "src/app/cape-sdk-angular/assets"],
+            "styles": ["src/styles.scss", "node_modules/bootstrap/scss/bootstrap.scss"],
+            "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -141,6 +119,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "cape-online-services"
 }

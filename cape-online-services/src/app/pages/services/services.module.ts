@@ -9,8 +9,6 @@ import { DialogPersonalAttributesComponent } from './personalattributes-dialogue
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -25,18 +23,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NbAccordionModule,
     NbIconModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [
-    ServicesComponent,
-    DialogPersonalAttributesComponent,
-    DialogPrivacyNoticeComponent
-  ],
-  providers: [
-  ],
-  entryComponents: [
-    ServicesComponent,
-    DialogPersonalAttributesComponent
-  ]
+  declarations: [ServicesComponent, DialogPersonalAttributesComponent, DialogPrivacyNoticeComponent],
+  providers: [],
+  entryComponents: [ServicesComponent, DialogPersonalAttributesComponent],
 })
-export class ServicesModule { }
+export class ServicesModule {}

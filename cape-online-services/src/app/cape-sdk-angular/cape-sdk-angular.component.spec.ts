@@ -8,9 +8,8 @@ describe('CapeSdkAngularComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CapeSdkAngularComponent ]
-    })
-    .compileComponents();
+      declarations: [CapeSdkAngularComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

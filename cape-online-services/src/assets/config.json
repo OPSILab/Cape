@@ -3,16 +3,17 @@
     "operatorId": "cape",
     "onlineServicesUrl": "http://localhost:4400/cape-online-services",
     "dashboardUrl": "http://localhost/cape-dashboard",
-    "idmHost": "https://www.cape-suite.eu:8002",
-    "clientId": "c8072b40-336d-43df-a054-290e97c614bf",
-    "loginPopupUrl": "/loginPopup",
-    "disable_auth": "false",
-    "assetsDataDir": "/assets/data/"
+    "auth": {
+      "idmHost": "https://www.cape-suite.eu",
+      "clientId": "cape-service-sdk",
+      "disableAuth": "false",
+      "authProfile": "oidc",
+      "authRealm": "Cape"
+    }
   },
   "services": {
     "sdkUrl": "http://localhost:8085/cape-service-sdk/api/v2",
     "checkConsentAtOperator": "true"
-    
   },
   "i18n": {
     "locale": "en"

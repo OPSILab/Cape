@@ -30,13 +30,16 @@ public interface ConsentRecordCustomRepository {
 	public ConsentRecordSigned addStatusToCr(String crId, ConsentStatusRecordSigned csr)
 			throws ConsentRecordNotFoundException;
 
-	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
+			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory);
 
-	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
+			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
 
-	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String serviceId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
+			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
 
 }

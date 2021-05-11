@@ -12,7 +12,6 @@ import { TranslateModule } from '@ngx-translate/core';
     NbIconModule,
     NbActionsModule,
     NbUserModule,
-    NbUserModule,
     NbContextMenuModule,
     CapeSdkAngularModule,
     TranslateModule.forChild({} /*{ extend: true }*/),

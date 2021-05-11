@@ -7,13 +7,19 @@ import { CapeSdkAngularModule } from '../cape-sdk-angular/cape-sdk-angular.modul
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 
-
 @NgModule({
-  imports: [CommonModule, RouterModule, NbIconModule, NbActionsModule, NbUserModule, NbUserModule,
-    NbContextMenuModule, CapeSdkAngularModule, NbButtonModule, TranslateModule.forChild({})],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NbIconModule,
+    NbActionsModule,
+    NbUserModule,
+    NbContextMenuModule,
+    CapeSdkAngularModule,
+    NbButtonModule,
+    TranslateModule.forChild({}),
+  ],
   declarations: [HeaderComponent, FooterComponent],
-  exports: [HeaderComponent, FooterComponent]
-
-
+  exports: [HeaderComponent, FooterComponent],
 })
-export class LayoutModule { }
+export class LayoutModule {}

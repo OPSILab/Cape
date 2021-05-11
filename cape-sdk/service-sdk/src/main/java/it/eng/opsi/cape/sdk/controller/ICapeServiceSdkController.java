@@ -18,6 +18,7 @@ package it.eng.opsi.cape.sdk.controller;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -50,6 +51,7 @@ import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferRequest;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferResponse;
@@ -135,19 +137,23 @@ public interface ICapeServiceSdkController {
 			JsonProcessingException, ParseException, JOSEException, ConsentRecordNotValid;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(String surrogateId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
-			Boolean checkConsentAtOperator);
+			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
+			String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
+
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByUserIdAndQuery(String userId,
+			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
+			String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
-			String userId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
+			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			Boolean checkConsentAtOperator);
 
-	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServicePairAndQuery(String sinkServiceId, String sourceServiceId,
-			String userId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
-
-	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(String serviceId,
-			String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(String surrogateId,
+			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
+			String purposeId, String purposeName, PurposeCategory purposeCategory,
 			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
 
 	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(String surrogateId, String slrId,
@@ -160,10 +166,15 @@ public interface ICapeServiceSdkController {
 			JsonMappingException, JsonProcessingException, ParseException, ConsentStatusNotValidException,
 			CapeSdkManagerException, JOSEException, ServiceManagerException, ServiceDescriptionNotFoundException;
 
-	public abstract ResponseEntity<DataTransferResponse> postDataTransfer(@Valid DataTransferRequest body,
-			String datasetId, String[] authorizationHeader) throws ConsentRecordNotFoundException, JsonMappingException,
+	public abstract ResponseEntity<DataTransferResponse> postDataTransfer(DataTransferRequest body, String datasetId,
+			String[] authorizationHeader) throws ConsentRecordNotFoundException, JsonMappingException,
 			JsonProcessingException, ParseException, ServiceLinkRecordNotFoundException, ConsentStatusRecordNotValid,
 			DatasetIdNotFoundException, JOSEException, DataRequestNotValid, CapeSdkManagerException;
+
+	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String serviceId,
+			String sourceServiceId, String datasetId, String purposeId, String purposeName,
+			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
+			Map<String, Object> dataObject) throws ConsentRecordNotFoundException;
 
 	public abstract ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys();
 

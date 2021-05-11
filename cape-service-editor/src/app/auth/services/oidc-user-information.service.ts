@@ -22,7 +22,7 @@ export class OidcUserInformationService {
   }
 
   getRole(): Observable<string[]> {
-    return this.user ? observableOf(this.user.roles.map((role) => role.toUpperCase())) : observableOf(['USER']);
+    return this.user.roles ? observableOf(this.user.roles.map((role) => role.toUpperCase())) : observableOf(['USER']);
   }
 
   getUser(): Observable<UserClaims> {

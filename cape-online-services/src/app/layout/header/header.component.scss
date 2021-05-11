@@ -6,37 +6,32 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  
-
 
   .logo-container {
     display: flex;
     align-items: center;
-    width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)} * 0.50);
+    width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)} * 0.5);
   }
 
   nb-action {
     height: auto;
     display: flex;
     align-content: center;
-    
   }
 
   nb-user {
     cursor: pointer;
-    
   }
 
   ::ng-deep nb-search button {
     padding: 0 !important;
   }
 
-
   .header-container {
     display: flex;
     align-items: center;
     width: auto;
-color: white;
+    color: white;
     .sidebar-toggle {
       @include nb-ltr(padding-right, 1.25rem);
       @include nb-rtl(padding-left, 1.25rem);

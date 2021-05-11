@@ -61,13 +61,30 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		return result;
 	}
 
-	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+	@Override
+	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
+			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
 
+		if (serviceId != null)
+			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
+
+		if (sourceServiceId != null)
+			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
+
+		if (datasetId != null)
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
+
+		if (purposeId != null)
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
+
+		if (purposeName != null)
+			pipeline.add(
+					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
@@ -94,15 +111,26 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	}
 
 	@Override
-	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
+			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
+		if (sourceServiceId != null)
+			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
+
 		if (datasetId != null)
-			pipeline.add(match(where("payload.rsDescription.resourceSet.datasets._id").is(datasetId)));
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
+
+		if (purposeId != null)
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
+
+		if (purposeName != null)
+			pipeline.add(
+					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
@@ -130,18 +158,32 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	}
 
 	@Override
-	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String serviceId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
+			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.serviceProviderBusinessId").is(businessId)));
 
+		if (surrogateId != null)
+			pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
+
 		if (serviceId != null)
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
+		if (sourceServiceId != null)
+			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
+
 		if (datasetId != null)
-			pipeline.add(match(where("payload.rsDescription.resourceSet.datasets._id").is(datasetId)));
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
+
+		if (purposeId != null)
+			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
+
+		if (purposeName != null)
+			pipeline.add(
+					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));

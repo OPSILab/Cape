@@ -11,8 +11,8 @@ import { DialogPersonalAttributesComponent } from './personalattributes-dialogue
 
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
 import { ConsentRecordSigned } from 'src/app/cape-sdk-angular/model/consent/consentRecordSigned';
-import { LoginService } from 'src/app/login/login.service';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { LoginService } from 'src/app/auth/login/login.service';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -50,8 +50,7 @@ export class ServicesComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private errorDialogService: ErrorDialogService,
-    private dialogService: NbDialogService,
-    private loginService: LoginService
+    private dialogService: NbDialogService
   ) {
     this.config = configService.config;
     this.locale = this.config.i18n.locale;

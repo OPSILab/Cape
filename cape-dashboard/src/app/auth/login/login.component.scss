@@ -31,6 +31,10 @@
     }
   }
 
+  .header-container > div {
+    color: nb-theme(header-text-color);
+  }
+
   .cm-login-link:hover {
     text-decoration: none;
   }

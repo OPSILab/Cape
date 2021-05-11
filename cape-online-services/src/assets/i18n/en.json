@@ -4,33 +4,29 @@
     "home": "Home",
     "error": "Error",
     "refresh": "Refresh",
-    "login": {
-      "enter_button": "Enter",
-      "logout_button": "Logout",
-      "select_login": "Select your Digital Identity Provider",
-      "login_with_cape_idm": "Login with CaPe",
-      "login_with_cape_idm_description": "CaPe uses natively the Keyrock IdM",
-      "keyrock_idm_link":"Sign in with FIWARE Keyrock",
-      "login_with_eidas": "Login with eIDAS",
-      "login_with_eidas_description": "The eIDAS regulation is the legislative basis for electronic interactions between businesses, citizens and public authorities.",
-      "loginPopup": {
-        "authorize_account_data": "Do you authorize to use your account data?",
-        "dont_ask_again": "Don't Ask again",
-        "authorize": "Authorize",
-        "do_not_authorize": "Do not authorize",
-        "error_message": "There was an error while contacting Cape!",
-        "no_cape_account": "Sorry! No CaPe Account Associated to You! Create?",
-        "cancel_button": "Cancel",
-        "create_button": "Create"
-      }
-    },
+    "close": "Close",
+    "cancel": "Cancel",
     "services": {
       "welcome": " Hi {{name}}, welcome to Online Services!",
       "no_name_welcome": "Welcome to Online Services!",
       "selectService": "Please select one of the following Services and then press GO!",
       "selectPurpose": "Please select one of the following Purposes and then press GO!",
-      "goButton": "GO"   
-      
+      "goButton": "GO"
+    }
+  },
+  "login": {
+    "enter_button": "Enter",
+    "logout_button": "Logout",
+    "logout_error": "There was an error while perfoming logout",
+    "select_login": "Select your Digital Identity Provider",
+    "login_with_cape_idm": "Login with CaPe",
+    "login_with_cape_idm_description": "CaPe uses natively the Keycloak IdM",
+    "keycloak_idm_link": "Sign in with Keycloak IdM",
+    "login_with_eidas": "Login with eIDAS",
+    "login_with_eidas_description": "The eIDAS regulation is the legislative basis for electronic interactions between businesses, citizens and public authorities.",
+    "eidas_link": "Sign in with a digital identity from another European Country",
+    "loginPopup": {
+      "error_message": "There was an error while contacting CaPe!"
     }
   }
 }

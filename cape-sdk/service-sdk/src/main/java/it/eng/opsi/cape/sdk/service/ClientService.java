@@ -198,10 +198,12 @@ public class ClientService {
 			ServicePopKey popKey) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<FinalLinkingResponse> response = restTemplate.exchange(
-				RequestEntity.post(URI.create(serviceManagerHost + "/api/v2/slr/link")).body(ContinueSinkLinkingRequest
-						.sinkBuilder().sessionCode(sessionCode).serviceId(serviceId).surrogateId(surrogateId).popKey(popKey).build()),
-				FinalLinkingResponse.class);
+		ResponseEntity<FinalLinkingResponse> response = restTemplate
+				.exchange(
+						RequestEntity.post(URI.create(serviceManagerHost + "/api/v2/slr/link"))
+								.body(ContinueSinkLinkingRequest.sinkBuilder().sessionCode(sessionCode)
+										.serviceId(serviceId).surrogateId(surrogateId).popKey(popKey).build()),
+						FinalLinkingResponse.class);
 
 		return response.getBody();
 	}
@@ -224,11 +226,12 @@ public class ClientService {
 	/*
 	 * Call Get Linking Session by Code Service SDK -> Service Manager
 	 */
-	public LinkingSession callGetLinkingSession(String sessionCode) throws SessionNotFoundException, ServiceManagerException {
+	public LinkingSession callGetLinkingSession(String sessionCode)
+			throws SessionNotFoundException, ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<LinkingSession> response = restTemplate
-				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
+		ResponseEntity<LinkingSession> response = restTemplate.getForEntity(
+				serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
@@ -341,28 +344,47 @@ public class ClientService {
 				ConsentRecordSignedPair.class, surrogateId, crId);
 	}
 
-	public ConsentRecordSigned[] callGetConsentRecordsBySurrogateIdAndQuery(String surrogateId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+//	public ConsentRecordSigned[] callGetConsentRecordsBySurrogateIdAndQuery(String surrogateId, String serviceId,
+//			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+//			ProcessingCategory processingCategory) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//		return restTemplate.getForEntity(consentManagerHost
+//				+ "/api/v2/users/{surrogateId}/consents?status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
+//				ConsentRecordSigned[].class, surrogateId, status, purposeCategory, processingCategory).getBody();
+//	}
+//
+//	public ConsentRecordSigned[] callGetConsentRecordsByServiceIdAndQuery(String serviceId, String sourceServiceId,
+//			String datasetId, ConsentRecordStatusEnum status, PurposeCategory purposeCategory,
+//			ProcessingCategory processingCategory) {
+//
+//		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+//		return restTemplate.getForEntity(consentManagerHost
+//				+ "/api/v2/services/{serviceId}/consents?sourceServiceId={sourceServiceId}&status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
+//				ConsentRecordSigned[].class, serviceId, sourceServiceId, status, purposeCategory, processingCategory)
+//				.getBody();
+//	}
+
+	public ConsentRecordSigned[] callGetConsentRecordsByBusinessIdAndQuery(String businessId, String surrogateId,
+			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
+			PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/users/{surrogateId}/consents?status={status}",
-				ConsentRecordSigned[].class, surrogateId, status).getBody();
+		return restTemplate.getForEntity(consentManagerHost
+				+ "/api/v2/dataControllers/{businessId}/consents?surrogate={surrogateId}&serviceId={serviceId}&sourceServiceId={sourceServiceId}&datasetId={datasetId}&status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
+				ConsentRecordSigned[].class, businessId, surrogateId, serviceId, sourceServiceId, datasetId, status,
+				purposeCategory, processingCategory).getBody();
 	}
 
-	public ConsentRecordSigned[] callGetConsentRecordsByServiceIdAndQuery(String serviceId, String datasetId,
+	public ConsentRecordSignedPair[] callGetConsentRecordPairsByBusinessIdAndQuery(String businessId,
+			String surrogateId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/services/{serviceId}/consents",
-				ConsentRecordSigned[].class, serviceId).getBody();
-	}
-
-	public ConsentRecordSigned[] callGetConsentRecordsByBusinessIdandQuery(String businessId, String surrogateId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents",
-				ConsentRecordSigned[].class, businessId).getBody();
+		return restTemplate.getForEntity(consentManagerHost
+				+ "/api/v2/dataControllers/{businessId}/consents/pair?surrogate={surrogateId}&serviceId={serviceId}&sourceServiceId={sourceServiceId}&datasetId={datasetId}&status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
+				ConsentRecordSignedPair[].class, businessId, surrogateId, serviceId, sourceServiceId, datasetId, status,
+				purposeCategory, processingCategory).getBody();
 	}
 
 	public AuthorisationTokenResponse callGetAuthorisationToken(String crId) {

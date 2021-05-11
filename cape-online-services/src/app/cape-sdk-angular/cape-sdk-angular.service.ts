@@ -277,18 +277,18 @@ export class CapeSdkAngularService {
   ): Promise<ConsentForm> {
     const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
 
-    let fetchConsentFormUrl = `${sdkUrl}/users/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
+    let fetchConsentFormUrl = `${sdkUrl}/users/surrogates/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
 
     if (sourceServiceId && sourceDatasetId) fetchConsentFormUrl += `?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`;
     return this.http.get<ConsentForm>(fetchConsentFormUrl).toPromise();
   }
 
   public async giveConsent(sdkUrl: string, consentForm: ConsentForm): Promise<ConsentRecordSigned> {
-    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/users/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
+    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
   }
 
   public async getConsentsBySurrogateId(sdkUrl: string, surrogateId: string): Promise<ConsentRecordSigned> {
-    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/users/${surrogateId}/consent`).toPromise();
+    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/users/surrogates/${surrogateId}/consents`).toPromise();
   }
 
   public async getConsentsBySurrogateIdAndPurposeId(
@@ -298,7 +298,7 @@ export class CapeSdkAngularService {
     checkConsentAtOperator: boolean
   ): Promise<ConsentRecordSigned[]> {
     return this.http
-      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/${surrogateId}/purpose/${purposeId}/consents?checkConsentAtOperator=${checkConsentAtOperator}`)
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/surrogates/${surrogateId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`)
       .toPromise();
   }
 
@@ -310,8 +310,11 @@ export class CapeSdkAngularService {
     operatorId: string,
     checkConsentAtOperator: boolean
   ): Promise<ConsentRecordSigned[]> {
-    const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
-    return this.getConsentsBySurrogateIdAndPurposeId(sdkUrl, userSurrogateLink.surrogateId, purposeId, checkConsentAtOperator);
+    return this.http
+      .get<ConsentRecordSigned[]>(
+        `${sdkUrl}/users/surrogates/${serviceUserId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
+      )
+      .toPromise();
   }
 
   public async getConsentStatus(

@@ -13,12 +13,12 @@ export interface CapeError extends Error {
   error?: ErrorResponse;
 }
 export interface ErrorResponse {
-  status?: ErrorResponseStatus;
+  status?: number;
+  error?: string;
   timestamp?: string;
   message?: string;
-  debugMessage?: string;
-  cause?: string;
-  subErrors?: Array<Record<string, unknown>>;
+  path?: string;
+  innerError?: ErrorResponse;
 }
 export enum ErrorResponseStatus {
   _100CONTINUE = '100 CONTINUE',

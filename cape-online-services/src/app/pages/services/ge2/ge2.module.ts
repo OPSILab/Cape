@@ -7,18 +7,8 @@ import { NbCardModule, NbRadioModule, NbButtonModule } from '@nebular/theme';
 import { CapeSdkAngularModule } from '../../../cape-sdk-angular/cape-sdk-angular.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-
 @NgModule({
   declarations: [Ge2Component],
-  imports: [
-    CommonModule,
-    NbCardModule,
-    NbRadioModule,
-    NbButtonModule,
-    Ge2RoutingModule,
-    TranslateModule.forChild({}),
-    CapeSdkAngularModule,
-    NgxChartsModule
-  ]
+  imports: [CommonModule, NbCardModule, NbRadioModule, NbButtonModule, Ge2RoutingModule, TranslateModule.forChild({}), CapeSdkAngularModule, NgxChartsModule],
 })
-export class Ge2Module { }
+export class Ge2Module {}

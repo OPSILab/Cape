@@ -8,9 +8,8 @@ describe('ConsentFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConsentFormComponent ]
-    })
-    .compileComponents();
+      declarations: [ConsentFormComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

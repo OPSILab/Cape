@@ -29,6 +29,9 @@ export interface CommonPart {
   subject_id: string;
   subject_name: string;
   subject_humanreadable_descriptions: Array<HumanReadableDescription>;
+  source_subject_id: string;
+  source_subject_name: string;
+  source_subject_humanreadable_descriptions: Array<HumanReadableDescription>;
   data_controller: DataController;
   service_description_version: string;
   service_description_signature: string;

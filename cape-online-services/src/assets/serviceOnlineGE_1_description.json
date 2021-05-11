@@ -8,12 +8,7 @@
   "serviceDescriptionSignature": "",
   "serviceIconUrl": "",
   "status": "Completed",
-  "supportedProfiles": [
-    "Consenting",
-    "3rd party re-use",
-    "Notification",
-    "Objection"
-  ],
+  "supportedProfiles": ["Consenting", "3rd party re-use", "Notification", "Objection"],
   "spatial": "ITA-Italy",
   "lifeEvent": "Starting education",
   "businessEvent": "",

@@ -94,7 +94,7 @@ public class CommonPart {
 	@NonNull
 	@NotBlank
 	private String operator;
-	
+
 	@NonNull
 	@NotBlank
 	@JsonProperty(value = "subject_id")
@@ -109,6 +109,21 @@ public class CommonPart {
 	@NotBlank
 	@JsonProperty(value = "subject_humanreadable_descriptions")
 	private List<HumanReadableDescription> subjectHumanReadableDescriptions;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "source_subject_id")
+	private String sourceSubjectId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "source_subject_name")
+	private String sourceSubjectName;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "source_subject_humanreadable_descriptions")
+	private List<HumanReadableDescription> sourceSubjectHumanReadableDescriptions;
 
 	@NonNull
 	@NotBlank

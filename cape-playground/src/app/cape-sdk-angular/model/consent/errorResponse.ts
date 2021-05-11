@@ -10,13 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface ErrorResponse {
-  status?: ErrorResponse.StatusEnum;
+ export interface ErrorResponse {
+  status?: number;
+  error?: string;
   timestamp?: string;
   message?: string;
-  debugMessage?: string;
-  cause?: string;
-  subErrors?: Array<object>;
+  path?: string;
+  innerError?: ErrorResponse;
 }
 export namespace ErrorResponse {
   export type StatusEnum =
