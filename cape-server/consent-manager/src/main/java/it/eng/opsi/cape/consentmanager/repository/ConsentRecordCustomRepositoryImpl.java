@@ -212,7 +212,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		pipeline.add(match(where("payload.commonPart.serviceProviderBusinessId").is(businessId)));
 
 		if (surrogateId != null)
-			pipeline.add(match(where("payload.commonPart.surrogateId").is(serviceId)));
+			pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
 
 		if (serviceId != null)
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));

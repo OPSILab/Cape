@@ -93,7 +93,7 @@ export class ConsentsService {
   }
 
   getMatchingDatasets(serviceId: string, purposeId: string, sourceDatasetId?: string, sourceServiceId?: string): Promise<DataMapping[]> {
-    let url = `${this.consentsApiPath}/api/v2/service/${serviceId}/purpose/${purposeId}/matchingDataset`;
+    let url = `${this.consentsApiPath}/api/v2/services/${serviceId}/purposes/${purposeId}/matchingDatasets`;
     if (sourceDatasetId && sourceServiceId) url = url.concat(`?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`);
 
     return this.http.get<DataMapping[]>(url).toPromise();

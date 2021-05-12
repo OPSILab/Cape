@@ -51,6 +51,7 @@ import it.eng.opsi.cape.sdk.model.linking.ContinueSinkLinkingRequest;
 import it.eng.opsi.cape.sdk.model.linking.FinalLinkingResponse;
 import it.eng.opsi.cape.sdk.model.linking.LinkingSession;
 import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordSigned;
+import it.eng.opsi.cape.serviceregistry.data.DataMapping;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
@@ -370,10 +371,43 @@ public class ClientService {
 			PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+
+		UriComponentsBuilder urlBuilder = UriComponentsBuilder
+				.fromHttpUrl(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents");
+
+		if (StringUtils.isNotBlank(surrogateId))
+			urlBuilder.queryParam("surrogateId", surrogateId);
+
+		if (StringUtils.isNotBlank(serviceId))
+			urlBuilder.queryParam("serviceId", serviceId);
+
+		if (StringUtils.isNotBlank(sourceServiceId))
+			urlBuilder.queryParam("sourceServiceId", sourceServiceId);
+
+		if (StringUtils.isNotBlank(datasetId))
+			urlBuilder.queryParam("datasetId", datasetId);
+
+		if (status != null)
+			urlBuilder.queryParam("status", status);
+
+		if (purposeCategory != null)
+			urlBuilder.queryParam("purposeCategory", purposeCategory);
+
+		if (processingCategory != null)
+			urlBuilder.queryParam("processingCategory", processingCategory);
+
+		return restTemplate.getForEntity(urlBuilder.build(businessId).toString(), ConsentRecordSigned[].class)
+				.getBody();
+	}
+
+	public DataMapping[] getMatchingDatasets(String sinkServiceId, String sourceServiceId, String purposeId,
+			String datasetId) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		return restTemplate.getForEntity(consentManagerHost
-				+ "/api/v2/dataControllers/{businessId}/consents?surrogate={surrogateId}&serviceId={serviceId}&sourceServiceId={sourceServiceId}&datasetId={datasetId}&status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
-				ConsentRecordSigned[].class, businessId, surrogateId, serviceId, sourceServiceId, datasetId, status,
-				purposeCategory, processingCategory).getBody();
+				+ "/api/v2/services/{serviceId}/purposes/{purposeId}/matchingDatasets?sourceServiceId={sourceServiceId}&sourceDatasetId={sourceDatasetId}",
+				DataMapping[].class, sinkServiceId, purposeId, sourceServiceId, datasetId).getBody();
+
 	}
 
 	public ConsentRecordSignedPair[] callGetConsentRecordPairsByBusinessIdAndQuery(String businessId,
@@ -381,10 +415,32 @@ public class ClientService {
 			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.getForEntity(consentManagerHost
-				+ "/api/v2/dataControllers/{businessId}/consents/pair?surrogate={surrogateId}&serviceId={serviceId}&sourceServiceId={sourceServiceId}&datasetId={datasetId}&status={status}&purposeCategory={purposeCategory}&processingCategory={processingCategory}",
-				ConsentRecordSignedPair[].class, businessId, surrogateId, serviceId, sourceServiceId, datasetId, status,
-				purposeCategory, processingCategory).getBody();
+		UriComponentsBuilder urlBuilder = UriComponentsBuilder
+				.fromHttpUrl(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents/pair");
+
+		if (StringUtils.isNotBlank(surrogateId))
+			urlBuilder.queryParam("surrogateId", surrogateId);
+
+		if (StringUtils.isNotBlank(serviceId))
+			urlBuilder.queryParam("serviceId", serviceId);
+
+		if (StringUtils.isNotBlank(sourceServiceId))
+			urlBuilder.queryParam("sourceServiceId", sourceServiceId);
+
+		if (StringUtils.isNotBlank(datasetId))
+			urlBuilder.queryParam("datasetId", datasetId);
+
+		if (status != null)
+			urlBuilder.queryParam("status", status);
+
+		if (purposeCategory != null)
+			urlBuilder.queryParam("purposeCategory", purposeCategory);
+
+		if (processingCategory != null)
+			urlBuilder.queryParam("processingCategory", processingCategory);
+
+		return restTemplate.getForEntity(urlBuilder.build(businessId).toString(), ConsentRecordSignedPair[].class)
+				.getBody();
 	}
 
 	public AuthorisationTokenResponse callGetAuthorisationToken(String crId) {

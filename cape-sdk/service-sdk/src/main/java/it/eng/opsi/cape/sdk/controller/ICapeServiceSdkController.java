@@ -174,7 +174,7 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String serviceId,
 			String sourceServiceId, String datasetId, String purposeId, String purposeName,
 			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
-			Map<String, Object> dataObject) throws ConsentRecordNotFoundException;
+			Map<String, Object> dataObject) throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys();
 

@@ -385,7 +385,7 @@ public class ConsentManagerController implements IConsentManagerController {
 	@Operation(summary = "Get the list of Data Consent Form for surrogateId, sinkId and sourceId (if any) in input.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' mappings (3-party reuse) or from the datasets of the service (Within Service)", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
-	@GetMapping(value = "/service/{serviceId}/purpose/{purposeId}/matchingDataset", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/services/{serviceId}/purposes/{purposeId}/matchingDatasets", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<DataMapping>> getMatchingDatasets(@PathVariable String serviceId,
 			@PathVariable String purposeId, @RequestParam(required = false) String sourceDatasetId,

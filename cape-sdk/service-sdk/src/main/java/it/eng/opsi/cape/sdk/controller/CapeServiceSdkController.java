@@ -1059,7 +1059,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Enforce Consent Usage Rule by filtering input body. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
+	@Operation(summary = "Enforce Usage Rule associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
 			"Data Request" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
 	@PostMapping(value = "/services/consents/enforceUsageRules")
@@ -1071,7 +1071,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
-			@RequestBody Map<String, Object> dataObject) throws ConsentRecordNotFoundException {
+			@RequestBody Map<String, Object> dataObject)
+			throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException {
 
 		/*
 		 * Get active Consent Records that match with UserId and Sink-Source Service
@@ -1083,20 +1084,37 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 		if (matchingConsents == null || matchingConsents.isEmpty())
 			throw new ConsentRecordNotFoundException(
-					"No Usage Rules or Consent Record found for the input UserId and Sink-Source Service Ids.");
+					"No Usage Rules or Active Consent Record found for the input UserId and Sink-Source Service Ids.");
 
 		// If any, there will be only one Active Matching Consent for input UserId and
 		// Sink-Source
 		ConsentRecordSigned consent = matchingConsents.get(0);
-		List<Dataset> conceptDatasets = consent.getPayload().getCommonPart().getRsDescription().getResourceSet()
+		List<Dataset> consentDatasets = consent.getPayload().getCommonPart().getRsDescription().getResourceSet()
 				.getDatasets();
 
-		for (Dataset dataset : conceptDatasets) {
+		/*
+		 * Filter out only fields that are in the Service / Purpose dataset but not in
+		 * the Consent Dataset because Data subject deselected the optional concepts
+		 * from available ones from Service Dataset
+		 */
 
-			List<String> properties = dataset.getDataMappings().stream().map(concept -> concept.getProperty())
+		for (Dataset dataset : consentDatasets) {
+
+			List<String> consentProperties = dataset.getDataMappings().stream().map(concept -> concept.getProperty())
 					.collect(Collectors.toList());
 
-			dataObject = dataObject.entrySet().stream().filter(entry -> properties.contains(entry.getKey()))
+			DataMapping[] serviceConcepts = clientService.getMatchingDatasets(sinkServiceId, sourceServiceId,
+					dataset.getPurposeId(), dataset.getId());
+			List<String> serviceProperties = Arrays.asList(serviceConcepts).stream()
+					.map(concept -> concept.getProperty()).collect(Collectors.toList());
+
+			/*
+			 * Keep only fields that are neither in serviceConcepts (Concepts matching
+			 * between datasets required by sink and ones provided by source) or not are
+			 * concepts contained in serviceConcepts but disallowed by Data Subject Consent
+			 */
+			dataObject = dataObject.entrySet().stream().filter(
+					entry -> !serviceProperties.contains(entry.getKey()) || consentProperties.contains(entry.getKey()))
 					.collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
 
 		}
