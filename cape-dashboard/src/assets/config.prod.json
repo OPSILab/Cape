@@ -1,6 +1,6 @@
 {
   "serviceRegistry": {
-    "url": "http://localhost:8088/service-registry/api/v2"
+    "url": "https://www.cape-suite.eu/cape-server/service-registry/api/v2"
   },
   "system": {
     "operatorId": "cape",
