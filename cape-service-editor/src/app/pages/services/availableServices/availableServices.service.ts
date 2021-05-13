@@ -18,36 +18,36 @@ export class AvailableServicesService {
   }
 
   getServices(): Promise<ServiceEntry[]> {
-    return this.http.get<ServiceEntry[]>(`${this.serviceRegistryUrl}/services?withCertificate=true`).toPromise();
+    return this.http.get<ServiceEntry[]>(`${this.serviceRegistryUrl}/api/v2/services?withCertificate=true`).toPromise();
   }
 
   getServicesCount(): Promise<number> {
-    return this.http.get<number>(`${this.serviceRegistryUrl}/services/count`).toPromise();
+    return this.http.get<number>(`${this.serviceRegistryUrl}/api/v2/services/count`).toPromise();
   }
 
   getService(serviceId: string): Promise<ServiceEntry> {
-    return this.http.get<ServiceEntry>(`${this.serviceRegistryUrl}/services/${serviceId}`).toPromise();
+    return this.http.get<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`).toPromise();
   }
 
   saveService(service: ServiceEntry): Promise<ServiceEntry> {
-    return this.http.post<ServiceEntry>(`${this.serviceRegistryUrl}/services`, service).toPromise();
+    return this.http.post<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services`, service).toPromise();
   }
 
   registerService(serviceId: string): Promise<ServiceEntry> {
     return this.http
-      .post<ServiceEntry>(`${this.sdkUrl}/services/${serviceId}`, '', { headers: { 'Content-Type': 'application/json' } })
+      .post<ServiceEntry>(`${this.sdkUrl}/api/v2services/${serviceId}`, '', { headers: { 'Content-Type': 'application/json' } })
       .toPromise();
   }
 
   deregisterService(serviceId: string): Promise<ServiceEntry> {
-    return this.http.delete(`${this.sdkUrl}/services/${serviceId}`).toPromise();
+    return this.http.delete(`${this.sdkUrl}/api/v2/services/${serviceId}`).toPromise();
   }
 
   updateService(service: Object, serviceId: string): Promise<ServiceEntry> {
-    return this.http.put(`${this.serviceRegistryUrl}/services/${serviceId}`, service).toPromise();
+    return this.http.put(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`, service).toPromise();
   }
 
   deleteService(serviceId: string): Promise<ServiceEntry> {
-    return this.http.delete(`${this.serviceRegistryUrl}/services/${serviceId}`).toPromise();
+    return this.http.delete(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`).toPromise();
   }
 }

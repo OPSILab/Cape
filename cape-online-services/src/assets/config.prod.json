@@ -12,7 +12,7 @@
     }
   },
   "services": {
-    "sdkUrl": "https://www.cape-suite.eu/cape-server/cape-service-sdk/api/v2",
+    "sdkUrl": "https://www.cape-suite.eu/cape-server/cape-service-sdk",
     "checkConsentAtOperator": "true"
   },
   "i18n": {

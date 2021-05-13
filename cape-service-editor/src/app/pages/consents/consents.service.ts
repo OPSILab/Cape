@@ -29,6 +29,6 @@ export class ConsentsService {
   }
 
   getConsents(): Promise<any> {
-    return this.http.get(this.sdkUrl + '/consents').toPromise();
+    return this.http.get(this.sdkUrl + '/api/v2/consents').toPromise();
   }
 }

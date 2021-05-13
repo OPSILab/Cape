@@ -157,7 +157,7 @@ export class CapeSdkAngularService {
   async getServiceLinkingSessionCode(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, returnUrl: string) {
     return this.http
       .get(
-        `${sdkUrl}/slr/linking/sessionCode?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
+        `${sdkUrl}/api/v2/slr/linking/sessionCode?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
         {
           responseType: 'text',
         }
@@ -179,16 +179,16 @@ export class CapeSdkAngularService {
       return_url: returnUrl,
     };
 
-    return this.http.post<LinkingResponseData>(`${sdkUrl}/slr/linking`, startLinkingBody).toPromise();
+    return this.http.post<LinkingResponseData>(`${sdkUrl}/api/v2/slr/linking`, startLinkingBody).toPromise();
   }
 
   public generateSurrogateId(sdkUrl: string, operatorId: string, serviceUserId: string): Promise<SurrogateIdResponse> {
-    return this.http.get<SurrogateIdResponse>(`${sdkUrl}/slr/surrogate_id?operatorId=${operatorId}&userId=${serviceUserId}`).toPromise();
+    return this.http.get<SurrogateIdResponse>(`${sdkUrl}/api/v2/slr/surrogate_id?operatorId=${operatorId}&userId=${serviceUserId}`).toPromise();
   }
 
   public linkSurrogateId(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, operatorId: string): Promise<UserSurrogateIdLink> {
     return this.http
-      .post<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink`, {
+      .post<UserSurrogateIdLink>(`${sdkUrl}/api/v2/userSurrogateIdLink`, {
         userId: serviceUserId,
         surrogateId: surrogateId,
         serviceId: serviceId,
@@ -205,7 +205,7 @@ export class CapeSdkAngularService {
     serviceName: string
   ): Promise<ServiceLinkStatusRecordSigned> {
     const newServiceStatusRecord = await this.http
-      .put<ServiceLinkStatusRecordSigned>(`${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
+      .put<ServiceLinkStatusRecordSigned>(`${sdkUrl}/api/v2/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
       .toPromise();
 
     this.toastrService.primary('', this.translateService.instant('general.services.enableSuccessfulMessage', { serviceName: serviceName }), {
@@ -225,7 +225,7 @@ export class CapeSdkAngularService {
     serviceName: string
   ): Promise<ServiceLinkStatusRecordSigned> {
     const newServiceStatusRecord = await this.http
-      .delete<ServiceLinkStatusRecordSigned>(`${sdkUrl}/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
+      .delete<ServiceLinkStatusRecordSigned>(`${sdkUrl}/api/v2/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
       .toPromise();
 
     this.toastrService.primary('', this.translateService.instant('general.services.disableSuccessfulMessage', { serviceName: serviceName }), {
@@ -245,16 +245,16 @@ export class CapeSdkAngularService {
     operatorId: string
   ): Promise<UserSurrogateIdLink> {
     return this.http
-      .get<UserSurrogateIdLink>(`${sdkUrl}/userSurrogateIdLink?userId=${serviceUserId}&serviceId=${serviceId}&operatorId=${operatorId}`)
+      .get<UserSurrogateIdLink>(`${sdkUrl}/api/v2/userSurrogateIdLink?userId=${serviceUserId}&serviceId=${serviceId}&operatorId=${operatorId}`)
       .toPromise();
   }
 
   public getOperatorDescription(sdkUrl: string, operatorId: string): Promise<OperatorDescription> {
-    return this.http.get<OperatorDescription>(`${sdkUrl}/operatorDescriptions/${operatorId}`).toPromise();
+    return this.http.get<OperatorDescription>(`${sdkUrl}/api/v2/operatorDescriptions/${operatorId}`).toPromise();
   }
 
   public getServiceLinkRecordBySurrogateIdAndServiceId(sdkUrl: string, surrogateId: string, serviceId: string): Promise<ServiceLinkRecordDoubleSigned> {
-    return this.http.get<ServiceLinkRecordDoubleSigned>(`${sdkUrl}/slr/surrogate/${surrogateId}/services/${serviceId}`).toPromise();
+    return this.http.get<ServiceLinkRecordDoubleSigned>(`${sdkUrl}/api/v2/slr/surrogate/${surrogateId}/services/${serviceId}`).toPromise();
   }
 
   public async getServiceLinkRecordByUserIdAndServiceId(
@@ -288,18 +288,18 @@ export class CapeSdkAngularService {
   ): Promise<ConsentForm> {
     const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
 
-    let fetchConsentFormUrl = `${sdkUrl}/users/surrogates/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
+    let fetchConsentFormUrl = `${sdkUrl}/api/v2/users/surrogates/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
 
     if (sourceServiceId && sourceDatasetId) fetchConsentFormUrl += `?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`;
     return this.http.get<ConsentForm>(fetchConsentFormUrl).toPromise();
   }
 
   public async giveConsent(sdkUrl: string, consentForm: ConsentForm): Promise<ConsentRecordSigned> {
-    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
+    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
   }
 
   public async getConsentsBySurrogateId(sdkUrl: string, surrogateId: string): Promise<ConsentRecordSigned> {
-    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/users/surrogates/${surrogateId}/consents`).toPromise();
+    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`).toPromise();
   }
 
   public async getConsentsBySurrogateIdAndPurposeId(
@@ -309,7 +309,9 @@ export class CapeSdkAngularService {
     checkConsentAtOperator: boolean
   ): Promise<ConsentRecordSigned[]> {
     return this.http
-      .get<ConsentRecordSigned[]>(`${sdkUrl}/users/surrogates/${surrogateId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`)
+      .get<ConsentRecordSigned[]>(
+        `${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
+      )
       .toPromise();
   }
 
@@ -323,7 +325,7 @@ export class CapeSdkAngularService {
   ): Promise<ConsentRecordSigned[]> {
     return this.http
       .get<ConsentRecordSigned[]>(
-        `${sdkUrl}/users/${serviceUserId}/consents?serviceId=${serviceId}&purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
+        `${sdkUrl}/api/v2/users/${serviceUserId}/consents?serviceId=${serviceId}&purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
       )
       .toPromise();
   }
@@ -348,7 +350,7 @@ export class CapeSdkAngularService {
   }
 
   private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentRecordSigned> {
-    const url = `${sdkUrl}/users/${consent.payload.common_part.surrogate_id}/servicelinks/${consent.payload.common_part.slr_id}/consents/${consent.payload.common_part.cr_id}/statuses`;
+    const url = `${sdkUrl}/api/v2/users/${consent.payload.common_part.surrogate_id}/servicelinks/${consent.payload.common_part.slr_id}/consents/${consent.payload.common_part.cr_id}/statuses`;
 
     return this.http
       .post<ConsentRecordSigned>(url, {
@@ -437,12 +439,12 @@ export class CapeSdkAngularService {
   }
 
   public getRegisteredService(sdkUrl: string, serviceId: string): Promise<ServiceEntry> {
-    return this.http.get<ServiceEntry>(`${sdkUrl}/services/${serviceId}?onlyRegistered=true`).toPromise();
+    return this.http.get<ServiceEntry>(`${sdkUrl}/api/v2/services/${serviceId}?onlyRegistered=true`).toPromise();
   }
 
   public createCapeAccount(sdkUrl: string, accountId: string, accountEmail: string, locale: string): Promise<Account> {
     return this.http
-      .post<Account>(`${sdkUrl}/accounts`, {
+      .post<Account>(`${sdkUrl}/api/v2/accounts`, {
         username: localStorage.serviceAccountId as string,
         account_info: {
           email: localStorage.serviceAccountEmail as string,

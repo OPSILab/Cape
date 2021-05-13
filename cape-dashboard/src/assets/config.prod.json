@@ -1,14 +1,14 @@
 {
   "serviceRegistry": {
-    "url": "https://www.cape-suite.eu/cape-server/service-registry/api/v2"
+    "url": "https://www.cape-suite.eu/cape-server/service-registry"
   },
   "system": {
     "operatorId": "cape",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
-    "accountUrl": "https://www.cape-suite.eu/cape-server/account-manager/api/v2",
-    "serviceManagerUrl": "https://www.cape-suite.eu/cape-server/service-manager/api/v2",
-    "auditLogUrl": "https://www.cape-suite.eu/cape-server/auditlog-manager/api/v2",
-    "consentManagerUrl": "https://www.cape-suite.eu/cape-server/consent-manager/api/v2",
+    "accountUrl": "https://www.cape-suite.eu/cape-server/account-manager",
+    "serviceManagerUrl": "https://www.cape-suite.eu/cape-server/service-manager",
+    "auditLogUrl": "https://www.cape-suite.eu/cape-server/auditlog-manager",
+    "consentManagerUrl": "https://www.cape-suite.eu/cape-server/consent-manager",
     "auth": {
       "idmHost": "https://www.cape-suite.eu",
       "clientId": "cape-server",
@@ -18,6 +18,6 @@
     }
   },
   "i18n": {
-    "locale": "it"
+    "locale": "en"
   }
 }
