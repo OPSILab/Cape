@@ -209,42 +209,42 @@ public class ApplicationProperties {
 
 	}
 
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	public class Idm {
-
-		@NotBlank
-		private String host;
-
-//		@Valid
-//		private Path path;
-//
-//		@Getter
-//		@Setter
-//		@NoArgsConstructor
-//		public class Path {
-//
-//			@NotBlank
-//			private String token;
-//
-//			@NotBlank
-//			private String user;
-//
-//		}
-
-//		@NotBlank
-//		private String clientId;
+//	@Getter
+//	@Setter
+//	@NoArgsConstructor
+//	public class Idm {
 //
 //		@NotBlank
-//		private String clientSecret;
+//		private String host;
 //
-//		@NotBlank
-//		private String redirectUri;
+////		@Valid
+////		private Path path;
+////
+////		@Getter
+////		@Setter
+////		@NoArgsConstructor
+////		public class Path {
+////
+////			@NotBlank
+////			private String token;
+////
+////			@NotBlank
+////			private String user;
+////
+////		}
 //
-//		@NotBlank
-//		private String logoutCallback;
-
-	}
+////		@NotBlank
+////		private String clientId;
+////
+////		@NotBlank
+////		private String clientSecret;
+////
+////		@NotBlank
+////		private String redirectUri;
+////
+////		@NotBlank
+////		private String logoutCallback;
+//
+//	}
 
 }

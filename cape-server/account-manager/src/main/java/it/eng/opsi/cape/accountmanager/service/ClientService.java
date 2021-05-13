@@ -57,7 +57,6 @@ public class ClientService {
 	private final String auditLogManagerHost;
 	private final String consentManagerHost;
 	private final String operatorId;
-	private final ApplicationProperties.Idm idm;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -71,45 +70,6 @@ public class ClientService {
 		auditLogManagerHost = this.appProperty.getCape().getAuditLogManager().getHost();
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
 		operatorId = this.appProperty.getCape().getOperatorId();
-		idm = this.appProperty.getIdm();
-	}
-
-	public Object getIdmUserDetail(String token) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate
-				.getForObject(UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/user")
-						.queryParam("access_token", token).toUriString(), Object.class);
-
-	}
-
-	public Object postCodeForToken(String grantType, String redirectUri, String code) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("grant_type", grantType);
-		body.add("redirect_uri", redirectUri);
-		body.add("code", code);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.setBasicAuth(idm.getClientId(), idm.getClientSecret());
-
-		return restTemplate.exchange(RequestEntity.post(UriComponentsBuilder
-				.fromHttpUrl(idm.getHost() + "/oauth2/token").build().toUri())
-				.headers(headers).body(body), Object.class);
-
-	}
-
-	public Object externalLogout(String clientId) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.exchange(RequestEntity.delete(
-				UriComponentsBuilder.fromHttpUrl(idm.getHost() + "/auth/external_logout")
-						.queryParam("clientId", clientId).build().toUri())
-				.build(), Object.class);
-
 	}
 
 	public ServiceEntry getServiceDescriptionFromRegistry(String serviceId)
@@ -132,11 +92,12 @@ public class ClientService {
 
 	}
 
-	public LinkingSession callGetLinkingSession(String sessionCode) throws SessionNotFoundException, AccountManagerException {
+	public LinkingSession callGetLinkingSession(String sessionCode)
+			throws SessionNotFoundException, AccountManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<LinkingSession> response = restTemplate
-				.getForEntity(serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
+		ResponseEntity<LinkingSession> response = restTemplate.getForEntity(
+				serviceManagerHost + "/api/v2/slr/linkingSession/{sessionCode}", LinkingSession.class, sessionCode);
 
 		HttpStatus responseStatus = response.getStatusCode();
 

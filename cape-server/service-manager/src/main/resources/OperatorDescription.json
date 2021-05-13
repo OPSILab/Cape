@@ -19,8 +19,8 @@
   ],
   "operatorUrls": {
     "domain": "string",
-    "linkingUri": "https://www.cape-suite-eu/cape-dashboard/serviceLinking",
-    "linkingRedirectUri": "https://www.cape-suite-eu/cape-dashboard/pages/services/linkedServices"
+    "linkingUri": "http://localhost/cape-dashboard/serviceLinking",
+    "linkingRedirectUri": "http://localhost/cape-dashboard/pages/services/linkedServices"
   },
   "createdOnDate": "2020-04-10T10:06:55.333Z",
   "createdByUserId": "string"
