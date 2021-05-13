@@ -38,7 +38,7 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
       - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
@@ -79,7 +79,7 @@ services:
       - CAPE_AUDITLOG_MANAGER_MONGODB_USER=root
       - CAPE_AUDITLOG_MANAGER_MONGODB_PWD=root
       - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
@@ -122,7 +122,7 @@ services:
       - CAPE_CONSENT_MANAGER_MONGODB_USER=root
       - CAPE_CONSENT_MANAGER_MONGODB_PWD=root
       - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
@@ -165,7 +165,7 @@ services:
       - CAPE_SERVICE_MANAGER_MONGODB_USER=root
       - CAPE_SERVICE_MANAGER_MONGODB_PWD=root
       - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
@@ -204,7 +204,7 @@ services:
       - CAPE_SERVICE_REGISTRY_MONGODB_USER=root
       - CAPE_SERVICE_REGISTRY_MONGODB_PWD=root
       - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
