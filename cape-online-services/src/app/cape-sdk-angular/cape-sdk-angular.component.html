@@ -75,7 +75,7 @@
       <button nbButton ghost shape="rectangle" size="medium" (click)="ref.close()">
         {{ 'general.services.closeButton' | translate }}
       </button>
-      <button nbButton ghost shape="rectangle" size="medium" (click)="enableConsent(true); ref.close()">
+      <button nbButton ghost shape="rectangle" size="medium" (click)="enableConsent(); ref.close()">
         {{ 'general.consents.force_serviceLink_activation' | translate }}
       </button>
     </nb-card-footer>

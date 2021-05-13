@@ -25,10 +25,10 @@ services:
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs
-      - SPRING_LOGGING_LEVEL=DEBUG
-      - MONGO_LOGGING_LEVEL=DEBUG
-      - SECURITY_LOGGING_LEVEL=DEBUG
-      - CAPE_LOGGING_LEVEL=DEBUG
+      - SPRING_LOGGING_LEVEL=INFO
+      - MONGO_LOGGING_LEVEL=ERROR
+      - SECURITY_LOGGING_LEVEL=ERROR
+      - CAPE_LOGGING_LEVEL=ERROR
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
       - CAPE_AUDITLOG_MANAGER_URL=http://auditlog-manager:8081/auditlog-manager
       - CAPE_SERVICE_REGISTRY_URL=http://service-registry:8088/service-registry
@@ -37,10 +37,9 @@ services:
       - CAPE_ACCOUNT_MANAGER_MONGODB_PORT=27017
       - CAPE_ACCOUNT_MANAGER_MONGODB_USER=root
       - CAPE_ACCOUNT_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_HOST=https://www.cape-suite.eu:8002
-      - CAPE_IDM_CLIENTID=c5e13913-11e9-4675-83c5-0cf0f67c131a
-      - CAPE_IDM_CLIENTSECRET=58fd387a-6e13-474b-b552-1258cad55768
-      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
+      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
   account-manager-mongo:
@@ -79,7 +78,9 @@ services:
       - CAPE_AUDITLOG_MANAGER_MONGODB_PORT=27017
       - CAPE_AUDITLOG_MANAGER_MONGODB_USER=root
       - CAPE_AUDITLOG_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
+      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
 
@@ -120,7 +121,9 @@ services:
       - CAPE_CONSENT_MANAGER_MONGODB_PORT=27017
       - CAPE_CONSENT_MANAGER_MONGODB_USER=root
       - CAPE_CONSENT_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
+      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
 
@@ -161,7 +164,9 @@ services:
       - CAPE_SERVICE_MANAGER_MONGODB_PORT=27017
       - CAPE_SERVICE_MANAGER_MONGODB_USER=root
       - CAPE_SERVICE_MANAGER_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
+      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
 
@@ -198,7 +203,9 @@ services:
       - CAPE_SERVICE_REGISTRY_MONGODB_PORT=27017
       - CAPE_SERVICE_REGISTRY_MONGODB_USER=root
       - CAPE_SERVICE_REGISTRY_MONGODB_PWD=root
-      - CAPE_IDM_USERINFOURI=https://www.cape-suite.eu:8002/user
+      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-network
 
