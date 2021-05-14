@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf } from 'rxjs/observable/of';
+import { of as observableOf } from 'rxjs';
 import { OidcJWTToken, UserClaims } from '../model/oidc';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NgxConfigureService } from 'ngx-configure';
@@ -22,7 +22,7 @@ export class OidcUserInformationService {
   }
 
   getRole(): Observable<string[]> {
-    return this.user.roles ? observableOf(this.user.roles.map((role) => role.toUpperCase())) : observableOf(['USER']);
+    return this.user?.roles ? observableOf(this.user.roles.map((role) => role.toUpperCase())) : observableOf(['USER']);
   }
 
   getUser(): Observable<UserClaims> {
