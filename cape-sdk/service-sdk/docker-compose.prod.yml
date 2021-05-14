@@ -21,7 +21,7 @@ services:
     image: capesuite/service-sdk
     build: ./
     ports:
-      - "8085:8080"
+      - "8085:8085"
     environment:
       #- PROFILE=
       - APIDOCS_PATH=/api-docs
