@@ -35,7 +35,7 @@ export class AvailableServicesService {
 
   registerService(serviceId: string): Promise<ServiceEntry> {
     return this.http
-      .post<ServiceEntry>(`${this.sdkUrl}/api/v2services/${serviceId}`, '', { headers: { 'Content-Type': 'application/json' } })
+      .post<ServiceEntry>(`${this.sdkUrl}/api/v2/services/${serviceId}`, '', { headers: { 'Content-Type': 'application/json' } })
       .toPromise();
   }
 
