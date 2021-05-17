@@ -1,7 +1,7 @@
 {
   "serviceId": "GE_1",
   "name": "Iscrizioni servizi 0-6",
-  "identifier": "GE_1",
+  "identifier": "http://localhost:83/cape-online-services/pages/services",
   "issued": "",
   "createdByUserId": "",
   "serviceDescriptionVersion": "1.0",

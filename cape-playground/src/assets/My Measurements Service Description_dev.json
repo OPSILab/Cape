@@ -51,7 +51,7 @@
       "x5c": []
     },
     "serviceUrls": {
-      "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
+      "libraryDomain": "http://localhost:8085/cape-service-sdk",
       "loginUri": "http://localhost:82/cape-playground/pages/services/my-measurements",
       "linkingRedirectUri": "http://localhost:82/cape-playground",
       "objectionUri": "",

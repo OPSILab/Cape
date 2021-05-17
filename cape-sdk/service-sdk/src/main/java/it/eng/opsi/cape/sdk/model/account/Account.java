@@ -44,7 +44,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Document("accounts")
 public class Account {
 
 	@Id
