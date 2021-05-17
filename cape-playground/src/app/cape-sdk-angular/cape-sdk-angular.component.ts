@@ -235,13 +235,15 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
       try {
         // Get the first retrieved Consent Record (results are order by descending "iat" field)
         this.consentRecord = (
-          await this.capeService.getConsentsByUserIdAndServiceIdAndPurposeId(
+          await this.capeService.getConsentsByUserIdAndQuery(
             this.sdkUrl,
+            this.checkConsentAtOperator,
             this.userId,
             this.serviceId,
-            this.purposeId,
-            this.operatorId,
-            this.checkConsentAtOperator
+            undefined,
+            undefined,
+            undefined,
+            this.purposeId
           )
         )[0];
 
@@ -664,13 +666,15 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
       try {
         // Get the first retrieved Consent Record (results are order by descending "iat" field)
         this.consentRecord = (
-          await this.capeService.getConsentsByUserIdAndServiceIdAndPurposeId(
+          await this.capeService.getConsentsByUserIdAndQuery(
             this.sdkUrl,
+            this.checkConsentAtOperator,
             this.userId,
             this.serviceId,
-            this.purposeId,
-            this.operatorId,
-            this.checkConsentAtOperator
+            undefined,
+            undefined,
+            undefined,
+            this.purposeId
           )
         )[0];
 

@@ -11,7 +11,7 @@
  */
 
 export interface StartLinkingRequest {
-  code: string;
+  session_code: string;
   surrogate_id: string;
   operator_id: string;
   service_id: string;

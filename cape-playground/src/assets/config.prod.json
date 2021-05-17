@@ -33,7 +33,7 @@
     },
     "mymeasurements": {
       "serviceId": "MYM20",
-      "serviceUrl": "https://www.cape-suite.eu/cape-plaground/pages/services/my-measurements",
+      "serviceUrl": "https://www.cape-suite.eu/cape-playground/pages/services/my-measurements",
       "serviceName": "MyMeasurements",
       "purposes": {
         "cholesterol": {

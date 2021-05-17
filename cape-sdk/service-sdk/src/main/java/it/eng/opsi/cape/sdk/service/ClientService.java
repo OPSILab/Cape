@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -368,12 +369,16 @@ public class ClientService {
 
 	public ConsentRecordSigned[] callGetConsentRecordsByBusinessIdAndQuery(String businessId, String surrogateId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
-			PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+			String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Sort.Direction iatSort) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		UriComponentsBuilder urlBuilder = UriComponentsBuilder
 				.fromHttpUrl(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents");
+
+		if (iatSort != null)
+			urlBuilder.queryParam("iatSort", iatSort);
 
 		if (StringUtils.isNotBlank(surrogateId))
 			urlBuilder.queryParam("surrogateId", surrogateId);
@@ -390,6 +395,12 @@ public class ClientService {
 		if (status != null)
 			urlBuilder.queryParam("status", status);
 
+		if (StringUtils.isNotBlank(purposeId))
+			urlBuilder.queryParam("purposeId", purposeId);
+
+		if (StringUtils.isNotBlank(purposeName))
+			urlBuilder.queryParam("purposeName", purposeName);
+		
 		if (purposeCategory != null)
 			urlBuilder.queryParam("purposeCategory", purposeCategory);
 
@@ -412,11 +423,15 @@ public class ClientService {
 
 	public ConsentRecordSignedPair[] callGetConsentRecordPairsByBusinessIdAndQuery(String businessId,
 			String surrogateId, String serviceId, String sourceServiceId, String datasetId,
-			ConsentRecordStatusEnum status, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Sort.Direction iatSort) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		UriComponentsBuilder urlBuilder = UriComponentsBuilder
 				.fromHttpUrl(consentManagerHost + "/api/v2/dataControllers/{businessId}/consents/pair");
+
+		if (iatSort != null)
+			urlBuilder.queryParam("iatSort", iatSort);
 
 		if (StringUtils.isNotBlank(surrogateId))
 			urlBuilder.queryParam("surrogateId", surrogateId);
@@ -432,6 +447,12 @@ public class ClientService {
 
 		if (status != null)
 			urlBuilder.queryParam("status", status);
+
+		if (StringUtils.isNotBlank(purposeId))
+			urlBuilder.queryParam("purposeId", purposeId);
+
+		if (StringUtils.isNotBlank(purposeName))
+			urlBuilder.queryParam("purposeName", purposeName);
 
 		if (purposeCategory != null)
 			urlBuilder.queryParam("purposeCategory", purposeCategory);

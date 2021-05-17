@@ -1,7 +1,7 @@
 {
   "system": {
     "operatorId": "cape",
-    "onlineServicesUrl": "http://localhost:4400/cape-online-services",
+    "onlineServicesUrl": "http://localhost:83/cape-online-services",
     "dashboardUrl": "http://localhost/cape-dashboard",
     "auth": {
       "idmHost": "https://www.cape-suite.eu",

@@ -22,7 +22,10 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
@@ -139,22 +142,27 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(String surrogateId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
 			String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByUserIdAndQuery(String userId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
 			String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
 			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
-			Boolean checkConsentAtOperator);
+			Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(String surrogateId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
 			String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Boolean checkConsentAtOperator);
+			ProcessingCategory processingCategory, Boolean checkConsentAtOperator, Sort.Direction iatSort);
+
+	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByBusinessIdAndQuery(
+			String surrogateId, String serviceId, String sourceServiceId, String datasetId,
+			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
+			ProcessingCategory processingCategory, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatusFromService(String surrogateId, String slrId,
 			String crId, ChangeConsentStatusRequest request)
@@ -174,7 +182,8 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String serviceId,
 			String sourceServiceId, String datasetId, String purposeId, String purposeName,
 			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
-			Map<String, Object> dataObject) throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException;
+			Map<String, Object> dataObject)
+			throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys();
 

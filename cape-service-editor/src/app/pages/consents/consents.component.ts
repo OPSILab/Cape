@@ -7,6 +7,7 @@ import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { LoginService } from '../../auth/login/login.service';
+import { QuerySortEnum } from '../../model/querySortEnum';
 
 @Component({
   selector: 'consents-smart-table',
@@ -28,7 +29,7 @@ export class ConsentsComponent {
   source: LocalDataSource = new LocalDataSource();
 
   constructor(
-    private service: ConsentsService,
+    private consentsService: ConsentsService,
     private translate: TranslateService,
     private configService: NgxConfigureService,
     private loginService: LoginService,
@@ -39,7 +40,7 @@ export class ConsentsComponent {
 
   async ngOnInit() {
     try {
-      this.consents = await this.service.getConsents();
+      this.consents = await this.consentsService.getConsents(QuerySortEnum.ASC);
 
       this.locale = this.configService.config.i18n.locale; // TODO change with user language preferences
 

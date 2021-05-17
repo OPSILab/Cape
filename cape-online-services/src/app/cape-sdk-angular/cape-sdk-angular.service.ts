@@ -16,12 +16,13 @@ import { ConsentForm } from './model/consent/consentForm';
 import { ConsentRecordSigned } from './model/consent/consentRecordSigned';
 import { ConsentStatusEnum, ConsentStatusRecordPayload } from './model/consent/consentStatusRecordPayload';
 import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSigned';
-import { ConsentRecordRoleSpecificPart } from './model/consent/consentRecordRoleSpecificPart';
 import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecordSinkRoleSpecificPart';
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
 import { ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
+import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from './model/processingBasis';
+import { QuerySortEnum } from './model/querySortEnum';
 
 export interface UserSurrogateIdLink {
   userId: string;
@@ -114,11 +115,19 @@ export class CapeSdkAngularService {
     );
   }
 
-  async linkFromOperator(sdkUrl: string, code: string, operatorId: string, serviceId: string, serviceName: string, serviceUserId: string, returnUrl: string) {
+  async linkFromOperator(
+    sdkUrl: string,
+    sessionCode: string,
+    operatorId: string,
+    serviceId: string,
+    serviceName: string,
+    serviceUserId: string,
+    returnUrl: string
+  ) {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
+    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
 
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
   }
@@ -128,11 +137,11 @@ export class CapeSdkAngularService {
     const surrogateId = surrogateIdResponse.surrogate_id;
 
     // Get Linking Session Code for automatic Linking
-    const code = await this.getServiceLinkingSessionCode(sdkUrl, serviceUserId, surrogateId, serviceId, returnUrl);
-    console.log(code);
+    const sessionCode = await this.getServiceLinkingSessionCode(sdkUrl, serviceUserId, surrogateId, serviceId, returnUrl);
+    console.log(sessionCode);
 
     // Start Service Linking with retrieved Linking Session Code
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, code, surrogateId, operatorId, serviceId, returnUrl);
+    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
 
     // Once the Service Link is done, save the userId - surrogateId association
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
@@ -149,7 +158,7 @@ export class CapeSdkAngularService {
   async getServiceLinkingSessionCode(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, returnUrl: string) {
     return this.http
       .get(
-        `${sdkUrl}/api/v2/slr/linking/code?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
+        `${sdkUrl}/api/v2/slr/linking/sessionCode?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
         {
           responseType: 'text',
         }
@@ -162,9 +171,9 @@ export class CapeSdkAngularService {
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
-  public startServiceLinking(sdkUrl: string, code: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
+  public startServiceLinking(sdkUrl: string, sessionCode: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
     const startLinkingBody: StartLinkingRequest = {
-      code: code,
+      session_code: sessionCode,
       surrogate_id: surrogateId,
       service_id: serviceId,
       operator_id: operatorId,
@@ -290,55 +299,69 @@ export class CapeSdkAngularService {
     return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
   }
 
-  public async getConsentsBySurrogateId(sdkUrl: string, surrogateId: string): Promise<ConsentRecordSigned> {
-    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`).toPromise();
-  }
-
-  public async getConsentsBySurrogateIdAndPurposeId(
+  public async getConsentsBySurrogateIdAndQuery(
     sdkUrl: string,
+    checkConsentAtOperator: boolean,
     surrogateId: string,
-    purposeId: string,
-    checkConsentAtOperator: boolean
+    serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
+    status?: ConsentStatusEnum,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
+    processingCategory?: ProcessingBasisProcessingCategories,
+    iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
+    let params = new HttpParams();
+    params = params.set('checkConsentAtOperator', String(checkConsentAtOperator));
+    params = iatSort ? params.set('iatSort', iatSort) : params;
+    params = serviceId ? params.set('serviceId', serviceId) : params;
+    params = sourceServiceId ? params.set('sourceServiceId', sourceServiceId) : params;
+    params = datasetId ? params.set('datasetId', datasetId) : params;
+    params = status ? params.set('status', status) : params;
+    params = purposeId ? params.set('purposeId', purposeId) : params;
+    params = purposeName ? params.set('purposeName', purposeName) : params;
+    params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
+    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
     return this.http
-      .get<ConsentRecordSigned[]>(
-        `${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
-      )
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`, {
+        params: params,
+      })
       .toPromise();
   }
 
-  public async getConsentsByUserIdAndServiceIdAndPurposeId(
+  public async getConsentsByUserIdAndQuery(
     sdkUrl: string,
+    checkConsentAtOperator: boolean,
     serviceUserId: string,
-    serviceId: string,
-    purposeId: string,
-    operatorId: string,
-    checkConsentAtOperator: boolean
+    serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
+    status?: ConsentStatusEnum,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
+    processingCategory?: ProcessingBasisProcessingCategories,
+    iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
-    return this.http
-      .get<ConsentRecordSigned[]>(
-        `${sdkUrl}/api/v2/users/surrogates/${serviceUserId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
-      )
-      .toPromise();
-  }
+    let params = new HttpParams();
+    params = params.set('checkConsentAtOperator', String(checkConsentAtOperator));
+    params = iatSort ? params.set('iatSort', iatSort) : params;
+    params = serviceId ? params.set('serviceId', serviceId) : params;
+    params = sourceServiceId ? params.set('sourceServiceId', sourceServiceId) : params;
+    params = datasetId ? params.set('datasetId', datasetId) : params;
+    params = status ? params.set('status', status) : params;
+    params = purposeId ? params.set('purposeId', purposeId) : params;
+    params = purposeName ? params.set('purposeName', purposeName) : params;
+    params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
+    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
 
-  public async getConsentStatus(
-    sdkUrl: string,
-    serviceUserId: string,
-    serviceId: string,
-    purposeId: string,
-    operatorId: string,
-    checkConsentAtOperator: boolean
-  ): Promise<ConsentStatusEnum> {
-    const consentRecords = await this.getConsentsByUserIdAndServiceIdAndPurposeId(
-      sdkUrl,
-      serviceUserId,
-      serviceId,
-      purposeId,
-      operatorId,
-      checkConsentAtOperator
-    );
-    return consentRecords[0].consentStatusList.pop().payload.consent_status;
+    return this.http
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/api/v2/users/${serviceUserId}/consents`, {
+        params: params,
+      })
+      .toPromise();
   }
 
   private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentRecordSigned> {

@@ -13,6 +13,8 @@ import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynoti
 import { ConsentRecordSigned } from 'src/app/cape-sdk-angular/model/consent/consentRecordSigned';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { LoginService } from 'src/app/auth/login/login.service';
+import { NbAuthService } from '@nebular/auth';
+import { AppConfig } from 'src/app/model/appConfig';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -22,7 +24,7 @@ export class ServicesComponent implements OnInit {
   private serviceAccountId: string;
   private serviceAccountEmail: string;
 
-  config: any;
+  config: AppConfig;
   private locale: string;
 
   selectedService: string;
@@ -50,9 +52,10 @@ export class ServicesComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private errorDialogService: ErrorDialogService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private authService: NbAuthService
   ) {
-    this.config = configService.config;
+    this.config = this.configService.config;
     this.locale = this.config.i18n.locale;
     this.operatorId = this.config.system.operatorId;
     this.dashboardUrl = this.config.system.dashboardUrl;
@@ -72,24 +75,14 @@ export class ServicesComponent implements OnInit {
     this.translateService.use(this.locale);
   }
 
-  onClickGo(serviceId: string, purposeId: string) {
-    if (!this.checkAuth()) {
+  async onClickGo(serviceId: string, purposeId: string) {
+    if (!(await this.authService.isAuthenticatedOrRefresh().toPromise())) {
       this.router.navigate(['/login']);
     } else {
       this.checkAndGo(serviceId, purposeId);
 
       /* this.dialogService.open(DialogPersonalAttributesComponent)
          .onClose.subscribe(() => this.checkAndGo(service, purpose));*/
-    }
-  }
-
-  // to update with actual auth session if it is valid yet
-  checkAuth() {
-    this.serviceAccountId = localStorage.getItem('serviceAccountId');
-    if (this.serviceAccountId) {
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -162,22 +155,23 @@ export class ServicesComponent implements OnInit {
             linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceAccountId, this.returnUrl);
           } else this.errorDialogService.openErrorDialog(error);
         }
-      } else this.errorDialogService.openErrorDialog(error);
+      } else throw error;
     }
   };
 
-  onCheckConsent = async (serviceId: string, purpose: string): Promise<boolean> => {
+  onCheckConsent = async (serviceId: string, purposeId: string): Promise<boolean> => {
     try {
       console.log('checking consent for service: ' + serviceId);
 
-      // var consentStatus = await this.capeService.getConsentStatus(this.sdkUrl, this.accountId, serviceId, purpose, this.operatorId, this.checkConsentAtOperator);
-      const consentRecords = await this.capeService.getConsentsByUserIdAndServiceIdAndPurposeId(
+      const consentRecords = await this.capeService.getConsentsByUserIdAndQuery(
         this.sdkUrl,
+        this.checkConsentAtOperator,
         this.serviceAccountId,
         serviceId,
-        purpose,
-        this.operatorId,
-        this.checkConsentAtOperator
+        undefined,
+        undefined,
+        undefined,
+        purposeId
       );
       const consentStatus = consentRecords[0]?.consentStatusList.pop().payload.consent_status;
 
@@ -187,7 +181,12 @@ export class ServicesComponent implements OnInit {
         return true;
       } else return false;
     } catch (error) {
-      this.errorDialogService.openErrorDialog(error);
+      if (error.error?.statusCode === '401' || error.status === 401) {
+        this.errorDialogService.openErrorDialog(error);
+      } else if (error.status === 404) {
+        console.log('No Consent Record for service: ' + serviceId + 'and User: ' + this.serviceAccountId);
+        return false;
+      } else throw error;
     }
   };
 

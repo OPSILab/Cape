@@ -46,9 +46,9 @@
       "x5c": []
     },
     "serviceUrls": {
-      "libraryDomain": "http://localhost:8085/cape-service-sdk",
-      "loginUri": "http://localhost:4100/pages/services",
-      "linkingRedirectUri": "http://localhost:4400",
+      "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
+      "loginUri": "https://www.cape-suite.eu/cape-online-services/pages/services",
+      "linkingRedirectUri": "https://www.cape-suite.eu/cape-online-services",
       "objectionUri": "",
       "notificationUri": ""
     },

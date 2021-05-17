@@ -1,9 +1,9 @@
 import { Injectable, ChangeDetectorRef } from '@angular/core';
 
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { ErrorDialogService } from '../pages/error-dialog/error-dialog.service';
-import { NbToastrService, NbPosition, NbGlobalLogicalPosition } from '@nebular/theme';
+import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { LinkingResponseData } from './model/service-link/linkingResponseData';
 import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
 import { SurrogateIdResponse } from './model/service-link/surrogateIdResponse';
@@ -16,12 +16,13 @@ import { ConsentForm } from './model/consent/consentForm';
 import { ConsentRecordSigned } from './model/consent/consentRecordSigned';
 import { ConsentStatusEnum, ConsentStatusRecordPayload } from './model/consent/consentStatusRecordPayload';
 import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSigned';
-import { ConsentRecordRoleSpecificPart } from './model/consent/consentRecordRoleSpecificPart';
 import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecordSinkRoleSpecificPart';
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
 import { ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
+import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from './model/processingBasis';
+import { QuerySortEnum } from './model/querySortEnum';
 
 export interface UserSurrogateIdLink {
   userId: string;
@@ -298,55 +299,69 @@ export class CapeSdkAngularService {
     return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
   }
 
-  public async getConsentsBySurrogateId(sdkUrl: string, surrogateId: string): Promise<ConsentRecordSigned> {
-    return this.http.get<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`).toPromise();
-  }
-
-  public async getConsentsBySurrogateIdAndPurposeId(
+  public async getConsentsBySurrogateIdAndQuery(
     sdkUrl: string,
+    checkConsentAtOperator: boolean,
     surrogateId: string,
-    purposeId: string,
-    checkConsentAtOperator: boolean
+    serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
+    status?: ConsentStatusEnum,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
+    processingCategory?: ProcessingBasisProcessingCategories,
+    iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
+    let params = new HttpParams();
+    params = params.set('checkConsentAtOperator', String(checkConsentAtOperator));
+    params = iatSort ? params.set('iatSort', iatSort) : params;
+    params = serviceId ? params.set('serviceId', serviceId) : params;
+    params = sourceServiceId ? params.set('sourceServiceId', sourceServiceId) : params;
+    params = datasetId ? params.set('datasetId', datasetId) : params;
+    params = status ? params.set('status', status) : params;
+    params = purposeId ? params.set('purposeId', purposeId) : params;
+    params = purposeName ? params.set('purposeName', purposeName) : params;
+    params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
+    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
     return this.http
-      .get<ConsentRecordSigned[]>(
-        `${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents?purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
-      )
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`, {
+        params: params,
+      })
       .toPromise();
   }
 
-  public async getConsentsByUserIdAndServiceIdAndPurposeId(
+  public async getConsentsByUserIdAndQuery(
     sdkUrl: string,
+    checkConsentAtOperator: boolean,
     serviceUserId: string,
-    serviceId: string,
-    purposeId: string,
-    operatorId: string,
-    checkConsentAtOperator: boolean
+    serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
+    status?: ConsentStatusEnum,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
+    processingCategory?: ProcessingBasisProcessingCategories,
+    iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
-    return this.http
-      .get<ConsentRecordSigned[]>(
-        `${sdkUrl}/api/v2/users/${serviceUserId}/consents?serviceId=${serviceId}&purposeId=${purposeId}&checkConsentAtOperator=${checkConsentAtOperator}`
-      )
-      .toPromise();
-  }
+    let params = new HttpParams();
+    params = params.set('checkConsentAtOperator', String(checkConsentAtOperator));
+    params = iatSort ? params.set('iatSort', iatSort) : params;
+    params = serviceId ? params.set('serviceId', serviceId) : params;
+    params = sourceServiceId ? params.set('sourceServiceId', sourceServiceId) : params;
+    params = datasetId ? params.set('datasetId', datasetId) : params;
+    params = status ? params.set('status', status) : params;
+    params = purposeId ? params.set('purposeId', purposeId) : params;
+    params = purposeName ? params.set('purposeName', purposeName) : params;
+    params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
+    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
 
-  public async getConsentStatus(
-    sdkUrl: string,
-    serviceUserId: string,
-    serviceId: string,
-    purposeId: string,
-    operatorId: string,
-    checkConsentAtOperator: boolean
-  ): Promise<ConsentStatusEnum> {
-    const consentRecords = await this.getConsentsByUserIdAndServiceIdAndPurposeId(
-      sdkUrl,
-      serviceUserId,
-      serviceId,
-      purposeId,
-      operatorId,
-      checkConsentAtOperator
-    );
-    return consentRecords[0].consentStatusList.pop().payload.consent_status;
+    return this.http
+      .get<ConsentRecordSigned[]>(`${sdkUrl}/api/v2/users/${serviceUserId}/consents`, {
+        params: params,
+      })
+      .toPromise();
   }
 
   private async changeConsentStatus(sdkUrl: string, consent: ConsentRecordSigned, newStatus: ConsentStatusEnum): Promise<ConsentRecordSigned> {

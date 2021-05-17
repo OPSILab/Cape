@@ -5,8 +5,8 @@
 
   "system": {
     "sdkUrl": "https://www.cape-suite.eu/cape-service-sdk",
+    "checkConsentAtOperator": false,
     "serviceEditorUrl": "https://www.cape-suite.eu/cape-service-editor",
-    "assetsDataDir": "/assets/data",
     "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
     "auth": {
       "idmHost": "https://www.cape-suite.eu",

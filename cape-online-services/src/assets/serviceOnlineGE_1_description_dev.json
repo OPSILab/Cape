@@ -1,7 +1,7 @@
 {
-  "serviceId": "GE_2",
-  "name": "Protezione Civile Iscrizione alerta",
-  "identifier": "GE_2",
+  "serviceId": "GE_1",
+  "name": "Iscrizioni servizi 0-6",
+  "identifier": "GE_1",
   "issued": "",
   "createdByUserId": "",
   "serviceDescriptionVersion": "1.0",
@@ -10,8 +10,8 @@
   "status": "Completed",
   "supportedProfiles": ["Consenting", "3rd party re-use", "Notification", "Objection"],
   "spatial": "ITA-Italy",
-  "lifeEvent": "other",
-  "businessEvent": "other",
+  "lifeEvent": "Starting education",
+  "businessEvent": "",
   "sector": [],
   "type": ["01 - General public services"],
   "thematicArea": ["01 - General public services"],
@@ -23,7 +23,7 @@
   "humanReadableDescription": [
     {
       "locale": "it",
-      "description": "Servizio di info e allerta tramite messagistica e BOT",
+      "description": "Manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
       "keywords": []
     }
   ],
@@ -46,9 +46,9 @@
       "x5c": []
     },
     "serviceUrls": {
-      "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
-      "loginUri": "https://www.cape-suite.eu/cape-online-services/pages/services",
-      "linkingRedirectUri": "https://www.cape-suite.eu/cape-online-services",
+      "libraryDomain": "http://localhost:8085/cape-service-sdk",
+      "loginUri": "http://localhost:83/cape-online-services/pages/services",
+      "linkingRedirectUri": "http://localhost:83/cape-online-services",
       "objectionUri": "",
       "notificationUri": ""
     },
@@ -120,7 +120,7 @@
         {
           "locale": "it",
           "title": "Registrazione Servizio",
-          "description": "Raccolta dati per manifestazione d’interesse a registrazione del sistema di allerta",
+          "description": "Raccolta dati per manifestazione d’interesse on line servizi asilo nido ed infanzia 2020",
           "descriptionUrl": "",
           "iconUrl": ""
         }
@@ -160,7 +160,7 @@
       "recipients": ["Other recipient"],
       "shareWith": [
         {
-          "orgName": "SocialMessage Inc.",
+          "orgName": "Mensa comunale ",
           "orgUrl": "",
           "businessType": "Profit",
           "required": false

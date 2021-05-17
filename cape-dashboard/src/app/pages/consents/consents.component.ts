@@ -21,6 +21,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
 import { LinkedServicesService } from '../services/linkedServices/linkedServices.service';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
+import { QuerySortEnum } from '../../model/querySortEnum';
 
 @Component({
   selector: 'consent',
@@ -104,7 +105,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     const queryParams = this.route.snapshot.queryParams;
 
-    await this.getConsents(queryParams.consentId, queryParams.serviceId);
+    await this.getConsents(QuerySortEnum.ASC, queryParams.consentId, queryParams.serviceId);
     await this.getServices();
   }
 
@@ -113,10 +114,15 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   }
 
   async getConsents(
+    iatSort?: QuerySortEnum,
     consentId?: string,
     serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
     status?: ConsentStatusEnum,
-    purposeCategory?: string,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
     processingCategory?: ProcessingBasisProcessingCategories
   ): Promise<void> {
     this.isCollapsed = [];
@@ -128,7 +134,18 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.message = '';
 
-      this.consents = await this.consentService.getConsentPairs(consentId, serviceId, status, purposeCategory, processingCategory);
+      this.consents = await this.consentService.getConsentPairs(
+        QuerySortEnum.ASC,
+        consentId,
+        serviceId,
+        undefined,
+        undefined,
+        status,
+        undefined,
+        undefined,
+        purposeCategory,
+        processingCategory
+      );
 
       if (this.consents.length === 0) this.message = this.translate.instant('general.consents.no_consent_message') as string;
       else

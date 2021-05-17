@@ -24,8 +24,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
@@ -55,28 +57,32 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByAccountIdAndQuery(String accountId, String consentId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("accountId").is(accountId)));
 
-		if (consentId != null)
+		if (iatSort != null)
+			pipeline.add(Aggregation.sort(iatSort, "payload.commonPart.iat"));
+
+		if (StringUtils.isNotBlank(consentId))
 			pipeline.add(match(where("payload.commonPart.crId").is(consentId)));
 
-		if (serviceId != null)
+		if (StringUtils.isNotBlank(serviceId))
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
-		if (sourceServiceId != null)
+		if (StringUtils.isNotBlank(sourceServiceId))
 			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
 
-		if (datasetId != null)
+		if (StringUtils.isNotBlank(datasetId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
 
-		if (purposeId != null)
+		if (StringUtils.isNotBlank(purposeId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
 
-		if (purposeName != null)
+		if (StringUtils.isNotBlank(purposeName))
 			pipeline.add(
 					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 
@@ -108,25 +114,29 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
 
-		if (serviceId != null)
+		if (iatSort != null)
+			pipeline.add(Aggregation.sort(iatSort, "payload.commonPart.iat"));
+
+		if (StringUtils.isNotBlank(serviceId))
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
-		if (sourceServiceId != null)
+		if (StringUtils.isNotBlank(sourceServiceId))
 			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
 
-		if (datasetId != null)
+		if (StringUtils.isNotBlank(datasetId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
 
-		if (purposeId != null)
+		if (StringUtils.isNotBlank(purposeId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
 
-		if (purposeName != null)
+		if (StringUtils.isNotBlank(purposeName))
 			pipeline.add(
 					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 
@@ -158,22 +168,25 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory) {
+			ProcessingCategory processingCategory, Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
-		if (sourceServiceId != null)
+		if (iatSort != null)
+			pipeline.add(Aggregation.sort(iatSort, "payload.commonPart.iat"));
+
+		if (StringUtils.isNotBlank(sourceServiceId))
 			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
 
-		if (datasetId != null)
+		if (StringUtils.isNotBlank(datasetId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
 
-		if (purposeId != null)
+		if (StringUtils.isNotBlank(purposeId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
 
-		if (purposeName != null)
+		if (StringUtils.isNotBlank(purposeName))
 			pipeline.add(
 					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 
@@ -205,28 +218,32 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory) {
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
 		pipeline.add(match(where("payload.commonPart.serviceProviderBusinessId").is(businessId)));
 
-		if (surrogateId != null)
+		if (iatSort != null)
+			pipeline.add(Aggregation.sort(iatSort, "payload.commonPart.iat"));
+
+		if (StringUtils.isNotBlank(surrogateId))
 			pipeline.add(match(where("payload.commonPart.surrogateId").is(surrogateId)));
 
-		if (serviceId != null)
+		if (StringUtils.isNotBlank(serviceId))
 			pipeline.add(match(where("payload.commonPart.subjectId").is(serviceId)));
 
-		if (sourceServiceId != null)
+		if (StringUtils.isNotBlank(sourceServiceId))
 			pipeline.add(match(where("payload.commonPart.sourceSubjectId").is(sourceServiceId)));
 
-		if (datasetId != null)
+		if (StringUtils.isNotBlank(datasetId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets._id").is(datasetId)));
 
-		if (purposeId != null)
+		if (StringUtils.isNotBlank(purposeId))
 			pipeline.add(match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeId").is(purposeId)));
 
-		if (purposeName != null)
+		if (StringUtils.isNotBlank(purposeName))
 			pipeline.add(
 					match(where("payload.commonPart.rsDescription.resourceSet.datasets.purposeName").is(purposeName)));
 

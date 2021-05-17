@@ -8,8 +8,8 @@ export interface AppConfig {
 
 export interface System {
   sdkUrl: string;
+  checkConsentAtOperator: boolean;
   serviceEditorUrl: string;
-  assetsDataDir: string;
   editorSchemaPath: string;
   auth: Auth;
 }

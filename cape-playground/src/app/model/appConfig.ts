@@ -1,8 +1,6 @@
 export interface AppConfig {
-  serviceRegistry: {
-    url: string;
-  };
   system: System;
+  services: Services;
   i18n: I18n;
 }
 
@@ -21,6 +19,10 @@ export interface Auth {
   authRealm: string;
 }
 
+export interface Services {
+  sdkUrl: string;
+  checkConsentAtOperator: boolean;
+}
 export interface I18n {
   locale: string;
 }

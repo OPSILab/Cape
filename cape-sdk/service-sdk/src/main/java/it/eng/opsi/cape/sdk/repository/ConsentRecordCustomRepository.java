@@ -18,6 +18,8 @@ package it.eng.opsi.cape.sdk.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
+
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
@@ -32,14 +34,14 @@ public interface ConsentRecordCustomRepository {
 
 	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory);
+			ProcessingCategory processingCategory, Sort.Direction iatSort);
 
 	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory, Sort.Direction iatSort);
 
 	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory);
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory, Sort.Direction iatSort);
 
 }

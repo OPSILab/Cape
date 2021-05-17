@@ -1,12 +1,12 @@
 {
-  "serviceId": "MYM20",
-  "name": "My Measurements",
-  "identifier": "https://www.cape-suite.eu/cape-playground/pages/services/my-measurements",
-  "issued": "2020-27-08T13:48:00Z",
+  "serviceId": "MYW20",
+  "name": "My Wellness",
+  "identifier": "http://localhost:82/cape-playground/pages/services/my-wellness",
+  "issued": "2020-18-06T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
-  "serviceIconUrl": "https://www.cape-suite.eu/cape-playground/my-measurements/favicon.ico",
+  "serviceIconUrl": "http://localhost:82/cape-playground/my-wellness/favicon.ico",
   "status": "Completed",
   "supportedProfiles": ["Consenting"],
   "spatial": "ITA-Italy",
@@ -23,12 +23,12 @@
   "humanReadableDescription": [
     {
       "locale": "en",
-      "description": "The My Measurements Service provides your e-health measurements such as cholesterol, weigth, glycemy, and so on. These will be used as source by sink services (e.g. My Wellness) to track hystorical trends with such data.",
+      "description": "The My Wellness Service provides useful suggestions about your diet and workouts, based on your hystorical cholesterol and body weight trends. These measurements will be retrieved from a thir party service, called My Measurements.",
       "keywords": []
     },
     {
       "locale": "it",
-      "description": "Il Servizio My Measurements fornisce le tue misurazioni e-health come colesterolo, peso, glicemia, ecc. Essi verranno usati come sorgente dai servizi sink (es. My Wellness) al fine di tracciare i trend storici con tali dati.",
+      "description": "Il Servizio My Wellness fornisce utili suggerimenti sulla tua dieta e i workouts, basati sull'andamento storico del tuo colesterolo e peso corporeo. Tali misurazioni verranno recuperate da un servizio terzo, chiamato My Measurements.",
       "keywords": []
     }
   ],
@@ -52,8 +52,8 @@
     },
     "serviceUrls": {
       "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
-      "loginUri": "https://www.cape-suite.eu/cape-playground/pages/services/my-measurements",
-      "linkingRedirectUri": "https://www.cape-suite.eu/cape-playground",
+      "loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
+      "linkingRedirectUri": "http://localhost:82/cape-playground",
       "objectionUri": "",
       "notificationUri": ""
     },
@@ -64,7 +64,8 @@
       "contact": "",
       "address": "",
       "email": "johndoe@example.com",
-      "phone": "+39222222"
+      "phone": "+39222222",
+      "operatorName": "John Doe"
     }
   },
   "isDescribedAt": [
@@ -73,12 +74,12 @@
       "description": [
         {
           "locale": "en",
-          "description": "This dataset represents the cholesterol measurements (in mg/dl).",
+          "description": "This dataset represents data used for the MyCholesterol purpose",
           "keyword": []
         },
         {
           "locale": "it",
-          "description": "Questo dataset rappresenta le misurazioni del colesterolo (in mg/dl).",
+          "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyCholesterol",
           "keyword": []
         }
       ],
@@ -105,7 +106,7 @@
         {
           "property": "cholesterol",
           "conceptId": "cholesterol_total",
-          "name": "Cholesterol Total",
+          "name": "Blood Cholesterol",
           "type": "text",
           "required": true
         },
@@ -123,12 +124,12 @@
       "description": [
         {
           "locale": "en",
-          "description": "This dataset represents the body weight measurements (in Kg).",
+          "description": "This dataset represents data used for the MyWeight purpose",
           "keyword": []
         },
         {
           "locale": "it",
-          "description": "Questo dataset rappresenta le misurazioni del peso corporeo (in Kg).",
+          "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyWeight",
           "keyword": []
         }
       ],
@@ -174,8 +175,8 @@
       "purposeId": "1",
       "purposeName": "MyCholesterol",
       "legalBasis": "Consent",
-      "purposeCategory": "AcademicResearch",
-      "processingCategories": ["Copy", "Store", "Acquire", "Collect"],
+      "purposeCategory": "CommercialInterest",
+      "processingCategories": ["Copy", "Analyse", "Profiling", "Store"],
       "description": [
         {
           "locale": "en",
@@ -213,7 +214,7 @@
         }
       ],
       "obligations": [],
-      "policyRef": "http://mymeasurements.com/policy",
+      "policyRef": "http://mywellness.com/policy",
       "collectionMethod": "Automatic aggregation",
       "termination": "None"
     },
@@ -221,8 +222,8 @@
       "purposeId": "2",
       "purposeName": "MyWeight",
       "legalBasis": "Consent",
-      "purposeCategory": "AcademicResearch",
-      "processingCategories": ["Copy", "Store", "Acquire", "Collect"],
+      "purposeCategory": "CommercialInterest",
+      "processingCategories": ["Copy", "Analyse", "Profiling", "Store"],
       "description": [
         {
           "locale": "en",
@@ -265,10 +266,10 @@
           "activity": ""
         }
       ],
-      "policyRef": "http://mymeasurements.com/policy",
-      "collectionMethod": "Collection",
+      "policyRef": "http://mywellness.com/policy",
+      "collectionMethod": "Automatic aggregation",
       "termination": "None"
     }
   ],
-  "role": "Source"
+  "role": "Sink"
 }

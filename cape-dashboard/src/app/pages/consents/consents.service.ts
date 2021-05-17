@@ -9,10 +9,11 @@ import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPaylo
 import { SinkUsageRules } from '../../model/consents/sinkUsageRules';
 import { ChangeConsentStatusRequest } from '../../model/consents/changeConsentStatusRequest';
 import { DataMapping } from '../../model/dataMapping';
-import { ProcessingBasis, ProcessingBasisProcessingCategories } from '../../model/processingBasis';
+import { ProcessingBasis, ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
 import { AvailableServicesService } from '../services/availableServices/availableServices.service';
 import { ServiceEntry } from '../../model/service-linking/serviceEntry';
 import { ChangeConsentStatusRequestFrom } from '../../model/consents/changeSlrStatusRequestFrom';
+import { QuerySortEnum } from '../../model/querySortEnum';
 
 @Injectable()
 export class ConsentsService {
@@ -33,33 +34,83 @@ export class ConsentsService {
     this.serviceRegistryUrl = this.config.serviceRegistry.url as string;
   }
 
-  getConsents(): Promise<ConsentRecordSigned[]> {
-    return this.http.get<ConsentRecordSigned[]>(`${this.consentsApiPath}/api/v2/accounts/${this.accountId}/consents`).toPromise();
-  }
-
-  getConsentPairs(
+  getConsents(
+    iatSort?: QuerySortEnum,
     consentId?: string,
     serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
     status?: ConsentStatusEnum,
-    purposeCategory?: string,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
     processingCategory?: ProcessingBasisProcessingCategories
-  ): Promise<ConsentRecordSignedPair[]> {
+  ): Promise<ConsentRecordSigned[]> {
     let queryParams = new HttpParams();
 
-    if (consentId) queryParams = queryParams.append('consentId', consentId);
+    if (iatSort) queryParams = queryParams.set('iatSort', iatSort);
 
-    if (serviceId) queryParams = queryParams.append('serviceId', serviceId);
+    if (consentId) queryParams = queryParams.set('consentId', consentId);
 
-    if (status) queryParams = queryParams.append('status', status);
+    if (serviceId) queryParams = queryParams.set('serviceId', serviceId);
 
-    if (purposeCategory) queryParams = queryParams.append('purposeCategory', purposeCategory);
+    if (sourceServiceId) queryParams = queryParams.set('sourceServiceId', sourceServiceId);
 
-    if (processingCategory) queryParams = queryParams.append('processingCategory', processingCategory);
+    if (datasetId) queryParams = queryParams.set('datasetId', datasetId);
+
+    if (status) queryParams = queryParams.set('status', status);
+
+    if (purposeId) queryParams = queryParams.set('purposeId', purposeId);
+
+    if (purposeName) queryParams = queryParams.set('purposeName', purposeName);
+
+    if (purposeCategory) queryParams = queryParams.set('purposeCategory', purposeCategory);
+
+    if (processingCategory) queryParams = queryParams.set('processingCategory', processingCategory);
 
     const httpOptions = {
       params: queryParams,
     };
+    return this.http.get<ConsentRecordSigned[]>(`${this.consentsApiPath}/api/v2/accounts/${this.accountId}/consents`, httpOptions).toPromise();
+  }
 
+  getConsentPairs(
+    iatSort?: QuerySortEnum,
+    consentId?: string,
+    serviceId?: string,
+    sourceServiceId?: string,
+    datasetId?: string,
+    status?: ConsentStatusEnum,
+    purposeId?: string,
+    purposeName?: string,
+    purposeCategory?: ProcessingBasisPurposeCategory,
+    processingCategory?: ProcessingBasisProcessingCategories
+  ): Promise<ConsentRecordSignedPair[]> {
+    let queryParams = new HttpParams();
+
+    if (iatSort) queryParams = queryParams.set('iatSort', iatSort);
+
+    if (consentId) queryParams = queryParams.set('consentId', consentId);
+
+    if (serviceId) queryParams = queryParams.set('serviceId', serviceId);
+
+    if (sourceServiceId) queryParams = queryParams.set('sourceServiceId', sourceServiceId);
+
+    if (datasetId) queryParams = queryParams.set('datasetId', datasetId);
+
+    if (status) queryParams = queryParams.set('status', status);
+
+    if (purposeId) queryParams = queryParams.set('purposeId', purposeId);
+
+    if (purposeName) queryParams = queryParams.set('purposeName', purposeName);
+
+    if (purposeCategory) queryParams = queryParams.set('purposeCategory', purposeCategory);
+
+    if (processingCategory) queryParams = queryParams.set('processingCategory', processingCategory);
+
+    const httpOptions = {
+      params: queryParams,
+    };
     return this.http
       .get<ConsentRecordSignedPair[]>(`${this.consentsApiPath}/api/v2/accounts/${this.accountId}/consents/pair`, httpOptions)
       .toPromise();

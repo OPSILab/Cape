@@ -1,12 +1,12 @@
 {
   "serviceId": "MYW20",
   "name": "My Wellness",
-  "identifier": "http://localhost:82/cape-playground/pages/services/my-wellness",
+  "identifier": "https://www.cape-suite.eu/cape-playground/pages/services/my-wellness",
   "issued": "2020-18-06T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
-  "serviceIconUrl": "http://localhost:82/cape-playground/my-wellness/favicon.ico",
+  "serviceIconUrl": "https://www.cape-suite.eu/cape-playground/my-wellness/favicon.ico",
   "status": "Completed",
   "supportedProfiles": ["Consenting"],
   "spatial": "ITA-Italy",
@@ -52,8 +52,8 @@
     },
     "serviceUrls": {
       "libraryDomain": "http://service-sdk:8085/cape-service-sdk",
-      "loginUri": "http://localhost:82/cape-playground/pages/services/my-wellness",
-      "linkingRedirectUri": "http://localhost:82/cape-playground",
+      "loginUri": "https://www.cape-suite.eu/cape-playground/pages/services/my-wellness",
+      "linkingRedirectUri": "https://www.cape-suite.eu/cape-playground",
       "objectionUri": "",
       "notificationUri": ""
     },

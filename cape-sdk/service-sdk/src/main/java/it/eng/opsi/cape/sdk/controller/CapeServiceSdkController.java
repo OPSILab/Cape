@@ -34,6 +34,8 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -783,7 +785,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by ", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
 	@GetMapping(value = "/users/surrogates/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -795,19 +797,22 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
-			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		if (checkConsentAtOperator)
 			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
-					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
+					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
+					processingCategory, iatSort)));
 		else
 
-			return ResponseEntity.ok(consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, serviceId,
-					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory));
+			return ResponseEntity
+					.ok(consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, serviceId, sourceServiceId, datasetId,
+							status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input User Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Category and Processing Category.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input User Id. Optionally can be filtered by ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
 	@GetMapping(value = "/users/{userId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -818,7 +823,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
-			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		/*
 		 * Retrieve SurrogateIds corresponding to the input UserId, in order to query
@@ -844,14 +850,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 				result.addAll(getConsentRecordsBySurrogateIdAndQuery(matchingSurrogateId.getSurrogateId(), serviceId,
 						sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory,
-						checkConsentAtOperator).getBody());
+						checkConsentAtOperator, iatSort).getBody());
 			}
 
 		return ResponseEntity.ok(result);
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Category and Processing Category.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records for the input ServiceId", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -863,19 +869,21 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
-			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		if (checkConsentAtOperator)
 
 			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
-					null, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
+					null, serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
+					processingCategory, iatSort)));
 		else
 			return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId, datasetId,
-					status, purposeId, purposeName, purposeCategory, processingCategory));
+					status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
 
 	}
 
-	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id.", tags = {
+	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id. Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
 	@GetMapping(value = "/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -887,14 +895,37 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
-			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator) {
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		if (checkConsentAtOperator)
 			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
-					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeCategory, processingCategory)));
+					surrogateId, serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
+					processingCategory, iatSort)));
 		else
-			return ResponseEntity.ok(consentRecordRepo.findByBusinessIdAndQuery(businessId, surrogateId, serviceId,
-					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory));
+			return ResponseEntity
+					.ok(consentRecordRepo.findByBusinessIdAndQuery(businessId, surrogateId, serviceId, sourceServiceId,
+							datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
+	}
+
+	@Operation(summary = "Get the list of the pairs of signed Consent Records for this Service Provider by using its assigned Business Id. Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
+	@GetMapping(value = "/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByBusinessIdAndQuery(
+			@RequestParam(required = false) String surrogateId, @RequestParam(required = false) String serviceId,
+			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
+
+		return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordPairsByBusinessIdAndQuery(businessId,
+				surrogateId, serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
+				processingCategory, iatSort)));
+
 	}
 
 	@Operation(summary = "Call the Consent Manager to change status (from Service) of a Consent for the input SurrogateId, Slr Id and Cr Id.", tags = {
@@ -1080,7 +1111,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 */
 		List<ConsentRecordSigned> matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId,
 				sourceServiceId, datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory,
-				processingCategory, checkConsentAtOperator).getBody();
+				processingCategory, checkConsentAtOperator, Sort.Direction.ASC).getBody();
 
 		if (matchingConsents == null || matchingConsents.isEmpty())
 			throw new ConsentRecordNotFoundException(
