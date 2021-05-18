@@ -44,7 +44,7 @@ export class ConsentsService {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<ConsentRecordSigned[]> {
     let queryParams = new HttpParams();
 
@@ -66,7 +66,10 @@ export class ConsentsService {
 
     if (purposeCategory) queryParams = queryParams.set('purposeCategory', purposeCategory);
 
-    if (processingCategory) queryParams = queryParams.set('processingCategory', processingCategory);
+    if (processingCategories)
+      processingCategories.forEach((cat) => {
+        queryParams = queryParams.append('processingCategories', cat);
+      });
 
     const httpOptions = {
       params: queryParams,
@@ -84,7 +87,7 @@ export class ConsentsService {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<ConsentRecordSignedPair[]> {
     let queryParams = new HttpParams();
 
@@ -106,7 +109,10 @@ export class ConsentsService {
 
     if (purposeCategory) queryParams = queryParams.set('purposeCategory', purposeCategory);
 
-    if (processingCategory) queryParams = queryParams.set('processingCategory', processingCategory);
+    if (processingCategories)
+      processingCategories.forEach((cat) => {
+        queryParams = queryParams.append('processingCategories', cat);
+      });
 
     const httpOptions = {
       params: queryParams,

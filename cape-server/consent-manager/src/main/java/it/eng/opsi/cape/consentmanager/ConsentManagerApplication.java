@@ -18,8 +18,10 @@ package it.eng.opsi.cape.consentmanager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -30,10 +32,12 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -55,7 +59,6 @@ import com.nimbusds.jose.util.Base64URL;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import it.eng.opsi.cape.consentmanager.RestTemplateHeaderModifierInterceptor;
 import it.eng.opsi.cape.consentmanager.repository.Base64URLReadConverter;
 import it.eng.opsi.cape.consentmanager.repository.Base64URLWriteConverter;
 import it.eng.opsi.cape.consentmanager.repository.JWSHeaderReadConverter;
@@ -185,6 +188,24 @@ public class ConsentManagerApplication extends SpringBootServletInitializer {
 						.allowCredentials(true).maxAge(3600);
 			}
 		};
+	}
+
+	@Configuration
+	public class EnumConfig implements WebMvcConfigurer {
+
+		@Autowired
+		private ListableBeanFactory beanFactory;
+
+		@Override
+		public void addFormatters(FormatterRegistry registry) {
+			Map<String, Object> components = beanFactory.getBeansWithAnnotation(RequestParameterConverter.class);
+			components.values().parallelStream().forEach(c -> {
+				if (c instanceof Converter) {
+					registry.addConverter((Converter) c);
+				}
+			});
+		}
+
 	}
 
 //	@Bean

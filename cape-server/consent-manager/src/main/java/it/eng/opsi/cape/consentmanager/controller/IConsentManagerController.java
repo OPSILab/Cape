@@ -63,13 +63,13 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndQuery(String accountId,
 			String consentId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort)
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndQuery(
 			String accountId, String consentId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort)
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndSlrId(String accountId,
@@ -84,12 +84,12 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(String surrogateId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
 			String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort);
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordsPairsBySurrogateIdAndQuery(
 			String surrogateId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort)
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsBySurrogateIdAndSlrId(
@@ -103,24 +103,24 @@ public interface IConsentManagerController {
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByServiceIdAndQuery(
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,
 			String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort)
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceProviderBusinessIdAndQuery(
 			String businessId, String surrogateId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort);
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByServiceProviderBusinessIdAndQuery(
 			String businessId, String surrogateId, String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort)
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException;
 
 	public abstract ResponseEntity<List<ConsentStatusRecordSigned>> getConsentStatusRecordsByAccountIdAndSlrIdAndCrId(

@@ -58,9 +58,10 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   public changeStatusButtons;
   public filtersForm = new FormGroup({
     service: new FormControl(),
+    sourceService: new FormControl(),
     status: new FormControl(),
     purposeCategory: new FormControl(),
-    processingCategory: new FormControl(),
+    processingCategories: new FormControl(),
   });
 
   currentLocale: string;
@@ -123,7 +124,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<void> {
     this.isCollapsed = [];
     this.changedDataMapping = [];
@@ -135,16 +136,16 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       this.message = '';
 
       this.consents = await this.consentService.getConsentPairs(
-        QuerySortEnum.ASC,
+        iatSort,
         consentId,
         serviceId,
-        undefined,
-        undefined,
+        sourceServiceId,
+        datasetId,
         status,
-        undefined,
-        undefined,
+        purposeId,
+        purposeName,
         purposeCategory,
-        processingCategory
+        processingCategories
       );
 
       if (this.consents.length === 0) this.message = this.translate.instant('general.consents.no_consent_message') as string;
@@ -482,20 +483,26 @@ export class ConsentsComponent implements OnInit, OnDestroy {
 
   async onFilterSubmit(): Promise<void> {
     await this.getConsents(
+      QuerySortEnum.ASC,
       undefined,
       this.filtersForm.get('service').value,
+      this.filtersForm.get('sourceService').value,
+      undefined,
       this.filtersForm.get('status').value,
+      undefined,
+      undefined,
       this.filtersForm.get('purposeCategory').value,
-      this.filtersForm.get('processingCategory').value
+      this.filtersForm.get('processingCategories').value
     );
   }
 
   resetFilters(): void {
     this.filtersForm.reset({
       service: '',
+      sourceService: '',
       status: '',
       purposeCategory: '',
-      processingCategory: '',
+      processingCategories: [],
     });
 
     void this.getConsents();

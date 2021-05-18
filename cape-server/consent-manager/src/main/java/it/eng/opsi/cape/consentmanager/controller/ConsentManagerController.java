@@ -218,7 +218,7 @@ public class ConsentManagerController implements IConsentManagerController {
 			}
 
 			/*
-			 * Otherwise generate a new Resource Set Id (serviceUri:uniqueResourceKey)
+			 * Otherwise generate a new Resource Set Id (serviceDomain:uniqueResourceKey)
 			 */
 			String rsId = serviceDescription.getServiceInstance().getServiceUrls().getDomain() + ":"
 					+ new ObjectId().toString();
@@ -829,16 +829,16 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		List<ConsentRecordSigned> result = null;
 
 		if (StringUtils.isNotBlank(consentId) || StringUtils.isNotBlank(serviceId)
 				|| StringUtils.isNotBlank(sourceServiceId) || StringUtils.isNotBlank(datasetId) || status != null
-				|| purposeCategory != null || processingCategory != null || iatSort != null)
+				|| purposeCategory != null || processingCategories != null || iatSort != null)
 			result = consentRecordRepo.findByAccountIdAndQuery(accountId, consentId, serviceId, sourceServiceId,
-					datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort);
+					datasetId, status, purposeId, purposeName, purposeCategory, processingCategories, iatSort);
 		else
 			result = consentRecordRepo.findByAccountId(accountId);
 
@@ -881,7 +881,7 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
@@ -889,9 +889,9 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		if (StringUtils.isNotBlank(consentId) || StringUtils.isNotBlank(serviceId)
 				|| StringUtils.isNotBlank(sourceServiceId) || StringUtils.isNotBlank(datasetId) || status != null
-				|| purposeCategory != null || processingCategory != null || iatSort != null)
+				|| purposeCategory != null || processingCategories != null || iatSort != null)
 			existingConsents = consentRecordRepo.findByAccountIdAndQuery(accountId, consentId, serviceId,
-					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory,
+					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategories,
 					iatSort);
 		else
 			existingConsents = consentRecordRepo.findByAccountId(accountId);
@@ -959,16 +959,16 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		List<ConsentRecordSigned> result = null;
 
 		if (StringUtils.isNotBlank(serviceId) || StringUtils.isNotBlank(sourceServiceId)
 				|| StringUtils.isNotBlank(datasetId) || status != null || purposeCategory != null
-				|| processingCategory != null || iatSort != null)
+				|| processingCategories != null || iatSort != null)
 			result = consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, serviceId, sourceServiceId, datasetId,
-					status, purposeId, purposeName, purposeCategory, processingCategory, iatSort);
+					status, purposeId, purposeName, purposeCategory, processingCategories, iatSort);
 		else
 			result = consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId);
 
@@ -986,7 +986,7 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
@@ -994,9 +994,9 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		if (StringUtils.isNotBlank(serviceId) || StringUtils.isNotBlank(sourceServiceId)
 				|| StringUtils.isNotBlank(datasetId) || status != null || purposeCategory != null
-				|| processingCategory != null || iatSort != null)
+				|| processingCategories != null || iatSort != null)
 			existingConsents = consentRecordRepo.findBySurrogateIdAndQuery(surrogateId, serviceId, sourceServiceId,
-					datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort);
+					datasetId, status, purposeId, purposeName, purposeCategory, processingCategories, iatSort);
 		else
 			existingConsents = consentRecordRepo.findByPayload_commonPart_surrogateId(surrogateId);
 
@@ -1156,15 +1156,15 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		List<ConsentRecordSigned> result = null;
 
 		if (StringUtils.isNotBlank(sourceServiceId) || StringUtils.isNotBlank(datasetId) || status != null
-				|| purposeCategory != null || processingCategory != null || iatSort != null)
+				|| purposeCategory != null || processingCategories != null || iatSort != null)
 			result = consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId, datasetId, status, purposeId,
-					purposeName, purposeCategory, processingCategory, iatSort);
+					purposeName, purposeCategory, processingCategories, iatSort);
 		else
 			result = consentRecordRepo.findByPayload_commonPart_subjectId(serviceId);
 
@@ -1182,15 +1182,15 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
 		List<ConsentRecordSigned> existingConsents = null;
 		if (sourceServiceId != null || datasetId != null || status != null || purposeCategory != null
-				|| processingCategory != null)
+				|| processingCategories != null)
 			existingConsents = consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId, datasetId, status,
-					purposeId, purposeName, purposeCategory, processingCategory, iatSort);
+					purposeId, purposeName, purposeCategory, processingCategories, iatSort);
 
 		List<ConsentRecordSignedPair> result = new ArrayList<ConsentRecordSignedPair>(existingConsents.size());
 		HashSet<String> processedCrPairIds = new HashSet<String>(existingConsents.size());
@@ -1224,16 +1224,16 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
 		List<ConsentRecordSigned> result = null;
 
 		if (surrogateId != null || serviceId != null || sourceServiceId != null || datasetId != null || status != null
-				|| purposeCategory != null || processingCategory != null || status != null || purposeCategory != null
-				|| processingCategory != null)
+				|| purposeCategory != null || processingCategories != null || status != null || purposeCategory != null
+				|| processingCategories != null)
 			result = consentRecordRepo.findByBusinessIdAndQuery(businessId, surrogateId, serviceId, sourceServiceId,
-					datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort);
+					datasetId, status, purposeId, purposeName, purposeCategory, processingCategories, iatSort);
 		else
 			result = consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId);
 
@@ -1252,17 +1252,17 @@ public class ConsentManagerController implements IConsentManagerController {
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
-			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(required = false) List<ProcessingCategory> processingCategories,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort)
 			throws ConsentRecordNotFoundException, ConsentManagerException {
 
 		List<ConsentRecordSigned> existingConsents = null;
 
 		if (serviceId != null || sourceServiceId != null || datasetId != null || status != null
-				|| purposeCategory != null || processingCategory != null || status != null || purposeCategory != null
-				|| processingCategory != null)
+				|| purposeCategory != null || processingCategories != null || status != null || purposeCategory != null
+				|| processingCategories != null)
 			existingConsents = consentRecordRepo.findByBusinessIdAndQuery(businessId, surrogateId, serviceId,
-					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategory,
+					sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory, processingCategories,
 					iatSort);
 		else
 			existingConsents = consentRecordRepo.findByPayload_commonPart_serviceProviderBusinessId(businessId);

@@ -29,21 +29,21 @@ public interface ConsentRecordCustomRepository {
 
 	public List<ConsentRecordSigned> findByAccountIdAndQuery(String accountId, String consentId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort);
 
 	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort);
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort);
 
 	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort);
 
 	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort);
 
 }

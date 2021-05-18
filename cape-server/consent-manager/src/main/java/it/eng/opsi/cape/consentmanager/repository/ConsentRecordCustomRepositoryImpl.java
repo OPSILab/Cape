@@ -57,7 +57,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByAccountIdAndQuery(String accountId, String consentId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
@@ -89,9 +89,9 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
-		if (processingCategory != null)
-			pipeline.add(
-					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+		if (processingCategories != null && !processingCategories.isEmpty())
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.processingCategories")
+					.in(processingCategories.stream().map(p -> p.name()).toArray())));
 
 		if (status != null) {
 			pipeline.add(new AggregationOperation() {
@@ -114,7 +114,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findBySurrogateIdAndQuery(String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
@@ -143,9 +143,9 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
-		if (processingCategory != null)
-			pipeline.add(
-					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+		if (processingCategories != null && !processingCategories.isEmpty())
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.processingCategories")
+					.in(processingCategories.stream().map(p -> p.name()).toArray())));
 
 		if (status != null) {
 			pipeline.add(new AggregationOperation() {
@@ -168,7 +168,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByServiceIdAndQuery(String serviceId, String sourceServiceId, String datasetId,
 			ConsentRecordStatusEnum status, String purposeId, String purposeName, PurposeCategory purposeCategory,
-			ProcessingCategory processingCategory, Sort.Direction iatSort) {
+			List<ProcessingCategory> processingCategories, Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
 
@@ -193,9 +193,9 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
-		if (processingCategory != null)
-			pipeline.add(
-					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+		if (processingCategories != null && !processingCategories.isEmpty())
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.processingCategories")
+					.in(processingCategories.stream().map(p -> p.name()).toArray())));
 
 		if (status != null) {
 			pipeline.add(new AggregationOperation() {
@@ -218,7 +218,7 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 	@Override
 	public List<ConsentRecordSigned> findByBusinessIdAndQuery(String businessId, String surrogateId, String serviceId,
 			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
-			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			String purposeName, PurposeCategory purposeCategory, List<ProcessingCategory> processingCategories,
 			Sort.Direction iatSort) {
 
 		List<AggregationOperation> pipeline = new ArrayList<AggregationOperation>();
@@ -250,9 +250,9 @@ public class ConsentRecordCustomRepositoryImpl implements ConsentRecordCustomRep
 		if (purposeCategory != null)
 			pipeline.add(match(where("payload.roleSpecificPart.usageRules.purposeCategory").is(purposeCategory)));
 
-		if (processingCategory != null)
-			pipeline.add(
-					match(where("payload.roleSpecificPart.usageRules.processingCategories").is(processingCategory)));
+		if (processingCategories != null && !processingCategories.isEmpty())
+			pipeline.add(match(where("payload.roleSpecificPart.usageRules.processingCategories")
+					.in(processingCategories.stream().map(p -> p.name()).toArray())));
 
 		if (status != null) {
 			pipeline.add(new AggregationOperation() {

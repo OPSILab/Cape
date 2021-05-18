@@ -5,7 +5,7 @@
     <nb-card-body>
       <div class="row justify-content-center">
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
-          <nb-select formControlName="status" #statusSelect placeholder="{{ 'general.consents.filterbystatus' | translate }}">
+          <nb-select formControlName="status" #statusSelect placeholder="{{ 'general.consents.filter_by_status' | translate }}">
             <nb-option (click)="resetFilter('status')"
               ><i>{{ 'general.consents.reset' | translate }}</i>
             </nb-option>
@@ -16,8 +16,17 @@
           </nb-select>
         </div>
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
-          <nb-select formControlName="service" #serviceSelect placeholder="{{ 'general.consents.filterbyservice' | translate }}">
+          <nb-select formControlName="service" #serviceSelect placeholder="{{ 'general.consents.filter_by_service' | translate }}">
             <nb-option (click)="resetFilter('service')"
+              ><i>{{ 'general.consents.reset' | translate }}</i>
+            </nb-option>
+            <nb-option disabled>------</nb-option>
+            <nb-option *ngFor="let service of services" value="{{ service.serviceId }}">{{ service.name }}</nb-option>
+          </nb-select>
+        </div>
+        <div class="mt-1 col-sm-auto d-flex justify-content-center">
+          <nb-select formControlName="sourceService" #sourceServiceSelect placeholder="{{ 'general.consents.filter_by_source_service' | translate }}">
+            <nb-option (click)="resetFilter('sourceService')"
               ><i>{{ 'general.consents.reset' | translate }}</i>
             </nb-option>
             <nb-option disabled>------</nb-option>
@@ -29,7 +38,7 @@
           <nb-rangepicker format="yyyy-MM-dd" #rangepicker (rangeChange)="onDateRangeSelected($event)"></nb-rangepicker>
         </div>-->
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
-          <nb-select formControlName="purposeCategory" #purposeSelect placeholder="{{ 'general.consents.filterbypurpose' | translate }}">
+          <nb-select formControlName="purposeCategory" #purposeSelect placeholder="{{ 'general.consents.filter_by_purpose' | translate }}">
             <nb-option (click)="resetFilter('purposeCategory')"
               ><i>{{ 'general.consents.reset' | translate }}</i>
             </nb-option>
@@ -38,7 +47,12 @@
           </nb-select>
         </div>
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
-          <nb-select formControlName="processingCategory" #processingSelect placeholder="{{ 'general.consents.filterbyprocessing' | translate }}">
+          <nb-select
+            formControlName="processingCategories"
+            #processingSelect
+            multiple
+            placeholder="{{ 'general.consents.filter_by_processing' | translate }}"
+          >
             <nb-option (click)="resetFilter('processingCategory')"
               ><i>{{ 'general.consents.reset' | translate }}</i>
             </nb-option>
@@ -121,29 +135,29 @@
               <ng-container *ngIf="consent.source; then isPair; else isSingle"></ng-container>
               <ng-template #isPair>
                 <tr>
-                  <th scope="row">{{ 'general.consents.dataprovider' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_provider' | translate }}</th>
                   <td>{{ consent.source.payload.common_part.source_subject_name }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{ 'general.consents.dataproviderdescription' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_provider_description' | translate }}</th>
                   <td>{{ getLocalizedHumanReadableDescription(consent.source.payload.common_part.source_subject_humanreadable_descriptions) }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{ 'general.consents.datarequester' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_requester' | translate }}</th>
                   <td>{{ consent.sink.payload.common_part.subject_name }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{ 'general.consents.datarequesterdescription' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_requester_description' | translate }}</th>
                   <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
                 </tr>
               </ng-template>
               <ng-template #isSingle>
                 <tr>
-                  <th scope="row">{{ 'general.consents.dataprocessor' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_processor' | translate }}</th>
                   <td>{{ consent.sink.payload.common_part.subject_name }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{ 'general.consents.dataprocessordescription' | translate }}</th>
+                  <th scope="row">{{ 'general.consents.data_processor_description' | translate }}</th>
                   <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
                 </tr>
               </ng-template>
@@ -328,7 +342,7 @@
                   </nb-tab>
 
                   <!-- Data Controller Tab -->
-                  <nb-tab tabTitle="{{ 'general.consents.datacontroller' | translate }}">
+                  <nb-tab tabTitle="{{ 'general.consents.data_controller' | translate }}">
                     <table class="table table-hover">
                       <tbody>
                         <tr>

@@ -57,7 +57,6 @@ public class EventLogCustomRepositoryImpl implements EventLogCustomRepository {
 
 		if (processingCategories != null && !processingCategories.isEmpty())
 			q.addCriteria(Criteria.where("usageRules.processingCategories").in(processingCategories.stream().map(p ->
-
 			p.name()).toArray()));
 
 		return Optional.of(template.find(q, EventLog.class));

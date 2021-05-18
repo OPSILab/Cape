@@ -102,7 +102,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     } catch (err) {
       console.log(err);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (err.status != 404 && err.error.statusCode != 404 && err.error.statusCode !== 401)
+      if (err.status != 404 && err.error?.statusCode != 404 && err.error?.statusCode !== 401)
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         this.openDialog(this.errorDialogTemplateRef, { error: err as ErrorResponse });
       // If error is 404 open Dialog to Create a new Cape Account

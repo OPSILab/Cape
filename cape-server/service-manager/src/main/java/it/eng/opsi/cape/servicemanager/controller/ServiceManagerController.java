@@ -353,7 +353,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		 * getServiceDescription from Service Registry
 		 */
 		ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
-		String serviceUri = serviceDescription.getServiceInstance().getServiceUrls().getDomain();
+		String serviceUri = serviceDescription.getIdentifier();
 		String serviceSdkHost = serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain();
 		String serviceDescriptionVersion = serviceDescription.getServiceDescriptionVersion();
 		String serviceName = serviceDescription.getName();
