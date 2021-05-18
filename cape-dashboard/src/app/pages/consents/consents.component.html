@@ -79,6 +79,7 @@
         <div class="ml-1 col-xs-auto d-flex justify-content-center">
           <button
             nbButton
+            type="button"
             shape="rectangle"
             size="medium"
             status="danger"
@@ -90,7 +91,7 @@
         </div>
       </div>
       <div class="row justify-content-start">
-        <button nbButton class="p-2" shape="round" size="small" status="primary" (click)="ngOnInit()">
+        <button nbButton ghost class="p-2" shape="round" size="small" (click)="ngOnInit()">
           {{ 'general.consents.refresh' | translate }}&nbsp;<i class="material-icons">refresh</i>
         </button>
       </div>

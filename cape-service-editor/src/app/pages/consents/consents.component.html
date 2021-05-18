@@ -4,6 +4,47 @@
   </nb-card-header>
 
   <nb-card-body>
+    <form [formGroup]="filtersForm" (ngSubmit)="onFilterSubmit()">
+      <div class="row mb-3 justify-content-center">
+        <div class="mt-1 col-sm-auto d-flex justify-content-center">
+          <input
+            type="text"
+            formControlName="user"
+            name="userId"
+            nbInput
+            placeholder="{{ 'general.consents.filterbyuserid' | translate }}"
+            #userInput
+          />
+        </div>
+      </div>
+      <div class="row mt-2 justify-content-center">
+        <div class="mr-1 col-xs-auto d-flex justify-content-center">
+          <button
+            nbButton
+            type="submit"
+            shape="rectangle"
+            size="medium"
+            status="primary"
+            class="button-filled-medium-padding button-filled-primary-focus-border-color"
+          >
+            {{ 'general.consents.apply' | translate }}
+          </button>
+        </div>
+        <div class="ml-1 col-xs-auto d-flex justify-content-center">
+          <button
+            nbButton
+            type="button"
+            shape="rectangle"
+            size="medium"
+            status="danger"
+            class="button-filled-medium-padding button-filled-primary-focus-border-color"
+            (click)="resetFilters()"
+          >
+            {{ 'general.consents.reset' | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
     <div class="row mb-2">
       <div class="col-12 col-md-12 text-right">
         <button nbButton ghost shape="round" size="small" (click)="ngOnInit()">

@@ -38,7 +38,7 @@ export class ConsentsService {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<any> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));
@@ -51,7 +51,12 @@ export class ConsentsService {
     params = purposeId ? params.set('purposeId', purposeId) : params;
     params = purposeName ? params.set('purposeName', purposeName) : params;
     params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
-    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
+
+    if (processingCategories)
+      processingCategories.forEach((cat) => {
+        params = params.append('processingCategories', cat);
+      });
+
     return this.http
       .get(this.sdkUrl + '/api/v2/consents', {
         params: params,
@@ -69,7 +74,7 @@ export class ConsentsService {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));
@@ -81,7 +86,11 @@ export class ConsentsService {
     params = purposeId ? params.set('purposeId', purposeId) : params;
     params = purposeName ? params.set('purposeName', purposeName) : params;
     params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
-    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
+    if (processingCategories)
+      processingCategories.forEach((cat) => {
+        params = params.append('processingCategories', cat);
+      });
+
     return this.http
       .get<ConsentRecordSigned[]>(`${this.sdkUrl}/api/v2/users/surrogates/${surrogateId}/consents`, {
         params: params,
@@ -99,7 +108,7 @@ export class ConsentsService {
     purposeId?: string,
     purposeName?: string,
     purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories
+    processingCategories?: ProcessingBasisProcessingCategories[]
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));
@@ -111,7 +120,10 @@ export class ConsentsService {
     params = purposeId ? params.set('purposeId', purposeId) : params;
     params = purposeName ? params.set('purposeName', purposeName) : params;
     params = purposeCategory ? params.set('purposeCategory', purposeCategory) : params;
-    params = processingCategory ? params.set('processingCategory', processingCategory) : params;
+    if (processingCategories)
+      processingCategories.forEach((cat) => {
+        params = params.append('processingCategories', cat);
+      });
 
     return this.http
       .get<ConsentRecordSigned[]>(`${this.sdkUrl}/api/v2/users/${serviceUserId}/consents`, {

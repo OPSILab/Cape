@@ -12,6 +12,7 @@
 import { RSDescription } from './rSDescription';
 import { HumanReadableDescription } from '../humanReadableDescription';
 import { DataController } from '../dataController';
+import { ConsentStatusEnum } from './consentStatusRecordPayload';
 
 export interface CommonPart {
   iat: string;
@@ -36,6 +37,7 @@ export interface CommonPart {
   service_description_version: string;
   service_description_signature: string;
   service_provider_business_id: string;
+  consent_status: ConsentStatusEnum;
 }
 
 export enum CommonPartRole {

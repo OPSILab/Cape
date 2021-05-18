@@ -835,7 +835,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		List<ConsentRecordSigned> result = new ArrayList<ConsentRecordSigned>(0);
 
 		if (StringUtils.isBlank(serviceId))
-			matchingSurrogateIds = userSurrogateIdRepo.findByUserIdOrderByCreatedDesc(userId);
+			matchingSurrogateIds = userSurrogateIdRepo.findByUserIdOrderByCreatedAsc(userId);
 		else {
 
 			Optional<UserSurrogateIdLink> matchingLink = userSurrogateIdRepo

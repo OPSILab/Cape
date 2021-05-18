@@ -32,4 +32,5 @@ public interface UserSurrogateIdLinkRepository extends MongoRepository<UserSurro
 
 	public List<UserSurrogateIdLink> findByUserIdOrderByCreatedDesc(String userId);
 
+	public List<UserSurrogateIdLink> findByUserIdOrderByCreatedAsc(String userId);
 }

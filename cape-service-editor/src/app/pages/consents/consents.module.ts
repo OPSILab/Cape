@@ -3,12 +3,21 @@ import { CommonModule } from '@angular/common';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ConsentsComponent } from './consents.component';
 import { ConsentsService } from './consents.service';
-import { ConsentInfoLinkRenderComponent } from './consentinfo-link-render.component';
+import { ConsentInfoLinkRenderComponent } from './consentInfoRender.component';
 import { ConsentsRoutingModule } from './consents-routing.module';
-import { ConsentInfoModalComponent } from './consentInfo-modal/consentInfo-modal.component';
 
-import { NbAccordionModule, NbButtonModule, NbCardModule, NbSelectModule, NbSpinnerModule, NbIconModule, NbListModule } from '@nebular/theme';
+import {
+  NbAccordionModule,
+  NbButtonModule,
+  NbCardModule,
+  NbSelectModule,
+  NbSpinnerModule,
+  NbIconModule,
+  NbListModule,
+  NbInputModule,
+} from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -23,9 +32,11 @@ import { TranslateModule } from '@ngx-translate/core';
     NbIconModule,
     TranslateModule.forChild({}),
     NbListModule,
+    ReactiveFormsModule,
+    NbInputModule,
   ],
-  declarations: [ConsentsComponent, ConsentInfoLinkRenderComponent, ConsentInfoModalComponent],
+  declarations: [ConsentsComponent, ConsentInfoLinkRenderComponent],
   providers: [ConsentsService],
-  entryComponents: [ConsentInfoLinkRenderComponent, ConsentInfoModalComponent],
+  entryComponents: [ConsentInfoLinkRenderComponent],
 })
 export class ConsentsModule {}

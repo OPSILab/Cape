@@ -1,68 +1,73 @@
-<nb-card style="width: 60vw; height: auto; max-width: 95vw; max-height: 95vh">
-  <nb-card-header class="d-flex justify-content-between">
-    <h5 class="h5">{{ 'general.consents.consentDetails' | translate }}</h5>
-    <button nbButton ghost shape="rectangle" size="tiny" (click)="closeModal()">
-      <i class="material-icons">close</i>
-    </button>
-  </nb-card-header>
-  <nb-card-body>
-    <div class="row justify-content-around">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.consents.consentId' | translate }}: </b> {{ cr_id }}</i
-          >
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-around">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.consents.issued' | translate }}: </b> {{ issued | date: 'short' }}</i
-          >
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-around">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.consents.status' | translate }}: </b> {{ status }}</i
-          >
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-around">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.services.service' | translate }}: </b> {{ service }}</i
-          >
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.consents.dataprovider' | translate }}: </b> {{ source }}</i
-          >
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-sm py-1">
-        <div class="accent">
-          <i>
-            <b>{{ 'general.consents.userid' | translate }}: </b> {{ userId }}</i
-          >
-        </div>
-      </div>
-    </div>
+<button nbButton ghost shape="rectangle" size="small" status="primary" (click)="showConsentInfoModal()">
+  <i class="material-icons">info</i>
+</button>
 
-    <br />
-    <div class="accordion-container">
+<!--Template for Consents Info Modal-->
+<ng-template #consentInfoModal let-data let-ref="dialogRef">
+  <nb-card style="width: 60vw; height: auto; max-width: 95vw; max-height: 95vh">
+    <nb-card-header class="d-flex justify-content-between">
+      <h5 class="h5">{{ 'general.consents.consentDetails' | translate }}</h5>
+      <button nbButton ghost shape="rectangle" size="tiny" (click)="ref.close()">
+        <i class="material-icons">close</i>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row justify-content-around align-items-sm-center">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.consents.consentId' | translate }}: </b> {{ data.cr_id }}</i
+            >
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-around">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.consents.issued' | translate }}: </b> {{ data.issued | date: 'short' }}</i
+            >
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-around">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.consents.status' | translate }}: </b> {{ data.status }}</i
+            >
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-around">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.services.service' | translate }}: </b> {{ data.service }}</i
+            >
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.consents.dataprovider' | translate }}: </b> {{ data.source }}</i
+            >
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-sm py-1">
+          <div class="accent">
+            <i>
+              <b>{{ 'general.consents.surrogateid' | translate }}: </b> {{ data.surrogateId }}</i
+            >
+          </div>
+        </div>
+      </div>
+
+      <br />
       <nb-accordion class="my-2 shadow-none border border-primary">
         <nb-accordion-item>
           <nb-accordion-item-header class="">
@@ -70,30 +75,30 @@
           </nb-accordion-item-header>
           <nb-accordion-item-body>
             <div class="my-1">
-              <span class="subtitle">{{ 'general.consents.purpose_category' | translate }}: </span> {{ purposeCat }}
+              <span class="subtitle">{{ 'general.consents.purpose_category' | translate }}: </span> {{ data.purposeCat }}
             </div>
             <div class="my-1">
-              <span class="subtitle">{{ 'general.consents.processing_category' | translate }}: </span> {{ processingCat }}
+              <span class="subtitle">{{ 'general.consents.processing_category' | translate }}: </span> {{ data.processingCat }}
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.services.storage' | translate }}: </span>
-              {{ storage.location }}({{ storage.duration }})
+              {{ data.storage.location }}({{ data.storage.duration }})
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.consents.collectionmethod' | translate }}: </span>
-              {{ collectionMethod }}
+              {{ data.collectionMethod }}
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.consents.operator' | translate }}: </span>
-              {{ operator }}
+              {{ data.operator }}
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.consents.termination' | translate }}: </span>
-              {{ termination }}
+              {{ data.termination }}
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.services.shared_with' | translate }}: </span>
-              <div *ngFor="let org of shareWith; let i = index" [attr.data-index]="i">
+              <div *ngFor="let org of data.shareWith; let i = index" [attr.data-index]="i">
                 <a href="{{ org.orgUrl.startsWith('http://') ? org.orgUrl : 'http://' + org.orgUrl }}" target="_blank">
                   {{ org.orgName }}
                 </a>
@@ -106,22 +111,25 @@
               <div class="my-1">
                 <span class="subtitle">{{ 'general.consents.data_processed' | translate }}: </span>
               </div>
-              <div class="mx-1 my-1 py-2 badge badge-info border border-info" *ngFor="let concept of concepts; let i = index" [attr.data-index]="i">
+              <div
+                class="mx-1 my-1 py-2 badge badge-info border border-info"
+                *ngFor="let concept of data.concepts; let i = index"
+                [attr.data-index]="i"
+              >
                 <i>{{ concept }}</i>
               </div>
             </div>
             <div class="my-1">
               <span class="subtitle">{{ 'general.services.policy_refs' | translate }}: </span>
 
-              <a href="{{ policy.startsWith('http://') ? policy : 'http://' + policy }}" target="_blank">
+              <a href="{{ data.policy.startsWith('http://') ? data.policy : 'http://' + data.policy }}" target="_blank">
                 <nb-icon icon="external-link-outline"></nb-icon>
               </a>
             </div>
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>
-    </div>
-    <div class="accordion-container">
+
       <nb-accordion class="my-2 shadow-none border border-primary">
         <nb-accordion-item>
           <nb-accordion-item-header class="">
@@ -138,7 +146,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let itemHistory of history">
+                  <tr *ngFor="let itemHistory of data.history">
                     <td>
                       {{ itemHistory.payload.iat | date: 'short' }}
                     </td>
@@ -159,8 +167,7 @@
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>
-    </div>
-    <div class="accordion-container">
+
       <nb-accordion class="my-2 shadow-none border border-primary">
         <nb-accordion-item>
           <nb-accordion-item-header class="">
@@ -168,17 +175,17 @@
           </nb-accordion-item-header>
           <nb-accordion-item-body>
             <div class="my-1">
-              <textarea rows="10" class="form-control" style="width: 100%; height: 100%; overflow: hidden">{{ consentSignedToken }}</textarea>
+              <textarea rows="10" class="form-control" style="width: 100%; height: 100%; overflow: hidden">{{ data.consentSignedToken }}</textarea>
             </div>
 
             <div class="mt-2 border-top">
               <div class="my-1">
                 <span class="subtitle">{{ 'general.consents.consent_notar_status' | translate }}: </span>
-                <i>{{ notarizationStatus }}</i>
+                <i>{{ data.notarizationStatus }}</i>
               </div>
               <div class="my-1">
                 <span class="subtitle">{{ 'general.consents.view_transaction' | translate }}: </span>
-                <i>{{ notarizationLink }}</i>
+                <i>{{ data.notarizationLink }}</i>
                 <!--<a href="{{notarizationLink}}" target="_blank">
                   <nb-icon icon="external-link-outline"></nb-icon>
                 </a>-->
@@ -187,9 +194,7 @@
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>
-    </div>
 
-    <div class="accordion-container">
       <nb-accordion class="my-2 shadow-none border border-primary">
         <nb-accordion-item>
           <nb-accordion-item-header class="">
@@ -198,20 +203,19 @@
           <nb-accordion-item-body>
             <div class="my-1">
               <textarea ng-readonly="BulletinEditMode == false" rows="20" class="form-control" style="width: 100%; height: 100%; overflow: hidden">{{
-                consent_record
+                data.consent_record
               }}</textarea>
             </div>
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>
-    </div>
-
-    <div class="modal-footer">
+    </nb-card-body>
+    <nb-card-footer>
       <div class="row justify-content-center">
-        <button nbButton ghost shape="rectangle" size="medium" status="primary" (click)="closeModal()">
+        <button nbButton ghost shape="rectangle" size="medium" status="primary" (click)="ref.close()">
           {{ 'general.close' | translate }}
         </button>
       </div>
-    </div>
-  </nb-card-body>
-</nb-card>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
