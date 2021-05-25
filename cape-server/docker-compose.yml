@@ -43,7 +43,7 @@ services:
     networks:
       - cape-network
   account-manager-mongo:
-    image: mongo:4.2
+    image: mongo:4.4.6
     restart: always
     ports:
      - "27017:27017"
@@ -85,7 +85,7 @@ services:
       - cape-network
 
   auditlog-manager-mongo:
-    image: mongo:4.2
+    image: mongo:4.4.6
     restart: always
     ports:
      - "27018:27017"
@@ -128,7 +128,7 @@ services:
       - cape-network
 
   consent-manager-mongo:
-    image: mongo:4.2
+    image: mongo:4.4.6
     restart: always
     ports:
      - "27019:27017"
@@ -171,7 +171,7 @@ services:
       - cape-network
 
   service-manager-mongo:
-    image: mongo:4.2
+    image: mongo:4.4.6
     restart: always
     ports:
      - "27020:27017"
@@ -210,7 +210,7 @@ services:
       - cape-network
 
   service-registry-mongo:
-    image: mongo:4.2
+    image: mongo:4.4.6
     restart: always
     ports:
      - "27021:27017"

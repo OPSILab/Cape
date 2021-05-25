@@ -34,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -82,6 +83,7 @@ public class ServiceLinkRecordPayload {
 	@JsonProperty(value = "service_name")
 	private String serviceName;
 
+	@Schema(hidden = true)
 	@JsonProperty(value = "pop_key")
 	@Valid
 	private ServicePopKey popKey;
@@ -104,24 +106,27 @@ public class ServiceLinkRecordPayload {
 	 * JSON​ ​Web​ ​Key​ ​(JWK)​ ​presentation​ ​of​ ​Operator's​ ​public​ ​key​
 	 * ​used​ ​to​ ​verify operator​ ​issued​ ​status​ ​change​ ​messages
 	 */
+	@Schema(hidden = true)
 	@NonNull
 	@NotNull(message = "operator_key field is mandatory")
 	@JsonProperty(value = "operator_key")
 	private RSAKey operatorKey;
 
-	/*
-	 * Account​ ​Owner’s​ ​public​ ​key(s) [1..*]​ ​used​ ​to​ ​verify​ ​MyData
-	 * Consent​ ​and​ ​Consent​ ​Status​ ​Records delivered​ ​to​ ​Service.​ ​
-	 */
-	@JsonProperty(value = "cr_keys")
-	private List<RSAKey> crKeys = new ArrayList<RSAKey>();
-
 	@NonNull
 	@NotNull(message = "iat field is mandatory")
 	private ZonedDateTime iat;
 
-	public void addCrKey(RSAKey crKey) {
-		this.crKeys.add(crKey);
-	}
+	/*
+	 * Account​ ​Owner’s​ ​public​ ​key(s) [1..*]​ ​used​ ​to​ ​verify​ Consent​
+	 * ​and​ ​Consent​ ​Status​ ​Records delivered​ ​to​ ​Service.​ Disabled, we
+	 * embed the Account's key directly in the jwk field of protected JOSE header of
+	 * SLR, SSR, CR and CSR"​
+	 */
+//	@JsonProperty(value = "cr_keys")
+//	private List<RSAKey> crKeys = new ArrayList<RSAKey>();
+
+//	public void addCrKey(RSAKey crKey) {
+//		this.crKeys.add(crKey);
+//	}
 
 }

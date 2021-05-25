@@ -34,17 +34,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.util.Base64URL;
-
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.servicemanager.model.OperatorDescription;
 import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenPayload;
@@ -52,6 +52,9 @@ import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenRespon
 import it.eng.opsi.cape.servicemanager.repository.OperatorDescriptionRepository;
 import it.eng.opsi.cape.servicemanager.service.CryptoService;
 import lombok.extern.slf4j.Slf4j;
+
+@OpenAPIDefinition(tags = {
+		@Tag(name = "Operator Description", description = "Service Manager APIs to manage Operator Description.") }, info = @Info(title = "CaPe Service Manager API", description = "Service Manager API used by CaPe compliant services.", version = "2.0"))
 
 @RestController
 @RequestMapping("/api/v2")
@@ -79,11 +82,12 @@ public class OperatorDescriptionController implements IOperatorDescriptionContro
 
 		// Derive domain Url from Base Url of LinkingUri
 		if (StringUtils.isBlank(operator.getOperatorUrls().getDomain())) {
-			Matcher matcher = Pattern.compile("^.+?[^\\/:](?=[?\\/]|$)").matcher(operator.getOperatorUrls().getLinkingUri());
+			Matcher matcher = Pattern.compile("^.+?[^\\/:](?=[?\\/]|$)")
+					.matcher(operator.getOperatorUrls().getLinkingUri());
 			if (matcher.find())
 				operator.getOperatorUrls().setDomain(matcher.group(0));
 		}
-		
+
 		OperatorDescription storedDescription = repository.insert(operator);
 
 		return ResponseEntity.created(URI.create(

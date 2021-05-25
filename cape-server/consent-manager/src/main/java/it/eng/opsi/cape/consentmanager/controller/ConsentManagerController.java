@@ -16,11 +16,9 @@
  ******************************************************************************/
 package it.eng.opsi.cape.consentmanager.controller;
 
-import java.net.URI;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,8 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.xml.crypto.KeySelector.Purpose;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +42,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.sun.mail.iap.Response;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,7 +52,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.consentmanager.ApplicationProperties;
 import it.eng.opsi.cape.consentmanager.model.AuthorisationTokenPayload;
@@ -117,7 +109,7 @@ import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.ServiceInstance;
 import lombok.extern.slf4j.Slf4j;
 
-@OpenAPIDefinition(security = { @SecurityRequirement(name = "bearer-key") }, tags = {
+@OpenAPIDefinition(tags = {
 		@Tag(name = "Consent Record", description = "Consent Manager APIs to manage CaPe Consent Records."),
 		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations.") }, info = @Info(title = "CaPe API - Consent Manager", description = "CaPe APIs used to manage CaPe Consent Form, Consent Records and consenting operations", version = "2.0"))
 @RestController
@@ -148,9 +140,9 @@ public class ConsentManagerController implements IConsentManagerController {
 		this.consentExpiration = this.appProperty.getCape().getAuthToken().getExp();
 	}
 
-	@Operation(summary = "Generate Consent Form for surrogateId, sinkId and sourceId (if any) in input.", tags = {
+	@Operation(summary = "Generate Consent Form for input Surrogate Id, ServiceId Id, Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case)", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present and serviceId parameter represents the Sink Service Id. The fetched Consent Form will be used in the Give Consent API.", tags = {
 			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' mappings (3-party reuse) or from the datasets of the service (Within Service)", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
+					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' data mappings/concepts (3-party consenting case) or directly from the datasets required by the selected Purpose of the service (Within Service case).", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
 	@GetMapping(value = "/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentForm> fetchConsentFormFromService(@PathVariable String surrogateId,
@@ -521,7 +513,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Give the Consent for the input ConsentForm. Return Consent Record signed with the Acccount private key.", tags = {
+	@Operation(summary = "Give the Consent for the input ConsentForm", description = "Return the newly generated Consent Record signed with the Acccount private key.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
 	@PostMapping(value = "/users/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -651,6 +643,10 @@ public class ConsentManagerController implements IConsentManagerController {
 			 */
 			signedCr.setAccountId(accountId);
 			signedCr.set_id(new ObjectId(signedCr.getPayload().getCommonPart().getCrId()));
+
+			// TODO Send CR to Service instead of returning in the API?
+			// Set notification to SDK Successful
+//			signedCr.setSentToSdkSuccessfully(true);
 			consentRecordRepo.insert(signedCr);
 
 			// Audit for give consent
@@ -788,7 +784,17 @@ public class ConsentManagerController implements IConsentManagerController {
 			 ******************************************************/
 			try {
 				clientService.sendConsentRecordToService(consentForm.getSourceLibraryDomainUrl(), signedSourceCr);
+
+				// TODO Send CR also to Sink Service instead of returning in the API?
+
+				// Set notification to SDK Successful
+//				signedSinkCr.setSentToSdkSuccessfully(true);
+//				signedSourceCr.setSentToSdkSuccessfully(true);
+
+				consentRecordRepo.insert(signedSinkCr);
+				consentRecordRepo.insert(signedSourceCr);
 			} catch (Exception e) {
+
 				throw new ConsentManagerException(
 						"There was an error while sending the Consent Record to the Source Service: " + e.getMessage());
 			}
@@ -817,7 +823,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Account Id. Optionally can be filtered by ConsentId, ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -845,9 +851,9 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Consent Record Id.", tags = {
+	@Operation(summary = "Get the signed Consent Record for the input Account Id and Consent Record Id.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input CrId.", responseCode = "200") })
+					@ApiResponse(description = "Returns the matching signed Consent Record belonging to the input Account Id and with input CrId.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/consents/{consentId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentRecordSigned> getConsentRecordByAccountIdAndCrId(@PathVariable String accountId,
@@ -858,7 +864,7 @@ public class ConsentManagerController implements IConsentManagerController {
 						+ accountId + " and Consent Record Id: " + consentId)));
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Service Link Record Id.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Account Id and Service Link Record Id. In 3rd party consenting case, the input Slr Id can be relative to a linked service acting in the consent either as sink or source.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input Account Id and with input Slr Id.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -869,9 +875,10 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(consentRecordRepo.findByAccountIdAndPayload_commonPart_slrId(accountId, slrId));
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Account Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Record pairs (sink, source) for the input Account Id. Optionally can be filtered by ConsentId, ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Account Id.", responseCode = "200") })
+
 	@GetMapping(value = "/accounts/{accountId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndQuery(
@@ -916,9 +923,9 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Account Id and SlrId.", tags = {
+	@Operation(summary = "Get the list of signed Consent Record pairs (sink, source) for the input Account Id and SlrId.", description = "In 3rd party consenting case, the input Slr Id can be relative to a linked service acting in the consent either as sink or source.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Account Id and and SlrId (for service linked and actin in the consent either as sink or source).", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Account Id and SlrId.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByAccountIdAndSlrId(
@@ -948,9 +955,10 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "In 3rd party consenting case, the input Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id.", responseCode = "200") })
+
 	@GetMapping(value = "/users/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(
@@ -975,7 +983,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Surrogate Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Record pairs (sink, source) for the input Surrogate Id. Optionally can be filtered by ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "In 3rd party consenting case, the input Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Surrogate Id (for service linked and acting in the consent either as sink or source).", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1019,7 +1027,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the signed Consent Record for the input SurrogateId and CrId.", tags = {
+	@Operation(summary = "Get the signed Consent Record for the input SurrogateId and CrId.", description = "In 3rd party consenting case, the input Surrogate Id can be relative to a linked service acting in the consent either as sink or source.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the signed Consent Record belonging to the input Account Id  and SlrId (for service linked and actin in the consent either as sink or source).", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents/{crId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1034,7 +1042,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the signed Consent Record Pair for the input SurrogateId and CrId.", tags = {
+	@Operation(summary = "Get the signed Consent Record Pair for the input SurrogateId and CrId.", description = "In 3rd party consenting case, the input Surrogate Id can be relative to a linked service acting in the consent either as sink or source.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the signed Consent Record pair belonging to the input Surrogate Id and with Cr Id.", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/consents/{crId}/pair", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1059,7 +1067,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Surrogate Id and SlrId.", tags = {
+	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Surrogate Id and SlrId.", description = "In 3rd party consenting case, the input Surrogate and Slr Ids can be relative to a linked service acting in the consent either as sink or source.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of pairs of signed Consent Records belonging to the input Account Id and and SlrId (for service linked and actin in the consent either as sink or source).", responseCode = "200") })
 	@GetMapping(value = "/users/{surrogateId}/servicelinks/{slrId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1145,7 +1153,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with the input Service Id.", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1171,9 +1179,9 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Service Id and optional query parameters.", tags = {
+	@Operation(summary = "Get the list of signed Consent Record pairs (sink, source) for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with the input Service Id.", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of signed Consent Record pairs belonging to the Users linked with the input Service Id.", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByServiceIdAndQuery(
@@ -1212,8 +1220,8 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Provider Business Id and optional query parameters.", tags = {
-			"Consent Record", "Data Controller" }, responses = {
+	@Operation(summary = "Get the list of signed Consent Records involving Services managed by the input Service Provider Business Id. Optionally can be filtered by Surrogate Id, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "In 3rd party consenting case, the optional Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
+			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with services provided by the input Business Id.", responseCode = "200") })
 	@GetMapping(value = "/dataControllers/{businessId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
@@ -1240,8 +1248,8 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Get the list of paired (sink, source) signed Consent Records for the input Service Provider Business Id and optional query parameters.", tags = {
-			"Consent Record", "Data Controller" }, responses = {
+	@Operation(summary = "Get the list of signed Consent Record pairs (sink, source) involving Services managed by the input Service Provider Business Id. Optionally can be filtered by Surrogate Id, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category.", description = "In 3rd party consenting case, the optional Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default).", tags = {
+			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the Users linked with services provided by the input Business Id.", responseCode = "200") })
 	@GetMapping(value = "/dataControllers/{businessId}/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
@@ -1290,7 +1298,7 @@ public class ConsentManagerController implements IConsentManagerController {
 	@Operation(summary = "Get the list of signed Consent Status Records for the input Account Id, Slr Id and Cr Id.", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Status Records belonging to the input Account Id, Slr Id and Cr Id.", responseCode = "200") })
-	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentStatusRecordSigned>> getConsentStatusRecordsByAccountIdAndSlrIdAndCrId(
 			@PathVariable String accountId, @PathVariable String slrId, @PathVariable String crId)
@@ -1305,9 +1313,9 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Status Records for the input Account Id, Slr Id and Cr Id.", tags = {
+	@Operation(summary = "Get the signed Consent Status Record for the input Account Id, Slr Id, Cr Id and Ssr Id.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Status Records belonging to the input Account Id, Slr Id and Cr Id.", responseCode = "200") })
+					@ApiResponse(description = "Returns the signed Consent Status Record belonging to the Consent Record matching input Account Id, Slr Id, Cr Id and Ssr.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses/{recordId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentStatusRecordSigned> getConsentStatusRecordByAccountIdAndSlrIdAndCrIdAndRecordId(
@@ -1324,7 +1332,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	@Operation(summary = "Get the last signed Consent Status Records for the input Account Id, Slr Id and Cr Id.", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the last signed Consent Status Records belonging to the input Account Id, Slr Id and Cr Id.", responseCode = "200") })
+					@ApiResponse(description = "Returns the last signed Consent Status Records belonging to the Consent Record matchin the input Account Id, Slr Id and Cr Id.", responseCode = "200") })
 	@GetMapping(value = "/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses/last", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentStatusRecordSigned> getLastConsentStatusRecordByAccountIdAndSlrIdAndCrId(
@@ -1340,7 +1348,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Change status (from Operator) of a Consent for the input AccountId, Slr Id and Cr Id.", tags = {
+	@Operation(summary = "Change status, starting from Operator (Cape Server / User Dashboard) of an existing Consent Record associated to the the input AccountId, Slr Id and Cr Id.", description = "The new Status can contain not only the new state (Active, Disabled, Withdrawn), but also a new Resource Set or Sink Usage Rules.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the new Consent Status Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
 	@PostMapping(value = "/accounts/{accountOrSurrogateId}/servicelinks/{slrId}/consents/{crId}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1554,7 +1562,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		consentRecordRepo.save(updatedCr);
 
 		/***************************************************************************
-		 * Send the new signed Consent Status Record to the Service Rollback stored CR
+		 * Send the new signed Consent Status Record to the Service. Rollback stored CR
 		 * and CSR in case of failure ( to keep consistent Operator and Service CRs)
 		 **************************************************************************/
 		try {
@@ -1639,7 +1647,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Delete all the Consent Records Signed for the Account Id in input.", tags = {
+	@Operation(summary = "Delete all the signed Consent Records for the input Account Id.", tags = {
 			"Consent Record" }, responses = { @ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@DeleteMapping(value = "/accounts/{accountId}/consents")
 	@Override
@@ -1665,7 +1673,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Delete all the Consent Records Signed for the Account Id in input.", tags = {
+	@Operation(summary = "Delete all the Consent Forms of the Cape Account associated to the input Surrogate Id.", tags = {
 			"Consent Record" }, responses = { @ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@DeleteMapping(value = "/users/{surrogateId}/consentForms")
 	@Override
@@ -1678,7 +1686,7 @@ public class ConsentManagerController implements IConsentManagerController {
 	}
 
 	@Override
-	@Operation(summary = "Get the AuthorisationToken used by Sink service in the data requests.", tags = {
+	@Operation(summary = "Get the Authorisation Token used by Sink service in the Data Requests.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns the AuthorisationToken signed with the Operator private key") })
 	@GetMapping(value = "/auth_token/{cr_id}", produces = MediaType.APPLICATION_JSON_VALUE)

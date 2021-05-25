@@ -17,14 +17,17 @@
 package it.eng.opsi.cape.accountmanager.utils;
 
 import java.io.IOException;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.nimbusds.jose.jwk.RSAKey;
 
 public class RSAKeySerializer extends StdSerializer<RSAKey> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public RSAKeySerializer() {
 		this(null);

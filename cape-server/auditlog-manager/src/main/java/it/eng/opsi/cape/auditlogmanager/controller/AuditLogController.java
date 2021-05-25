@@ -44,10 +44,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.auditlogmanager.ApplicationProperties;
 import it.eng.opsi.cape.auditlogmanager.model.audit.AuditDataMapping;
 import it.eng.opsi.cape.auditlogmanager.model.audit.AuditLog;
-import it.eng.opsi.cape.auditlogmanager.model.event.EventLog;
 import it.eng.opsi.cape.auditlogmanager.repository.AuditLogRepository;
 import it.eng.opsi.cape.auditlogmanager.repository.EventLogRepository;
-import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.AuditLogNotFoundException;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
@@ -55,7 +53,7 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.Storage.Location;
 import lombok.extern.slf4j.Slf4j;
 
-@OpenAPIDefinition(/* security = { @SecurityRequirement(name = "bearer-key") }, */ tags = {
+@OpenAPIDefinition(tags = {
 		@Tag(name = "Audit Log", description = "Audit Log, reporting aggregated auditing statistics, triggered by incoming Event Logs (ServiceLink, Consent or Data Processing) regarding a specific Account"),
 		@Tag(name = "Event Log", description = "Log of an Event (ServiceLink, Consent or Data Processing) regarding a specific Account") }, info = @Info(title = "CaPe API - AuditLog Manager", description = "CaPe APIs used to manage Events and Auditing operations", version = "2.0"))
 @RestController
@@ -256,7 +254,8 @@ public class AuditLogController implements IAuditLogController {
 					@ApiResponse(description = "Returns the updated Audit Log.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuditLog.class))) })
 	@PutMapping(value = "/auditLogs/accounts/{accountId}/purposeCategoryPersonalData/{purposeCategory}/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<AuditLog> addPurposeCategoryPersonalDataToAuditLog(String accountId, PurposeCategory purposeCategory) {
+	public ResponseEntity<AuditLog> addPurposeCategoryPersonalDataToAuditLog(String accountId,
+			PurposeCategory purposeCategory) {
 
 		Optional<AuditLog> updatedAuditLog = auditLogsRepo.addPurposeCategory(accountId, purposeCategory);
 

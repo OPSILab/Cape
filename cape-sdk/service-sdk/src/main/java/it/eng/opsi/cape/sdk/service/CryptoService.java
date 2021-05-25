@@ -251,9 +251,9 @@ public class CryptoService {
 		JWSHeader protectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(servicePublicKey.getAlgorithm().getName()))
 				.keyID(servicePublicKey.getKeyID()).jwk(servicePublicKey).build();
 
-		JWSHeader unprotectedHeader = new JWSHeader.Builder(
-				JWSAlgorithm.parse(servicePublicKey.getAlgorithm().getName())).keyID(servicePublicKey.getKeyID())
-						.build();
+//		JWSHeader unprotectedHeader = new JWSHeader.Builder(
+//				JWSAlgorithm.parse(servicePublicKey.getAlgorithm().getName())).keyID(servicePublicKey.getKeyID())
+//						.build();
 
 		/*
 		 * Create the object to be signed with protected Header and Json serialized
@@ -307,24 +307,26 @@ public class CryptoService {
 
 	}
 
-	public Boolean verifyConsentRecordSigned(ConsentRecordSigned signedConsentRecord, RSAKey accountPublicKey)
-			throws ParseException, JOSEException, JsonProcessingException {
+	public Boolean verifyConsentRecordSigned(ConsentRecordSigned signedConsentRecord,
+			RSAKey accountPublicKeyFromAssociatedSlr) throws ParseException, JOSEException, JsonProcessingException {
 
 		/*
 		 * JWS Unprotected Header (should contain alg and kid)
 		 */
-		JWSHeader unprotectedSlrHeader = signedConsentRecord.getHeader();
+		JWSHeader unprotectedCrHeader = signedConsentRecord.getHeader();
 
 		/*
 		 * JWS Protected header (should contain alg, kid and jwk)
 		 */
-		JWSHeader protectedSlrHeader = JWSHeader.parse(signedConsentRecord.get_protected());
+		JWSHeader protectedCrHeader = JWSHeader.parse(signedConsentRecord.get_protected());
 
 		/*
-		 * Check if alg and kid coming from protected and unprotected JWS Headers match
+		 * Check if alg and kid coming from protected, unprotected JWS Headers match
+		 * from signed CR and kid of accountPublicKeyFromAssociatedSlr
 		 */
-		if (unprotectedSlrHeader.getAlgorithm().equals(protectedSlrHeader.getAlgorithm())
-				&& unprotectedSlrHeader.getKeyID().equals(protectedSlrHeader.getKeyID())) {
+		if (accountPublicKeyFromAssociatedSlr.getKeyID().equals(protectedCrHeader.getKeyID())
+				&& unprotectedCrHeader.getAlgorithm().equals(protectedCrHeader.getAlgorithm())
+				&& unprotectedCrHeader.getKeyID().equals(protectedCrHeader.getKeyID())) {
 
 			/*
 			 * Create the object to be signed with protected Header and Json serialized SLR
@@ -335,9 +337,7 @@ public class CryptoService {
 			JWSObject jwsObject = new JWSObject(signedConsentRecord.get_protected(), payload,
 					signedConsentRecord.getSignature());
 
-//			RSAKey accountRSAKey = (RSAKey) protectedSlrHeader.getJWK();
-
-			return jwsObject.verify(new RSASSAVerifier(accountPublicKey));
+			return jwsObject.verify(new RSASSAVerifier(accountPublicKeyFromAssociatedSlr));
 
 		} else
 			throw new JOSEException("Protected and unprotected header fields don't match");
@@ -345,23 +345,25 @@ public class CryptoService {
 	}
 
 	public Boolean verifyConsentStatusRecordSigned(ConsentStatusRecordSigned signedConsentStatusRecord,
-			RSAKey accountPublicKey) throws ParseException, JOSEException, JsonProcessingException {
+			RSAKey accountPublicKeyFromAssociatedSlr) throws ParseException, JOSEException, JsonProcessingException {
 
 		/*
 		 * JWS Unprotected Header (should contain alg and kid)
 		 */
-		JWSHeader unprotectedSlrHeader = signedConsentStatusRecord.getHeader();
+		JWSHeader unprotectedCrHeader = signedConsentStatusRecord.getHeader();
 
 		/*
 		 * JWS Protected header (should contain alg, kid and jwk)
 		 */
-		JWSHeader protectedSlrHeader = JWSHeader.parse(signedConsentStatusRecord.get_protected());
+		JWSHeader protectedCrHeader = JWSHeader.parse(signedConsentStatusRecord.get_protected());
 
 		/*
-		 * Check if alg and kid coming from protected and unprotected JWS Headers match
+		 * Check if alg and kid coming from protected, unprotected JWS Headers match
+		 * from signed CR and kid of accountPublicKeyFromAssociatedSlr
 		 */
-		if (unprotectedSlrHeader.getAlgorithm().equals(protectedSlrHeader.getAlgorithm())
-				&& unprotectedSlrHeader.getKeyID().equals(protectedSlrHeader.getKeyID())) {
+		if (accountPublicKeyFromAssociatedSlr.getKeyID().equals(protectedCrHeader.getKeyID())
+				&& unprotectedCrHeader.getAlgorithm().equals(protectedCrHeader.getAlgorithm())
+				&& unprotectedCrHeader.getKeyID().equals(protectedCrHeader.getKeyID())) {
 
 			/*
 			 * Create the object to be signed with protected Header and Json serialized SLR
@@ -374,7 +376,7 @@ public class CryptoService {
 
 //			RSAKey accountRSAKey = (RSAKey) protectedSlrHeader.getJWK();
 
-			return jwsObject.verify(new RSASSAVerifier(accountPublicKey));
+			return jwsObject.verify(new RSASSAVerifier(accountPublicKeyFromAssociatedSlr));
 
 		} else
 			throw new JOSEException("Protected and unprotected header fields don't match");
@@ -450,7 +452,7 @@ public class CryptoService {
 			throw new JOSEException("Alg or kid header not found or kid does not match with the operator Key");
 
 		/*
-		 * Verify JWS object with operator Key contained in the token issuer key field
+		 * Verify JWS object with Operator Key contained in the token issuer key field
 		 * of Consent Record Source specific part
 		 */
 		Boolean signatureVerify = jws.verify(new RSASSAVerifier(sourceSpecificPart.getTokenIssuerKey()));
@@ -489,11 +491,13 @@ public class CryptoService {
 				.getSource().getPayload().getRoleSpecificPart());
 
 		/*
-		 * Check if there is alg and kid matches with the one of Operator Key
+		 * Check if there is alg and kid matches with the kid of Pop key contained in
+		 * the Source part of Consent Record
 		 */
 		if (jwsHeader.getAlgorithm() == null || StringUtils.isBlank(jwsHeader.getKeyID())
 				|| !jwsHeader.getKeyID().equals(sourceSpecificPart.getPopKey().getJwk().getKeyID()))
-			throw new JOSEException("Alg or kid header not found or kid does not match with the Pop Key");
+			throw new JOSEException(
+					"Alg or kid header not found or kid does not match with the Pop Key in the Consent Record");
 
 		/*
 		 * Verify Authorization Token contained in the JWS payload

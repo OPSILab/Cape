@@ -16,13 +16,10 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk.repository;
 
-import java.util.Optional;
-
 import org.bson.Document;
 import org.springframework.core.convert.converter.Converter;
 
 import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
 
 public class JWSHeaderWriteConverter implements Converter<JWSHeader, Document> {
 

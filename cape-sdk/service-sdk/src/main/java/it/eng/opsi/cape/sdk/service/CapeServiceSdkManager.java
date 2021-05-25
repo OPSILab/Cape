@@ -28,12 +28,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.RSAKey;
 
 import it.eng.opsi.cape.exception.CapeSdkManagerException;
@@ -45,11 +43,9 @@ import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
-import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSourceRoleSpecificPart;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordPayload;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
 import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenPayload;
-import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenResponse;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataRequestAuthorizationPayload;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataTransferRequest;
 import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordAccountSigned;
@@ -244,18 +240,42 @@ public class CapeServiceSdkManager {
 
 	}
 
-	public Boolean verifyConsentRecordSigned(ConsentRecordSigned signedConsentRecord, RSAKey accountPublicKey)
-			throws JsonProcessingException, ParseException, JOSEException {
+	/*
+	 * Verify input Signed Consent Record with the Account's public key contained in
+	 * the first signature of input associated SLR (jwk field of protected
+	 * JOSEHeader)
+	 */
+	public Boolean verifyConsentRecordSigned(ConsentRecordSigned signedConsentRecord,
+			ServiceLinkRecordDoubleSigned associatedSlr) throws JsonProcessingException, ParseException, JOSEException {
 
-		return cryptoService.verifyConsentRecordSigned(signedConsentRecord, accountPublicKey);
+		/*
+		 * Extract Account's public key from jwk field of JWS Protected header (should
+		 * contain alg, kid and jwk) Take the protected header from the first (Account
+		 * signed) signature of ServiceLinkRecordDoubleSigned signatures)
+		 */
+		JWSHeader protectedSlrHeader = JWSHeader.parse(associatedSlr.getSignatures().get(0).get_protected());
+
+		RSAKey accountPublicKeyFromAssociatedSlr = (RSAKey) protectedSlrHeader.getJWK();
+		return cryptoService.verifyConsentRecordSigned(signedConsentRecord, accountPublicKeyFromAssociatedSlr);
 	}
 
 	public Boolean verifyConsentStatusRecordSigned(ConsentStatusRecordSigned signedConsentStatusRecord,
-			RSAKey accountPublicKey) throws JsonProcessingException, ParseException, JOSEException {
+			ServiceLinkRecordDoubleSigned associatedSlr) throws JsonProcessingException, ParseException, JOSEException {
 
-		return cryptoService.verifyConsentStatusRecordSigned(signedConsentStatusRecord, accountPublicKey);
+		/*
+		 * Extract Account's public key from jwk field of JWS Protected header (should
+		 * contain alg, kid and jwk)
+		 */
+		JWSHeader protectedSlrHeader = JWSHeader.parse(associatedSlr.getSignatures().get(0).get_protected());
+
+		RSAKey accountPublicKeyFromAssociatedSlr = (RSAKey) protectedSlrHeader.getJWK();
+		return cryptoService.verifyConsentStatusRecordSigned(signedConsentStatusRecord, accountPublicKeyFromAssociatedSlr);
 	}
 
+	/*
+	 * Verify input Signed Consent Stauts Record with the Account's public key
+	 * contained in the input associated SLR (jwk field of protected JOSEHeader)
+	 */
 	public Boolean verifyConsentStatusChain(ConsentStatusRecordPayload[] csrArray) {
 
 		if (csrArray.length == 1 && csrArray[0].getPrevRecordId().equals("none"))
@@ -286,6 +306,10 @@ public class CapeServiceSdkManager {
 			DataTransferRequest dataRequest) throws CapeSdkManagerException, JsonProcessingException, JOSEException,
 			ServiceManagerException, ServiceDescriptionNotFoundException {
 
+		/*
+		 * Get Pop key from internal repository in order to put its public part in the
+		 * Data Request
+		 */
 		ServicePopKey popKey = popKeyRepo.findFirstBySurrogateId(dataRequest.getSurrogateId()).orElseThrow(
 				() -> new CapeSdkManagerException("No Pop key found for surrogateId: " + dataRequest.getSurrogateId()));
 

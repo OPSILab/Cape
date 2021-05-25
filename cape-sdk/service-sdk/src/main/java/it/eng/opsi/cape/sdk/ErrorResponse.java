@@ -18,7 +18,6 @@ package it.eng.opsi.cape.sdk;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.eng.opsi.cape.exception.RestTemplateException;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -60,6 +60,7 @@ public class ErrorResponse {
 
 	private ZonedDateTime timestamp;
 
+	@Schema(implementation = ErrorResponse.class, name = "innerError", type = "object", description = "Error Response object")
 	private ErrorResponse innerError = null;
 	private List<? extends ApiSubError> subErrors;
 

@@ -19,7 +19,6 @@ package it.eng.opsi.cape.consentmanager;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,7 +43,6 @@ import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +58,6 @@ public class ConsentManagerExceptionHandler extends ResponseEntityExceptionHandl
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
-	}
-
-	@ExceptionHandler(ResourceNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
-
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getCause()));
 	}
 
 	@ExceptionHandler(ResourceSetIdNotFoundException.class)

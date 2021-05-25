@@ -24,9 +24,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
 
 public class JWSHeaderSerializer extends StdSerializer<JWSHeader> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public JWSHeaderSerializer() {
 		this(null);

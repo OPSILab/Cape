@@ -70,6 +70,9 @@ public class ConsentRecordSigned {
 	@NonNull
 	private List<ConsentStatusRecordSigned> consentStatusList;
 
+//	@JsonIgnore
+//	private Boolean sentToSdkSuccessfully = false;
+	
 	public void addConsentStatusRecord(ConsentStatusRecordSigned consentStatusRecords) {
 		if (this.consentStatusList == null)
 			this.consentStatusList = new ArrayList<ConsentStatusRecordSigned>();

@@ -32,13 +32,7 @@ export class ServicesComponent implements OnInit {
   public sdkUrl: string;
   public operatorId: string;
   public dashboardUrl: string;
-  public serviceId: string;
-  public serviceName: string;
-  public serviceUrl: string;
   public returnUrl: string;
-  public purposeId: string;
-  public sourceDatasetId: string;
-  public sourceServiceId: string;
   public capeLinkStatus: SlStatusEnum;
   public capeConsentStatus: ConsentStatusEnum;
   public checkConsentAtOperator: boolean;
@@ -75,20 +69,20 @@ export class ServicesComponent implements OnInit {
     this.translateService.use(this.locale);
   }
 
-  async onClickGo(serviceId: string, purposeId: string) {
+  async onClickGo(serviceId: string, serviceName: string, purposeId: string) {
     if (!(await this.authService.isAuthenticatedOrRefresh().toPromise())) {
       this.router.navigate(['/login']);
     } else {
-      this.checkAndGo(serviceId, purposeId);
+      this.checkAndGo(serviceId, serviceName, purposeId);
 
       /* this.dialogService.open(DialogPersonalAttributesComponent)
          .onClose.subscribe(() => this.checkAndGo(service, purpose));*/
     }
   }
 
-  checkAndGo = async (serviceId: string, purposeId: string) => {
+  checkAndGo = async (serviceId: string, serviceName: string, purposeId: string) => {
     try {
-      var checkLinking = await this.onCheckLinking(serviceId);
+      var checkLinking = await this.onCheckLinking(serviceId, serviceName);
       console.log(checkLinking);
 
       if (checkLinking) {
@@ -113,7 +107,7 @@ export class ServicesComponent implements OnInit {
     }
   };
 
-  onCheckLinking = async (serviceId: string): Promise<boolean> => {
+  onCheckLinking = async (serviceId: string, serviceName: string): Promise<boolean> => {
     let linkSurrogateId;
 
     try {
@@ -130,12 +124,34 @@ export class ServicesComponent implements OnInit {
       if (linkSurrogateId) {
         console.log('checking SLR status');
 
-        var serviceLinkStatus = await this.capeService.getServiceLinkStatus(this.sdkUrl, this.serviceAccountId, serviceId, this.operatorId);
-        console.log('checking SLR status...OK' + serviceLinkStatus);
+        const serviceLinkRecord = await this.capeService.getServiceLinkRecordByUserIdAndServiceId(
+          this.sdkUrl,
+          this.serviceAccountId,
+          serviceId,
+          this.operatorId
+        );
 
-        return serviceLinkStatus === SlStatusEnum.Active;
+        // Auto activate existing SLR but in Removed status
+        if (serviceLinkRecord.serviceLinkStatuses.pop().payload.sl_status == SlStatusEnum.Removed)
+          await this.capeService.enableServiceLink(
+            this.sdkUrl,
+            serviceLinkRecord.payload.link_id,
+            serviceLinkRecord.payload.surrogate_id,
+            serviceId,
+            serviceName
+          );
+
+        return true;
       } else {
-        linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceAccountId, this.returnUrl);
+        linkSurrogateId = await this.capeService.automaticLinkFromService(
+          this.sdkUrl,
+          this.operatorId,
+          serviceId,
+          this.serviceAccountId,
+          this.serviceAccountEmail,
+          this.locale,
+          this.returnUrl
+        );
         if (linkSurrogateId) return true;
       }
     } catch (error) {
@@ -144,16 +160,25 @@ export class ServicesComponent implements OnInit {
       } else if (error.status === 404) {
         console.log('No ServiceLink for service: ' + serviceId + '...starting service linking');
         try {
-          linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceAccountId, this.returnUrl);
+          linkSurrogateId = await this.capeService.automaticLinkFromService(
+            this.sdkUrl,
+            this.operatorId,
+            serviceId,
+            this.serviceAccountId,
+            this.serviceAccountEmail,
+            this.locale,
+            this.returnUrl
+          );
           return linkSurrogateId ? true : false;
         } catch (error) {
-          if (error?.error.cause == 'it.eng.opsi.cape.exception.AccountNotFoundException') {
-            // Call SDK API to Create Account using as accountId the accountId of the Service
-            await this.capeService.createCapeAccount(this.sdkUrl, this.serviceAccountId, this.serviceAccountEmail, this.locale);
-            this.capeAccountId = this.serviceAccountId;
-            // Once the Cape Account has been created, retry automaticLinking
-            linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceAccountId, this.returnUrl);
-          } else this.errorDialogService.openErrorDialog(error);
+          // if (error?.error.cause == 'it.eng.opsi.cape.exception.AccountNotFoundException') {
+          //   // Call SDK API to Create Account using as accountId the accountId of the Service
+          //   await this.capeService.createCapeAccount(this.sdkUrl, this.serviceAccountId, this.serviceAccountEmail, this.locale);
+          //   this.capeAccountId = this.serviceAccountId;
+          //   // Once the Cape Account has been created, retry automaticLinking
+          //   linkSurrogateId = await this.capeService.automaticLinkFromService(this.sdkUrl, this.operatorId, serviceId, this.serviceAccountId, this.returnUrl);
+          // } else
+          this.errorDialogService.openErrorDialog(error);
         }
       } else throw error;
     }

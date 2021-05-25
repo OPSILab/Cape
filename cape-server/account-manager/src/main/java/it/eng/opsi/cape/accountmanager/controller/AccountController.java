@@ -77,10 +77,11 @@ import it.eng.opsi.cape.accountmanager.model.audit.EventLog;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
 import lombok.extern.slf4j.Slf4j;
 
-@OpenAPIDefinition(security = { @SecurityRequirement(name = "bearer-key") }, tags = {
+@OpenAPIDefinition(info = @Info(title = "CaPe API - Account Manager", description = "CaPe APIs used to manage CRUD on CaPe Account and related Service Link Records and for internal operations during the overall Consent and Service Linking processes.", version = "2.0"), tags = {
 		@Tag(name = "Account", description = "Account Manager APIs to manage CaPe Account."),
 		@Tag(name = "Service Link Record", description = "Account Manager APIs to manage Service Link Records."),
-		@Tag(name = "Service Linking", description = "Account Manager APIs to handle Service Linking internal operations.") }, info = @Info(title = "CaPe API - Account Manager", description = "CaPe APIs used to manage CaPe Account, Service Link Records and Service Linking internal operations", version = "2.0"))
+		@Tag(name = "(Internal) Service Linking", description = "Account Manager APIs to handle Service Linking internal operations."),
+		@Tag(name = "(Internal) Consenting", description = "Account Manager APIs to handle Consenting internal operations.") })
 @RestController
 @RequestMapping("/api/v2")
 @Slf4j
@@ -109,7 +110,6 @@ public class AccountController implements IAccountController {
 		this.operatorId = this.appProperty.getCape().getOperatorId();
 		this.accountPublicUrl = this.appProperty.getCape().getAccountManager().getHost();
 	}
-
 
 	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
 			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
@@ -271,7 +271,8 @@ public class AccountController implements IAccountController {
 	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getServiceLinkRecords(@PathVariable String accountId)
 			throws AccountNotFoundException {
 
-		List<ServiceLinkRecordDoubleSigned> result = accountRepo.getServiceLinksRecordsBy_idOrUsername(accountId)
+		List<ServiceLinkRecordDoubleSigned> result = accountRepo
+				.getServiceLinksRecordsBy_idOrUsername(accountId)
 				.orElseThrow(() -> new AccountNotFoundException("No Account found with Id: " + accountId));
 
 		return ResponseEntity.ok(result);

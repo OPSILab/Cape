@@ -16,17 +16,9 @@
  ******************************************************************************/
 package it.eng.opsi.cape.accountmanager.controller;
 
-import java.net.URI;
 import java.text.ParseException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import javax.validation.Valid;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,30 +28,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.util.Base64;
-import com.nimbusds.jose.util.Base64URL;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import it.eng.opsi.cape.accountmanager.ApplicationProperties;
 import it.eng.opsi.cape.accountmanager.model.Account;
-import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
-import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordPayload;
-import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordSigned;
-import it.eng.opsi.cape.accountmanager.model.consenting.RSDescription;
-import it.eng.opsi.cape.accountmanager.model.consenting.ThirdPartyReuseConsentSignRequest;
-import it.eng.opsi.cape.accountmanager.model.consenting.ThirdPartyReuseConsentSignResponse;
-import it.eng.opsi.cape.accountmanager.model.consenting.WithinServiceConsentSignRequest;
-import it.eng.opsi.cape.accountmanager.model.consenting.WithinServiceConsentSignResponse;
 import it.eng.opsi.cape.accountmanager.model.linking.AccountSignSlrRequest;
 import it.eng.opsi.cape.accountmanager.model.linking.AccountSignSlrResponse;
 import it.eng.opsi.cape.accountmanager.model.linking.FinalStoreSlrRequest;
@@ -112,7 +92,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 
 	@Override
 	@Operation(summary = "Init Service Linking at Account Manager - Sink", description = "Stores Service Link ID to Account with PoP Key.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/init/sink", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceLinkInitResponse> storeSinkSlrId(@PathVariable("account_id") String accountId,
@@ -160,7 +140,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 
 	@Override
 	@Operation(summary = "Init Service Linking at Account Manager - Source.", description = "Stores Service Link ID to Account.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/init/source", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceLinkInitResponse> storeSourceSlrId(@PathVariable("account_id") String accountId,
@@ -206,7 +186,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 	}
 
 	@Operation(summary = "Sign Service Link.", description = "Signs constructed Service Link Record with Account owner's key.", tags = {
-			"Service Linking" }, responses = { @ApiResponse(description = "	\r\n"
+			"(Internal) Service Linking" }, responses = { @ApiResponse(description = "	\r\n"
 					+ "Service Link Record and Service Link Status Record created.", responseCode = "302"), })
 
 	@Override
@@ -239,9 +219,11 @@ public class ServiceLinkingController implements IServiceLinkingController {
 		RSAKey accountKeyPair = cryptoService.getKeyPairByAccountId(accountId);
 
 		/*
-		 * Add public key to SLR payload (cr_keys field)
+		 * Add public key to SLR payload (cr_keys field). DISABLED. We put public key
+		 * directly in the jwk field of the protected JOSEHeader in signPartialSLR below
 		 */
-		partialSlr.addCrKey(accountKeyPair.toPublicJWK());
+
+//		partialSlr.addCrKey(accountKeyPair.toPublicJWK());
 
 		ServiceLinkRecordAccountSigned accountSignedSlr = cryptoService.signPartialSLR(accountKeyPair, partialSlr);
 
@@ -254,7 +236,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 	}
 
 	@Operation(summary = "Init Service Linking at Account Manager - Source", description = "Stores Service Link ID to Account.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns Redirect to Service Login page for authentication.", responseCode = "302") })
 
 	@Override
@@ -311,7 +293,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 	}
 
 	@Operation(summary = "Sign and store a new Service Link Status Record.", description = "Constructs signed Service Link Status Record based on provided Service Link Status Record payload. Signs constructed Service Link Status Record with Account owner's key. Finally Service Link Status Record is stored.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns the newly signed Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/{link_id}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -358,7 +340,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 	}
 
 	@Operation(summary = "Only store a new Service Link Status Record, already signed by Service Manager.", description = "Store a new Service Link Status Record, already signed by Service Manager with the Operator's private key.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns the stored Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@PostMapping(value = "/users/{surrogate_id}/servicelinks/{link_id}/statuses/storeOnly", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -414,7 +396,7 @@ public class ServiceLinkingController implements IServiceLinkingController {
 	 * @throws AccountNotFoundException
 	 */
 	@Operation(summary = "Delete Partial Service Link Record payload by Account Id and Slr Id.", tags = {
-			"Service Linking" }, responses = {
+			"(Internal) Service Linking" }, responses = {
 					@ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@Override
 	@DeleteMapping(value = "/accounts/{accountId}/servicelinks/{slrId}")

@@ -289,22 +289,30 @@ public class ClientService {
 
 	}
 
+	/*
+	 * Use the notification to SDK successful boolean to discriminate whether to
+	 * force storing CR at the Service
+	 */
 	public String sendConsentRecordToService(String serviceDomainUrl, ConsentRecordSigned signedCr) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<String> response = restTemplate.exchange(
-				RequestEntity.post(URI.create(serviceDomainUrl + "/api/v2/cr/cr_management")).body(signedCr),
-				String.class);
+		ResponseEntity<String> response = restTemplate.exchange(RequestEntity
+				.post(UriComponentsBuilder.fromHttpUrl(serviceDomainUrl + "/api/v2/consents").build().toUri())
+				.body(signedCr), String.class);
 		return response.getBody();
 	}
 
+	/*
+	 * Use the notification to SDK successful boolean to discriminate whether to
+	 * force storing CR and CSR at the Service -> SDK will not check CSR chain
+	 */
 	public String sendUpdatedConsentRecordToService(String serviceDomainUrl, ConsentRecordSigned signedCr) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<String> response = restTemplate
 				.exchange(
 						RequestEntity
-								.patch(UriComponentsBuilder.fromHttpUrl(serviceDomainUrl + "/api/v2/cr/cr_management")
+								.patch(UriComponentsBuilder.fromHttpUrl(serviceDomainUrl + "/api/v2/consents/{crId}")
 										.build(signedCr.getPayload().getCommonPart().getCrId()))
 								.body(signedCr),
 						String.class);

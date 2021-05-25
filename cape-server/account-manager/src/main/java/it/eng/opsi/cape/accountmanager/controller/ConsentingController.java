@@ -21,10 +21,13 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jose.util.Base64URL;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.accountmanager.ApplicationProperties;
 import it.eng.opsi.cape.accountmanager.model.Account;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
@@ -42,6 +45,7 @@ import it.eng.opsi.cape.accountmanager.service.CryptoService;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @RequestMapping("/api/v2")
@@ -65,7 +69,7 @@ public class ConsentingController implements IConsentingController {
 	}
 
 	@Operation(summary = "Constructs Consent Record's and Consent Status Record's, for consenting a single service, based on provided payloads.", description = "Signs constructed record's with Account owner's key.", tags = {
-			"Consenting" }, responses = {
+			"(Internal) Consenting" }, responses = {
 					@ApiResponse(description = "Returns the stored Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = WithinServiceConsentSignResponse.class))) })
 	@Override
 	@PostMapping(value = "/users/{surrogate_id}/servicelinks/{link_id}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +125,7 @@ public class ConsentingController implements IConsentingController {
 	}
 
 	@Operation(summary = "Constructs Consent Record and Consent Status Record, for consenting a service for third party reuse case, based on provided payloads.", description = "Signs constructed record with Account owner key.", tags = {
-			"Consenting" }, responses = {
+			"(Internal) Consenting" }, responses = {
 					@ApiResponse(description = "Returns the stored Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ThirdPartyReuseConsentSignResponse.class))) })
 	@Override
 	@PostMapping(value = "/users/{surrogate_id}/servicelinks/{sink_link_id}/{source_link_id}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -214,7 +218,7 @@ public class ConsentingController implements IConsentingController {
 	}
 
 	@Operation(summary = "Sign input Consent Status Record Payload.", description = "Signs constructed record's with Account owner's key.", tags = {
-			"Consenting" }, responses = {
+			"(Internal) Consenting" }, responses = {
 					@ApiResponse(description = "Returns the Consent Status Record signed with the private part of the key pair matching with the input Account Id.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
 	@Override
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/{link_id}/consents/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -238,7 +242,7 @@ public class ConsentingController implements IConsentingController {
 	}
 
 	@Operation(summary = "Sign input Consent Status Record List.", description = "Signs constructed Conssent Status Records List with Account owner's key.", tags = {
-			"Consenting" }, responses = {
+			"(Internal) Consenting" }, responses = {
 					@ApiResponse(description = "Returns the Base64 Signature Consent Status Records List with the private part of the key pair matching with the input Account Id.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = WithinServiceConsentSignResponse.class))) })
 	@Override
 	@PostMapping(value = "/accounts/{account_id}/servicelinks/{link_id}/consents/statuses/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.util.Base64URL;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ import lombok.ToString;
 @ToString
 public class ServiceLinkStatusRecordSigned {
 
+	@Schema(implementation = Object.class, defaultValue = "{}", name = "header", type = "object", description = "Unprotected JOSE header value", example = "{\"alg\":\"RS256\",\"kid\":\"cape:60a7c2a28c0fe81c37a5a154\"}")
 	@NotNull(message = "header is mandatory")
 	JWSHeader header;
 
@@ -50,6 +52,5 @@ public class ServiceLinkStatusRecordSigned {
 
 	@NotNull(message = "signature is mandatory")
 	Base64URL signature;
-
 
 }

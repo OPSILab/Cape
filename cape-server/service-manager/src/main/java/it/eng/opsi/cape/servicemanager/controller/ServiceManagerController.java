@@ -98,8 +98,7 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import lombok.extern.slf4j.Slf4j;
 
 @OpenAPIDefinition(tags = {
-		@Tag(name = "Service Linking", description = "Service Manager APIs to handle internal service linking operations."),
-		@Tag(name = "Operator Description", description = "Service Manager APIs to manage Operator Description.") }, info = @Info(title = "CaPe Service Manager API", description = "Service Manager API used by CaPe compliant services.", version = "2.0"))
+		@Tag(name = "Service Linking", description = "Service Manager APIs to handle internal service linking operations.") }, info = @Info(title = "CaPe Service Manager API", description = "Service Manager API used by CaPe compliant services.", version = "2.0"))
 @RestController
 @RequestMapping("/api/v2")
 @Slf4j
@@ -199,15 +198,16 @@ public class ServiceManagerController implements IServiceManagerController {
 			String operatorLinkingReturnUrl = operatorDescription.getOperatorUrls().getLinkingRedirectUri();
 
 			HttpHeaders headers = new HttpHeaders();
-			headers.add("Location", serviceLoginUri + "?sessionCode=" + sessionCode + "&operatorId=" + operatorId + "&returnUrl="
-					+ operatorLinkingReturnUrl + "&linkingFrom=Operator");
+			headers.add("Location", serviceLoginUri + "?sessionCode=" + sessionCode + "&operatorId=" + operatorId
+					+ "&returnUrl=" + operatorLinkingReturnUrl + "&linkingFrom=Operator");
 
 			/*
-			 *  startSession
+			 * startSession
 			 */
 			// TODO Check if Account corresponding to AccountId exists (call Account
 			// Manager)
-			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
+			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")),
+					toRecover);
 
 			return new ResponseEntity<String>(null, headers, HttpStatus.OK);
 
@@ -301,7 +301,8 @@ public class ServiceManagerController implements IServiceManagerController {
 			// Manager)
 			// In case of automatic linking (forceCode=true) the accountId in input is
 			// instead the Service User Id
-			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")), toRecover);
+			serviceManager.startSession(sessionCode, accountId, serviceId, ZonedDateTime.now(ZoneId.of("UTC")),
+					toRecover);
 
 			/*
 			 * If forceCode is true, return directly the Linking Session Code in order to
@@ -419,7 +420,8 @@ public class ServiceManagerController implements IServiceManagerController {
 					popKey);
 		} else {
 			// Call storeSourceSlrId
-			storeSlrIdResponse = clientService.callStoreSourceSlrId(accountId, sessionCode, slrId, serviceId, surrogateId);
+			storeSlrIdResponse = clientService.callStoreSourceSlrId(accountId, sessionCode, slrId, serviceId,
+					surrogateId);
 		}
 
 		/*
@@ -520,8 +522,8 @@ public class ServiceManagerController implements IServiceManagerController {
 		/*
 		 * Call Account Manager to sign and store SSR and final double signed SLR
 		 */
-		ResponseEntity<FinalStoreSlrResponse> storeSlrResponse = clientService.callStoreFinalSlr(accountId, sessionCode, slrId,
-				serviceSignResponse.getServiceSignedSlr(), ssrPayload);
+		ResponseEntity<FinalStoreSlrResponse> storeSlrResponse = clientService.callStoreFinalSlr(accountId, sessionCode,
+				slrId, serviceSignResponse.getServiceSignedSlr(), ssrPayload);
 
 		/*
 		 * Update The Linking Session to the next state: DOUBLE_SIGNED_SLR ->
@@ -677,7 +679,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		ConsentRecordSignedPair[] crPairs = null;
 
 		/*
-		 * If Request generated from Operator (Cape) Call Account Manager to sign with
+		 * If Request generated from Operator (Cape) -> Call Account Manager to sign with
 		 * Account private key and store the newly generated SSR
 		 */
 		if (requestFrom.equals(ChangeSlrStatusRequestFrom.OPERATOR)) {
@@ -690,7 +692,7 @@ public class ServiceManagerController implements IServiceManagerController {
 
 		} else if (requestFrom.equals(ChangeSlrStatusRequestFrom.SERVICE)) {
 			/*
-			 * Else if the request generated from Service Call Account Manager to store the
+			 * Else if the request generated from Service -> Call Account Manager to store the
 			 * newly generated SSR, signed with the Operator's key
 			 */
 			/*

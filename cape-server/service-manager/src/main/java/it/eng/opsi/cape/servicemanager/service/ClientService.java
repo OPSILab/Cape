@@ -252,7 +252,7 @@ public class ClientService {
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		ResponseEntity<ServiceSignSlrResponse> response = restTemplate.exchange(
-				RequestEntity.post(URI.create(serviceSdkHost + "/api/v2/slr/slr"))
+				RequestEntity.post(URI.create(serviceSdkHost + "/api/v2/slr/sign"))
 						.body(ServiceSignSlrRequest.builder().accountSignedSlr(accountSignedSlr).sessionCode(sessionCode)
 								.surrogateId(surrogateId).operatorId(operatorId).build()),
 				ServiceSignSlrResponse.class);

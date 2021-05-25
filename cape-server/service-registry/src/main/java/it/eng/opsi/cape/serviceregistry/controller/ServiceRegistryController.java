@@ -41,7 +41,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
 import it.eng.opsi.cape.exception.PurposeIdNotFoundException;
@@ -57,7 +56,7 @@ import it.eng.opsi.cape.serviceregistry.model.ServiceReportGroupingCriteria;
 import it.eng.opsi.cape.serviceregistry.repository.ServiceEntryRepository;
 import lombok.extern.slf4j.Slf4j;
 
-@OpenAPIDefinition(security = { @SecurityRequirement(name = "bearer-key") }, tags = {
+@OpenAPIDefinition(tags = {
 		@Tag(name = "Service Entry", description = "Service entry Description APIs to get and manage service entry descriptions."),
 		@Tag(name = "Service Dataset Data Mapping", description = "APIs to get Data Mapping for Services Datasets"),
 		@Tag(name = "Service Report", description = "Service Report APIs about Service descriptions.") }, info = @Info(title = "CaPe API - Service Registry", description = "Servicve Registry APIs used to manage Service entry descriptions and get data mappings and reports.", version = "2.0"))

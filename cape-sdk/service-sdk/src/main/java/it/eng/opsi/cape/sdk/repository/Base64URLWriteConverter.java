@@ -16,13 +16,8 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk.repository;
 
-import java.util.Optional;
-
-import org.bson.Document;
 import org.springframework.core.convert.converter.Converter;
 
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64URL;
 
 public class Base64URLWriteConverter implements Converter<Base64URL, String> {

@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.jwk.RSAKey;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkRecordDoubleSigned;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,7 @@ public class Account {
 	@Indexed(unique = true)
 	private String username;
 
+	@Schema(hidden = true)
 	private Locale language;
 
 	private List<AccountNotificationEnum> notification = new ArrayList<AccountNotificationEnum>();
@@ -76,11 +78,13 @@ public class Account {
 	@JsonIgnore
 	private List<ServiceLinkRecordDoubleSigned> serviceLinkRecords;
 
+	
 	@JsonIgnore
 	public void setKeyPair(RSAKey keyPair) {
 		this.keyPair = keyPair;
 	}
 
+	@Schema(hidden = true)
 	@JsonProperty
 	public RSAKey getKeyPair() {
 		return keyPair;

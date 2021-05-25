@@ -48,7 +48,8 @@ public interface AccountRepository extends MongoRepository<Account, String>, Acc
 	// @Query(value = "{ '$or': [{'_id': ?0}, {'username': ?1}]}", fields = "
 	// {'serviceLinkRecords.payload': 1}")
 	@Aggregation(pipeline = { "{ $match: { $or: [{'_id': ?0}, {'username': ?0}]}}",
-			"{ $unwind : '$serviceLinkRecords'}", "{ $replaceRoot: { newRoot : '$serviceLinkRecords'}}" })
+			"{ $unwind : '$serviceLinkRecords'}", "{ $unset: ['serviceLinkRecords.payload.operatorKey', 'serviceLinkRecords.payload.popKey']}",
+			"{ $replaceRoot: { newRoot : '$serviceLinkRecords'}}" })
 	public Optional<List<ServiceLinkRecordDoubleSigned>> getServiceLinksRecordsBy_idOrUsername(String accountId);
 
 	@Aggregation(pipeline = { "{ $match: { $or: [{'_id': ?0}, {'username': ?0}]}}",
@@ -97,13 +98,10 @@ public interface AccountRepository extends MongoRepository<Account, String>, Acc
 	public Optional<ServiceLinkStatusRecordSigned> getLastServiceLinkStatusRecordByAccountOrUsernameAndSlrId(
 			String accountId, String slrId);
 
-	//@Query(value="{ $and: [{ 'serviceLinkRecords.payload._id': ?0},{'serviceLinkRecords.payload.surrogateId': ?1}]}", fields="{username : 1, _id : 0}")
-	public Optional<Account> findByServiceLinkRecords_Payload_slrIdAndServiceLinkRecords_Payload_SurrogateId(String slrId, String surrogateId);
-	
-	
-	
-	
-	
-	
-	
+	// @Query(value="{ $and: [{ 'serviceLinkRecords.payload._id':
+	// ?0},{'serviceLinkRecords.payload.surrogateId': ?1}]}", fields="{username : 1,
+	// _id : 0}")
+	public Optional<Account> findByServiceLinkRecords_Payload_slrIdAndServiceLinkRecords_Payload_SurrogateId(
+			String slrId, String surrogateId);
+
 }

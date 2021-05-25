@@ -16,11 +16,9 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk;
 
-import org.apache.http.conn.HttpHostConnectException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,16 +56,8 @@ public class CapeServiceSdkExceptionHandler extends ResponseEntityExceptionHandl
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String message = "Malformed JSON request";
 		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex);
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
-	}
-
-	@ExceptionHandler(ResourceNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ResourceNotFoundException ex) {
-
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex.getCause()));
 	}
 
 	@ExceptionHandler(UserSurrogateIdLinkNotFoundException.class)
@@ -169,9 +158,8 @@ public class CapeServiceSdkExceptionHandler extends ResponseEntityExceptionHandl
 
 		}
 
-		
 		ex.printStackTrace();
-		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex,  req.getRequestURI()));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex, req.getRequestURI()));
 
 	}
 

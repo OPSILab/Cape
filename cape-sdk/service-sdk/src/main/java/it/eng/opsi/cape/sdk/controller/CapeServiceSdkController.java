@@ -16,17 +16,14 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk.controller;
 
-import java.net.URI;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -35,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,14 +50,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.jwk.RSAKey;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,14 +86,12 @@ import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.CommonPart;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
-import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordPayload;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordPayload;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentStatusRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.Dataset;
-import it.eng.opsi.cape.sdk.model.consenting.RSDescription;
 import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenPayload;
 import it.eng.opsi.cape.sdk.model.datatransfer.AuthorisationTokenResponse;
 import it.eng.opsi.cape.sdk.model.datatransfer.DataRequestAuthorizationPayload;
@@ -124,7 +115,6 @@ import it.eng.opsi.cape.sdk.repository.ServiceLinkRecordDoubleSignedRepository;
 import it.eng.opsi.cape.sdk.repository.UserSurrogateIdLinkRepository;
 import it.eng.opsi.cape.sdk.service.CapeServiceSdkManager;
 import it.eng.opsi.cape.sdk.service.ClientService;
-import it.eng.opsi.cape.sdk.service.CryptoService;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
@@ -132,11 +122,14 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-@OpenAPIDefinition(security = { @SecurityRequirement(name = "bearer-key") }, tags = {
-		@Tag(name = "Service Linking", description = "Cape SDK APIs to handle Service Linking internal operations."),
-		@Tag(name = "Service Management", description = "Cape SDK APIs to handle Services managed by this SDK"),
+@OpenAPIDefinition(info = @Info(title = "SDK Service API", description = "SDK Service API for integration with cape", version = "2.0"), tags = {
+		@Tag(name = "Service Linking", description = "Cape SDK APIs to start and manage Service Linking starting from Service."),
+		@Tag(name = "(Internal) Service Linking", description = "Cape SDK APIs used internally by Cape Server to handle operations during Service Linking. These endpoints are part of Service Linking transaction and should not be called independently."),
+		@Tag(name = "Service Entry", description = "Service Description APIs to get and manage service entry descriptions."),
+		@Tag(name = "Service Management", description = "Cape SDK APIs to handle Service Registrations managed by this SDK and already present in the Cape Service Registry."),
 		@Tag(name = "Service Link Record", description = "Cape SDK APIs to manage Service Link Records."),
-		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations.") }, info = @Info(title = "SDK Service API", description = "SDK Service API for integration with cape", version = "2.0"))
+		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations."),
+		@Tag(name = "(Internal) Consenting", description = "Consent Manager APIs to perform internal communications between SDK and Cape Server during Consenting operations. These endpoints are part of Consenting transaction and should not be called independently.") })
 @RestController
 @RequestMapping("/api/v2")
 @Slf4j
@@ -194,7 +187,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok().body(operatorDescription);
 	}
 
-	@Operation(summary = "Get Linking sessionCode from Service Manager for automatic linking starting", tags = {
+	@Operation(summary = "Get Service Linking sessionCode from Service Manager to start Automatic Service Linking", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns the requested linking sessionCode.", responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@Override
@@ -217,7 +210,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	 * @throws SessionNotFoundException
 	 */
 
-	@Operation(summary = "Link Service Account to CaPe Account", description = "Initiate linking process", tags = {
+	@Operation(summary = "Link the Service User's Account to CaPe Account.", description = "Initiate linking process from service. It needs the generated sessionCode and surrogateId taken using the respective APIs ( /slr/linking/sessionCode and /slr/linking/surrogateId .", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the created Service Link Record and Service Link Status Record", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = FinalLinkingResponse.class))) })
 	@Override
@@ -267,11 +260,11 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(operatorLinkingResponse);
 	}
 
-	@Operation(summary = "Generate surrogate_id for given CaPe Account and Service Account.", description = "Generate surrogate_id", tags = {
+	@Operation(summary = "Generate surrogateId for given Service User's Account.", description = "Generate surrogateId to be used in the /slr/linking to start Service Linking. This will represent the same User in both sides (Service and Cape).", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the created surrogate_id ", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SurrogateIdResponse.class))) })
 	@Override
-	@GetMapping(value = "/slr/surrogate_id")
+	@GetMapping(value = "/slr/linking/surrogateId")
 	public ResponseEntity<SurrogateIdResponse> generateSurrogateId(@RequestParam(required = true) String operatorId,
 			@RequestParam(required = true) String userId) {
 
@@ -281,7 +274,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Register a Service existing in the Service Registry as managed by CaPe.", description = "Register the Service as managed by this SDK and create Service key pair and x509 Certificate", tags = {
+	@Operation(summary = "Register a Service existing in the Service Registry as managed by CaPe.", description = "Register the Service as managed by this SDK and create Service key pair and x509 Certificate. Once registered, the Service will be available to the User for service linking.", tags = {
 			"Service Management" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the Service Description containing generated Public X509 Certificate.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
@@ -294,7 +287,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(certificateFilledAndSignedDescription);
 	}
 
-	@Operation(summary = "Unregister a Service managed by CaPe. Optionally delete also Service Description from Service Registry", description = "Delete Service Sign key pair (and PoP key if Sink) and cert from Service Description at Registry", tags = {
+	@Operation(summary = "Unregister a Service managed by CaPe. Optionally delete also Service Description from Service Registry.", description = "Delete Service Sign key pair (and PoP key if Sink) and X509 Certificate from Service Description at Registry. Until is unregistered, the Service will not be visible/available to the User.", tags = {
 			"Service Management" }, responses = {
 					@ApiResponse(description = "Returns 204 No Content", responseCode = "204"),
 					@ApiResponse(description = "Returns 404, no Service or Sign Key was found", responseCode = "404") })
@@ -309,20 +302,20 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@Operation(summary = "Get sign keys of services registered to Cape by this SDK", description = "Get registered services sign keys managed by this SDK", tags = {
+	@Operation(summary = "Get sign keys of services registered to Cape by this SDK.", description = "Get registered services sign keys managed by this SDK (associated to its Service Provider Business Id).", tags = {
 			"Service Management" }, responses = {
-					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceSignKey.class))) })
+					@ApiResponse(description = "Returns 200 OK and the list of requested services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceSignKey.class))) })
 	@Override
-	@GetMapping(value = "/services/signKeys")
+	@GetMapping(value = "/services/signingKeys")
 	public ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys() {
 
 		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getRegisteredServicesKeys());
 
 	}
 
-	@Operation(summary = "Get services (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get services managed by this SDK", tags = {
-			"Service Management" }, responses = {
-					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Operation(summary = "Get services descriptions (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get services managed by this SDK (associated to its Service Provider Business Id).", tags = {
+			"Service Entry" }, responses = {
+					@ApiResponse(description = "Returns 200 OK and the list of requested services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
 	@GetMapping(value = "/services")
 	public ResponseEntity<List<ServiceEntry>> getServices(@RequestParam(defaultValue = "false") Boolean onlyRegistered)
@@ -331,9 +324,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getServices(onlyRegistered, businessId));
 	}
 
-	@Operation(summary = "Get service by ServiceId (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get service managed by this SDK", tags = {
-			"Service Management" }, responses = {
-					@ApiResponse(description = "Returns 200 OK and the list of registered services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Operation(summary = "Get Service Description by ServiceId (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get service managed by this SDK (associated to the Service Provider Business Id).", tags = {
+			"Service Entry" }, responses = {
+					@ApiResponse(description = "Returns 200 OK and the requested service", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
 	@GetMapping(value = "/services/{serviceId}")
 	public ResponseEntity<ServiceEntry> getService(@PathVariable String serviceId,
@@ -343,11 +336,11 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getService(serviceId, onlyRegistered));
 	}
 
-	@Operation(summary = "Sign the Service Link Record payload with Service key.", description = "Sign the Service Link Record payload with Service key after verifying Account signature", tags = {
-			"Service Linking" }, responses = {
-					@ApiResponse(description = "Returns 201 CREATED and the created Service Description containing generated Public X509 Certificate.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
+	@Operation(summary = "Sign the Service Link Record payload with Service key.", description = "Sign the Service Link Record payload with Service key after verifying SLR signature made by Account Manager.", tags = {
+			"(Internal) Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 CREATED and the SLR Payload signed with Service private key.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceSignSlrResponse.class))) })
 	@Override
-	@PostMapping(value = "/slr/slr", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/slr/sign", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ServiceSignSlrResponse> signServiceLinkRecordPayload(
 			@RequestBody @Valid ServiceSignSlrRequest request)
 			throws JsonProcessingException, JOSEException, ParseException, ServiceSignKeyNotFoundException,
@@ -376,8 +369,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 				.body(new ServiceSignSlrResponse(request.getSessionCode(), doubleSignedSlr));
 	}
 
-	@Operation(summary = "Return all the Service Link Records", tags = { "Service Link Record" }, responses = {
-			@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
+	@Operation(summary = "Return all the Service Link Records managed by this SDK instance (associated to its Service Provider Business Id)", tags = {
+			"Service Link Record" }, responses = {
+					@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
 	@Override
 	@GetMapping(value = "/slr")
 	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getAllServiceLinkRecords() {
@@ -388,8 +382,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Return Service Link Records by Service Id", tags = { "Service Link Record" }, responses = {
-			@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
+	@Operation(summary = "Return Service Link Records associated to a specific Service Id.", tags = {
+			"Service Link Record" }, responses = {
+					@ApiResponse(description = "Returns Service Link Records.", responseCode = "200") })
 	@Override
 	@GetMapping(value = "/services/{serviceId}/slr")
 	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getServiceLinkRecordsByServiceId(
@@ -400,7 +395,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Return Service Link Records by Slr Id", tags = { "Service Link Record" }, responses = {
+	@Operation(summary = "Return Service Link Record by Slr Id", tags = { "Service Link Record" }, responses = {
 			@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
 	@Override
 	@GetMapping(value = "/slr/{slrId}")
@@ -414,7 +409,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Return Service Link Records by Surrogate Id", tags = { "Service Link Record" }, responses = {
+	@Operation(summary = "Return Service Link Record by Surrogate Id.", tags = { "Service Link Record" }, responses = {
 			@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
 	@Override
 	@GetMapping(value = "/slr/surrogate/{surrogateId}")
@@ -428,7 +423,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Return Service Link Records by Surrogate Id and Service Id", tags = {
+	@Operation(summary = "Return Service Link Record by Surrogate Id and Service Id.", tags = {
 			"Service Link Record" }, responses = {
 					@ApiResponse(description = "Returns the Service Link Record.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkRecordDoubleSigned.class))) })
 	@Override
@@ -460,7 +455,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok(result);
 	}
 
-	@Operation(summary = "Insert a new link between userId, surrogateId, serviceId and operatorId.", tags = {
+	@Operation(summary = "Insert a new link between Service userId, surrogateId, serviceId and operatorId.", description = "It is used by SDK once the Service Linking has been completed at Cape. This link holds the matching between Service User Id (known only on Service side) and Surrogate Id (generated By Cape SDK).", tags = {
 			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the created UserSurrogateIdLink.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserSurrogateIdLink.class))) })
 	@Override
@@ -473,8 +468,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
 
-	@Operation(summary = "Return the Last Service Link Record Status by Slr Id.", tags = {
-			"Service Link Record" }, responses = {
+	@Operation(summary = "Get the link between Service userId, surrogateId, serviceId and operatorId.", description = "It is used to easily discover from the Service side if a Service User has a link to Cape for the specific Service managed by this SDK.", tags = {
+			"Service Linking" }, responses = {
 					@ApiResponse(description = "Returns the Last Service Link Record Status.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@GetMapping(value = "/userSurrogateIdLink")
@@ -491,17 +486,17 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	}
 
 	/**
-	 * Return changed Service Link Status Record, due to a status change request
-	 * started from Operator
+	 * Notify a changed Service Link Status Record to be saved by SDK, due to a
+	 * Service Link status changed starting from Operator
 	 * 
 	 * @throws ParseException
 	 * @throws JOSEException
 	 * @throws JsonProcessingException
 	 * @throws ServiceLinkStatusRecordNotValid
 	 **/
-	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
-			"Service Linking" }, responses = {
-					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+	@Operation(summary = "Notify a changed Service Link Status Record to be saved by SDK, due to a Service Link status change coming from Operator (Cape Server/User Dashboard).", description = "This API is used internally by Cape when a Service Link Status is changed by the User. SDK will append the Service Link Status Record to the status list of affected Service Link Record.", tags = {
+			"(Internal) Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 200 OK.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@PostMapping(value = "/slr/{slrId}/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> notifyServiceLinkStatusChanged(@PathVariable String slrId,
@@ -520,7 +515,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			 * Get existing Service Link Record associated to the input Service Link Status
 			 * Record
 			 */
-			ServiceLinkRecordDoubleSigned existingSlr = slrRepo.findByPayload_SlrId(slrId).orElseThrow(
+			slrRepo.findByPayload_SlrId(slrId).orElseThrow(
 					() -> new ServiceLinkRecordNotFoundException("No Service Link Record found with slrId: " + slrId));
 
 			slrRepo.addStatusToSlr(slrId, ssr);
@@ -537,9 +532,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	 * 
 	 * @throws ServiceLinkRecordNotFoundException
 	 **/
-	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
+	@Operation(summary = "Enable an existing disabled ('Removed' status) Service Link Record, due to a request started from Service.", description = "SDK will call Cape Server to change the Service Link status and will append the new Service Link Status Record to the status list of affected Service Link Record.", tags = {
 			"Service Linking" }, responses = {
-					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+					@ApiResponse(description = "Returns 201 Created and the new Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@PutMapping(value = "/slr/{slrId}/surrogate/{surrogateId}/services/{serviceId}")
 	public ResponseEntity<ServiceLinkStatusRecordSigned> enableServiceLink(@PathVariable String slrId,
@@ -558,14 +553,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	}
 
 	/**
-	 * Disable an existing disabled Service Link, due to a status change request
+	 * Disable an existing enabled Service Link, due to a status change request
 	 * started from Service
 	 * 
 	 * @throws ServiceLinkRecordNotFoundException
 	 **/
-	@Operation(summary = "Notify to the Service a status change in a Service Link Record.", tags = {
+	@Operation(summary = "Disable an existing enabled ('Enabled' status) Service Link Record, due to a request started from Service.", description = "SDK will call Cape Server to change the Service Link status and will append the new Service Link Status Record to the status list of affected Service Link Record.", tags = {
 			"Service Linking" }, responses = {
-					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
+					@ApiResponse(description = "Returns 201 Created and the new Service Link Status Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceLinkStatusRecordSigned.class))) })
 	@Override
 	@DeleteMapping(value = "/slr/{slrId}/surrogate/{surrogateId}/services/{serviceId}")
 
@@ -587,9 +582,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	/**
 	 * Fetch Consent Form from Consent Manager
 	 */
-	@Operation(summary = "Call Consent Manager to generate Consent Form for surrogateId, sinkId and sourceId (if any) in input.", tags = {
+	@Operation(summary = "Call Consent Manager to generate Consent Form for the input Surrogate Id, ServiceId Id, Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case).", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present and serviceId parameter represents the Sink Service Id. The fetched Consent Form will be used in the Give Consent API.", tags = {
 			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' mappings (3-party reuse) or from the datasets of the service (Within Service)", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
+					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' data mappings/concepts (3-party consenting case) or directly from the datasets required by the selected Purpose of the service (Within Service case).", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
 	@GetMapping(value = "/users/surrogates/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentForm> fetchConsentForm(@PathVariable String surrogateId,
@@ -612,11 +607,11 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	 * @throws ConsentRecordNotValid
 	 * @throws ConsentStatusRecordNotValid
 	 **/
-	@Operation(summary = "Verify and store a new Consent Record issued by the Operator.", tags = {
-			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "text/plain")) })
+	@Operation(summary = "Verify and store a new Consent Record issued by the Operator (Cape Consent Manager).", tags = {
+			"(Internal) Consenting" }, responses = {
+					@ApiResponse(description = "Returns 201 Created and the URI of the stored Consent Record.", responseCode = "201", content = @Content(mediaType = "text/plain")) })
 	@Override
-	@PostMapping(value = "/cr/cr_management", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value = "/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> storeNewConsentRecord(@RequestBody @Valid ConsentRecordSigned consentRecord)
 			throws ServiceLinkRecordNotFoundException, JsonProcessingException, ParseException, JOSEException,
 			ConsentRecordNotValid, ConsentStatusRecordNotValid {
@@ -642,13 +637,13 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * Verify input Consent Record and Consent Status Record signatures with Account
 		 * public key contained in the associated SLR
 		 */
-		RSAKey accountPublicKey = associatedSlr.getPayload().getCrKeys().get(0);
-		if (!sdkManager.verifyConsentRecordSigned(consentRecord, accountPublicKey))
+
+		if (!sdkManager.verifyConsentRecordSigned(consentRecord, associatedSlr))
 			throw new ConsentRecordNotValid("The signature of the input Consent Record is not valid");
 
 		ConsentStatusRecordSigned consentStatusRecord = consentRecord.getConsentStatusList()
 				.get(consentRecord.getConsentStatusList().size() - 1);
-		if (!sdkManager.verifyConsentStatusRecordSigned(consentStatusRecord, accountPublicKey))
+		if (!sdkManager.verifyConsentStatusRecordSigned(consentStatusRecord, associatedSlr))
 			throw new ConsentStatusRecordNotValid("The signature of the input Consent Status Record is not valid");
 
 		/*
@@ -673,7 +668,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	}
 
 	/**
-	 * Verify and store a new Consent Status Record issued by the Consent Manager
+	 * Verify and update the existing Consent Record issued by the Consent Manager
 	 * 
 	 * @throws ConsentStatusRecordNotValid
 	 * @throws ConsentRecordNotFoundException
@@ -683,23 +678,29 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	 * @throws JsonProcessingException
 	 * @throws ConsentRecordNotValid
 	 **/
-	@Operation(summary = "Verify and update the Consent Record (along with new Csr as last one in the csr list) issued by the Consent Manager.", tags = {
-			"Consenting" }, responses = {
+	@Operation(summary = "Verify and update the Consent Record (along with new Csr to be appended to the Csr list) issued by the Operator (Cape Consent Manager).", tags = {
+			"(Internal) Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created.", responseCode = "201", content = @Content(mediaType = "text/plain")) })
 	@Override
-	@PatchMapping(value = "/cr/cr_management", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> updateConsentRecordWithNewStatus(@RequestBody @Valid ConsentRecordSigned updatedCr)
+	@PatchMapping(value = "/consents/{crId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> updateConsentRecordWithNewStatus(@PathVariable String crId,
+			@RequestBody @Valid ConsentRecordSigned updatedCr)
 			throws ConsentStatusRecordNotValid, ConsentRecordNotFoundException, ServiceLinkRecordNotFoundException,
 			JsonProcessingException, ParseException, JOSEException, ConsentRecordNotValid {
 
-		String inputCrId = updatedCr.getPayload().getCommonPart().getCrId();
+		String bodyCrId = updatedCr.getPayload().getCommonPart().getCrId();
+
+		if (!bodyCrId.equals(crId))
+			throw new ConsentStatusRecordNotValid("The crId in the path and the crId in the body does not match");
+
 		ConsentStatusRecordSigned updatedCsr = updatedCr.getConsentStatusList()
 				.get(updatedCr.getConsentStatusList().size() - 1);
+
 		/*
-		 * Get existing Consent Record matching to the input Consent Record id
+		 * Get existing Consent Record matching to the input Consent Record Id
 		 */
-		ConsentRecordSigned existingCr = consentRecordRepo.findByPayload_commonPart_crId(inputCrId).orElseThrow(
-				() -> new ConsentRecordNotFoundException("The Consent Record with id: " + inputCrId + "was not found"));
+		ConsentRecordSigned existingCr = consentRecordRepo.findByPayload_commonPart_crId(bodyCrId).orElseThrow(
+				() -> new ConsentRecordNotFoundException("The Consent Record with id: " + bodyCrId + "was not found"));
 		List<ConsentStatusRecordSigned> existingCsrList = existingCr.getConsentStatusList();
 
 		/*
@@ -712,24 +713,30 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 		/*
 		 * Verify input Consent Record signatures (Cr, Csr list and last Csr) with
-		 * Account public key contained in the associated SLR
+		 * Account public key contained in the associated SLR (jwk field in protected
+		 * header of first signature)
 		 */
-		RSAKey accountPublicKey = associatedSlr.getPayload().getCrKeys().get(0);
-		if (!sdkManager.verifyConsentStatusRecordSigned(updatedCsr, accountPublicKey))
+		if (!sdkManager.verifyConsentStatusRecordSigned(updatedCsr, associatedSlr))
 			throw new ConsentStatusRecordNotValid("The signature of the input Consent Status Record is not valid");
 
-		if (!sdkManager.verifyConsentRecordSigned(updatedCr, accountPublicKey))
+		if (!sdkManager.verifyConsentRecordSigned(updatedCr, associatedSlr))
 			throw new ConsentRecordNotValid("The signature of the input Consent Record is not valid");
 
 		/*
-		 * Add input CSR to the existing CSR list and Verify CSR chain is intact
+		 * If Cape Server is sending forceUpdate=true, it means that a previous Cr
+		 * status change notification failed
+		 */
+//		if (!forceUpdate) {
+		/*
+		 * Add the new last CSR to the existing CSR list and Verify CSR chain is intact
 		 */
 		existingCsrList.add(updatedCsr);
-
 		if (!sdkManager.verifyConsentStatusChain(existingCsrList.stream().map(ConsentStatusRecordSigned::getPayload)
 				.toArray(ConsentStatusRecordPayload[]::new)))
 			throw new ConsentStatusRecordNotValid(
 					"The input Consent Record does not have a valid Consent Statuses chain");
+
+//		} 
 
 		// Store the Cr updated with the new Csr
 		updatedCr.set_id(new ObjectId(updatedCr.getPayload().getCommonPart().getCrId()));
@@ -741,9 +748,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	/**
 	 * Give Consent from Consent Manager
 	 */
-	@Operation(summary = "Give the Consent for the input ConsentForm. Return Consent Record signed with the Acccount private key.", tags = {
+	@Operation(summary = "Give the Consent for the input ConsentForm.", description = "Call Cape Consent Manager to start Consenting transaction and return the new Consent Record signed with the Cape Account private key.", tags = {
 			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
+					@ApiResponse(description = "Returns 201 Created with the new signed Consent Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
 	@PostMapping(value = "/users/surrogates/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
 			@RequestBody @Valid ConsentForm consentForm) {
@@ -785,16 +792,16 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", description = "In 3rd party consenting case the Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id.", responseCode = "200") })
 	@GetMapping(value = "/users/surrogates/{surrogateId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsBySurrogateIdAndQuery(
 			@PathVariable String surrogateId, @RequestParam(required = false) String serviceId,
 			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String datasetId,
-			ConsentRecordStatusEnum status, @RequestParam(required = false) String purposeId,
-			@RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
@@ -812,14 +819,15 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input User Id. Optionally can be filtered by ServiceId, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service User Id.", description = "Optionally can be filtered by Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the input User Id.", responseCode = "200") })
 	@GetMapping(value = "/users/{userId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByUserIdAndQuery(@PathVariable String userId,
 			@RequestParam(required = false) String serviceId, @RequestParam(required = false) String sourceServiceId,
-			@RequestParam(required = false) String datasetId, ConsentRecordStatusEnum status,
+			@RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
@@ -857,14 +865,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get the list of signed Consent Records for the input Service Id. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+	@Operation(summary = "Get the list of signed Consent Records for the input Service Id", description = "Optionally can be filtered by Service User Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records for the input ServiceId", responseCode = "200") })
 	@GetMapping(value = "/services/{serviceId}/consents", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(
-			@PathVariable String serviceId, @RequestParam(required = false) String sourceServiceId,
-			@RequestParam(required = false) String datasetId,
+			@PathVariable String serviceId, @RequestParam(required = false) String userId,
+			@RequestParam(required = false) String sourceServiceId, @RequestParam(required = false) String datasetId,
 			@RequestParam(required = false) ConsentRecordStatusEnum status,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
@@ -872,18 +880,25 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) {
 
-		if (checkConsentAtOperator)
+		if (StringUtils.isNotBlank(userId)) {
+			return this.getConsentRecordsByUserIdAndQuery(userId, serviceId, sourceServiceId, datasetId, status,
+					purposeId, purposeName, purposeCategory, processingCategory, checkConsentAtOperator, iatSort);
+		} else {
 
-			return ResponseEntity.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId,
-					null, serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
-					processingCategory, iatSort)));
-		else
-			return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId, datasetId,
-					status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
+			if (checkConsentAtOperator)
 
+				return ResponseEntity
+						.ok(Arrays.asList(clientService.callGetConsentRecordsByBusinessIdAndQuery(businessId, null,
+								serviceId, sourceServiceId, datasetId, status, purposeId, purposeName, purposeCategory,
+								processingCategory, iatSort)));
+			else
+				return ResponseEntity.ok(consentRecordRepo.findByServiceIdAndQuery(serviceId, sourceServiceId,
+						datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
+
+		}
 	}
 
-	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id. Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id.", description = "Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record(DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
 			"Consent Record" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
 	@GetMapping(value = "/consents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -908,9 +923,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 							datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
 	}
 
-	@Operation(summary = "Get the list of the pairs of signed Consent Records for this Service Provider by using its assigned Business Id. Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by iat timestamp value (DESC by default).", tags = {
+	@Operation(summary = "Get the list of the pairs of signed Consent Records (sink, source) managed by this SDK (associated to its Service Provider Business Id)", description = "Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. In 3rd party consenting case, the optional Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Results can be sorted by the value of the iat timestamp of Consent Record(DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
 			"Consent Record" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for services provided by this Service Provieder (SDK instance).", responseCode = "200") })
+					@ApiResponse(description = "Returns the list of signed Consent Records for all the Users for all services managed by this SDK (associated to its Service Provided Business Id.", responseCode = "200") })
 	@GetMapping(value = "/consents/pair", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<List<ConsentRecordSignedPair>> getConsentRecordPairsByBusinessIdAndQuery(
@@ -928,7 +943,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Call the Consent Manager to change status (from Service) of a Consent for the input SurrogateId, Slr Id and Cr Id.", tags = {
+	@Operation(summary = "Change the status (starting from Service) of an existing Consent Record associated to the input CrId, SlrId and SurrogateId.", description = "The new Status can contain not only the new state (Active, Disabled, Withdrawn), but also a new Resource Set or Sink Usage Rules. Call the Cape Consent Manager to change status (from Service) the existing Consent Record. This will trigger the notification from Cape to the SDK of the newly generated Consent Status Record.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the new Consent Status Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
 	@PostMapping(value = "/users/{surrogateId}/servicelinks/{slrId}/consents/{crId}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1009,8 +1024,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.ok(dataTransferResponse);
 	}
 
-	@Operation(summary = "Final End point to get Data Transfer at the Source.", tags = { "Data Request" }, responses = {
-			@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
+	@Operation(summary = "Final End point to perform Data Transfer from the Source Service.", tags = {
+			"Data Request" }, responses = {
+					@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc/send", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<DataTransferResponse> postDataTransfer(@RequestBody @Valid DataTransferRequest dataRequest,
@@ -1080,17 +1096,33 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return null;
 	}
 
-	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
-			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
+	@Operation(summary = "Create a new CaPe Account starting from Service.", tags = {
+			"(Internal) Service Linking" }, responses = {
+					@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
 	@Override
 	@PostMapping(value = "/accounts")
-	public ResponseEntity<Account> createAccount(@RequestBody @Valid Account account) {
+	public ResponseEntity<Account> createCapeAccount(@RequestBody @Valid Account account) {
 
 		return clientService.createCapeAccount(account);
 
 	}
 
-	@Operation(summary = "Enforce Usage Rule associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
+//	@Operation(summary="Notify to this SDK a Cape Account deletion.", description = "Notify to this SDK that a CaPe Account has been deleted by passing the SurrogateIds for which associated Service Links and Consent Record are to be disabled/withdrawn.", tags = { "Account" }, responses = {
+//			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
+//	@Override
+//	@DeleteMapping(value = "/accounts")
+//	public ResponseEntity<Account> notifyCapeAccountDeletion(@RequestBody List<String> surrogateIds) {
+//		return null;
+//
+//		/*
+//		 * For each input SurrogateId: 
+//		 * 
+//		 * - Set matching Service Link Record to "Removed"
+//		 * - Set related Consent Records to ?
+//		 */
+//	}
+
+	@Operation(summary = "Enforce Usage Rules associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
 			"Data Request" }, responses = {
 					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
 	@PostMapping(value = "/services/consents/enforceUsageRules")

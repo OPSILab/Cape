@@ -17,17 +17,17 @@
 package it.eng.opsi.cape.consentmanager.utils;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64URL;
 
 public class Base64URLSerializer extends StdSerializer<Base64URL> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Base64URLSerializer() {
 		this(null);

@@ -24,8 +24,6 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
@@ -135,7 +133,7 @@ public interface ICapeServiceSdkController {
 			throws ServiceLinkRecordNotFoundException, JsonProcessingException, ParseException, JOSEException,
 			ConsentRecordNotValid, ConsentStatusRecordNotValid;
 
-	public abstract ResponseEntity<String> updateConsentRecordWithNewStatus(@Valid ConsentRecordSigned updatedCr)
+	public abstract ResponseEntity<String> updateConsentRecordWithNewStatus(String crId, ConsentRecordSigned updatedCr)
 			throws ConsentStatusRecordNotValid, ConsentRecordNotFoundException, ServiceLinkRecordNotFoundException,
 			JsonProcessingException, ParseException, JOSEException, ConsentRecordNotValid;
 
@@ -150,7 +148,7 @@ public interface ICapeServiceSdkController {
 			ProcessingCategory processingCategory, Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByServiceIdAndQuery(String serviceId,
-			String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
+			String userId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
 			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
 			Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
@@ -196,5 +194,7 @@ public interface ICapeServiceSdkController {
 	public abstract ResponseEntity<String> getLinkSessionCode(String serviceId, String userId, String surrogateId,
 			String returnUrl, Boolean forceLinking) throws ServiceManagerException, SessionNotFoundException;
 
-	public abstract ResponseEntity<Account> createAccount(Account account);
+	public abstract ResponseEntity<Account> createCapeAccount(Account account);
+
+//	public abstract ResponseEntity<Account> notifyCapeAccountDeletion(List<String> surrogateIds);
 }

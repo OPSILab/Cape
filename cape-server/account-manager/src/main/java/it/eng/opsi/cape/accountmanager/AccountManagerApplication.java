@@ -17,6 +17,7 @@
 package it.eng.opsi.cape.accountmanager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
@@ -63,7 +64,9 @@ import com.nimbusds.jose.util.Base64URL;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import it.eng.opsi.cape.accountmanager.repository.Base64URLReadConverter;
 import it.eng.opsi.cape.accountmanager.repository.Base64URLWriteConverter;
 import it.eng.opsi.cape.accountmanager.repository.JWSHeaderReadConverter;
@@ -196,9 +199,18 @@ public class AccountManagerApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public OpenAPI customOpenAPI() {
-		return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key",
-				new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("token")));
+	public OpenAPI customOpenAPI(@Value("${server.servlet.context-path}") String contextPath,
+			@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuerUri) {
+		return new OpenAPI().addServersItem(new Server().url(contextPath))
+				.components(new Components()
+						.addSecuritySchemes("openid-connect",
+								new SecurityScheme().type(SecurityScheme.Type.OPENIDCONNECT)
+										.openIdConnectUrl(issuerUri + "/.well-known/openid-configuration"))
+						.addSecuritySchemes("bearer-jwt",
+								new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")
+										.bearerFormat("JWT")))
+				.addSecurityItem(new SecurityRequirement().addList("bearer-jwt", Arrays.asList("read", "write")))
+				.addSecurityItem(new SecurityRequirement().addList("openid-connect", Arrays.asList("read", "write")));
 	}
 
 	@Bean

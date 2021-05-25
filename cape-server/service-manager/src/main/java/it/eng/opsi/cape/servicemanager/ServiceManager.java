@@ -187,7 +187,7 @@ public class ServiceManager {
 			String accountId, String username) {
 
 		return new ServiceLinkRecordPayload(version, slrId, operatorId, serviceId, serviceUri, serviceName, popKey,
-				serviceDescriptionVersion, surrogateId, operatorKey, new ArrayList<RSAKey>(), iat);
+				serviceDescriptionVersion, surrogateId, operatorKey, iat);
 	}
 
 	public ServiceLinkStatusRecordPayload generateSsrPayload(String version, String ssrId, String surrogate,

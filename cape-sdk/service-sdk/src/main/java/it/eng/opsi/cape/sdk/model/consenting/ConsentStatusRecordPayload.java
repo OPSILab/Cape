@@ -16,7 +16,6 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk.model.consenting;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javax.validation.Valid;

@@ -25,8 +25,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.util.Base64URL;
 

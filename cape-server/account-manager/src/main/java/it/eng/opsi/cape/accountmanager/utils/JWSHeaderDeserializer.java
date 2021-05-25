@@ -17,20 +17,21 @@
 package it.eng.opsi.cape.accountmanager.utils;
 
 import java.io.IOException;
-import java.text.ParseException;
-
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.jwk.RSAKey;
 
 
 public class JWSHeaderDeserializer extends StdDeserializer<JWSHeader> {
 
-	  public JWSHeaderDeserializer() { 
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public JWSHeaderDeserializer() { 
 	        this(null); 
 	    } 
 	 

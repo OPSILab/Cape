@@ -20,13 +20,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nimbusds.jose.jwk.RSAKey;
-
 import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Getter
