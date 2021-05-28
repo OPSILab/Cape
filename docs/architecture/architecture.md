@@ -42,6 +42,18 @@ The Cape Suite comprises the following Frontend dashboards, which will be used b
  - **User Self-Service Dashboard**: Single point for the End User to have an overview, verify and modify which data are used, and how and for which purpose. In addition can view Event Logs and modify Linked Services and Consents previously given when logged at the Service ends. (See [User Self-Service Dashboard section](dashboards/user-dashboard/index.md) ).
     
  - **Data Controller Dashboard**: Entry point for the Service Provider to manage the Semantic Descriptions and registrations of its own provided Services, view and manage the Service Linking and Consents status given by all the Users of its registered services.(See [Data Controller Dashboard section](dashboards/data-controller-dashboard/index.md) ).
-	
-	
+
+---
+## Identity and Access Management
+
+CaPe must interact with any Identity Manager that supports [OpenId Connect](https://openid.net/connect/) and OAuth2 authorization framework.
+
+Cape Dashboards will use the Open Id Connect protocol upon the OAuth2 Authorization workflows, in order to perform User authentication and obtain an Access Token (JWT), which will be used to grant access to Cape APIs. 
+Similarly, a client application/service wanting to integrate with Cape, will perform OAuth2 Authorization, obtaining an Access Token to be used in the request made to the Cape Service SDK APIs.
+
+**Note.** 
+It is recommended to use [Keycloak Identity and Access Management](https://www.keycloak.org/), which will be used as reference for this guide.
+
+
+
 

@@ -5,7 +5,7 @@ Cape SDK comes with the Angular Frontend Plugin, an Angular module providing:
   - **Component**: (cape-sdk-angular.component) Provides a "CaPe button" with contextual menu providing options for the Linking e Consenting functionalities. 
                   Its component selector will be embedded in the template of the service pages.
 				  
-  - ** Angular injectable**: (cape-sdk-angular.service) Injectable service providing methods to make HTTP calls to Cape SDK APIs. 
+  - **Angular Injectable service**: (cape-sdk-angular.service) Injectable service providing methods to make HTTP calls to Cape SDK APIs. 
                              It must be injected into Typescript part of existing Angular project (Host component).
  
                                     

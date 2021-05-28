@@ -66,7 +66,7 @@ fields of `config.json` configuration file, located in `dist/assets/` folder.
 (These modifications can be made also in `cape-dashboard/src/assets/config.json` file before building the Application, as described in the section above).
 
 
-- **`serviceRegistry.url`**: with endpoint (**`host`:`port`/api/v2**) where Service Registry component of Cape Server is listening:
+- **`serviceRegistry.url`**: with endpoint (**`host`:`port`**) where Service Registry component of Cape Server is listening:
 
 
 ```
@@ -85,7 +85,7 @@ fields of `config.json` configuration file, located in `dist/assets/` folder.
 ``` 
 
 
-- **`system.dashUrl`**: with endpoint (**`host`:`port`**) where User Self-Service Dashboard is running (depends on Web server configuration or if running with Docker on different published port).
+- **`system.dashboardUrl`**: with endpoint (**`host`:`port`**) where User Self-Service Dashboard is running (depends on Web server configuration or if running with Docker on different published port).
 
 ```   
     "serviceEditorUrl": "http://localhost/cape-dashboard",
@@ -127,38 +127,27 @@ fields of `config.json` configuration file, located in `dist/assets/` folder.
 
 ##### IDM Configuration for OAuth2 authentication
 
-CaPe Data Controller Dashboard uses the Oauth2 Implicit flow to perform authentication and authorize to retrieve User information from the configured Idm (whose details, such as email and username will be used to create a Cape Account on first login).
+CaPe User Dashboard uses the Oauth2 Client Credentials flow (without client secret at moment, soon PKCE will be implemented) to perform authentication and get User information from claims of the issued JWT (in particular the email will be used to create a Cape Account on first login).
 
-In order to correctly execute the Implicit OAuth2 flow, CaPe User Self-Service Dashboard must be registered as an **Application** in the IdM, by
-specifying, in the registration form, following parameters:
+In order to correctly execute the OAuth2 flow, CaPe User Self-Service Dashboard will act as the `cape-server` client application previously registered in the IdM (Keycloak):
 
-  -   **Url**: **`http://localhost/cape-dashboard/login`** 
-  -   **Callback Url**: **`http://localhost/cape-dashboard/loginPopup`**
+- Configure correctly the Valid Redirect URIs section [see here](https://www.keycloak.org/docs/latest/server_admin/#_clients) with.:
+  
+    * **`http://localhost/cape-dashboard/login/*`**
 
-**Note**. Replace `localhost` with the real hostname where the Dashboard is deployed.
+- If the Dashboard is going to be deployed in a different domain (e.g. http://localhost) than the Keycloak one (e.g. https://www.cape-suite.eu), configure the Web Origins section accordingly, in order to correctly enable CORS requests between the Dashboard and Keycloak.
+  
+**Note**. Replace `http://localhost` with the real hostname (include http(s) protocol) where the Dashboard is deployed and accessible from browser.
 
-**Note**. Please see the
-[Fiware Identity Manager](https://fiware-idm.readthedocs.io/en/latest/oauth/introduction/index.html)
-manual for further information about the registration process and
-**Oauth2** APIs.
 
-Change following fields in `config.json` file:
+- Change following fields in `src/assets/config.json` file:
 
-  - **`system.idmHost`** with endpoint (**`host`:`port`**) where IdM (e.g. Keyrock) has been deployed.
+    * **`system.auth.idmHost`** with endpoint (**`protocol://host`:`port`**) where IdM has been deployed.
+  
+    * **`system.auth.clientId`** with Client Id (`cape-server`) provided by application registration in the Idm.
 
-``` 
-    "idmHost": "https://IDM_HOST",
-```	
 
-  - **`system.clientId`** with Client Id provided by application registration in the Idm.
-
-```
-    "clientId": "c3b0f7d9-412b-4309-ac70-94a5cb04fcf7",
-```
-
-**Note**. Similar configurations and approach can be applied for any other IdM capable of OAuth2 functionalities (e.g. **Keycloak**).
-
-**IMPORTANT Note**. In both installatione modes, will be used `src/assets/config.json` file to configure the portal application.
+**Note**. Similar configurations and approach can be applied for any other IdM capable of OAuth2 functionalities.
 
 **SOON** will be used also environment variables in order to ease the configuration in case of installation with Docker.
 

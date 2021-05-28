@@ -19,9 +19,9 @@ installed on your computer:
 
 | Name                                                                                                           | Version              | Licence                                 |
 | -------------------------------------------------------------------------------------------------------------- | -------------------- |---------------------------------------- |
-| [Java OpenJDK](https://openjdk.java.net/)                                                                      | >= 8                 | GNU General Public License Version 2.0  |
-| [Apache Tomcat](https://tomcat.apache.org)                                                                     | >=8.5                | Apache License v.2.0                    |
-| [MongoDB Community Server](www.mongodb.com)                                                                    | >=4.0.9              | Server Side Public License (SSPL)       |
+| [Java OpenJDK](https://openjdk.java.net/)                                                                      | >= 15                 | GNU General Public License Version 2.0  |
+| [Apache Tomcat](https://tomcat.apache.org)                                                                     | >=9.0                | Apache License v.2.0                    |
+| [MongoDB Community Server](www.mongodb.com)                                                                    | >=4.2.9              | Server Side Public License (SSPL)       |
 | [Maven](https://maven.apache.org)                                                                              | >=3.5.0              | Apache License 2.0                      |
 
 
@@ -200,52 +200,29 @@ Following properties wil depend on MongoDB installation:
 ---
 ### IdM Configuration
 
-CaPe Server will communicate with Fiware Keyrock Identity Manager (or any other OAuth2 capable IdM, e.g. **Keycloak**)  to:
+Each component of CaPe Server will communicate with an Identity Manager acting as Oauth2 Authorization Server (e.g. **Keycloak**)  to:
 
  - Verify token issued when calling component APIs:
     
-    Modify **`security.oauth2.resource.user-info-uri`** with Idm User Info URI (default for Keyrock: `http(s)://IDM_HOST:3000/user`)
+    Modify **`spring.security.oauth2.resourceserver.jwt.issuer-uri`** with the JWT Issuer Uri of installed Idm (e.g. `https://IDM_HOST/auth/realms/Cape`)
 
- - Perform the "Client credentials" OAuth2 authorization flow through the IdM 
-   Tipically not used since CaPe Dashboards will use by default the Implicit flow directly from frontend.
-   In specific case (e.g. SPID and EIDAS login) CaPe Dashboards could use Client Credentials grant.
-   
-    See below and the [Account Manager APIs]() for further information.
+**Note**. This endpoint will be used to verify token issued for the Oauth2 client application `cape-server` registered during Idm/Keycloak installation [(see this section)](./index.md#identity-manager).
 
+**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keycloak) has been deployed.
 
+### CORS Configuration
 
-##### Configure CaPe for Client Credentials flow (optional)
+If the Self Service User Dashboard is going to be deployed in a different domain (e.g. http://localhost) than the one of Cape Server components (e.g. https://www.cape-suite.eu), modify one of the following appropriately:
 
-In order to correctly execute the Client Credentials OAuth2 flow CaPe Server must be registered as an **Application** in the Fiware IdM, by
-specifying, in the registration form, following parameters (considering as example Cape User Self-Service Dashboard running on localhost):
+ - **cape.cors.allowed-origin-patterns**
+ - **cape.cors.allowed-origins**
 
-  -   **Url**: **`http://localhost/cape-dashboard/login`** 
-  -   **Callback Url**: **`http://localhost/cape-dashboard/loginPopup`**
-
-
-**Note**. Please see the
-[Fiware Identity Manager](https://fiware-idm.readthedocs.io/en/latest/oauth/introduction/index.html)
-manual for further information about the registration process and
-**Oauth2** APIs.
-
-
-
-The registration process, described above, provides **`Client Id`** and **`Client Secret`**, which will be used by Cape to perform the Oauth2 flow as a Client.
-
-Modify following properties (only in Account Manager configuration, since it implements the [APIs]() to perform Oauth "authorize" call:
-
-  - **idm.host**: (default for Keyrock: `http://IDM_HOST:3000`)
-  - **idm.clientId**, **idm.clientSecret**: Client Id and Client Secret provided by application registration in the Idm.
-  
-
-**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keyrock) has been deployed.
-
-**Note**. Similar configurations and approach can be applied for any other IdM exposing OAuth2 functionalities (e.g Keycloak).
+in order to correctly enable CORS requests between the Dashboard and Cape Server APIs.
 
 ---
 ### Applying configuration
 
-In order to apply all the configuration done previously, restart the Tomcat and
+In order to apply all the configuration done previously, restart the Tomcat server and
 wait until the artifacts are redeployed. 
 
 As a result, Cape Server components will listen on Tomcat endpoint at different contexts.

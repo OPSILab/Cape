@@ -89,17 +89,22 @@ the default `value` defined in the properties file.
 
 As other configuration (see next sections) relies on docker networking lookup, the only environment variables to be modified is:
 
- - **`CAPE_IDM_USERINFOURI`**: Idm User Info URI (default for Keyrock: `http(s)://IDM_HOST:3000/user`)
+ - **`CAPE_IDM_ISSUER_URI`**: with the JWT Issuer Uri of installed Idm (e.g. `https://IDM_HOST/auth/realms/Cape`)
 
-Optionally (only for Account Manager, see [Configure CaPe for Client Credentials flow](install-cape-server-war.md) section):
 
-  - **`CAPE_IDM_HOST`**: default for Keyrock: `http://IDM_HOST:3000`
-  - **`CAPE_IDM_CLIENTID`**, **`CAPE_IDM_CLIENTSECRET`**: Client Id and Client Secret provided by IdM registration.
- 
-**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keyrock) has been deployed.
+**Note**. This endpoint will be used to verify token issued for the Oauth2 client application `cape-server` registered during Idm/Keycloak installation [(see this section)](./index.md#identity-manager).
 
-**Note**. Similar configurations and approach can be applied for any other IdM exposing OAuth2 functionalities (e.g Keycloak).
+**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keycloak) has been deployed.
 
+
+#### CORS Configuration
+
+If the User Self-Service Dashboard is going to be deployed in a different domain (e.g. http://localhost) than the one of Cape Server components (e.g. https://www.cape-suite.eu), modify one of the following environment variable appropriately:
+
+  - **CAPE_IDM_ALLOWED_ORIGIN_PATTERNS**
+  - **CAPE_IDM_ALLOWED_ORIGINS**
+
+in order to correctly enable CORS requests between the Dashboard and Cape Server APIs.
 
 #### Inter-component communication variables (keep untouched by default)
 

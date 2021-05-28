@@ -1,6 +1,6 @@
 # Installing CaPe Server
 
-This section covers the steps needed to properly install CaPe Server.
+This section covers the steps needed to properly install CaPe Server backend.
 
 ---
 
@@ -15,7 +15,7 @@ Its main components are:
  - **Auditlog Manager**: Collects aggregated auditing statistics, triggered by incoming Event Logs (ServiceLink, Consent or Data Processing) regarding a specific Account.
  - **Service Registry** : Collects the Service Descriptions and registrations (Signing keys and certificates).
 
-Each of them are implemented as Spring Boot Java services, and will be deployed with a tighly coupled storage service (MongoDB).
+Each of them are implemented as Spring Boot Java services, and will be deployed with a tighly coupled storage service (MongoDB 4.2+).
 
 Two installation modes are available:
 

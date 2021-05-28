@@ -19,9 +19,9 @@ installed on your computer:
 
 | Name                                                                                                           | Version              | Licence                                 |
 | -------------------------------------------------------------------------------------------------------------- | -------------------- |---------------------------------------- |
-| [Java OpenJDK](https://openjdk.java.net/)                                                                      | >= 8                 | GNU General Public License Version 2.0  |
-| [Apache Tomcat](https://tomcat.apache.org)                                                                     | >=8.5                | Apache License v.2.0                    |
-| [MongoDB Community Server](www.mongodb.com)                                                                    | >=4.0.9              | Server Side Public License (SSPL)       |
+| [Java OpenJDK](https://openjdk.java.net/)                                                                      | >= 15                 | GNU General Public License Version 2.0  |
+| [Apache Tomcat](https://tomcat.apache.org)                                                                     | >=9.0                | Apache License v.2.0                    |
+| [MongoDB Community Server](www.mongodb.com)                                                                    | >=4.2.9              | Server Side Public License (SSPL)       |
 | [Maven](https://maven.apache.org)                                                                              | >=3.5.0              | Apache License 2.0                      |
 
 &nbsp;
@@ -97,9 +97,24 @@ Following properties wil depend on MongoDB installation:
 
 ### IdM Configuration
 
-CaPe SDK Client will communicate with Fiware Keyrock Identity Manager to verify token issued when calling component APIs:
+CaPe Service SDK client will communicate with an Identity Manager acting as Oauth2 Authorization Server (e.g. **Keycloak**)  to:
 
-  - Modify **`security.oauth2.resource.user-info-uri`** with Idm User Info URI (default for Keyrock: `http(s)://KEYROCK_HOST:3000/user`)
+ - Verify token issued when calling component APIs:
+    
+    Modify **`spring.security.oauth2.resourceserver.jwt.issuer-uri`** with the JWT Issuer Uri of installed Idm (e.g. `https://IDM_HOST/auth/realms/Cape`)
+
+**Note**. This endpoint will be used to verify token issued for the Oauth2 client application `cape-service-sdk` registered during Idm/Keycloak installation [(see this section)](./index.md#identity-manager).
+
+**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keycloak) has been deployed.
+
+### CORS Configuration
+
+If the Data Controller Dashboard are going to be deployed in a different domain (e.g. http://localhost) than the one of Cape Service SDK client (e.g. https://www.cape-suite.eu), modify one of the following appropriately:
+
+ - **cape.cors.allowed-origin-patterns**
+ - **cape.cors.allowed-origins**
+
+in order to correctly enable CORS requests between the Dashboard and Cape Service SDK APIs.
 
 ### Applying configuration
 
@@ -217,9 +232,22 @@ the default `value` defined in the properties file.
 
 As other configuration (see next sections) relies on docker networking lookup, the only environment variables to be modified is:
 
- - **`CAPE_IDM_USERINFOURI`**: Idm User Info URI (default for Keyrock: `http(s)://IDM_HOST:3000/user`)
+ - **`CAPE_IDM_ISSUER_URI`**: with the JWT Issuer Uri of installed Idm (e.g. `https://IDM_HOST/auth/realms/Cape`)
 
-**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keyrock) has been deployed.
+
+**Note**. This endpoint will be used to verify token issued for the Oauth2 client application `cape-service-sdk` registered during Idm/Keycloak installation [(see this section)](./index.md#identity-manager).
+
+**Note.** Change **IDM_HOST** with the real hostname where IdM (e.g. Keycloak) has been deployed.
+
+### CORS Configuration
+
+If the Data Controller Dashboard and/or Services that will be registered and integrated with Cape SDK are going to be deployed in a different domain (e.g. http://localhost) than the one of Cape Service SDK (e.g. https://www.cape-suite.eu), modify one of the following environment variable appropriately:
+
+  - **CAPE_IDM_ALLOWED_ORIGIN_PATTERNS**
+  - **CAPE_IDM_ALLOWED_ORIGINS**
+
+in order to correctly enable CORS requests between the Dashboard and Cape Server APIs.
+
 
 #### Inter-component communication variables (keep untouched by default)
 
