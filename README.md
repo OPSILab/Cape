@@ -39,7 +39,7 @@ The User Guide for CaPe Dashboards can be found at the corresponding section of
 
 ## API
 
-The Cape APIs Introduction can be found the corresponding section of
+The Cape APIs Introduction can be found at the corresponding section of
 [Read The Docs](https://cape-suite.readthedocs.io/en/latest/api/index.md).
   
 The SwaggerUI - OpenAPI 3 documentation can be found here:

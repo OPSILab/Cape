@@ -16,18 +16,14 @@
  ******************************************************************************/
 package it.eng.opsi.cape.serviceregistry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
-import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver;
 import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
@@ -42,18 +38,26 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class MongoConfiguration {
 
-	
 	private final MongoTemplate mongoTemplate;
 
 	private final MongoConverter mongoConverter;
 
-
+	@SuppressWarnings("unchecked")
 	@EventListener(ApplicationReadyEvent.class)
 	public void initIndicesAfterStartup() {
 		log.info("Mongo InitIndicesAfterStartup init");
 		long init = System.currentTimeMillis();
 
 		MappingContext mappingContext = this.mongoConverter.getMappingContext();
+
+		/*
+		 * Ensure serviceId and identifier indexes on ServiceEntry explicitly (to avoid missing @index
+		 * annotation on class after regeneration with json2pojo)
+		 */
+		mongoTemplate.indexOps("serviceEntry") // collection name string or .class
+				.ensureIndex(new Index().on("serviceId", Sort.Direction.ASC).unique());
+		mongoTemplate.indexOps("serviceEntry") // collection name string or .class
+		.ensureIndex(new Index().on("identifier", Sort.Direction.ASC).unique());
 
 		if (mappingContext instanceof MongoMappingContext) {
 			MongoMappingContext mongoMappingContext = (MongoMappingContext) mappingContext;

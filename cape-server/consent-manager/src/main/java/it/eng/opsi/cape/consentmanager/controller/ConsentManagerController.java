@@ -110,7 +110,7 @@ import it.eng.opsi.cape.serviceregistry.data.ServiceInstance;
 import lombok.extern.slf4j.Slf4j;
 
 @OpenAPIDefinition(tags = {
-		@Tag(name = "Consent Record", description = "Consent Manager APIs to manage CaPe Consent Records."),
+		@Tag(name = "Consent Record", description = "Consent Manager APIs to query CaPe Consent Records."),
 		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations.") }, info = @Info(title = "CaPe API - Consent Manager", description = "CaPe APIs used to manage CaPe Consent Form, Consent Records and consenting operations", version = "2.0"))
 @RestController
 @RequestMapping("/api/v2")

@@ -203,9 +203,10 @@ public class CapeServiceSdkManager {
 
 	}
 
-	public List<ServiceEntry> getServices(Boolean onlyRegistered, String businessId) throws ServiceManagerException {
+	public List<ServiceEntry> getServices(Boolean onlyRegistered, String serviceUrl, String businessId)
+			throws ServiceManagerException {
 
-		return clientService.getServicesDescriptionsFromRegistry(onlyRegistered, businessId);
+		return clientService.getServicesDescriptionsFromRegistry(onlyRegistered, serviceUrl, businessId);
 	}
 
 	public ServiceEntry getService(String serviceId, Boolean onlyRegistered)
@@ -269,7 +270,8 @@ public class CapeServiceSdkManager {
 		JWSHeader protectedSlrHeader = JWSHeader.parse(associatedSlr.getSignatures().get(0).get_protected());
 
 		RSAKey accountPublicKeyFromAssociatedSlr = (RSAKey) protectedSlrHeader.getJWK();
-		return cryptoService.verifyConsentStatusRecordSigned(signedConsentStatusRecord, accountPublicKeyFromAssociatedSlr);
+		return cryptoService.verifyConsentStatusRecordSigned(signedConsentStatusRecord,
+				accountPublicKeyFromAssociatedSlr);
 	}
 
 	/*

@@ -121,12 +121,11 @@ public class ClientService {
 
 	}
 
-	public List<ServiceEntry> getServicesDescriptionsFromRegistry(Boolean onlyRegistered, String businessId)
+	public List<ServiceEntry> getServicesDescriptionsFromRegistry(Boolean onlyRegistered, String serviceUrl, String businessId)
 			throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<ServiceEntry[]> response = restTemplate.getForEntity(
-				serviceRegistryHost + "/api/v2/services?onlyRegistered=" + onlyRegistered + "&businessId=" + businessId,
+		ResponseEntity<ServiceEntry[]> response = restTemplate.getForEntity(UriComponentsBuilder.fromHttpUrl(serviceRegistryHost + "/api/v2/services?onlyRegistered={onlyRegistered}&serviceUrl={serviceUrl}&businessId={businessId}").build(onlyRegistered, serviceUrl, businessId),
 				ServiceEntry[].class);
 
 		HttpStatus responseStatus = response.getStatusCode();

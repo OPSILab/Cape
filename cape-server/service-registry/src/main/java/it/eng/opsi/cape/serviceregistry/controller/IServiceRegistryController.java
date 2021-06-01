@@ -19,8 +19,6 @@ package it.eng.opsi.cape.serviceregistry.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
 import it.eng.opsi.cape.exception.PurposeIdNotFoundException;
 import it.eng.opsi.cape.exception.ServiceNotEditableException;
@@ -34,9 +32,11 @@ import it.eng.opsi.cape.serviceregistry.model.ServiceReportGroupingCriteria;
 public interface IServiceRegistryController {
 
 	public abstract ResponseEntity<List<ServiceEntry>> getServices(String serviceName, String serviceUrl,
-			String businessId, Boolean onlyRegistered, Boolean withSignature, Boolean withCert) throws ServiceNotFoundException;
+			String businessId, Boolean onlyRegistered, Boolean withSignature, Boolean withCert)
+			throws ServiceNotFoundException;
 
-	public abstract ResponseEntity<ServiceEntry> getServiceById(String serviceId, Boolean onlyRegistered) throws ServiceNotFoundException;
+	public abstract ResponseEntity<ServiceEntry> getServiceById(String serviceId, Boolean onlyRegistered)
+			throws ServiceNotFoundException;
 
 	public abstract ResponseEntity<String> getServicesCount(Boolean onlyRegistered);
 

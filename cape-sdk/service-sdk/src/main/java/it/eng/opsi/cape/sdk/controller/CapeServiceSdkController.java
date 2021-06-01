@@ -128,7 +128,8 @@ import lombok.extern.slf4j.Slf4j;
 		@Tag(name = "Service Entry", description = "Service Description APIs to get and manage service entry descriptions."),
 		@Tag(name = "Service Management", description = "Cape SDK APIs to handle Service Registrations managed by this SDK and already present in the Cape Service Registry."),
 		@Tag(name = "Service Link Record", description = "Cape SDK APIs to manage Service Link Records."),
-		@Tag(name = "Consenting", description = "Consent Manager APIs to perform CaPe Consenting operations."),
+		@Tag(name = "Consent Record", description = "Cape SDK APIs to query CaPe Consent Records."),
+		@Tag(name = "Consenting", description = "Cape SDK APIs to perform CaPe Consenting operations."),
 		@Tag(name = "(Internal) Consenting", description = "Consent Manager APIs to perform internal communications between SDK and Cape Server during Consenting operations. These endpoints are part of Consenting transaction and should not be called independently.") })
 @RestController
 @RequestMapping("/api/v2")
@@ -313,15 +314,16 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Get services descriptions (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get services managed by this SDK (associated to its Service Provider Business Id).", tags = {
+	@Operation(summary = "Get services descriptions (optionally only the ones registered to CaPe) managed by this SDK. Optionally can be filtered by Service Identifier (URI).", description = "Get services managed by this SDK (associated to its Service Provider Business Id).", tags = {
 			"Service Entry" }, responses = {
 					@ApiResponse(description = "Returns 200 OK and the list of requested services", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
 	@GetMapping(value = "/services")
-	public ResponseEntity<List<ServiceEntry>> getServices(@RequestParam(defaultValue = "false") Boolean onlyRegistered)
-			throws ServiceManagerException {
+	public ResponseEntity<List<ServiceEntry>> getServices(@RequestParam(defaultValue = "false") Boolean onlyRegistered,
+			@RequestParam(required = false) String serviceUrl) throws ServiceManagerException {
 
-		return ResponseEntity.status(HttpStatus.OK).body(sdkManager.getServices(onlyRegistered, businessId));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(sdkManager.getServices(onlyRegistered, serviceUrl, businessId));
 	}
 
 	@Operation(summary = "Get Service Description by ServiceId (optionally only the ones registered to CaPe) managed by this SDK.", description = "Get service managed by this SDK (associated to the Service Provider Business Id).", tags = {
@@ -1124,30 +1126,48 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	@Operation(summary = "Enforce Usage Rules associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
 			"Data Request" }, responses = {
-					@ApiResponse(description = "Returns the list of signed Consent Records belonging to the User linked with the input Surrogate Id", responseCode = "200") })
+					@ApiResponse(description = "Returns the input body with fields filtered according to the Consent Recors associated to the input UserId", responseCode = "200") })
 	@PostMapping(value = "/services/consents/enforceUsageRules")
 	@Override
 	public ResponseEntity<Object> enforceUsageRulesToPayload(@RequestParam(required = true) String userId,
-			@RequestParam(required = true) String sinkServiceId, @RequestParam(required = false) String sourceServiceId,
-			@RequestParam(required = false) String datasetId, @RequestParam(required = false) String purposeId,
-			@RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) String sinkServiceId,
+			@RequestParam(required = false) String sourceServiceId,
+			@RequestParam(required = false) String sinkServiceUrl,
+			@RequestParam(required = false) String sourceServiceUrl, @RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,
 			@RequestParam(required = false) ProcessingCategory processingCategory,
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
 			@RequestBody Map<String, Object> dataObject)
 			throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException {
 
+		List<ConsentRecordSigned> matchingConsents = null;
 		/*
 		 * Get active Consent Records that match with UserId and Sink-Source Service
 		 * pair
 		 */
-		List<ConsentRecordSigned> matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId,
-				sourceServiceId, datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory,
-				processingCategory, checkConsentAtOperator, Sort.Direction.ASC).getBody();
+
+		if (StringUtils.isNotBlank(sinkServiceId) && StringUtils.isNotBlank(sourceServiceId))
+			matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId, sourceServiceId, datasetId,
+					ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory, processingCategory,
+					checkConsentAtOperator, Sort.Direction.ASC).getBody();
+		else if (StringUtils.isNotBlank(sinkServiceUrl) && StringUtils.isNotBlank(sourceServiceUrl)) {
+			/*
+			 * Get Service descrcriptions from Service Urls in input (identifier) to get
+			 * corresponding IDs
+			 */
+			ServiceEntry sinkService = sdkManager.getServices(true, sinkServiceUrl, businessId).get(0);
+			ServiceEntry sourceService = sdkManager.getServices(true, sourceServiceUrl, businessId).get(0);
+
+			matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkService.getServiceId(),
+					sourceService.getServiceId(), datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName,
+					purposeCategory, processingCategory, checkConsentAtOperator, Sort.Direction.ASC).getBody();
+
+		}
 
 		if (matchingConsents == null || matchingConsents.isEmpty())
 			throw new ConsentRecordNotFoundException(
-					"No Usage Rules or Active Consent Record found for the input UserId and Sink-Source Service Ids.");
+					"No Usage Rules or Active Consent Record found for the input UserId and Sink-Source Service Ids/Urls.");
 
 		// If any, there will be only one Active Matching Consent for input UserId and
 		// Sink-Source

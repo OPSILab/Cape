@@ -37,6 +37,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
 import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
@@ -60,46 +61,53 @@ public class CapeServiceSdkExceptionHandler extends ResponseEntityExceptionHandl
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
+	@ExceptionHandler(ConsentRecordNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(ConsentRecordNotFoundException ex, HttpServletRequest req) {
+
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
+	}
+	
 	@ExceptionHandler(UserSurrogateIdLinkNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(UserSurrogateIdLinkNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(UserSurrogateIdLinkNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(OperatorDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceDescriptionNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceDescriptionNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceLinkRecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceLinkRecordNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceLinkRecordNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceSignKeyNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceSignKeyNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceSignKeyNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(SessionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleSessionNotFound(SessionNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleSessionNotFound(SessionNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@Override
@@ -119,23 +127,23 @@ public class CapeServiceSdkExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex) {
+	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex) {
+	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(SessionStateNotAllowedException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleSessionStateNotAllowed(SessionStateNotAllowedException ex) {
+	protected ResponseEntity<ErrorResponse> handleSessionStateNotAllowed(SessionStateNotAllowedException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
 
 //	@ExceptionHandler(value = Exception.class)

@@ -177,15 +177,16 @@ public interface ICapeServiceSdkController {
 			JsonProcessingException, ParseException, ServiceLinkRecordNotFoundException, ConsentStatusRecordNotValid,
 			DatasetIdNotFoundException, JOSEException, DataRequestNotValid, CapeSdkManagerException;
 
-	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String serviceId,
-			String sourceServiceId, String datasetId, String purposeId, String purposeName,
+	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String sinkServiceId,
+			String sourceServiceId,String sinkServiceUrl,
+			String sourceServiceUrl,  String datasetId, String purposeId, String purposeName,
 			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
 			Map<String, Object> dataObject)
 			throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys();
 
-	public abstract ResponseEntity<List<ServiceEntry>> getServices(Boolean onlyRegistered)
+	public abstract ResponseEntity<List<ServiceEntry>> getServices(Boolean onlyRegistered, String serviceUrl)
 			throws ServiceManagerException;
 
 	public abstract ResponseEntity<ServiceEntry> getService(String serviceId, Boolean onlyRegistered)

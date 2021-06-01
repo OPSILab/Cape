@@ -188,6 +188,10 @@ public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepos
 
 		return Optional.ofNullable(template.findOne(q, ServiceEntry.class));
 	}
+	
+	
+	
+	
 
 	@Override
 	public List<ServiceEntry> getServicesByBusinessId(String businessId, Boolean onlyRegistered, Boolean withSignature,
