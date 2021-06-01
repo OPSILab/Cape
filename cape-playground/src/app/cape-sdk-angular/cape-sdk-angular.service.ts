@@ -184,7 +184,7 @@ export class CapeSdkAngularService {
   }
 
   public generateSurrogateId(sdkUrl: string, operatorId: string, serviceUserId: string): Promise<SurrogateIdResponse> {
-    return this.http.get<SurrogateIdResponse>(`${sdkUrl}/api/v2/slr/surrogate_id?operatorId=${operatorId}&userId=${serviceUserId}`).toPromise();
+    return this.http.get<SurrogateIdResponse>(`${sdkUrl}/api/v2/slr/linking/surrogateId?operatorId=${operatorId}&userId=${serviceUserId}`).toPromise();
   }
 
   public linkSurrogateId(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, operatorId: string): Promise<UserSurrogateIdLink> {
