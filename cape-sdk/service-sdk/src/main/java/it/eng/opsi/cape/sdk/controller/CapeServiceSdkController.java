@@ -1158,10 +1158,12 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			 */
 			ServiceEntry sinkService = sdkManager.getServices(true, sinkServiceUrl, businessId).get(0);
 			ServiceEntry sourceService = sdkManager.getServices(true, sourceServiceUrl, businessId).get(0);
+			sinkServiceId = sinkService.getServiceId();
+			sourceServiceId = sourceService.getServiceId();
 
-			matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkService.getServiceId(),
-					sourceService.getServiceId(), datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName,
-					purposeCategory, processingCategory, checkConsentAtOperator, Sort.Direction.ASC).getBody();
+			matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId, sourceServiceId, datasetId,
+					ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory, processingCategory,
+					checkConsentAtOperator, Sort.Direction.ASC).getBody();
 
 		}
 

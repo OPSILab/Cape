@@ -791,8 +791,7 @@ public class ConsentManagerController implements IConsentManagerController {
 //				signedSinkCr.setSentToSdkSuccessfully(true);
 //				signedSourceCr.setSentToSdkSuccessfully(true);
 
-				consentRecordRepo.insert(signedSinkCr);
-				consentRecordRepo.insert(signedSourceCr);
+		
 			} catch (Exception e) {
 
 				throw new ConsentManagerException(

@@ -23,14 +23,14 @@ import org.springframework.core.convert.converter.Converter;
 
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.util.JSONObjectUtils;
 
 public class JWSHeaderWriteConverter implements Converter<JWSHeader, Document> {
 
 	@Override
 	public Document convert(JWSHeader source) {
 
-
-		return Document.parse(source.toJSONObject().toJSONString());
+		return Document.parse(JSONObjectUtils.toJSONString(source.toJSONObject()));
 //		Document result = new Document();
 
 //		result.append("n", source.getModulus().toString());

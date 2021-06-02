@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,7 @@ public class MongoConfiguration {
 		if (mappingContext instanceof MongoMappingContext) {
 			MongoMappingContext mongoMappingContext = (MongoMappingContext) mappingContext;
 
-			for (BasicMongoPersistentEntity<?> persistentEntity : mongoMappingContext.getPersistentEntities()) {
+			for (MongoPersistentEntity<?> persistentEntity : mongoMappingContext.getPersistentEntities()) {
 				Class clazz = persistentEntity.getType();
 				if (clazz.isAnnotationPresent(Document.class)) {
 					IndexOperations indexOps = mongoTemplate.indexOps(clazz);

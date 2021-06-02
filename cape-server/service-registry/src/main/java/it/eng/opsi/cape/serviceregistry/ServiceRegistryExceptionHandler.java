@@ -60,23 +60,23 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 
 	@ExceptionHandler(AccountNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceNotFound(ServiceNotFoundException ex) {
+	protected ResponseEntity<ErrorResponse> handleServiceNotFound(ServiceNotFoundException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceNotEditableException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	protected ResponseEntity<ErrorResponse> handleServiceNotEditable(ServiceNotEditableException ex) {
+	protected ResponseEntity<ErrorResponse> handleServiceNotEditable(ServiceNotEditableException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex, req.getRequestURI()));
 	}
 
 	@Override
@@ -96,9 +96,9 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 
 	@ExceptionHandler(value = IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex) {
+	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -112,9 +112,9 @@ public class ServiceRegistryExceptionHandler extends ResponseEntityExceptionHand
 
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex) {
+	protected ResponseEntity<ErrorResponse> handleDuplicateKeyError(DuplicateKeyException ex, HttpServletRequest req) {
 
-		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(value = Exception.class)

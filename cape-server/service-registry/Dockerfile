@@ -21,7 +21,7 @@
 # SOFTWARE.
 ##############################################################################
 
-FROM openjdk:15-jdk-alpine as build
+FROM openjdk:16-alpine as build
 
 LABEL maintainer="Engineering Ingegneria Informatica S.p.A."
 
@@ -36,7 +36,7 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
  
 
-FROM openjdk:15-jdk-alpine as deploy
+FROM openjdk:16-alpine as deploy
 VOLUME /tmp
 ARG DEPENDENCY=target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib

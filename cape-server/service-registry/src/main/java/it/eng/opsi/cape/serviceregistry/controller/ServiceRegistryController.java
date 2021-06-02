@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -143,7 +146,7 @@ public class ServiceRegistryController implements IServiceRegistryController {
 			@ApiResponse(description = "Returns 201 Created with the created Service Entry.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
 	@PostMapping(value = "/services")
-	public ResponseEntity<ServiceEntry> createService(@RequestBody ServiceEntry service) {
+	public ResponseEntity<ServiceEntry> createService(@RequestBody @Valid ServiceEntry service) {
 
 		// Set Service Cert to null, it will be created by Sdk when registering
 		// Service to Cape

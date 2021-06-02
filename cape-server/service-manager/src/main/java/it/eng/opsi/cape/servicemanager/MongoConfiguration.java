@@ -33,6 +33,7 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 
 import it.eng.opsi.cape.servicemanager.repository.ZonedDateTimeReadConverter;
 import it.eng.opsi.cape.servicemanager.repository.ZonedDateTimeWriteConverter;
@@ -60,7 +61,7 @@ public class MongoConfiguration {
 		if (mappingContext instanceof MongoMappingContext) {
 			MongoMappingContext mongoMappingContext = (MongoMappingContext) mappingContext;
 
-			for (BasicMongoPersistentEntity<?> persistentEntity : mongoMappingContext.getPersistentEntities()) {
+			for (MongoPersistentEntity<?> persistentEntity : mongoMappingContext.getPersistentEntities()) {
 				Class clazz = persistentEntity.getType();
 				if (clazz.isAnnotationPresent(Document.class)) {
 					IndexOperations indexOps = mongoTemplate.indexOps(clazz);
