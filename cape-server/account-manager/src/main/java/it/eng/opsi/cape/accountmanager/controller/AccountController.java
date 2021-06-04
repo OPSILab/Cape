@@ -17,21 +17,18 @@
 package it.eng.opsi.cape.accountmanager.controller;
 
 import java.net.URI;
-import java.security.Principal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
+import java.util.Map;
 import javax.validation.Valid;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,22 +36,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.util.IOUtils;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkStatusRecordSigned;
@@ -109,6 +102,16 @@ public class AccountController implements IAccountController {
 		this.appProperty = appProperty;
 		this.operatorId = this.appProperty.getCape().getOperatorId();
 		this.accountPublicUrl = this.appProperty.getCape().getAccountManager().getHost();
+	}
+
+	@Operation(summary = "Get running Cape version")
+	@GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getCapeVersion() throws JsonProcessingException {
+
+		Map<String, String> result = new HashMap<String, String>(1);
+		result.put("version", this.appProperty.getCape().getVersion());
+
+		return ResponseEntity.ok(objectMapper.writeValueAsString(result));
 	}
 
 	@Operation(summary = "Create a new CaPe Account.", tags = { "Account" }, responses = {
@@ -271,8 +274,7 @@ public class AccountController implements IAccountController {
 	public ResponseEntity<List<ServiceLinkRecordDoubleSigned>> getServiceLinkRecords(@PathVariable String accountId)
 			throws AccountNotFoundException {
 
-		List<ServiceLinkRecordDoubleSigned> result = accountRepo
-				.getServiceLinksRecordsBy_idOrUsername(accountId)
+		List<ServiceLinkRecordDoubleSigned> result = accountRepo.getServiceLinksRecordsBy_idOrUsername(accountId)
 				.orElseThrow(() -> new AccountNotFoundException("No Account found with Id: " + accountId));
 
 		return ResponseEntity.ok(result);

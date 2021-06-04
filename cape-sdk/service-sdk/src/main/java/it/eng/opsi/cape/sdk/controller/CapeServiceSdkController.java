@@ -21,6 +21,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -168,6 +169,16 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	public CapeServiceSdkController(ApplicationProperties appProperty) {
 		this.appProperty = appProperty;
 		this.businessId = this.appProperty.getCape().getServiceSdk().getBusinessId();
+	}
+
+	@Operation(summary = "Get running Cape version")
+	@GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getCapeVersion() throws JsonProcessingException {
+
+		Map<String, String> result = new HashMap<String, String>(1);
+		result.put("version", this.appProperty.getCape().getVersion());
+
+		return ResponseEntity.ok(objectMapper.writeValueAsString(result));
 	}
 
 	@Operation(summary = "Get Operator Description for CaPe by Operator Id", tags = {
@@ -1126,7 +1137,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	@Operation(summary = "Enforce Usage Rules associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
 			"Data Request" }, responses = {
-					@ApiResponse(description = "Returns the input body with fields filtered according to the Consent Recors associated to the input UserId", responseCode = "200") })
+					@ApiResponse(description = "Returns the input body with fields filtered according to the Consent Record associated to the input UserId", responseCode = "200") })
 	@PostMapping(value = "/services/consents/enforceUsageRules")
 	@Override
 	public ResponseEntity<Object> enforceUsageRulesToPayload(@RequestParam(required = true) String userId,
@@ -1169,7 +1180,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 		if (matchingConsents == null || matchingConsents.isEmpty())
 			throw new ConsentRecordNotFoundException(
-					"No Usage Rules or Active Consent Record found for the input UserId and Sink-Source Service Ids/Urls.");
+					"No Usage Rules or Active Consent Record found for the input UserId, Sink-Source Service Ids/Urls and optional query paramaeters.");
 
 		// If any, there will be only one Active Matching Consent for input UserId and
 		// Sink-Source
