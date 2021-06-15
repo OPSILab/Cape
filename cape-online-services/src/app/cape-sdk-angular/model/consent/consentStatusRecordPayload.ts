@@ -16,14 +16,13 @@ export interface ConsentStatusRecordPayload {
   record_id: string;
   version: string;
   surrogate_id: string;
-  cr_id: string;
+  source_surrogate_id?: string;
   consent_status: ConsentStatusEnum;
   consent_resource_set?: ResourceSet;
   consent_usage_rules?: SinkUsageRules;
   iat: string;
   prev_record_id: string;
 }
-
 export enum ConsentStatusEnum {
   Active = 'Active',
   Disabled = 'Disabled',

@@ -15,5 +15,4 @@ export interface StartLinkingRequest {
   surrogate_id: string;
   operator_id: string;
   service_id: string;
-  return_url: string;
 }

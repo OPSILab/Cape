@@ -20,30 +20,29 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
-public class ConsentRecordSourceRoleSpecificPart extends  ConsentRecordRoleSpecificPart{
+@NoArgsConstructor
+@SuperBuilder
+public class ConsentRecordSourceRoleSpecificPart extends ConsentRecordRoleSpecificPart {
 
 	@NotNull
 	@Valid
-	@JsonProperty(value="pop_key")
+	@JsonProperty(value = "pop_key")
 	private ServicePopKey popKey;
 
 	@NotNull
 	@Valid
-	@JsonProperty(value="token_issuer_key")
+	@JsonProperty(value = "token_issuer_key")
 	private RSAKey tokenIssuerKey;
 
 }

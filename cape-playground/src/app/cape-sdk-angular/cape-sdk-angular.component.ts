@@ -13,6 +13,7 @@ import { ConsentFormComponent } from './consent-form/consent-form.component';
 import { ConsentRecordSigned } from './model/consent/consentRecordSigned';
 import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSigned';
 import { ConsentStatusEnum } from './model/consent/consentStatusRecordPayload';
+import { RoleEnum } from './model/service-link/serviceEntry';
 
 @Component({
   selector: 'cape-sdk-angular',
@@ -57,6 +58,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   private userId: string;
 
   public isServiceRegistered: boolean = false;
+  private serviceRole: RoleEnum;
   private serviceLinkRecord: ServiceLinkRecordDoubleSigned;
   private consentRecord: ConsentRecordSigned;
   private linkingFrom: LinkingFromEnum;
@@ -144,7 +146,6 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
                 this.cdr.detectChanges();
               });
-
               await this.capeService.linkWithOperator(
                 this.sdkUrl,
                 this.locale,
@@ -190,7 +191,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
      * */
     try {
       const serviceDescription = await this.capeService.getRegisteredService(this.sdkUrl, this.serviceId);
-
+      this.serviceRole = serviceDescription.role;
       if (serviceDescription) this.isServiceRegistered = this.capeService.emitIsRegisteredValue(true);
     } catch (error) {
       if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
@@ -326,7 +327,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
   async startLinkingAfterServiceLogin() {
     try {
-      await this.capeService.linkFromOperator(this.sdkUrl, this.sessionCode, this.operatorId, this.serviceId, this.serviceName, this.userId, this.returnUrl);
+      await this.capeService.linkFromOperator(this.sdkUrl, this.sessionCode, this.operatorId, this.serviceId, this.serviceName, this.userId);
 
       const successMessage: string = this.translateService.instant('general.services.linkingSuccessfulMessage', {
         serviceId: this.serviceId,
@@ -376,8 +377,8 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   cancel() {
     window.opener.postMessage(
       {
-        result: 'CANCELLED',
-        message: this.translateService.instant('general.services.linkingCancelledMessage'),
+        result: 'CANCELED',
+        message: this.translateService.instant('general.services.linkingCanceledMessage'),
         serviceId: this.serviceId,
         returnUrl: this.returnUrl,
       },
@@ -403,6 +404,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
             this.serviceId,
             this.operatorId,
             this.purposeId,
+            this.serviceRole,
             this.sourceServiceId,
             this.sourceDatasetId
           ),

@@ -22,6 +22,7 @@ import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } f
 import { LinkedServicesService } from '../services/linkedServices/linkedServices.service';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
 import { QuerySortEnum } from '../../model/querySortEnum';
+import { ConsentRecordSinkRoleSpecificPart } from '../../model/consents/consentRecordSinkRoleSpecificPart';
 
 @Component({
   selector: 'consent',
@@ -239,7 +240,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     // TODO Change if we will use more datasets per resource set
     const lastDataset: Dataset = consent.payload.common_part.rs_description.resource_set.datasets[0];
 
-    const lastUsageRules: SinkUsageRules = consent.payload.role_specific_part.usage_rules;
+    const lastUsageRules: SinkUsageRules = (consent.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules;
 
     if (this.changedDataMapping[consentIndex])
       lastDataset.dataMappings = this.lastClickedDataMapping.get(consentIndex).reduce((result: DataMapping[], concept: DataMapping) => {
@@ -398,15 +399,11 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     const consentStatusLength = consent.sink.consentStatusList.length;
 
     // TODO Change if we will use more datasets per resource set
-    // Get the current Dataset either from common part or from consents status list if we have statuses > 1
     const consentDataset: Dataset =
       consentStatusLength > 1
         ? consent.sink.consentStatusList[consentStatusLength - 1].payload.consent_resource_set.datasets[0]
         : consent.sink.payload.common_part.rs_description.resource_set.datasets[0];
-    const consentShareWith: ShareWith[] =
-      consentStatusLength > 1
-        ? consent.sink.consentStatusList[consentStatusLength - 1].payload.consent_usage_rules.shareWith
-        : consent.sink.payload.role_specific_part.usage_rules.shareWith;
+    const consentShareWith: ShareWith[] = (consent.sink.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules.shareWith;
 
     const purposeId: string = consentDataset.purposeId;
     const sinkShareWith: ShareWith[] = (await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))

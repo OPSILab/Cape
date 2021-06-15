@@ -19,10 +19,11 @@ import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSi
 import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecordSinkRoleSpecificPart';
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
-import { ServiceEntry } from './model/service-link/serviceEntry';
+import { RoleEnum, ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
 import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from './model/processingBasis';
 import { QuerySortEnum } from './model/querySortEnum';
+import { ConsentFormRequest } from './model/consent/consentFormRequest';
 
 export interface UserSurrogateIdLink {
   userId: string;
@@ -115,19 +116,11 @@ export class CapeSdkAngularService {
     );
   }
 
-  async linkFromOperator(
-    sdkUrl: string,
-    sessionCode: string,
-    operatorId: string,
-    serviceId: string,
-    serviceName: string,
-    serviceUserId: string,
-    returnUrl: string
-  ) {
+  async linkFromOperator(sdkUrl: string, sessionCode: string, operatorId: string, serviceId: string, serviceName: string, serviceUserId: string) {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
+    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId);
 
     const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
   }
@@ -150,7 +143,7 @@ export class CapeSdkAngularService {
 
     try {
       // Start Service Linking with retrieved Linking Session Code
-      const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
+      const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId);
     } catch (error) {
       if (error?.error.innerError.innerError.error == 'it.eng.opsi.cape.exception.AccountNotFoundException') {
         // Call SDK API to Create Account using as accountId the accountId of the Service
@@ -187,13 +180,12 @@ export class CapeSdkAngularService {
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
-  public startServiceLinking(sdkUrl: string, sessionCode: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
+  public startServiceLinking(sdkUrl: string, sessionCode: string, surrogateId: string, operatorId: string, serviceId: string) {
     const startLinkingBody: StartLinkingRequest = {
       session_code: sessionCode,
       surrogate_id: surrogateId,
       service_id: serviceId,
       operator_id: operatorId,
-      return_url: returnUrl,
     };
 
     return this.http.post<LinkingResponseData>(`${sdkUrl}/api/v2/slr/linking`, startLinkingBody).toPromise();
@@ -300,19 +292,26 @@ export class CapeSdkAngularService {
     serviceId: string,
     operatorId: string,
     purposeId: string,
+    requesterRole: RoleEnum,
     sourceServiceId?: string,
     sourceDatasetId?: string
   ): Promise<ConsentForm> {
     const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(sdkUrl, serviceUserId, serviceId, operatorId);
 
-    let fetchConsentFormUrl = `${sdkUrl}/api/v2/users/surrogates/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
-
-    if (sourceServiceId && sourceDatasetId) fetchConsentFormUrl += `?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`;
-    return this.http.get<ConsentForm>(fetchConsentFormUrl).toPromise();
+    return this.http
+      .post<ConsentForm>(`${sdkUrl}/api/v2/consents/consentForm`, {
+        requester_surrogate_id: userSurrogateLink.surrogateId,
+        requester_role: requesterRole,
+        purpose_id: purposeId,
+        sink_service_id: serviceId,
+        source_service_id: sourceServiceId,
+        source_service_dataset_id: sourceDatasetId,
+      } as ConsentFormRequest)
+      .toPromise();
   }
 
   public async giveConsent(sdkUrl: string, consentForm: ConsentForm): Promise<ConsentRecordSigned> {
-    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
+    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/consents`, consentForm).toPromise();
   }
 
   public async getConsentsBySurrogateIdAndQuery(

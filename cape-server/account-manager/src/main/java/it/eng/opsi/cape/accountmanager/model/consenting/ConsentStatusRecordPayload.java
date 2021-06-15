@@ -50,9 +50,12 @@ public class ConsentStatusRecordPayload {
 	@NotBlank
 	private String surrogateId;
 
-	@JsonProperty(value = "cr_id")
-	@NotBlank
-	private String crId;
+	@JsonProperty(value = "source_surrogate_id")
+	private String sourceSurrogateId;
+
+//	@JsonProperty(value = "cr_id")
+//	@NotBlank
+//	private String crId;
 
 	@JsonProperty(value = "consent_status")
 	@NotNull

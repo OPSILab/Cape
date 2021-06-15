@@ -13,6 +13,7 @@ import { SinkUsageRules } from './sinkUsageRules';
 import { DataController } from '../dataController';
 import { HumanReadableDescription } from '../humanReadableDescription';
 import { ResourceSet } from './resourceSet';
+import { RoleEnum } from '../service-link/serviceEntry';
 
 export interface ConsentForm {
   surrogate_id: string;
@@ -31,4 +32,11 @@ export interface ConsentForm {
   data_controller: DataController;
   service_description_version: string;
   service_description_signature: string;
+  source_service_description_version?: string;
+  source_service_description_signature?: string;
+  service_provider_business_id: string;
+  /**
+   * Role (SINK, SOURCE) of requester Service initiating the Consenting request (is the Service related to the input Surrogate Id
+   */
+  requester_role: RoleEnum;
 }

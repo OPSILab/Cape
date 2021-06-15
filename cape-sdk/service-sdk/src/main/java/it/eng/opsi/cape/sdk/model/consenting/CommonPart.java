@@ -25,7 +25,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.util.Base64URL;
 
@@ -66,6 +65,61 @@ public class CommonPart {
 	@JsonProperty(value = "surrogate_id")
 	private String surrogateId;
 
+	@JsonProperty(value = "source_surrogate_id")
+	private String sourceSurrogateId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "slr_id")
+	private String slrId;
+
+	@JsonProperty(value = "source_slr_id")
+	private String sourceSlrId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "subject_id")
+	private String subjectId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "subject_name")
+	private String subjectName;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "subject_humanreadable_descriptions")
+	private List<HumanReadableDescription> subjectHumanReadableDescriptions;
+
+	@JsonProperty(value = "source_subject_id")
+	private String sourceSubjectId;
+
+	@JsonProperty(value = "source_subject_name")
+	private String sourceSubjectName;
+
+	@JsonProperty(value = "source_subject_humanreadable_descriptions")
+	private List<HumanReadableDescription> sourceSubjectHumanReadableDescriptions;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "service_description_version")
+	private String serviceDescriptionVersion;
+
+	@NonNull
+	@JsonProperty(value = "service_description_signature")
+	private String serviceDescriptionSignature;
+
+	@JsonProperty(value = "source_service_description_version")
+	private String sourceServiceDescriptionVersion;
+
+	@JsonProperty(value = "source_service_description_signature")
+	private String sourceServiceDescriptionSignature;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "service_provider_business_id")
+	private String serviceProviderBusinessId;
+
 	@NonNull
 	@NotNull
 	@Valid
@@ -74,8 +128,13 @@ public class CommonPart {
 
 	@NonNull
 	@NotBlank
-	@JsonProperty(value = "slr_id")
-	private String slrId;
+	private String jurisdiction;
+
+	@NonNull
+	@NotNull
+	@Valid
+	@JsonProperty(value = "data_controller")
+	private DataController dataController;
 
 	@NonNull
 	@NotNull(message = "iat field is mandatory")
@@ -93,64 +152,6 @@ public class CommonPart {
 	@NonNull
 	@NotBlank
 	private String operator;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "subject_id")
-	private String subjectId;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "subject_name")
-	private String subjectName;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "subject_humanreadable_descriptions")
-	private List<HumanReadableDescription> subjectHumanReadableDescriptions;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "source_subject_id")
-	private String sourceSubjectId;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "source_subject_name")
-	private String sourceSubjectName;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "source_subject_humanreadable_descriptions")
-	private List<HumanReadableDescription> sourceSubjectHumanReadableDescriptions;
-
-	@NonNull
-	@NotBlank
-	private String jurisdiction;
-
-	@NonNull
-	@NotNull
-	@Valid
-	@JsonProperty(value = "data_controller")
-	private DataController dataController;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "service_description_version")
-	private String serviceDescriptionVersion;
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "service_description_signature")
-	private String serviceDescriptionSignature;
-
-	@NonNull
-	@NotBlank
-	@JsonProperty(value = "service_provider_business_id")
-	private String serviceProviderBusinessId;
-
-	@NonNull
-	@NotBlank
-	private ConsentRecordRoleEnum role;
 
 	@NonNull
 	@NotBlank(message = "consent_status is mandatory")

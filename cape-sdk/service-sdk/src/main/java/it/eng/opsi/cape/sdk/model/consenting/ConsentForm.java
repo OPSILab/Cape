@@ -23,12 +23,15 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.eng.opsi.cape.serviceregistry.data.DataController;
 import it.eng.opsi.cape.serviceregistry.data.HumanReadableDescription;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +46,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Document(collection = "consentForms")
 public class ConsentForm {
 
 	@Id
@@ -60,12 +63,12 @@ public class ConsentForm {
 	private String sourceSurrogateId;
 
 	@JsonProperty(value = "source_service_id")
-	private String sourceId;
+	private String sourceServiceId;
 
 	@JsonProperty(value = "sink_service_id")
 	@NonNull
 	@NotBlank
-	private String sinkId;
+	private String sinkServiceId;
 
 	@JsonProperty(value = "source_name")
 	private String sourceName;
@@ -75,11 +78,13 @@ public class ConsentForm {
 	@NotBlank
 	private String sinkName;
 
-	@JsonProperty(value = "sink_library_domain_url")
-	private String sinkLibraryDomainUrl;
-
 	@JsonProperty(value = "source_library_domain_url")
 	private String sourceLibraryDomainUrl;
+
+	@JsonProperty(value = "sink_library_domain_url")
+	@NonNull
+	@NotBlank
+	private String sinkLibraryDomainUrl;
 
 	@JsonProperty(value = "source_humanreadable_descriptions")
 	private List<HumanReadableDescription> sourceHumanReadableDescriptions;
@@ -120,8 +125,20 @@ public class ConsentForm {
 	@NotBlank
 	private String serviceDescriptionSignature;
 
+	@JsonProperty(value = "source_service_description_version")
+	private String sourceServiceDescriptionVersion;
+
+	@JsonProperty(value = "source_service_description_signature")
+	private String sourceServiceDescriptionSignature;
+
 	@NonNull
 	@NotBlank
 	@JsonProperty(value = "service_provider_business_id")
 	private String serviceProviderBusinessId;
+
+	@Schema(description = "Role (SINK, SOURCE) of requester Service initiating the Consenting request (is the Service related to the input Surrogate Id")
+	@JsonProperty(value = "requester_role")
+	@NonNull
+	@NotNull
+	private Role requesterSurrogateRole;
 }

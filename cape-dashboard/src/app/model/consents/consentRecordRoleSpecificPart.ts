@@ -10,18 +10,11 @@
  * Do not edit the class manually.
  */
 
-import { RSAKey } from '../service-linking/rSAKey';
-import { ServicePopKey } from '../service-linking/servicePopKey';
-import { SinkUsageRules } from './sinkUsageRules';
-
 export interface ConsentRecordRoleSpecificPart {
+  role: ConsentRecordRoleSpecificPartRoleEnum;
   type: string;
-
-  /* SINK CASE */
-  usage_rules?: SinkUsageRules;
-  source_cr_id?: string;
-
-  /* SOURCE CASE */
-  pop_key?: ServicePopKey;
-  token_issuer_key?: RSAKey;
+}
+export enum ConsentRecordRoleSpecificPartRoleEnum {
+  Sink = 'Sink',
+  Source = 'Source',
 }

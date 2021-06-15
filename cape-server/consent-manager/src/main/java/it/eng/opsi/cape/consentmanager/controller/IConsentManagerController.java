@@ -21,9 +21,13 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import it.eng.opsi.cape.consentmanager.model.AuthorisationTokenResponse;
 import it.eng.opsi.cape.consentmanager.model.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.consentmanager.model.ConsentForm;
+import it.eng.opsi.cape.consentmanager.model.ConsentFormRequest;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSigned;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSignedPair;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordStatusEnum;
@@ -32,6 +36,7 @@ import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ChangeConsentStatusException;
 import it.eng.opsi.cape.exception.ConsentManagerException;
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
+import it.eng.opsi.cape.exception.ConsentRecordNotValid;
 import it.eng.opsi.cape.exception.ConsentStatusNotValidException;
 import it.eng.opsi.cape.exception.DataMappingNotFoundException;
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
@@ -45,20 +50,19 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 
 public interface IConsentManagerController {
 
-	public abstract ResponseEntity<ConsentForm> fetchConsentFormFromService(String surrogateId, String serviceId,
-			String purposeId, String sourceDatasetId, String sourceServiceId) throws ConsentManagerException,
-			ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException, DataMappingNotFoundException,
-			DatasetIdNotFoundException, AccountNotFoundException, ServiceLinkStatusNotValidException;
+	public abstract ResponseEntity<ConsentForm> fetchGeneratedConsentForm(ConsentFormRequest request)
+			throws ConsentManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
+			DataMappingNotFoundException, DatasetIdNotFoundException, AccountNotFoundException,
+			ServiceLinkStatusNotValidException;
 
 	public abstract ResponseEntity<List<DataMapping>> getMatchingDatasets(String serviceId, String purposeId,
 			String sourceDatasetId, String sourceServiceId) throws DataMappingNotFoundException,
 			DatasetIdNotFoundException, ConsentManagerException, ServiceDescriptionNotFoundException;
 
-	public abstract ResponseEntity<ConsentRecordSigned> giveConsentFromService(String surrogateId,
-			ConsentForm consentForm)
+	public abstract ResponseEntity<ConsentRecordSigned> giveConsent(ConsentForm consentForm)
 			throws ResourceSetIdNotFoundException, ConsentManagerException, ServiceLinkRecordNotFoundException,
 			AccountNotFoundException, ConsentRecordNotFoundException, ConsentStatusNotValidException,
-			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException, JsonMappingException, JsonProcessingException, ConsentRecordNotValid;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByAccountIdAndQuery(String accountId,
 			String consentId, String serviceId, String sourceServiceId, String datasetId,
@@ -135,7 +139,7 @@ public interface IConsentManagerController {
 	public abstract ResponseEntity<ConsentRecordSigned> changeConsentStatus(String accountId, String slrId, String crId,
 			ChangeConsentStatusRequest request) throws ConsentRecordNotFoundException, ConsentManagerException,
 			ConsentStatusNotValidException, ResourceSetIdNotFoundException, ServiceLinkRecordNotFoundException,
-			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException;
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException, JsonMappingException, JsonProcessingException;
 
 	public abstract ResponseEntity<ConsentRecordSigned> deleteConsentRecordsByAccountId(String accountId,
 			Boolean deleteConsentForm) throws ConsentRecordNotFoundException, ConsentManagerException;

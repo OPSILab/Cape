@@ -37,10 +37,8 @@ import it.eng.opsi.cape.consentmanager.model.ConsentRecordPayload;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSigned;
 import it.eng.opsi.cape.consentmanager.model.ConsentStatusRecordPayload;
 import it.eng.opsi.cape.consentmanager.model.ConsentStatusRecordSigned;
-import it.eng.opsi.cape.consentmanager.model.ThirdPartyReuseConsentSignRequest;
-import it.eng.opsi.cape.consentmanager.model.ThirdPartyReuseConsentSignResponse;
-import it.eng.opsi.cape.consentmanager.model.WithinServiceConsentSignRequest;
-import it.eng.opsi.cape.consentmanager.model.WithinServiceConsentSignResponse;
+import it.eng.opsi.cape.consentmanager.model.ConsentSignRequest;
+import it.eng.opsi.cape.consentmanager.model.ConsentSignResponse;
 import it.eng.opsi.cape.consentmanager.model.audit.EventLog;
 import it.eng.opsi.cape.consentmanager.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
@@ -217,45 +215,21 @@ public class ClientService {
 		return response.getBody();
 	}
 
-	public WithinServiceConsentSignResponse callSignWithinServiceConsent(String surrogateId, String slrId,
+	public ConsentSignResponse callSignConsentRecordAndConsentStatusRecord(String surrogateId, String slrId,
 			ConsentRecordPayload crPayload, ConsentStatusRecordPayload csrPayload,
 			List<ConsentStatusRecordSigned> csrList) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
-		ResponseEntity<WithinServiceConsentSignResponse> response = restTemplate
+		ResponseEntity<ConsentSignResponse> response = restTemplate
 				.postForEntity(
 						UriComponentsBuilder
 								.fromHttpUrl(accountManagerHost
 										+ "/api/v2/users/{surrogate_id}/servicelinks/{link_id}/consents")
 								.build(surrogateId, slrId),
-						WithinServiceConsentSignRequest.builder().crPayload(crPayload).csrPayload(csrPayload)
-								.csrList(csrList).build(),
-						WithinServiceConsentSignResponse.class);
-
-		return response.getBody();
-
-	}
-
-	public ThirdPartyReuseConsentSignResponse callSignThirdPartyReuseConsent(String surrogateId, String sinkSlrId,
-			String sourceSlrId, ConsentRecordPayload sinkCrPayload, ConsentStatusRecordPayload sinkCsrPayload,
-			ConsentRecordPayload sourceCrPayload, ConsentStatusRecordPayload sourceCsrPayload,
-			List<ConsentStatusRecordSigned> sinkCsrList, List<ConsentStatusRecordSigned> sourceCsrList) {
-
-		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-
-		ResponseEntity<ThirdPartyReuseConsentSignResponse> response = restTemplate.postForEntity(
-				UriComponentsBuilder
-						.fromHttpUrl(accountManagerHost
-								+ "/api/v2/users/{surrogate_id}/servicelinks/{sink_link_id}/{source_link_id}/consents")
-						.build(surrogateId, sinkSlrId, sourceSlrId),
-				ThirdPartyReuseConsentSignRequest.builder()
-						.sink(WithinServiceConsentSignRequest.builder().crPayload(sinkCrPayload)
-								.csrPayload(sinkCsrPayload).csrList(sinkCsrList).build())
-						.source(WithinServiceConsentSignRequest.builder().crPayload(sourceCrPayload)
-								.csrPayload(sourceCsrPayload).csrList(sourceCsrList).build())
-						.build(),
-				ThirdPartyReuseConsentSignResponse.class);
+						ConsentSignRequest.builder().crPayload(crPayload).csrPayload(csrPayload).csrList(csrList)
+								.build(),
+						ConsentSignResponse.class);
 
 		return response.getBody();
 
@@ -293,7 +267,7 @@ public class ClientService {
 	 * Use the notification to SDK successful boolean to discriminate whether to
 	 * force storing CR at the Service
 	 */
-	public String sendConsentRecordToService(String serviceDomainUrl, ConsentRecordSigned signedCr) {
+	public String sendNewConsentRecordToService(String serviceDomainUrl, ConsentRecordSigned signedCr) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<String> response = restTemplate.exchange(RequestEntity
@@ -316,6 +290,18 @@ public class ClientService {
 										.build(signedCr.getPayload().getCommonPart().getCrId()))
 								.body(signedCr),
 						String.class);
+		return response.getBody();
+	}
+
+	/*
+	 * Delete a ConsentRecordSigned from Service by CrId. Used for rollback
+	 */
+	public String deleteConsentRecordFromService(String serviceDomainUrl, String crId) {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+		ResponseEntity<String> response = restTemplate.exchange(RequestEntity
+				.delete(UriComponentsBuilder.fromHttpUrl(serviceDomainUrl + "/api/v2/consents/{crId}").build(crId))
+				.build(), String.class);
 		return response.getBody();
 	}
 

@@ -15,6 +15,7 @@ import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { LoginService } from 'src/app/auth/login/login.service';
 import { NbAuthService } from '@nebular/auth';
 import { AppConfig } from 'src/app/model/appConfig';
+import { RoleEnum } from 'src/app/cape-sdk-angular/model/service-link/serviceEntry';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -69,18 +70,18 @@ export class ServicesComponent implements OnInit {
     this.translateService.use(this.locale);
   }
 
-  async onClickGo(serviceId: string, serviceName: string, purposeId: string) {
+  async onClickGo(serviceId: string, serviceName: string, serviceRole: string, purposeId: string) {
     if (!(await this.authService.isAuthenticatedOrRefresh().toPromise())) {
       this.router.navigate(['/login']);
     } else {
-      this.checkAndGo(serviceId, serviceName, purposeId);
+      this.checkAndGo(serviceId, serviceName, serviceRole == 'Sink' ? RoleEnum.Sink : RoleEnum.Source, purposeId);
 
       /* this.dialogService.open(DialogPersonalAttributesComponent)
          .onClose.subscribe(() => this.checkAndGo(service, purpose));*/
     }
   }
 
-  checkAndGo = async (serviceId: string, serviceName: string, purposeId: string) => {
+  checkAndGo = async (serviceId: string, serviceName: string, serviceRole: RoleEnum, purposeId: string) => {
     try {
       var checkLinking = await this.onCheckLinking(serviceId, serviceName);
       console.log(checkLinking);
@@ -90,7 +91,7 @@ export class ServicesComponent implements OnInit {
         console.log(checkConsent);
 
         if (!checkConsent) {
-          this.dialogService.open(DialogPersonalAttributesComponent).onClose.subscribe(() => this.openInformativaForm(serviceId, purposeId));
+          this.dialogService.open(DialogPersonalAttributesComponent).onClose.subscribe(() => this.openInformativaForm(serviceId, serviceRole, purposeId));
         } else {
           console.log(checkConsent);
           // to enforce consentRules
@@ -215,7 +216,7 @@ export class ServicesComponent implements OnInit {
     }
   };
 
-  async openInformativaForm(serviceId: string, purposeId: string) {
+  async openInformativaForm(serviceId: string, serviceRole: RoleEnum, purposeId: string) {
     try {
       this.dialogService
         .open(DialogPrivacyNoticeComponent, {
@@ -226,6 +227,7 @@ export class ServicesComponent implements OnInit {
             accountId: this.serviceAccountId,
             sdkUrl: this.sdkUrl,
             serviceId: serviceId,
+            serviceRole: serviceRole,
             operatorId: this.operatorId,
             purposeId: purposeId,
           },

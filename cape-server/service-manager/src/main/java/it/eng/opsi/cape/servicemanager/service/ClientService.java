@@ -117,7 +117,7 @@ public class ClientService {
 	 * Operator Login) Service Manager -> Service SDK
 	 */
 	public FinalStoreSlrResponse callStartServiceLinking(String sessionCode, String surrogateId, String operatorId,
-			String serviceId, String returnUrl, String serviceLinkingUri) throws ServiceManagerException {
+			String serviceId, String serviceLinkingUri) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
@@ -125,7 +125,7 @@ public class ClientService {
 				.exchange(
 						RequestEntity.post(URI.create(serviceLinkingUri))
 								.body(StartLinkingRequest.builder().sessionCode(sessionCode).surrogateId(surrogateId)
-										.operatorId(operatorId).serviceId(serviceId).returnUrl(returnUrl).build()),
+										.operatorId(operatorId).serviceId(serviceId).build()),
 						FinalStoreSlrResponse.class);
 
 		HttpStatus status = linkingResponse.getStatusCode();
@@ -155,8 +155,8 @@ public class ClientService {
 	/*
 	 * callStoreSinkSlrId Service Manager ---> Account Manager
 	 */
-	public ServiceLinkInitResponse callStoreSinkSlrId(String accountId, String sessionCode, String slrId, String serviceId,
-			String surrogateId, ServicePopKey popKey) throws ServiceManagerException {
+	public ServiceLinkInitResponse callStoreSinkSlrId(String accountId, String sessionCode, String slrId,
+			String serviceId, String surrogateId, ServicePopKey popKey) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
@@ -167,8 +167,8 @@ public class ClientService {
 										.fromHttpUrl(accountManagerHost
 												+ "/api/v2/accounts/{account_id}/servicelinks/init/sink")
 										.build(accountId))
-								.body(SinkServiceLinkInitRequest.builder().sessionCode(sessionCode).slrId(slrId).serviceId(serviceId)
-										.surrogateId(surrogateId).popKey(popKey).build()),
+								.body(SinkServiceLinkInitRequest.builder().sessionCode(sessionCode).slrId(slrId)
+										.serviceId(serviceId).surrogateId(surrogateId).popKey(popKey).build()),
 						ServiceLinkInitResponse.class);
 
 		HttpStatus status = response.getStatusCode();
@@ -181,8 +181,8 @@ public class ClientService {
 	/*
 	 * callSourceSinkSlrId Service Manager ---> Account Manager
 	 */
-	public ServiceLinkInitResponse callStoreSourceSlrId(String accountId, String sessionCode, String slrId, String serviceId,
-			String surrogateId) throws ServiceManagerException {
+	public ServiceLinkInitResponse callStoreSourceSlrId(String accountId, String sessionCode, String slrId,
+			String serviceId, String surrogateId) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
@@ -231,8 +231,8 @@ public class ClientService {
 										.fromHttpUrl(accountManagerHost
 												+ "/api/v2/accounts/{account_id}/servicelinks/{link_id}")
 										.build(accountId, slrId))
-								.body(AccountSignSlrRequest.builder().sessionCode(sessionCode).partialSlrPayload(partialSlrPayload)
-										.build()),
+								.body(AccountSignSlrRequest.builder().sessionCode(sessionCode)
+										.partialSlrPayload(partialSlrPayload).build()),
 						AccountSignSlrResponse.class);
 
 		HttpStatus status = response.getStatusCode();
@@ -253,8 +253,8 @@ public class ClientService {
 
 		ResponseEntity<ServiceSignSlrResponse> response = restTemplate.exchange(
 				RequestEntity.post(URI.create(serviceSdkHost + "/api/v2/slr/sign"))
-						.body(ServiceSignSlrRequest.builder().accountSignedSlr(accountSignedSlr).sessionCode(sessionCode)
-								.surrogateId(surrogateId).operatorId(operatorId).build()),
+						.body(ServiceSignSlrRequest.builder().accountSignedSlr(accountSignedSlr)
+								.sessionCode(sessionCode).surrogateId(surrogateId).operatorId(operatorId).build()),
 				ServiceSignSlrResponse.class);
 
 		HttpStatus status = response.getStatusCode();
@@ -498,7 +498,7 @@ public class ClientService {
 				.body(ChangeConsentStatusRequest.builder()
 						.resourceSet(existingCrPayload.getCommonPart().getRsDescription().getResourceSet())
 						.status(newStatus)
-						.usageRules(existingCrPayload.getCommonPart().getRole().equals(ConsentRecordRoleEnum.SINK)
+						.usageRules(existingCrPayload.getRoleSpecificPart().getRole().equals(ConsentRecordRoleEnum.SINK)
 								? ((ConsentRecordSinkRoleSpecificPart) existingCrPayload.getRoleSpecificPart())
 										.getUsageRules()
 								: null)

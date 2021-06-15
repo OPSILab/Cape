@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package it.eng.opsi.cape.accountmanager.model.consenting;
+package it.eng.opsi.cape.consentmanager.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class WithinServiceConsentSignResponse {
+public class ConsentSignResponse {
 
 	@NotNull(message = "consent_record is mandatory")
 	@Valid

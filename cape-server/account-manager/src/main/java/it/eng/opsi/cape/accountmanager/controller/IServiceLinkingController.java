@@ -17,22 +17,12 @@
 package it.eng.opsi.cape.accountmanager.controller;
 
 import java.text.ParseException;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.util.Base64;
-
-import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordPayload;
-import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordSigned;
-import it.eng.opsi.cape.accountmanager.model.consenting.ThirdPartyReuseConsentSignRequest;
-import it.eng.opsi.cape.accountmanager.model.consenting.ThirdPartyReuseConsentSignResponse;
-import it.eng.opsi.cape.accountmanager.model.consenting.WithinServiceConsentSignRequest;
-import it.eng.opsi.cape.accountmanager.model.consenting.WithinServiceConsentSignResponse;
 import it.eng.opsi.cape.accountmanager.model.linking.AccountSignSlrRequest;
 import it.eng.opsi.cape.accountmanager.model.linking.AccountSignSlrResponse;
 import it.eng.opsi.cape.accountmanager.model.linking.FinalStoreSlrRequest;
@@ -53,13 +43,16 @@ public interface IServiceLinkingController {
 
 	public abstract ResponseEntity<ServiceLinkInitResponse> storeSinkSlrId(String accountId,
 			SinkServiceLinkInitRequest request) throws SessionNotFoundException, AccountManagerException,
-			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException, ServiceLinkRecordNotFoundException;
+			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException,
+			ServiceLinkRecordNotFoundException;
 
 	public abstract ResponseEntity<ServiceLinkInitResponse> storeSourceSlrId(String accountId,
 			SourceServiceLinkInitRequest request) throws SessionNotFoundException, AccountManagerException,
-			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException, ServiceLinkRecordNotFoundException;
+			AccountNotFoundException, ServiceLinkRecordAlreadyPresentException, SessionStateNotAllowedException,
+			ServiceLinkRecordNotFoundException;
 
-	public abstract ResponseEntity<String> deletePartialSlr(String accountId, String slrId) throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
+	public abstract ResponseEntity<String> deletePartialSlr(String accountId, String slrId)
+			throws AccountNotFoundException, ServiceLinkRecordNotFoundException;
 
 	public abstract ResponseEntity<AccountSignSlrResponse> accountSignSlr(String accountId, String slrId,
 			AccountSignSlrRequest request) throws SessionNotFoundException, AccountManagerException, JOSEException,

@@ -62,6 +62,8 @@ import com.nimbusds.jose.util.Base64URL;
 import it.eng.opsi.cape.exception.DataRequestNotValid;
 import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordPayload;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordRoleSpecificPart;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSourceRoleSpecificPart;
@@ -330,12 +332,27 @@ public class CryptoService {
 
 			/*
 			 * Create the object to be signed with protected Header and Json serialized SLR
-			 * payload
+			 * payload (set to null fields to be ignored in the signature verification, like
+			 * as done in signing process of Consent Manager
 			 */
-			Base64URL payload = new Payload(payloadMapper.writeValueAsString(signedConsentRecord.getPayload()))
+
+			ConsentRecordPayload crPayload = signedConsentRecord.getPayload();
+			ConsentRecordRoleSpecificPart roleSpecificPart = crPayload.getRoleSpecificPart();
+			String crId = crPayload.getCommonPart().getCrId();
+			
+			crPayload.setRoleSpecificPart(null);
+			crPayload.getCommonPart().setCrId("__"); // To not trigger NotBlank errors
+
+			Base64URL payload = new Payload(payloadMapper.writeValueAsString(crPayload))
 					.toBase64URL();
 			JWSObject jwsObject = new JWSObject(signedConsentRecord.get_protected(), payload,
 					signedConsentRecord.getSignature());
+
+			/*
+			 * Recover previously excluded fields from signature verification
+			 */
+			crPayload.setRoleSpecificPart(roleSpecificPart);
+			crPayload.getCommonPart().setCrId(crId);
 
 			return jwsObject.verify(new RSASSAVerifier(accountPublicKeyFromAssociatedSlr));
 

@@ -41,6 +41,7 @@ import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentFormRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
@@ -55,6 +56,7 @@ import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordSigned;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 @Service
@@ -121,12 +123,14 @@ public class ClientService {
 
 	}
 
-	public List<ServiceEntry> getServicesDescriptionsFromRegistry(Boolean onlyRegistered, String serviceUrl, String businessId)
-			throws ServiceManagerException {
+	public List<ServiceEntry> getServicesDescriptionsFromRegistry(Boolean onlyRegistered, String serviceUrl,
+			String businessId) throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<ServiceEntry[]> response = restTemplate.getForEntity(UriComponentsBuilder.fromHttpUrl(serviceRegistryHost + "/api/v2/services?onlyRegistered={onlyRegistered}&serviceUrl={serviceUrl}&businessId={businessId}").build(onlyRegistered, serviceUrl, businessId),
-				ServiceEntry[].class);
+		ResponseEntity<ServiceEntry[]> response = restTemplate.getForEntity(UriComponentsBuilder
+				.fromHttpUrl(serviceRegistryHost
+						+ "/api/v2/services?onlyRegistered={onlyRegistered}&serviceUrl={serviceUrl}&businessId={businessId}")
+				.build(onlyRegistered, serviceUrl, businessId), ServiceEntry[].class);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
@@ -299,24 +303,20 @@ public class ClientService {
 		return response.getBody();
 	}
 
-	public ResponseEntity<ConsentForm> callFetchConsentForm(String surrogateId, String serviceId, String purposeId,
-			String sourceDatasetId, String sourceServiceId) {
+	public ResponseEntity<ConsentForm> callFetchConsentForm(ConsentFormRequest request) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
-		String url = consentManagerHost
-				+ "/api/v2/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm"
-				+ (StringUtils.isAnyBlank(sourceDatasetId, sourceServiceId) ? ""
-						: "?sourceDatasetId=" + sourceDatasetId + "&sourceServiceId=" + sourceServiceId);
+		String url = consentManagerHost + "/api/v2/consents/consentForm";
 
-		return restTemplate.getForEntity(url, ConsentForm.class, surrogateId, serviceId, purposeId);
+		return restTemplate.exchange(RequestEntity.post(url).body(request), ConsentForm.class);
 	}
 
-	public ResponseEntity<ConsentRecordSigned> callGiveConsent(String surrogateId, ConsentForm consentForm) {
+	public ResponseEntity<ConsentRecordSigned> callGiveConsent(ConsentForm consentForm) {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		return restTemplate.postForEntity(URI.create(consentManagerHost + "/api/v2/users/" + surrogateId + "/consents"),
-				consentForm, ConsentRecordSigned.class);
+		return restTemplate.postForEntity(URI.create(consentManagerHost + "/api/v2/consents"), consentForm,
+				ConsentRecordSigned.class);
 	}
 
 	public ResponseEntity<ConsentRecordSigned> callChangeConsentStatus(String surrogateId, String slrId, String crId,
@@ -399,7 +399,7 @@ public class ClientService {
 
 		if (StringUtils.isNotBlank(purposeName))
 			urlBuilder.queryParam("purposeName", purposeName);
-		
+
 		if (purposeCategory != null)
 			urlBuilder.queryParam("purposeCategory", purposeCategory);
 

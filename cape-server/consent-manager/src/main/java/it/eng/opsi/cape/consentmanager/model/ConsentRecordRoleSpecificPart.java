@@ -16,13 +16,27 @@
  ******************************************************************************/
 package it.eng.opsi.cape.consentmanager.model;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = ConsentRecordSinkRoleSpecificPart.class, name = "sink"),
 		@Type(value = ConsentRecordSourceRoleSpecificPart.class, name = "source") })
-public abstract class ConsentRecordRoleSpecificPart {
+@SuperBuilder
+@NoArgsConstructor
+public class ConsentRecordRoleSpecificPart {
+
+	@NonNull
+	@NotBlank
+	@Getter
+	private ConsentRecordRoleEnum role;
 
 }

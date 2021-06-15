@@ -27,7 +27,7 @@
       "linkButton": "Collega",
       "closeAndReturnToOperatorButton": "Chiudi e ritorna su CaPe",
       "forceLinkingButton": "Forza collegamento",
-      "linkingCancelledMessage": "Il collegamento è stato annullato",
+      "linkingCanceledMessage": "Il collegamento è stato annullato",
       "linkingSuccessfulHeader": "Servizio associato al tuo Account Cape",
       "linkingSuccessfulMessage": "Il Servizio {{serviceName}} con Id: {{serviceId}} è stato associato con successo al tuo Account CaPe",
       "enableSuccessfulMessage": "Il collegamento con il Servizio {{serviceName}} è stato abilitato con successo",

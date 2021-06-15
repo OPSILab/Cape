@@ -27,7 +27,7 @@
       "linkButton": "Link",
       "closeAndReturnToOperatorButton": "Close and return to CaPe",
       "forceLinkingButton": "Force Linking",
-      "linkingCancelledMessage": "Service Linking has been cancelled",
+      "linkingCanceledMessage": "Service Linking has been canceled",
       "linkingSuccessfulHeader": "Service linked to your Cape Account",
       "linkingSuccessfulMessage": "The Service {{serviceName}} with Id: {{serviceId}} has been linked successfully to your Cape Account",
       "enableSuccessfulMessage": "The Link for Service {{serviceName}} has been enabled successfully",

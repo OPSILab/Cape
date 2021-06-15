@@ -62,6 +62,8 @@ import com.nimbusds.jose.util.X509CertUtils;
 
 import it.eng.opsi.cape.accountmanager.model.Account;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordPayload;
+import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordRoleEnum;
+import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordRoleSpecificPart;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordPayload;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentStatusRecordSigned;
@@ -73,6 +75,7 @@ import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkStatusRecordPayl
 import it.eng.opsi.cape.accountmanager.model.linking.ServiceLinkStatusRecordSigned;
 import it.eng.opsi.cape.accountmanager.repository.AccountRepository;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
 import it.eng.opsi.cape.accountmanager.ApplicationProperties;
 
 @Service
@@ -224,6 +227,18 @@ public class CryptoService {
 		return signedSsr;
 	}
 
+	/**
+	 * Sign the input Consent Record Payload with input Account RSAKey The
+	 * ConsentRecordRoleSpecificPart and crId will be always left out of the
+	 * signature in order to produce the same signature for both Sink and eventual
+	 * Source Consent Record copies.
+	 * 
+	 * @param accountKeyPair
+	 * @param crPayload
+	 * @return
+	 * @throws JsonProcessingException
+	 * @throws JOSEException
+	 */
 	public ConsentRecordSigned signConsentRecord(RSAKey accountKeyPair, ConsentRecordPayload crPayload)
 			throws JsonProcessingException, JOSEException {
 
@@ -237,22 +252,26 @@ public class CryptoService {
 		 * Sign the the partial SLR and return new Account signed SLR (payload + JWS
 		 * Headers (protected as BASE64URL and unprotected) + Signature)
 		 */
-
 		JWSHeader protectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
 				.keyID(accountKeyPair.getKeyID()).jwk(accountPublicKey).build();
 
 		JWSHeader unprotectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
 				.keyID(accountKeyPair.getKeyID()).build();
 
-		ConsentRecordSigned signedCr = new ConsentRecordSigned();
-
-		signedCr.set_protected(protectedHeader.toBase64URL());
-		signedCr.setHeader(unprotectedHeader);
-
 		/*
 		 * Create the object to be signed with protected Header and Json serialized SLR
 		 * payload
+		 * 
+		 * (first put aside the consentRecordRoleSpecificPart and CrId, it will be not
+		 * part of payload to be signed)
 		 */
+
+		ConsentRecordRoleSpecificPart roleSpecificPart = crPayload.getRoleSpecificPart();
+		String crId = crPayload.getCommonPart().getCrId();
+
+		crPayload.setRoleSpecificPart(null);
+		crPayload.getCommonPart().setCrId("__"); // To not trigger NotBlank errors
+
 		JWSObject jwsObject = new JWSObject(protectedHeader, new Payload(payloadMapper.writeValueAsString(crPayload)));
 
 		/*
@@ -261,11 +280,23 @@ public class CryptoService {
 		jwsObject.sign(new RSASSASigner(accountKeyPair));
 
 		/*
-		 * Get the signature and insert in the ServiceLinkStatusRecordSigned
+		 * Get the signature and insert in the new ConsentRecordSigned
 		 * 
 		 */
+		ConsentRecordSigned signedCr = new ConsentRecordSigned();
+		signedCr.set_protected(protectedHeader.toBase64URL());
+		signedCr.setHeader(unprotectedHeader);
+
+		/*
+		 * We reinsert as payload the input one, including the
+		 * ConsentRecordRoleSpecificPart and CrId left out previously of the signing
+		 * process
+		 */
+		crPayload.setRoleSpecificPart(roleSpecificPart);
+
 		signedCr.setPayload(crPayload);
 		signedCr.setSignature(jwsObject.getSignature());
+		crPayload.getCommonPart().setCrId(crId);
 
 		return signedCr;
 	}
@@ -290,13 +321,8 @@ public class CryptoService {
 		JWSHeader unprotectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
 				.keyID(accountKeyPair.getKeyID()).build();
 
-		ConsentStatusRecordSigned signedCsr = new ConsentStatusRecordSigned();
-
-		signedCsr.set_protected(protectedHeader.toBase64URL());
-		signedCsr.setHeader(unprotectedHeader);
-
 		/*
-		 * Create the object to be signed with protected Header and Json serialized SLR
+		 * Create the object to be signed with protected Header and Json serialized CSR
 		 * payload
 		 */
 		JWSObject jwsObject = new JWSObject(protectedHeader, new Payload(payloadMapper.writeValueAsString(csrPayload)));
@@ -307,9 +333,13 @@ public class CryptoService {
 		jwsObject.sign(new RSASSASigner(accountKeyPair));
 
 		/*
-		 * Get the signature and insert in the ServiceLinkStatusRecordSigned
+		 * Get the signature and insert in the new ConsentStatusRecordSigned
 		 * 
 		 */
+		ConsentStatusRecordSigned signedCsr = new ConsentStatusRecordSigned();
+
+		signedCsr.set_protected(protectedHeader.toBase64URL());
+		signedCsr.setHeader(unprotectedHeader);
 		signedCsr.setPayload(csrPayload);
 		signedCsr.setSignature(jwsObject.getSignature());
 
@@ -333,8 +363,8 @@ public class CryptoService {
 		JWSHeader protectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
 				.keyID(accountKeyPair.getKeyID()).jwk(accountPublicKey).build();
 
-		JWSHeader unprotectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
-				.keyID(accountKeyPair.getKeyID()).build();
+//		JWSHeader unprotectedHeader = new JWSHeader.Builder(JWSAlgorithm.parse(accountKeyPair.getAlgorithm().getName()))
+//				.keyID(accountKeyPair.getKeyID()).build();
 
 		/*
 		 * Create the object to be signed with protected Header and Json serialized SLR
@@ -404,7 +434,6 @@ public class CryptoService {
 
 		return sw.toString();
 	}
-
 
 	public Boolean verifyServiceSignature(ServiceLinkRecordDoubleSigned serviceSignedSlr, Base64 encodedServiceCert)
 			throws JOSEException, JsonProcessingException, ParseException {

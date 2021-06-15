@@ -61,6 +61,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.CapeSdkManagerException;
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
 import it.eng.opsi.cape.exception.ConsentRecordNotValid;
@@ -87,6 +88,7 @@ import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.CommonPart;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentFormRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
@@ -118,6 +120,7 @@ import it.eng.opsi.cape.sdk.service.CapeServiceSdkManager;
 import it.eng.opsi.cape.sdk.service.ClientService;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import lombok.NonNull;
@@ -595,18 +598,15 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	/**
 	 * Fetch Consent Form from Consent Manager
 	 */
-	@Operation(summary = "Call Consent Manager to generate Consent Form for the input Surrogate Id, ServiceId Id, Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case).", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present and serviceId parameter represents the Sink Service Id. The fetched Consent Form will be used in the Give Consent API.", tags = {
+	@Operation(summary = "Fetch generated Consent Form for input Surrogate Id (depends on requesting party), (Sink) ServiceId , Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case)", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present. The fetched Consent Form will be used in the Give Consent API.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' data mappings/concepts (3-party consenting case) or directly from the datasets required by the selected Purpose of the service (Within Service case).", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
-	@GetMapping(value = "/users/surrogates/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/consents/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentForm> fetchConsentForm(@PathVariable String surrogateId,
-			@PathVariable String serviceId, @PathVariable String purposeId,
-			@RequestParam(required = false, name = "sourceDatasetId") String sourceDatasetId,
-			@RequestParam(required = false, name = "sourceServiceId") String sourceServiceId)
+	public ResponseEntity<ConsentForm> fetchConsentForm(@RequestBody @Valid ConsentFormRequest request)
 			throws ServiceManagerException, CapeSdkManagerException {
 
-		return clientService.callFetchConsentForm(surrogateId, serviceId, purposeId, sourceDatasetId, sourceServiceId);
+		return clientService.callFetchConsentForm(request);
 
 	}
 
@@ -761,15 +761,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	/**
 	 * Give Consent from Consent Manager
 	 */
-	@Operation(summary = "Give the Consent for the input ConsentForm.", description = "Call Cape Consent Manager to start Consenting transaction and return the new Consent Record signed with the Cape Account private key.", tags = {
+	@Operation(summary = "Give the Consent for the input ConsentForm. Generated Cr(s) will be saved and notified by Consent Manager.", description = "Return the newly generated Consent Record signed with the Acccount private key. (In case of 3rd party consenting, return the signed Cr copy related to which party has started consenting (Sink or Source).", tags = {
 			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns 201 Created with the new signed Consent Record.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
-	@PostMapping(value = "/users/surrogates/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ConsentRecordSigned> giveConsent(@PathVariable String surrogateId,
-			@RequestBody @Valid ConsentForm consentForm) {
+					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
+	@PostMapping(value = "/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned> giveConsent(@RequestBody @Valid ConsentForm consentForm) {
 
-		ResponseEntity<ConsentRecordSigned> giveConsentResponse = clientService.callGiveConsent(surrogateId,
-				consentForm);
+		ResponseEntity<ConsentRecordSigned> giveConsentResponse = clientService.callGiveConsent(consentForm);
 		ConsentRecordSigned responseCr = giveConsentResponse.getBody();
 
 		String crId = responseCr.getPayload().getCommonPart().getCrId();
@@ -779,18 +778,12 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * ConsentRecord)
 		 */
 		if (giveConsentResponse.getStatusCode().equals(HttpStatus.CREATED)) {
-			/*
-			 * 1. Store Signed CR and CSR
-			 */
-			responseCr.set_id(new ObjectId(responseCr.getPayload().getCommonPart().getCrId()));
-			consentRecordRepo.insert(responseCr);
 
 			/*
-			 * 2. If both sourceId and sourceName are not blank, we are in 3rd party
-			 * consenting case Get and save the (serialized) authorisation Token from
-			 * Consent Manager
+			 * If both sourceId and sourceName are not blank, we are in 3rd party consenting
+			 * case Get and save the (serialized) authorisation Token from Consent Manager
 			 */
-			if (!StringUtils.isAnyBlank(consentForm.getSourceId(), consentForm.getSourceName())) {
+			if (!StringUtils.isAnyBlank(consentForm.getSourceServiceId(), consentForm.getSourceName())) {
 				AuthorisationTokenResponse tokenResponse = clientService.callGetAuthorisationToken(crId);
 				authTokenRepo.save(tokenResponse);
 			}
@@ -801,8 +794,23 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return ResponseEntity.created(UriComponentsBuilder
 				.fromHttpUrl(
 						appProperty.getCape().getServiceSdk().getHost() + "/api/v2/users/{surrogateId}/consents/{crId}")
-				.build(crCommonPart.getSurrogateId(), crCommonPart.getCrId())).body(responseCr);
+				.build(consentForm.getRequesterSurrogateRole().equals(Role.SINK) ? crCommonPart.getSurrogateId()
+						: crCommonPart.getSourceSurrogateId(), crCommonPart.getCrId()))
+				.body(responseCr);
 
+	}
+
+	@Operation(summary = "Delete Consent Record Signed due to a rollback from Consent Manager.", tags = {
+			"(Internal) Consenting" }, responses = {
+					@ApiResponse(description = "Returns No Content.", responseCode = "204") })
+	@DeleteMapping(value = "/consents/{crId}")
+	@Override
+	public ResponseEntity<?> deleteConsentRecord(@PathVariable String crId) throws ConsentRecordNotFoundException {
+
+		if (consentRecordRepo.deleteConsentRecordSignedByPayload_commonPart_crId(crId) == 0L)
+			throw new ConsentRecordNotFoundException("No Consent Record with Cr Id: " + crId + " was found");
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Get the list of signed Consent Records for the input Surrogate Id.", description = "In 3rd party consenting case the Surrogate Id can be relative to a linked service acting in the consent either as sink or source. Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record (DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {

@@ -312,7 +312,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			if (forceCode)
 				return ResponseEntity.ok(sessionCode);
 			else {
-				clientService.callStartServiceLinking(sessionCode, surrogateId, operatorId, serviceId, returnUrl,
+				clientService.callStartServiceLinking(sessionCode, surrogateId, operatorId, serviceId,
 						serviceLinkingUri);
 				return ResponseEntity.ok(null);
 			}
@@ -679,8 +679,8 @@ public class ServiceManagerController implements IServiceManagerController {
 		ConsentRecordSignedPair[] crPairs = null;
 
 		/*
-		 * If Request generated from Operator (Cape) -> Call Account Manager to sign with
-		 * Account private key and store the newly generated SSR
+		 * If Request generated from Operator (Cape) -> Call Account Manager to sign
+		 * with Account private key and store the newly generated SSR
 		 */
 		if (requestFrom.equals(ChangeSlrStatusRequestFrom.OPERATOR)) {
 			ResponseEntity<ServiceLinkStatusRecordSigned> signAndStoreSsrResponse = clientService
@@ -692,8 +692,8 @@ public class ServiceManagerController implements IServiceManagerController {
 
 		} else if (requestFrom.equals(ChangeSlrStatusRequestFrom.SERVICE)) {
 			/*
-			 * Else if the request generated from Service -> Call Account Manager to store the
-			 * newly generated SSR, signed with the Operator's key
+			 * Else if the request generated from Service -> Call Account Manager to store
+			 * the newly generated SSR, signed with the Operator's key
 			 */
 			/*
 			 * Get Operator Key Pair and sign SSR with private key

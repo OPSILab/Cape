@@ -10,9 +10,10 @@
  * Do not edit the class manually.
  */
 import { SinkUsageRules } from './sinkUsageRules';
-import { DataController } from './dataController';
-import { HumanReadableDescription } from './humanReadableDescription';
+import { DataController } from '../dataController';
+import { HumanReadableDescription } from '../humanReadableDescription';
 import { ResourceSet } from './resourceSet';
+import { RoleEnum } from '../service-link/serviceEntry';
 
 export interface ConsentForm {
   surrogate_id: string;
@@ -21,8 +22,8 @@ export interface ConsentForm {
   sink_service_id: string;
   source_name?: string;
   sink_name: string;
-  source_domain_url?: string;
-  sink_domain_url?: string;
+  source_library_domain_url?: string;
+  sink_library_domain_url?: string;
   source_humanreadable_descriptions?: Array<HumanReadableDescription>;
   sink_humanreadable_descriptions?: Array<HumanReadableDescription>;
   resource_set: ResourceSet;
@@ -31,5 +32,11 @@ export interface ConsentForm {
   data_controller: DataController;
   service_description_version: string;
   service_description_signature: string;
+  source_service_description_version?: string;
+  source_service_description_signature?: string;
   service_provider_business_id: string;
+  /**
+   * Role (SINK, SOURCE) of requester Service initiating the Consenting request (is the Service related to the input Surrogate Id
+   */
+  requester_role: RoleEnum;
 }

@@ -46,6 +46,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -61,6 +65,7 @@ import it.eng.opsi.cape.consentmanager.model.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.consentmanager.model.ChangeConsentStatusRequest.ChangeConsentStatusRequestFrom;
 import it.eng.opsi.cape.consentmanager.model.CommonPart;
 import it.eng.opsi.cape.consentmanager.model.ConsentForm;
+import it.eng.opsi.cape.consentmanager.model.ConsentFormRequest;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordPayload;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordRoleEnum;
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordSigned;
@@ -75,8 +80,7 @@ import it.eng.opsi.cape.consentmanager.model.Policy;
 import it.eng.opsi.cape.consentmanager.model.RSDescription;
 import it.eng.opsi.cape.consentmanager.model.ResourceSet;
 import it.eng.opsi.cape.consentmanager.model.SinkUsageRules;
-import it.eng.opsi.cape.consentmanager.model.ThirdPartyReuseConsentSignResponse;
-import it.eng.opsi.cape.consentmanager.model.WithinServiceConsentSignResponse;
+import it.eng.opsi.cape.consentmanager.model.ConsentSignResponse;
 import it.eng.opsi.cape.consentmanager.model.audit.ConsentActionType;
 import it.eng.opsi.cape.consentmanager.model.audit.ConsentEventLog;
 import it.eng.opsi.cape.consentmanager.model.audit.EventType;
@@ -92,6 +96,7 @@ import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ChangeConsentStatusException;
 import it.eng.opsi.cape.exception.ConsentManagerException;
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
+import it.eng.opsi.cape.exception.ConsentRecordNotValid;
 import it.eng.opsi.cape.exception.ConsentStatusNotValidException;
 import it.eng.opsi.cape.exception.DataMappingNotFoundException;
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
@@ -105,6 +110,7 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.ServiceInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -133,6 +139,9 @@ public class ConsentManagerController implements IConsentManagerController {
 	ClientService clientService;
 
 	@Autowired
+	private ObjectMapper objectMapper;
+
+	@Autowired
 	public ConsentManagerController(ApplicationProperties appProperty) {
 		this.appProperty = appProperty;
 		this.operatorId = this.appProperty.getCape().getOperatorId();
@@ -140,154 +149,168 @@ public class ConsentManagerController implements IConsentManagerController {
 		this.consentExpiration = this.appProperty.getCape().getAuthToken().getExp();
 	}
 
-	@Operation(summary = "Generate Consent Form for input Surrogate Id, ServiceId Id, Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case)", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present and serviceId parameter represents the Sink Service Id. The fetched Consent Form will be used in the Give Consent API.", tags = {
+	@Operation(summary = "Generate Consent Form for input Surrogate Id (depends on requesting party), (Sink) ServiceId , Purpose Id and optionally sourceDatasetId and sourceServiceId (in 3rd party consenting case)", description = "PurposeId must match with one of the purposes present in the (Sink) Service Description. In case of 3rd party consenting, sourceDatasetId and sourceServiceId parameters must be both present. The fetched Consent Form will be used in the Give Consent API.", tags = {
 			"Consenting" }, responses = {
-					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' data mappings/concepts (3-party consenting case) or directly from the datasets required by the selected Purpose of the service (Within Service case).", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
-	@GetMapping(value = "/users/{surrogateId}/service/{serviceId}/purpose/{purposeId}/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
+					@ApiResponse(description = "Returns the generated Consent Form containing the Resource Set generated either by matching Sink and Source datasets' data mappings/concepts (3rd-party consenting case) or directly from the datasets required by the selected Purpose of the service (Within Service case).", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentForm.class))) })
+	@PostMapping(value = "/consents/consentForm", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentForm> fetchConsentFormFromService(@PathVariable String surrogateId,
-			@PathVariable String serviceId, @PathVariable String purposeId,
-			@RequestParam(required = false) String sourceDatasetId,
-			@RequestParam(required = false) String sourceServiceId) throws ConsentManagerException,
-			ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException, DataMappingNotFoundException,
-			DatasetIdNotFoundException, AccountNotFoundException, ServiceLinkStatusNotValidException {
+	public ResponseEntity<ConsentForm> fetchGeneratedConsentForm(@RequestBody @Valid ConsentFormRequest request)
+			throws ConsentManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
+			DataMappingNotFoundException, DatasetIdNotFoundException, AccountNotFoundException,
+			ServiceLinkStatusNotValidException {
 
 		ConsentForm consentForm = null;
 		List<Dataset> resourceSetDatasets = null;
 
+		// Can related to a SLR either of a Sink or a Source
+		String requesterSurrogateId = request.getRequesterSurrogateId();
+
+		String sinkServiceId = request.getSinkServiceId();
+		String sourceServiceId = request.getSourceServiceId();
+		String sourceDatasetId = request.getSourceServiceDatasetId();
+		String purposeId = request.getPurposeId();
+
+		/*****************************************************************************
+		 * 1. Check if there is an active Service Link Record for the Requester Service
+		 * (which Role is in input) corresponding to the input requester SurrogateId
+		 * 
+		 *****************************************************************************/
+		String requesterServiceId = request.getRequesterSurrogateRole().equals(Role.SINK)
+				|| StringUtils.isBlank(sourceServiceId) ? sinkServiceId : sourceServiceId;
+
+		ServiceLinkRecordDoubleSigned requesterSlr = clientService
+				.callGetServiceLinkRecordBySurrogateIdAndServiceId(requesterSurrogateId, requesterServiceId);
+		ServiceLinkStatusRecordPayload requesterSsr = requesterSlr.getServiceLinkStatuses()
+				.get(requesterSlr.getServiceLinkStatuses().size() - 1).getPayload();
+		if (!requesterSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
+			throw new ServiceLinkStatusNotValidException("The Service Link Record found for Surrogate Id: "
+					+ requesterSurrogateId + " and requester Service Id: " + requesterServiceId
+					+ " is in Removed state, try to active it first.");
+
+		/****************************************************************************
+		 * 2. Check if there is an existing Consent Form for the input SurrogateId -
+		 * ServiceId - (eventual) sourceServiceId - PurposeId for which a Consent Record
+		 * has been given, in that case return it
+		 * 
+		 ****************************************************************************/
+		List<ConsentForm> existingConsentForms = consentFormRepo
+				.findBySurrogateIdAndSinkServiceIdAndSourceServiceIdAndUsageRules_purposeId(requesterSurrogateId,
+						sinkServiceId, sourceServiceId, purposeId);
+
+		for (ConsentForm existingConsentForm : existingConsentForms) {
+			Optional<ConsentRecordSigned[]> crPair = consentRecordRepo
+					.findByPayload_commonPart_rsDescription_resourceSet_rsId(
+							existingConsentForm.getResourceSet().getRsId());
+
+			if (!crPair.isPresent())
+				return ResponseEntity.ok(existingConsentForm);
+		}
+
 		/*
-		 * If SourceId is present the Consenting is supposed to be between a Sink and a
-		 * Source (Third Party Re-use case).
+		 * Get Service Description from Service Registry
 		 */
+		ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(sinkServiceId);
+
+		/*********************************************************************
+		 * 3. Create the (Sink) Usage Rule
+		 * 
+		 *********************************************************************/
+		ProcessingBasis servicePurpose = serviceDescription.getProcessingBases().stream()
+				.filter(basis -> basis.getPurposeId().equals(purposeId)).findFirst().get();
+
+		SinkUsageRules serviceUsageRule = new SinkUsageRules(purposeId, servicePurpose.getPurposeCategory(),
+				servicePurpose.getDescription(), servicePurpose.getLegalBasis(), servicePurpose.getPurposeName(),
+				servicePurpose.getProcessingCategories(), new Policy(servicePurpose.getPolicyRef(), "", ""),
+				servicePurpose.getStorage(), servicePurpose.getRecipients(), servicePurpose.getShareWith(),
+				servicePurpose.getObligations(), servicePurpose.getCollectionMethod(), servicePurpose.getTermination());
+
+		/********************************************************************************
+		 * 3. If SourceServiceId is present in the request, the Consenting is supposed
+		 * to be between a Sink and a Source (Third Party Re-use case), otherwise the
+		 * requesting Service is requesting Consent form for Consenting data processed
+		 * within itself (Within Service case).
+		 * 
+		 *********************************************************************************/
 
 		/*******************************************************************
-		 * *** 1. Consenting Case (within Service) ****
-		 * 
+		 * 3a. Consenting Case (Within Service)
 		 * 
 		 *******************************************************************/
 		if (StringUtils.isBlank(sourceServiceId) && StringUtils.isBlank(sourceDatasetId)) {
-
-			/*
-			 * Check if there is an active Service Link Record for the Service and Account
-			 * corresponding to the input SurrogateId
-			 */
-			ServiceLinkRecordDoubleSigned existingSlr = clientService
-					.callGetServiceLinkRecordBySurrogateIdAndServiceId(surrogateId, serviceId);
-			ServiceLinkStatusRecordPayload existingSsr = existingSlr.getServiceLinkStatuses()
-					.get(existingSlr.getServiceLinkStatuses().size() - 1).getPayload();
-			if (!existingSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
-				throw new ServiceLinkStatusNotValidException(
-						"The Service Link Record found for Surrogate Id: " + surrogateId + " and Service Id: "
-								+ serviceId + " is in Removed state, try to active it first");
 
 			/*
 			 * TODO Check if there is an already Active Consent Record throw new
 			 * ConsentAlreadyPresentException();
 			 */
 
-			// Get Service Description from Service Registry
-			ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
-
-			// In the within Service case, the Resource Set Dataset is directly the ones
+			// In the within Service case, the Resource Set Datasets are directly the ones
 			// required by the Purpose
 			resourceSetDatasets = getWithinServiceDatasets(purposeId, serviceDescription);
 
-			/********************************************************************
-			 * Check if there is an existing Consent Form for the input SurrogateId -
-			 * ServiceId - PurposeId for which a Consent Record has been given
-			 ********************************************************************/
-			List<ConsentForm> existingConsentForms = consentFormRepo
-					.findBySurrogateIdAndSinkIdAndSourceIdAndUsageRules_purposeId(surrogateId, serviceId,
-							sourceServiceId, purposeId);
-
-			for (ConsentForm existingConsentForm : existingConsentForms) {
-				Optional<ConsentRecordSigned[]> crPair = consentRecordRepo
-						.findByPayload_commonPart_rsDescription_resourceSet_rsId(
-								existingConsentForm.getResourceSet().getRsId());
-
-				if (!crPair.isPresent())
-					return ResponseEntity.ok(existingConsentForm);
-			}
-
 			/*
-			 * Otherwise generate a new Resource Set Id (serviceDomain:uniqueResourceKey)
+			 * Generate a new Resource Set Id (serviceDomain:uniqueResourceKey)
 			 */
 			String rsId = serviceDescription.getServiceInstance().getServiceUrls().getDomain() + ":"
 					+ new ObjectId().toString();
 			ResourceSet proposedResourceSet = new ResourceSet(rsId, resourceSetDatasets);
-
-			/*
-			 * Create the Sink Usage Rule
-			 * 
-			 */
-			ProcessingBasis servicePurpose = serviceDescription.getProcessingBases().stream()
-					.filter(basis -> basis.getPurposeId().equals(purposeId)).findFirst().get();
-
-			SinkUsageRules serviceUsageRule = new SinkUsageRules(purposeId, servicePurpose.getPurposeCategory(),
-					servicePurpose.getDescription(), servicePurpose.getLegalBasis(), servicePurpose.getPurposeName(),
-					servicePurpose.getProcessingCategories(), new Policy(servicePurpose.getPolicyRef(), "", ""),
-					servicePurpose.getStorage(), servicePurpose.getRecipients(), servicePurpose.getShareWith(),
-					servicePurpose.getObligations(), servicePurpose.getCollectionMethod(),
-					servicePurpose.getTermination());
 
 			/******************************************************************************
 			 * Create the final Consent Form to be returned
 			 *******************************************************************************/
 			ServiceInstance serviceInstance = serviceDescription.getServiceInstance();
 
-			consentForm = new ConsentForm(rsId, surrogateId, serviceId, serviceDescription.getName(),
+			consentForm = new ConsentForm(rsId, requesterSurrogateId, sinkServiceId, serviceDescription.getName(),
+					serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
 					serviceDescription.getHumanReadableDescription(), proposedResourceSet, serviceUsageRule,
 					serviceInstance.getServiceProvider().getJurisdiction(), serviceInstance.getDataController(),
 					serviceDescription.getServiceDescriptionVersion(),
 					serviceDescription.getServiceDescriptionSignature(),
-					serviceDescription.getServiceInstance().getServiceProvider().getBusinessId());
+					serviceDescription.getServiceInstance().getServiceProvider().getBusinessId(),
+					request.getRequesterSurrogateRole());
 
-		} else
-
-		{
+		} else {
 
 			/********************************************************************
-			 * *** 2. Third Party Re-use Case (Sink-Source Services) ****
+			 * 3b. Third Party Re-use Case (Sink-Source Services)
 			 * 
 			 * The input serviceId represents the sinkId
 			 * 
-			 * The input datasetId represents the Source dataset, to which Data concepts
-			 * contained in the purpose required dataset must match.
+			 * The input sourceDatasetId represents the Source dataset whose provided Data
+			 * (Sink) Purpose.
 			 * 
 			 *******************************************************************/
 
 			/*******************************************************************
-			 * Check if there is a Service Link Record for the Services (Sink and Source)
-			 * and the Account corresponding to the input SurrogateId
-			 *
+			 * Check if there is an active Service Link Record also for the other party
+			 * Service
+			 * 
 			 *******************************************************************/
-			ServiceLinkRecordDoubleSigned existingSinkSlr = clientService
-					.callGetServiceLinkRecordBySurrogateIdAndServiceId(surrogateId, serviceId);
-			ServiceLinkStatusRecordPayload existingSinkSsr = existingSinkSlr.getServiceLinkStatuses()
-					.get(existingSinkSlr.getServiceLinkStatuses().size() - 1).getPayload();
-			if (!existingSinkSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
-				throw new ServiceLinkRecordNotFoundException("No active Service Link Record found for Surrogate Id: "
-						+ surrogateId + "and Service Id: " + serviceId);
-
 			/********************************************************************
-			 * Get from Account Manager the accountId corresponding to the input Surrogate
-			 * Id Used to get the Source Slr by accountId (we have in input only the
-			 * Surrogate Id of the Sink service) and then to retrieve the Source Surrogate
-			 * Id
+			 * a. Get (from Account Manager) the accountId corresponding to the requester
+			 * SLR (retrieved previously by input requesterSurrogateId).
+			 * 
+			 * b. Use accountId to get the SLR of the other party (Source if the requester
+			 * party has Sink role and vice-versa) (we have in input only the Surrogate Id
+			 * of the requester service)
 			 ********************************************************************/
-			String sinkSlrId = existingSinkSlr.getPayload().getSlrId();
-			String accountId = clientService.callGetAccountIdFromSlrIdAndSurrogateId(sinkSlrId, surrogateId);
+			String requesterSlrId = requesterSlr.getPayload().getSlrId();
+			String accountId = clientService.callGetAccountIdFromSlrIdAndSurrogateId(requesterSlrId,
+					requesterSurrogateId);
 
-			ServiceLinkRecordDoubleSigned existingSourceSlr = clientService
-					.callGetServiceLinkRecordByAccountIdAndServiceId(accountId, sourceServiceId);
-			ServiceLinkStatusRecordPayload existingSourceSsr = existingSourceSlr.getServiceLinkStatuses()
-					.get(existingSourceSlr.getServiceLinkStatuses().size() - 1).getPayload();
+			// If the requester party is Sink, we retrieve the Source SLR by its serviceId
+			// and vice-versa
+			String otherPartyServiceId = request.getRequesterSurrogateRole().equals(Role.SINK) ? sourceServiceId
+					: sinkServiceId;
+			ServiceLinkRecordDoubleSigned otherPartySlr = clientService
+					.callGetServiceLinkRecordByAccountIdAndServiceId(accountId, otherPartyServiceId);
+			ServiceLinkStatusRecordPayload otherPartySsr = otherPartySlr.getServiceLinkStatuses()
+					.get(otherPartySlr.getServiceLinkStatuses().size() - 1).getPayload();
 
-			if (!existingSourceSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
+			if (!otherPartySsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
 				throw new ServiceLinkRecordNotFoundException("No active Service Link Record found for Account Id: "
-						+ accountId + "and Source Service Id: " + serviceId);
+						+ accountId + "and other party Service Id: " + otherPartyServiceId);
 
-			String sourceSurrogateId = existingSourceSlr.getPayload().getSurrogateId();
+			String otherPartySurrogateId = otherPartySlr.getPayload().getSurrogateId();
 
 			/*
 			 * TODO Check if there is an already Active Consent Record throw new
@@ -296,78 +319,66 @@ public class ConsentManagerController implements IConsentManagerController {
 
 			/********************************************************************
 			 * 
-			 * 
 			 * Create the Proposed Resource Set by matching the Data Mappings. Starting from
-			 * the input Sink Purpose Id, get the required datasets. For each sink required
-			 * dataset for the purpose, match its data mapping fields (by the conceptId) to
-			 * the ones coming from the Source Dataset (sourceDatasetId in input)
+			 * the input Sink Purpose Id, get the required datasets. For each required
+			 * dataset of the sink purpose, match its data mapping fields (by the conceptId)
+			 * to the ones coming from the Source Dataset (sourceDatasetId in input)
 			 * 
 			 **********************************************************************************/
 
-			ServiceEntry sinkDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
-			ServiceEntry sourceDescription = clientService.getServiceDescriptionFromRegistry(sourceServiceId);
+			ServiceEntry sourceServiceDescription = clientService.getServiceDescriptionFromRegistry(sourceServiceId);
 
-			resourceSetDatasets = getThirdPartyReuseMatchedDatasets(purposeId, sourceDatasetId, sinkDescription,
-					sourceDescription);
-
-			/*
-			 * Check if there is an existing Consent Form for the input SurrogateId -
-			 * ServiceId - PurposeId for which a Consent Record has been given
-			 */
-			List<ConsentForm> existingConsentForms = consentFormRepo
-					.findBySurrogateIdAndSinkIdAndSourceIdAndUsageRules_purposeId(surrogateId, serviceId,
-							sourceServiceId, purposeId);
-
-			for (ConsentForm existingConsentForm : existingConsentForms) {
-				Optional<ConsentRecordSigned[]> crPair = consentRecordRepo
-						.findByPayload_commonPart_rsDescription_resourceSet_rsId(
-								existingConsentForm.getResourceSet().getRsId());
-
-				if (!crPair.isPresent())
-					return ResponseEntity.ok(existingConsentForm);
-			}
+			resourceSetDatasets = getThirdPartyReuseMatchedDatasets(purposeId, sourceDatasetId, serviceDescription,
+					sourceServiceDescription);
 
 			/*
-			 * Otherwise generate a new Resource Set Id (serviceUri:uniqueResourceKey)
+			 * Generate a new Resource Set Id (serviceUri:uniqueResourceKey)
 			 */
-			String rsId = sourceDescription.getServiceInstance().getServiceUrls().getDomain() + ":"
+			String rsId = sourceServiceDescription.getServiceInstance().getServiceUrls().getDomain() + ":"
 					+ new ObjectId().toString();
 			ResourceSet proposedResourceSet = new ResourceSet(rsId, resourceSetDatasets);
 
-			/*
-			 * Create the Sink Usage Rule
-			 * 
-			 */
-			ProcessingBasis sinkPurpose = sinkDescription.getProcessingBases().stream()
-					.filter(basis -> basis.getPurposeId().equals(purposeId)).findFirst().get();
-
-			SinkUsageRules sinkUsageRule = new SinkUsageRules(purposeId, sinkPurpose.getPurposeCategory(),
-					sinkPurpose.getDescription(), sinkPurpose.getLegalBasis(), sinkPurpose.getPurposeName(),
-					sinkPurpose.getProcessingCategories(), new Policy(sinkPurpose.getPolicyRef(), "", ""),
-					sinkPurpose.getStorage(), sinkPurpose.getRecipients(), sinkPurpose.getShareWith(),
-					sinkPurpose.getObligations(), sinkPurpose.getCollectionMethod(), sinkPurpose.getTermination());
-
 			/*******************************************************************************
 			 *
-			 * Create the final Consent Form to be returned
+			 * Create the final Consent Form to be returned (with surrogateIds order in the
+			 * constructor depending on who is requester and who otherParty)
 			 *******************************************************************************/
-			ServiceInstance sinkServiceInstance = sinkDescription.getServiceInstance();
+			ServiceInstance sinkServiceInstance = serviceDescription.getServiceInstance();
 
-			consentForm = new ConsentForm(rsId, surrogateId, sourceSurrogateId, sourceServiceId, serviceId,
-					sourceDescription.getName(), sinkDescription.getName(),
-					sourceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
-					sinkDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
-					sourceDescription.getHumanReadableDescription(), sinkDescription.getHumanReadableDescription(),
-					proposedResourceSet, sinkUsageRule, sinkServiceInstance.getServiceProvider().getJurisdiction(),
-					sinkServiceInstance.getDataController(), sinkDescription.getServiceDescriptionVersion(),
-					sinkDescription.getServiceDescriptionSignature(),
-					sinkDescription.getServiceInstance().getServiceProvider().getBusinessId());
+			if (request.getRequesterSurrogateRole().equals(Role.SINK))
+				consentForm = new ConsentForm(rsId, requesterSurrogateId, otherPartySurrogateId, sourceServiceId,
+						sinkServiceId, sourceServiceDescription.getName(), serviceDescription.getName(),
+						sourceServiceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
+						serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
+						sourceServiceDescription.getHumanReadableDescription(),
+						serviceDescription.getHumanReadableDescription(), proposedResourceSet, serviceUsageRule,
+						sinkServiceInstance.getServiceProvider().getJurisdiction(),
+						sinkServiceInstance.getDataController(), serviceDescription.getServiceDescriptionVersion(),
+						serviceDescription.getServiceDescriptionSignature(),
+						sourceServiceDescription.getServiceDescriptionVersion(),
+						sourceServiceDescription.getServiceDescriptionSignature(),
+						serviceDescription.getServiceInstance().getServiceProvider().getBusinessId(),
+						request.getRequesterSurrogateRole());
+			else
+				consentForm = new ConsentForm(rsId, otherPartySurrogateId, requesterSurrogateId, sourceServiceId,
+						sinkServiceId, sourceServiceDescription.getName(), serviceDescription.getName(),
+						sourceServiceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
+						serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
+						sourceServiceDescription.getHumanReadableDescription(),
+						serviceDescription.getHumanReadableDescription(), proposedResourceSet, serviceUsageRule,
+						sinkServiceInstance.getServiceProvider().getJurisdiction(),
+						sinkServiceInstance.getDataController(), serviceDescription.getServiceDescriptionVersion(),
+						serviceDescription.getServiceDescriptionSignature(),
+						sourceServiceDescription.getServiceDescriptionVersion(),
+						sourceServiceDescription.getServiceDescriptionSignature(),
+						serviceDescription.getServiceInstance().getServiceProvider().getBusinessId(),
+						request.getRequesterSurrogateRole());
 
 		}
 
 		/*
-		 * Save Consent Form in DB ( To check its RsId when giving consent and to expose
-		 * it as consent_proposal_url =
+		 * Save Consent Form in DB ( To let check its RsId when giving consent and to
+		 * expose it as consent_proposal_url =
 		 */
 		consentFormRepo.save(consentForm);
 
@@ -513,41 +524,42 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Give the Consent for the input ConsentForm", description = "Return the newly generated Consent Record signed with the Acccount private key.", tags = {
+	@Operation(summary = "Give the Consent for the input ConsentForm.", description = "Return the newly generated Consent Record signed with the Acccount private key. (In case of 3rd party consenting, return the signed Cr copy related to which party has started consenting (Sink or Source).", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the created Consent Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentRecordSigned.class))) })
-	@PostMapping(value = "/users/{surrogateId}/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/consents", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned> giveConsentFromService(@PathVariable String surrogateId,
-			@RequestBody @Valid ConsentForm consentForm)
+	public ResponseEntity<ConsentRecordSigned> giveConsent(@RequestBody @Valid ConsentForm consentForm)
 			throws ResourceSetIdNotFoundException, ConsentManagerException, ServiceLinkRecordNotFoundException,
 			AccountNotFoundException, ConsentRecordNotFoundException, ConsentStatusNotValidException,
-			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException {
+			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException, ChangeConsentStatusException,
+			JsonMappingException, JsonProcessingException, ConsentRecordNotValid {
 
+		ConsentRecordSigned signedCr = null, signedSourceCr = null;
 		/*
-		 * Check Resource Id of the input Consent Form (is its Id)
+		 * Check Resource Id of the input Consent Form (is its own Id)
 		 */
 		consentFormRepo.findById(consentForm.getResourceSet().getRsId())
 				.orElseThrow(() -> new ResourceSetIdNotFoundException(
 						"The Resource Set Id in the input Consent Forms was not found"));
 
-		/*****************************************************
+		/*****************************************************************************
 		 * If there is a sourceId, we are in the 3rd-party consenting case, then the
-		 * serviceId is the Sink Id and surrogateId is the one of Sink Service's User
-		 ******************************************************/
-		String serviceId = consentForm.getSinkId();
-		String sourceId = consentForm.getSourceId();
+		 * serviceId is the Sink Service Id
+		 ******************************************************************************/
+		String serviceId = consentForm.getSinkServiceId();
+		String sourceId = consentForm.getSourceServiceId();
+		String surrogateId = consentForm.getSurrogateId();
 
 		ResourceSet proposedResourceSet = consentForm.getResourceSet();
 		Dataset proposedDataset = proposedResourceSet.getDatasets().get(0);
-		String datasetId = proposedDataset.getId();
 		SinkUsageRules proposedUsageRules = consentForm.getUsageRules();
 		DataMapping[] proposedConcepts = proposedDataset.getDataMappings().stream().toArray(DataMapping[]::new);
 
-		/******************************************************
+		/*****************************************************************************
 		 * Check if there is an active Service Link Record for the Service and Account
-		 * corresponding to the input SurrogateId
-		 ******************************************************/
+		 * corresponding to the SurrogateId in the input Consent Form
+		 *****************************************************************************/
 		ServiceLinkRecordDoubleSigned existingSlr = clientService
 				.callGetServiceLinkRecordBySurrogateIdAndServiceId(surrogateId, serviceId);
 		ServiceLinkRecordPayload existingSlrPayload = existingSlr.getPayload();
@@ -557,7 +569,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		if (!existingSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
 			throw new ServiceLinkRecordNotFoundException("No active Service Link Record found for Surrogate Id: "
-					+ surrogateId + "and Service Id: " + serviceId);
+					+ surrogateId + " and Service Id: " + serviceId);
 
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
 		String accountId = clientService.callGetAccountIdFromSlrIdAndSurrogateId(slrId, surrogateId);
@@ -566,7 +578,8 @@ public class ConsentManagerController implements IConsentManagerController {
 		 * Check if there is an already Active Consent Record for (Sink) Service and
 		 * selected purposeId (take it from one of Resource Set's dataset).
 		 * 
-		 * In case return the existing Consent Record
+		 * In case return the existing Consent Record after updating with input proposed
+		 * Resource Set and Usage Rules
 		 **********************************************************************************/
 
 		List<ConsentRecordSigned> existingCrList = consentRecordRepo
@@ -579,10 +592,10 @@ public class ConsentManagerController implements IConsentManagerController {
 
 			if (!existingCr.isWithdrawn()) {
 
-				/************************************
-				 * If The existing Consent Record is disabled, activate it and vice-versa, Also
+				/******************************************************************************
+				 * If The existing Consent Record is disabled, activate it and vice-versa. Also
 				 * updating Resource Set and Usage Rules with the proposed ones in input
-				 ************************************/
+				 ******************************************************************************/
 				proposedResourceSet
 						.setRsId(existingCr.getPayload().getCommonPart().getRsDescription().getResourceSet().getRsId());
 
@@ -594,78 +607,49 @@ public class ConsentManagerController implements IConsentManagerController {
 						.getBody();
 
 				return ResponseEntity.ok(existingCr);
-			}
+			} else if (proposedResourceSet.getRsId()
+					.equals(existingCr.getPayload().getCommonPart().getRsDescription().getResourceSet().getRsId()))
+				throw new ConsentRecordNotValid(
+						"The ResourceSet Id in input was already used by a Withdrawn Consent Record, issue a new one by fetching a new Consent Form.");
+
 		}
 
-		/******************************************************
-		 * Start creating Consent Record and Consent Status Record for Service/Sink
-		 ******************************************************/
+		/***********************************************************************************
+		 * 
+		 * Start creating Consent Record and Consent Status Record for Service (Sink in
+		 * 3rd party consenting case)
+		 * 
+		 ***********************************************************************************/
 		String consentRecordId = new ObjectId().toString();
 		String consentStatusRecordId = new ObjectId().toString();
 		RSDescription resourceSetDescription = new RSDescription(proposedResourceSet);
 
-		/******************************************************
-		 * *** 1. Consenting Case (within Service) ****
+		/***********************************************************************************
+		 * 1. Common Case, create the Common Part and roleSpecific part for Service
+		 * (Sink)
 		 * 
-		 * 
-		 **********************************************/
-		if (StringUtils.isBlank(sourceId)) {
+		 ************************************************************************************/
+		CommonPart consentCommonPart = new CommonPart(appProperty.getCape().getVersion(), consentRecordId, null,
+				existingSlrPayload.getSurrogateId(), consentForm.getSourceSurrogateId(), slrId, null, serviceId,
+				consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(),
+				consentForm.getSourceServiceId(), consentForm.getSourceName(),
+				consentForm.getSourceHumanReadableDescriptions(), consentForm.getServiceDescriptionVersion(),
+				consentForm.getServiceDescriptionSignature(), consentForm.getSourceServiceDescriptionVersion(),
+				consentForm.getSourceServiceDescriptionSignature(), consentForm.getServiceProviderBusinessId(),
+				resourceSetDescription, consentForm.getJurisdiction(), consentForm.getDataController(), now, now, null,
+				null, operatorId, ConsentRecordStatusEnum.Active, null);
 
-			/*
-			 * The Resource Set id is used as Consent Pair Id (if needed).
-			 */
-			CommonPart consentCommonPart = new CommonPart(appProperty.getCape().getVersion(), consentRecordId,
-					existingSlrPayload.getSurrogateId(), resourceSetDescription, slrId, now, now, operatorId, serviceId,
-					consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(), serviceId,
-					consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(),
-					consentForm.getJurisdiction(), consentForm.getDataController(),
-					consentForm.getServiceDescriptionVersion(), consentForm.getServiceDescriptionSignature(),
-					consentForm.getServiceProviderBusinessId(), ConsentRecordRoleEnum.SINK,
-					ConsentRecordStatusEnum.Active);
+		ConsentRecordSinkRoleSpecificPart sinkRolePart = ConsentRecordSinkRoleSpecificPart.builder()
+				.usageRules(proposedUsageRules).role(ConsentRecordRoleEnum.SINK).build();
+		ConsentRecordPayload crPayload = new ConsentRecordPayload(consentCommonPart, sinkRolePart, null);
 
-			ConsentRecordSinkRoleSpecificPart sinkRolePart = new ConsentRecordSinkRoleSpecificPart(proposedUsageRules);
-			ConsentRecordPayload crPayload = new ConsentRecordPayload(consentCommonPart, sinkRolePart, null);
+		ConsentStatusRecordPayload csrPayload = new ConsentStatusRecordPayload(consentStatusRecordId,
+				appProperty.getCape().getVersion(), surrogateId, consentForm.getSourceSurrogateId(),
+				ConsentRecordStatusEnum.Active, proposedResourceSet, proposedUsageRules, now, "none");
 
-			ConsentStatusRecordPayload csrPayload = new ConsentStatusRecordPayload(consentStatusRecordId,
-					appProperty.getCape().getVersion(), surrogateId, consentRecordId, ConsentRecordStatusEnum.Active,
-					proposedResourceSet, proposedUsageRules, now, "none");
-
-			/*
-			 * Call Account Manager to Sign Consent Record and Consent Status Record
-			 */
-			WithinServiceConsentSignResponse consentSignResponse = clientService.callSignWithinServiceConsent(
-					surrogateId, slrId, crPayload, csrPayload, new ArrayList<ConsentStatusRecordSigned>());
-			ConsentRecordSigned signedCr = consentSignResponse.getSignedCr();
-			ConsentStatusRecordSigned signedCsr = consentSignResponse.getSignedCsr();
-
-			/*
-			 * Store Signed CR and CSR
-			 */
-			signedCr.setAccountId(accountId);
-			signedCr.set_id(new ObjectId(signedCr.getPayload().getCommonPart().getCrId()));
-
-			// TODO Send CR to Service instead of returning in the API?
-			// Set notification to SDK Successful
-//			signedCr.setSentToSdkSuccessfully(true);
-			consentRecordRepo.insert(signedCr);
-
-			// Audit for give consent
-			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
-					"Consent given", proposedUsageRules, serviceId, serviceId, proposedConcepts, null,
-					ConsentActionType.GIVE, null, consentRecordId));
-
-			// Audit of consent sending
-			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
-					"Consent sent", proposedUsageRules, serviceId, serviceId, proposedConcepts, null,
-					ConsentActionType.SEND, null, consentRecordId));
-
-			return ResponseEntity.created(UriComponentsBuilder
-					.fromHttpUrl(consentManagerHost + "/api/v2/accounts/{accountId}/consents/{consentRecordId}")
-					.build(accountId, consentRecordId)).body(signedCr);
-
-		} else {
+		if (StringUtils.isNotBlank(sourceId)) {
 			/******************************************************
-			 * *** 2. Third Party Re-use Case (Sink-Source Services) ****
+			 * *** 2a. Third Party Re-use Case (Sink-Source Services) ****
 			 * 
 			 * The input serviceId represents the sinkId
 			 * 
@@ -674,29 +658,10 @@ public class ConsentManagerController implements IConsentManagerController {
 			 * 
 			 *****************************************************************/
 
-			/*
-			 * The Resource Set id is used as Consent Pair Id (if needed)
-			 */
-			CommonPart consentCommonPart = new CommonPart(appProperty.getCape().getVersion(), consentRecordId,
-					existingSlrPayload.getSurrogateId(), resourceSetDescription, slrId, now, now, operatorId, serviceId,
-					consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(), sourceId,
-					consentForm.getSourceName(), consentForm.getSourceHumanReadableDescriptions(),
-					consentForm.getJurisdiction(), consentForm.getDataController(),
-					consentForm.getServiceDescriptionVersion(), consentForm.getServiceDescriptionSignature(),
-					consentForm.getServiceProviderBusinessId(), ConsentRecordRoleEnum.SINK,
-					ConsentRecordStatusEnum.Active);
-
-			ConsentRecordSinkRoleSpecificPart sinkRolePart = new ConsentRecordSinkRoleSpecificPart(proposedUsageRules);
-			ConsentRecordPayload crPayload = new ConsentRecordPayload(consentCommonPart, sinkRolePart, null);
-
-			ConsentStatusRecordPayload csrPayload = new ConsentStatusRecordPayload(consentStatusRecordId,
-					appProperty.getCape().getVersion(), surrogateId, consentRecordId, ConsentRecordStatusEnum.Active,
-					proposedResourceSet, proposedUsageRules, now, "none");
-
-			/*
-			 * Check if there is an active Service Link Record for the Service and Account
-			 * corresponding to the Source SurrogateId present in the Consent Form
-			 */
+			/*****************************************************************************
+			 * a. Check if there is an active Service Link Record corresponding to the
+			 * Source SurrogateId in the input Consent Form
+			 *****************************************************************************/
 
 			String sourceSurrogateId = consentForm.getSourceSurrogateId();
 			ServiceLinkRecordDoubleSigned sourceSlr = clientService
@@ -705,120 +670,175 @@ public class ConsentManagerController implements IConsentManagerController {
 			String sourceSlrId = sourceSlrPayload.getSlrId();
 			ServiceLinkStatusRecordPayload sourceSsr = sourceSlr.getServiceLinkStatuses()
 					.get(sourceSlr.getServiceLinkStatuses().size() - 1).getPayload();
-
 			if (!sourceSsr.getServiceLinkStatus().equals(ServiceLinkStatusEnum.ACTIVE))
 				throw new ServiceLinkRecordNotFoundException("No active Service Link Record found for Surrogate Id: "
-						+ surrogateId + "and Service Id: " + sourceId);
-
-			/******************************************************
-			 * Start creating Consent Record and Consent Status Record for Source Service
-			 ******************************************************/
-
-			String sourceConsentRecordId = new ObjectId().toString();
-			String sourceConsentStatusRecordId = new ObjectId().toString();
-
-			CommonPart sourceConsentCommonPart = new CommonPart(appProperty.getCape().getVersion(),
-					sourceConsentRecordId, sourceSurrogateId, resourceSetDescription, sourceSlrId, now, now, operatorId,
-					serviceId, consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(), sourceId,
-					consentForm.getSourceName(), consentForm.getSourceHumanReadableDescriptions(),
-					consentForm.getJurisdiction(), consentForm.getDataController(),
-					consentForm.getServiceDescriptionVersion(), consentForm.getServiceDescriptionSignature(),
-					consentForm.getServiceProviderBusinessId(), ConsentRecordRoleEnum.SOURCE,
-					ConsentRecordStatusEnum.Active);
+						+ surrogateId + " and Service Id: " + sourceId);
 
 			/*
-			 * Set the Sink and Source Cr Pair ids with the Resource Set Id, this will
+			 * Set in the already created Common Part, the retrieved sourceSlrId
+			 */
+			consentCommonPart.setSourceSlrId(sourceSlrId);
+			/*
+			 * Set the Common Part -> Cr Pair Id with the Resource Set Id, this will
 			 * identify the Consent Records as part of a Cr pair being a third party reuse
 			 * case
 			 */
 			consentCommonPart.setCrPairId(proposedResourceSet.getRsId());
-			sourceConsentCommonPart.setCrPairId(proposedResourceSet.getRsId());
 
-			ConsentRecordSourceRoleSpecificPart sourceRolePart = new ConsentRecordSourceRoleSpecificPart(
-					existingSlrPayload.getPopKey(), sourceSlrPayload.getOperatorKey());
-			ConsentRecordPayload sourceCrPayload = new ConsentRecordPayload(sourceConsentCommonPart, sourceRolePart,
-					null);
+			/********************************************************************************
+			 * b. Call Account Manager to Sign Consent Record and Consent Status Record
+			 ********************************************************************************/
+			ConsentSignResponse consentSignResponse = clientService.callSignConsentRecordAndConsentStatusRecord(
+					surrogateId, slrId, crPayload, csrPayload, new ArrayList<ConsentStatusRecordSigned>());
+			signedCr = consentSignResponse.getSignedCr();
 
-			ConsentStatusRecordPayload sourceCsrPayload = new ConsentStatusRecordPayload(sourceConsentStatusRecordId,
-					appProperty.getCape().getVersion(), sourceSlrPayload.getSurrogateId(), sourceConsentRecordId,
-					ConsentRecordStatusEnum.Active, proposedResourceSet, proposedUsageRules, now, "none");
+			signedCr.setAccountId(accountId);
+			signedCr.set_id(new ObjectId(signedCr.getPayload().getCommonPart().getCrId()));
+
+			/******************************************************************************
+			 * c. Start creating Consent Record for Source Service (CommonPart and Csr and
+			 * signatures are the same of the sink one)
+			 ******************************************************************************/
+
+			String sourceConsentRecordId = new ObjectId().toString();
+
+			ConsentRecordSourceRoleSpecificPart sourceRolePart = ConsentRecordSourceRoleSpecificPart.builder()
+					.popKey(existingSlrPayload.getPopKey()).tokenIssuerKey(sourceSlrPayload.getOperatorKey())
+					.role(ConsentRecordRoleEnum.SOURCE).build();
+
+			/*
+			 * Source ConsentRecordSigned will have the same commonPart, signature and
+			 * signed CsrList of the sink, but different crId and
+			 * consentRecordRoleSpecificPart
+			 */
+
+			signedSourceCr = objectMapper.readValue(objectMapper.writeValueAsString(signedCr),
+					ConsentRecordSigned.class);
+
+			consentCommonPart.setCrId(sourceConsentRecordId);
+			signedSourceCr.getPayload().getCommonPart().setCrId(sourceConsentRecordId);
+			signedSourceCr.set_id(new ObjectId(sourceConsentRecordId));
+			signedSourceCr.setAccountId(accountId);
+			signedSourceCr.getPayload().setRoleSpecificPart(sourceRolePart);
 
 			/*
 			 * Set the Source Consent Record Id in the Role Specific Part of the Sink
-			 * Consent Record
+			 * Consent Record and updated it in the signedCr
 			 */
-
 			sinkRolePart.setSourceCrId(sourceConsentRecordId);
-
-			/******************************************************
-			 * Call Account Manager to Sign Sink and Source Consent Record and Consent
-			 * Status Record
-			 ******************************************************/
-
-			ThirdPartyReuseConsentSignResponse consentSignResponse = clientService.callSignThirdPartyReuseConsent(
-					surrogateId, slrId, sourceSlrPayload.getSlrId(), crPayload, csrPayload, sourceCrPayload,
-					sourceCsrPayload, new ArrayList<ConsentStatusRecordSigned>(),
-					new ArrayList<ConsentStatusRecordSigned>());
-
-			ConsentRecordSigned signedSinkCr = consentSignResponse.getSink().getSignedCr();
-			ConsentStatusRecordSigned signedSinkCsr = consentSignResponse.getSink().getSignedCsr();
-
-			ConsentRecordSigned signedSourceCr = consentSignResponse.getSource().getSignedCr();
-			ConsentStatusRecordSigned signedSourceCsr = consentSignResponse.getSource().getSignedCsr();
-
-			/*
-			 * Store Signed CRs (relative CSRs has been added into their own
-			 * ConsentStatusList by the Account Manager in the signThirdPartyReuseConsent
-			 */
-			signedSinkCr.setAccountId(accountId);
-			signedSinkCr.set_id(new ObjectId(signedSinkCr.getPayload().getCommonPart().getCrId()));
-			consentRecordRepo.insert(signedSinkCr);
-
-			signedSourceCr.setAccountId(accountId);
-			signedSourceCr.set_id(new ObjectId(signedSourceCr.getPayload().getCommonPart().getCrId()));
-			consentRecordRepo.insert(signedSourceCr);
-
-			/******************************************************
-			 * Send the signed Consent Record (with CSR) to the Source Service (Sink will
-			 * receive its with the response of this API)
-			 ******************************************************/
+			signedCr.getPayload().setRoleSpecificPart(sinkRolePart);
 			try {
-				clientService.sendConsentRecordToService(consentForm.getSourceLibraryDomainUrl(), signedSourceCr);
+				/*
+				 * *****************************************************************************
+				 * ** c. Store Signed CRs and CSRs (added into their own ConsentStatusList by
+				 * the Account Manager when signing CR)
+				 *******************************************************************************/
 
-				// TODO Send CR also to Sink Service instead of returning in the API?
+				consentRecordRepo.insert(signedCr);
+				consentRecordRepo.insert(signedSourceCr);
 
-				// Set notification to SDK Successful
-//				signedSinkCr.setSentToSdkSuccessfully(true);
-//				signedSourceCr.setSentToSdkSuccessfully(true);
+				/****************************************************************************
+				 * Send signed Consent Record copies (with CSR) to both Services (Sink and
+				 * Source)
+				 ****************************************************************************/
+				clientService.sendNewConsentRecordToService(consentForm.getSinkLibraryDomainUrl(), signedCr);
 
-		
+				try {
+					clientService.sendNewConsentRecordToService(consentForm.getSourceLibraryDomainUrl(),
+							signedSourceCr);
+					// If the source sending failed, we must rollback Sink sending, by deleting Cr
+					// at the Sink SDK
+				} catch (Exception e) {
+
+					clientService.deleteConsentRecordFromService(consentForm.getSinkLibraryDomainUrl(),
+							consentRecordId);
+					throw new ConsentManagerException(
+							"There was an error while sending the Consent Record to the Sink Service: "
+									+ e.getMessage());
+				}
+
 			} catch (Exception e) {
 
+				/*
+				 * Rollback CR insertions
+				 */
+				consentRecordRepo.delete(signedCr);
+				consentRecordRepo.delete(signedSourceCr);
+
 				throw new ConsentManagerException(
-						"There was an error while sending the Consent Record to the Source Service: " + e.getMessage());
+						"There was an error while inserting or sending the Consent Records to the Services: "
+								+ e.getMessage());
 			}
 			/******************************************************
 			 * Auditing
 			 ******************************************************/
-
-			// Audit for give consent
-			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
-					"Consent given", proposedUsageRules, serviceId, sourceId, proposedConcepts, null,
-					ConsentActionType.GIVE, null, sourceConsentRecordId));
 
 			// Audit of consent sending
 			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
 					"Consent sent", proposedUsageRules, serviceId, sourceId, proposedConcepts, null,
 					ConsentActionType.SEND, null, sourceConsentRecordId));
 
+		} else {
 			/******************************************************
-			 * Return the Sink Consent Records to the caller (supposed to be the Sink from
-			 * which Consenting started)
-			 ******************************************************/
-			return ResponseEntity.created(UriComponentsBuilder
-					.fromHttpUrl(consentManagerHost + "/api/v2/accounts/{accountId}/consents/{consentRecordId}")
-					.build(accountId, consentRecordId)).body(signedSinkCr);
+			 * *** 2b. Within Service (only one Consent Record) ****
+			 */
+
+			/********************************************************************************
+			 * a. Call Account Manager to Sign Consent Record and Consent Status Record
+			 ********************************************************************************/
+			ConsentSignResponse consentSignResponse = clientService.callSignConsentRecordAndConsentStatusRecord(
+					surrogateId, slrId, crPayload, csrPayload, new ArrayList<ConsentStatusRecordSigned>());
+			signedCr = consentSignResponse.getSignedCr();
+
+			signedCr.setAccountId(accountId);
+			signedCr.set_id(new ObjectId(signedCr.getPayload().getCommonPart().getCrId()));
+
+			/******************************************************************************
+			 * b. Store (Sink) Signed CR and CSR
+			 *******************************************************************************/
+			try {
+				consentRecordRepo.insert(signedCr);
+
+				/******************************************************
+				 * Send the signed Consent Record (with CSR) to the Service
+				 ******************************************************/
+				clientService.sendNewConsentRecordToService(consentForm.getSinkLibraryDomainUrl(), signedCr);
+			} catch (Exception e) {
+
+				/*
+				 * Rollback CR insertion
+				 */
+				consentRecordRepo.delete(signedCr);
+				throw new ConsentManagerException(
+						"There was an error while inserting or sending the Consent Record to the Service: "
+								+ e.getMessage());
+			}
 		}
+
+		/******************************************************
+		 * Auditing
+		 ******************************************************/
+		// Audit for give consent
+		clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
+				"Consent given", proposedUsageRules, serviceId, sourceId, proposedConcepts, null,
+				ConsentActionType.GIVE, null, consentRecordId));
+
+		// Audit of consent sending
+		clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, accountId, LegalBasis.CONSENT,
+				"Consent sent", proposedUsageRules, serviceId, sourceId, proposedConcepts, null, ConsentActionType.SEND,
+				null, consentRecordId));
+
+		/*****************************************************************************
+		 * Return the Consent Record copy (Sink or Source) relative to the inital
+		 * requester (it depends on requesterSurrogateRole contained in the input
+		 * ConsentForm)
+		 *****************************************************************************/
+		ConsentRecordSigned crToBeReturned = consentForm.getRequesterSurrogateRole().equals(Role.SINK) ? signedCr
+				: signedSourceCr;
+
+		return ResponseEntity.created(UriComponentsBuilder
+				.fromHttpUrl(consentManagerHost + "/api/v2/accounts/{accountId}/consents/{consentRecordId}")
+				.build(accountId, consentRecordId)).body(crToBeReturned);
 
 	}
 
@@ -1056,11 +1076,11 @@ public class ConsentManagerController implements IConsentManagerController {
 		CommonPart commonPart = consent.getPayload().getCommonPart();
 
 		ConsentRecordSigned pairedCr = getPairedConsentRecordByCrPairId(surrogateId, commonPart.getCrPairId(),
-				commonPart.getRole(), ChangeConsentStatusRequestFrom.SERVICE);
+				consent.getPayload().getRoleSpecificPart().getRole(), ChangeConsentStatusRequestFrom.SERVICE);
 
-		ConsentRecordSignedPair result = commonPart.getRole().equals(ConsentRecordRoleEnum.SINK)
-				? new ConsentRecordSignedPair(consent, pairedCr)
-				: new ConsentRecordSignedPair(pairedCr, consent);
+		ConsentRecordSignedPair result = consent.getPayload().getRoleSpecificPart().getRole()
+				.equals(ConsentRecordRoleEnum.SINK) ? new ConsentRecordSignedPair(consent, pairedCr)
+						: new ConsentRecordSignedPair(pairedCr, consent);
 
 		return ResponseEntity.ok(result);
 
@@ -1114,10 +1134,11 @@ public class ConsentManagerController implements IConsentManagerController {
 							"No Consent Record pair was found for crPairId: " + crPairId));
 
 		if (crPair.length != 2)
-			throw new ConsentManagerException("The found Consent Record Pair is incorrect");
+			throw new ConsentManagerException(
+					"The found Consent Record Pair is incorrect (found less or more that 2 Consent Records)");
 
 		ConsentRecordSigned otherCr = Arrays.asList(crPair).stream()
-				.filter(pair -> pair.getPayload().getCommonPart().getRole()
+				.filter(pair -> pair.getPayload().getRoleSpecificPart().getRole()
 						.equals(role.equals(ConsentRecordRoleEnum.SINK) ? ConsentRecordRoleEnum.SOURCE
 								: ConsentRecordRoleEnum.SINK))
 				.findFirst().get();
@@ -1142,7 +1163,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		ConsentRecordSigned sink = null, source = null;
 		for (ConsentRecordSigned consent : crPair) {
-			if (consent.getPayload().getCommonPart().getRole().equals(ConsentRecordRoleEnum.SINK))
+			if (consent.getPayload().getRoleSpecificPart().getRole().equals(ConsentRecordRoleEnum.SINK))
 				sink = consent;
 			else
 				source = consent;
@@ -1347,17 +1368,17 @@ public class ConsentManagerController implements IConsentManagerController {
 
 	}
 
-	@Operation(summary = "Change status, starting from Operator (Cape Server / User Dashboard) of an existing Consent Record associated to the the input AccountId, Slr Id and Cr Id.", description = "The new Status can contain not only the new state (Active, Disabled, Withdrawn), but also a new Resource Set or Sink Usage Rules.", tags = {
+	@Operation(summary = "Change status, starting from either Operator (Cape Server / User Dashboard) or Service (Cape SDK) of an existing Consent Record associated to the the input AccountId or SurrogateId, Slr Id and Cr Id.", description = "The new Status can contain not only the new state (Active, Disabled, Withdrawn), but also a new Resource Set or Sink Usage Rules.", tags = {
 			"Consenting" }, responses = {
 					@ApiResponse(description = "Returns 201 Created with the new Consent Status Record Signed.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsentStatusRecordSigned.class))) })
 	@PostMapping(value = "/accounts/{accountOrSurrogateId}/servicelinks/{slrId}/consents/{crId}/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<ConsentRecordSigned> changeConsentStatus(@PathVariable String accountOrSurrogateId,
 			@PathVariable String slrId, @PathVariable String crId,
-			@RequestBody @Valid ChangeConsentStatusRequest request)
-			throws ConsentRecordNotFoundException, ConsentManagerException, ConsentStatusNotValidException,
-			ResourceSetIdNotFoundException, ServiceLinkRecordNotFoundException, ServiceLinkStatusNotValidException,
-			ServiceDescriptionNotFoundException, ChangeConsentStatusException {
+			@RequestBody @Valid ChangeConsentStatusRequest request) throws ConsentRecordNotFoundException,
+			ConsentManagerException, ConsentStatusNotValidException, ResourceSetIdNotFoundException,
+			ServiceLinkRecordNotFoundException, ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException,
+			ChangeConsentStatusException, JsonMappingException, JsonProcessingException {
 
 		ConsentRecordStatusEnum newStatus = request.getStatus();
 		DataMapping[] newConcepts = request.getResourceSet().getDatasets()
@@ -1365,11 +1386,11 @@ public class ConsentManagerController implements IConsentManagerController {
 				.toArray(DataMapping[]::new);
 		ConsentActionType actionType;
 
-		ConsentRecordSigned existingCr, updatedCr, updatedPairedCr = null, pairedCr = null;
-		ConsentStatusRecordSigned newCsrSigned, sourceCsrSigned = null;
+		ConsentRecordSigned existingCr, updatedSignedCr, updatedPairedSignedCr = null, existingPairedCr = null;
 		CommonPart pairedCrCommonPart = null;
 		String pairedServiceId = null;
 		ConsentRecordStatusEnum lastSourceStatus = null;
+		ConsentRecordRoleEnum requesterRole = null; // Will be derived from existing Cr
 
 		if (newStatus != null)
 			switch (newStatus) {
@@ -1387,17 +1408,17 @@ public class ConsentManagerController implements IConsentManagerController {
 			actionType = ConsentActionType.UPDATE;
 
 		/****************************************************************************
-		 * Get the Service Link Record associated to the Consent Record (either by
-		 * AccountId or Surrogate Id depending on which part initiated the request) to
-		 * check if its status is compatible with the new Consent Status Record (e.g.
-		 * Activating a Consent with its related SLR removed)
+		 * 1. Get and check the Service Link Record associated to the Consent Record
+		 * 
+		 * (either by AccountId or Surrogate Id depending on which part initiated the
+		 * request) to check if its status is compatible with the new Consent Status
+		 * Record (e.g. Activating a Consent with its related SLR removed)
 		 *******************************************************************************/
 
 		ServiceLinkRecordDoubleSigned associatedSlr = null;
 		associatedSlr = request.getRequestFrom().equals(ChangeConsentStatusRequestFrom.OPERATOR)
 				? clientService.callGetServiceLinkRecordByAccountIdAndSlrId(accountOrSurrogateId, slrId)
 				: clientService.callGetServiceLinkRecordBySurrogateId(accountOrSurrogateId);
-		ServiceLinkRecordPayload associateSlrPayload = associatedSlr.getPayload();
 		ServiceLinkStatusRecordPayload associatedSlrStatus = associatedSlr.getServiceLinkStatuses()
 				.get(associatedSlr.getServiceLinkStatuses().size() - 1).getPayload();
 
@@ -1406,12 +1427,10 @@ public class ConsentManagerController implements IConsentManagerController {
 			throw new ServiceLinkStatusNotValidException("The Service Link Record with id: " + slrId
 					+ " must be Active to Activate the related Consent Record with id: " + crId);
 
-		/*
-		 * **************************************************************************
-		 * Get the existing Consent Record related to the input pair
-		 * accountOrSurrogateId - crId
+		/***************************************************************************
+		 * 2. Get the existing Consent Record related to the input accountOrSurrogateId
+		 * - crId
 		 ***************************************************************************/
-
 		existingCr = (request.getRequestFrom().equals(ChangeConsentStatusRequestFrom.OPERATOR)
 				? consentRecordRepo.findByAccountIdAndPayload_commonPart_crId(accountOrSurrogateId, crId)
 				: consentRecordRepo
@@ -1429,9 +1448,11 @@ public class ConsentManagerController implements IConsentManagerController {
 		ConsentStatusRecordPayload lastCsrPayload = existingCr.getConsentStatusList()
 				.get(existingCr.getConsentStatusList().size() - 1).getPayload();
 		ConsentRecordStatusEnum lastStatus = lastCsrPayload.getConsentStatus();
+		requesterRole = existingCr.getPayload().getRoleSpecificPart().getRole();
 
-		/***************************************************************************
-		 * Initial Checks 1. Status validity 2. Rs Id validity
+		/*
+		 * a. Status validity b. Rs Id validity
+		 * 
 		 ****************************************************/
 		if (!newStatusIsValid(lastStatus, newStatus))
 			throw new ConsentStatusNotValidException(
@@ -1459,9 +1480,11 @@ public class ConsentManagerController implements IConsentManagerController {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
 
 		/***************************************************************************
-		 * Create the new Consent Status Record, with the input new Status (if null use
-		 * the last status) and other new state info from request body (ResourceSet,
-		 * UsageRules)
+		 * 3. Create the new Consent Status Record and Sign Cr and CSR
+		 * 
+		 * with the input new Status (if null use the last status) and other new state
+		 * info from request body (ResourceSet, UsageRules and if any the Source
+		 * Surrogate Id)
 		 **************************************************************************/
 		if (newStatus == null)
 			newStatus = lastStatus;
@@ -1469,10 +1492,26 @@ public class ConsentManagerController implements IConsentManagerController {
 		String newCsrId = new ObjectId().toString();
 		ConsentStatusRecordPayload newCsrPayload = new ConsentStatusRecordPayload(newCsrId,
 				appProperty.getCape().getVersion(), existingCrCommonPart.getSurrogateId(),
-				existingCrCommonPart.getCrId(), newStatus, request.getResourceSet(), request.getUsageRules(), now,
-				lastCsrPayload.getRecordId());
+				existingCrCommonPart.getSourceSurrogateId(), newStatus, request.getResourceSet(),
+				request.getUsageRules(), now, lastCsrPayload.getRecordId());
+
+		/***************************************************************************
+		 * Sign Cr and Csr
+		 * 
+		 * Call Account Manager to sign the new Consent Status Record. Sign also the
+		 * updated Consent Record, as the CSR list changed
+		 ***************************************************************************/
+
+		ConsentSignResponse signResponse = clientService.callSignConsentRecordAndConsentStatusRecord(
+				associatedSlr.getPayload().getSurrogateId(), slrId, existingCr.getPayload(), newCsrPayload,
+				existingCr.getConsentStatusList());
+		updatedSignedCr = signResponse.getSignedCr();
+		updatedSignedCr.setAccountId(existingCr.getAccountId());
+		updatedSignedCr.set_id(new ObjectId(existingCr.getPayload().getCommonPart().getCrId()));
 
 		/******************************************************************************
+		 * 4. Update (if any) paired Consent Record
+		 * 
 		 * If there is a Consent Record pair (Third Party re-use case), get the other
 		 * Consent Record of the pair (Source or Sink, depending on the role of the
 		 * already retrieved one)
@@ -1480,17 +1519,12 @@ public class ConsentManagerController implements IConsentManagerController {
 		String crPairId = existingCrCommonPart.getCrPairId();
 		if (StringUtils.isNotBlank(crPairId)) {
 
-			pairedCr = getPairedConsentRecordByCrPairId(accountOrSurrogateId, crPairId, existingCrCommonPart.getRole(),
-					request.getRequestFrom());
-			pairedCrCommonPart = pairedCr.getPayload().getCommonPart();
-			String sourceSlrId = pairedCrCommonPart.getSlrId();
-			String sourceSurrogateId = pairedCrCommonPart.getSurrogateId();
+			existingPairedCr = getPairedConsentRecordByCrPairId(accountOrSurrogateId, crPairId,
+					existingCr.getPayload().getRoleSpecificPart().getRole(), request.getRequestFrom());
+			pairedCrCommonPart = existingPairedCr.getPayload().getCommonPart();
+			String pairedSlrId = pairedCrCommonPart.getSlrId();
+			String pairedSurrogateId = pairedCrCommonPart.getSurrogateId();
 			pairedServiceId = pairedCrCommonPart.getSubjectId();
-
-			ConsentStatusRecordPayload lastSourceCsrPayload = pairedCr.getConsentStatusList()
-					.get(pairedCr.getConsentStatusList().size() - 1).getPayload();
-
-			lastSourceStatus = lastSourceCsrPayload.getConsentStatus();
 
 			/****************************************************************************
 			 * Get the Service Link Record associated to the Consent Record (either by
@@ -1498,115 +1532,89 @@ public class ConsentManagerController implements IConsentManagerController {
 			 * check if its status is compatible with the new Consent Status Record (e.g.
 			 * Activating a Consent with its related SLR removed)
 			 *******************************************************************************/
-
-			ServiceLinkRecordDoubleSigned associatedSourceSlr = request.getRequestFrom()
+			ServiceLinkRecordDoubleSigned associatedPairedSlr = request.getRequestFrom()
 					.equals(ChangeConsentStatusRequestFrom.OPERATOR)
 							? clientService.callGetServiceLinkRecordByAccountIdAndSlrId(accountOrSurrogateId,
-									sourceSlrId)
-							: clientService.callGetServiceLinkRecordBySurrogateId(sourceSurrogateId);
+									pairedSlrId)
+							: clientService.callGetServiceLinkRecordBySurrogateId(pairedSurrogateId);
 
-			ServiceLinkStatusRecordPayload associatedSourceSlrStatus = associatedSourceSlr.getServiceLinkStatuses()
-					.get(associatedSourceSlr.getServiceLinkStatuses().size() - 1).getPayload();
+			ServiceLinkStatusRecordPayload associatedPairedSlrStatus = associatedPairedSlr.getServiceLinkStatuses()
+					.get(associatedPairedSlr.getServiceLinkStatuses().size() - 1).getPayload();
 
 			if (actionType.equals(ConsentActionType.ACTIVATE)
-					&& associatedSourceSlrStatus.getServiceLinkStatus().equals(ServiceLinkStatusEnum.REMOVED))
-				throw new ServiceLinkStatusNotValidException("The Service Link Record with id: " + sourceSlrId
+					&& associatedPairedSlrStatus.getServiceLinkStatus().equals(ServiceLinkStatusEnum.REMOVED))
+				throw new ServiceLinkStatusNotValidException("The Service Link Record with id: " + pairedSlrId
 						+ " must be Active to Activate the paired Consent Record of the one with id: " + crId);
 
-			/*************************************************************************
-			 * Create the new Consent Status Record for the Source, with the input new
-			 * Status and other state info from Consent Record (ResourceSet, UsageRules)
-			 **************************************************************************/
-			ConsentStatusRecordPayload sourceCsrPayload = new ConsentStatusRecordPayload(new ObjectId().toString(),
-					appProperty.getCape().getVersion(), pairedCrCommonPart.getSurrogateId(),
-					pairedCrCommonPart.getCrId(), newStatus, request.getResourceSet(), request.getUsageRules(), now,
-					lastSourceCsrPayload.getRecordId());
+			/*******************************
+			 * Update paired Consent Record
+			 *
+			 * Paired ConsentRecordSigned will have the same commonPart, signature and
+			 * signed Csr of the updatedCr, but different crId and
+			 * consentRecordRoleSpecificPart
+			 *******************************/
+			updatedPairedSignedCr = objectMapper.readValue(objectMapper.writeValueAsString(updatedSignedCr),
+					ConsentRecordSigned.class);
 
+			updatedPairedSignedCr.getPayload().getCommonPart()
+					.setCrId(existingPairedCr.getPayload().getCommonPart().getCrId());
+			updatedPairedSignedCr.getPayload().setRoleSpecificPart(existingPairedCr.getPayload().getRoleSpecificPart());
+			updatedPairedSignedCr.set_id(new ObjectId(existingPairedCr.getPayload().getCommonPart().getCrId()));
+			updatedPairedSignedCr.setAccountId(existingPairedCr.getAccountId());
 			/***************************************************************************
-			 * Call Account Manager to sign the new Consent Status Record both for the
-			 * Source and the Sink. Sign also the updated Consent Records, as the CSR list
-			 * changed
-			 **************************************************************************/
-
-			ThirdPartyReuseConsentSignResponse signResponse = clientService.callSignThirdPartyReuseConsent(
-					associatedSlr.getPayload().getSurrogateId(), associateSlrPayload.getSlrId(), sourceSlrId,
-					existingCr.getPayload(), newCsrPayload, pairedCr.getPayload(), sourceCsrPayload,
-					existingCr.getConsentStatusList(), pairedCr.getConsentStatusList());
-
-			updatedCr = signResponse.getSink().getSignedCr();
-			newCsrSigned = signResponse.getSink().getSignedCsr();
-			updatedPairedCr = signResponse.getSource().getSignedCr();
-			sourceCsrSigned = signResponse.getSource().getSignedCsr();
-
-		} else {
-
-			/***************************************************************************
-			 * Call Account Manager to sign the new Consent Status Record. Sign also the
-			 * updated Consent Record, as the CSR list changed
-			 ***************************************************************************/
-
-			WithinServiceConsentSignResponse signResponse = clientService.callSignWithinServiceConsent(
-					associatedSlr.getPayload().getSurrogateId(), slrId, existingCr.getPayload(), newCsrPayload,
-					existingCr.getConsentStatusList());
-			updatedCr = signResponse.getSignedCr();
-			newCsrSigned = signResponse.getSignedCsr();
-		}
-
-		/***************************************************************************
-		 * Once Sink (and if in that case also Source) Cr and Csr has been correctly
-		 * made and signed, save locally and send them to the Service(s)
-		 *************************************************************************/
-		updatedCr.setAccountId(existingCr.getAccountId());
-		updatedCr.set_id(new ObjectId(updatedCr.getPayload().getCommonPart().getCrId()));
-		consentRecordRepo.save(updatedCr);
-
-		/***************************************************************************
-		 * Send the new signed Consent Status Record to the Service. Rollback stored CR
-		 * and CSR in case of failure ( to keep consistent Operator and Service CRs)
-		 **************************************************************************/
-		try {
-			ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
-			clientService.sendUpdatedConsentRecordToService(
-					serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(), updatedCr);
-		} catch (Exception e) {
-
-			/*
-			 * Rollback stored CR
-			 */
-			consentRecordRepo.save(existingCr);
-
-			throw new ChangeConsentStatusException(
-					"There was an error while sending the Consent Status Record to the Sink Service: "
-							+ e.getMessage());
-		}
-
-		if (StringUtils.isNotBlank(crPairId)) {
-			/*
-			 * **************************************************************************
-			 * Store signed Source Consent Status Record into relative Consent Record
-			 ***************************************************************************/
-			updatedPairedCr.setAccountId(pairedCr.getAccountId());
-			updatedPairedCr.set_id(new ObjectId(updatedPairedCr.getPayload().getCommonPart().getCrId()));
-			consentRecordRepo.save(updatedPairedCr);
-
-			/***************************************************************************
-			 * Send the new signed Consent Status Record to the Source Service
+			 * 5a. (3rd-party consent case) Store new CR & CSR and Send to Services
+			 * 
+			 * Store locally both requester Service and paired CRs and CSRs and send them to
+			 * Services
+			 * 
 			 ***************************************************************************/
 			try {
-				ServiceEntry sourceServiceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
+				consentRecordRepo.save(updatedSignedCr);
+				consentRecordRepo.save(updatedPairedSignedCr);
+
+				/****************************************************************************
+				 * Send updated Consent Record copies (with CSR) to both Services (Sink and
+				 * Source)
+				 * 
+				 * Rollback stored CR and CSR in case of failure (to keep consistent both
+				 * Operator and Service CRs)
+				 ****************************************************************************/
+
+				// TODO Include Service's library domain in the Consent Record in order to avoid
+				// calling Service Registry?
+				ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
 				clientService.sendUpdatedConsentRecordToService(
-						sourceServiceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
-						updatedPairedCr);
+						serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(), updatedSignedCr);
+
+				try {
+					ServiceEntry pairedServiceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
+					clientService.sendUpdatedConsentRecordToService(
+							pairedServiceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(),
+							updatedPairedSignedCr);
+
+					// If the paired sending failed, we must rollback first sending, by sending
+					// previous Cr
+					// at the respective SDK
+				} catch (Exception e) {
+
+					clientService.sendUpdatedConsentRecordToService(
+							serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(), existingCr);
+
+					throw new ConsentManagerException(
+							"There was an error while sending the Consent Record to the Service: " + e.getMessage());
+				}
+
 			} catch (Exception e) {
 
 				/*
 				 * Rollback stored CRs (both for Sink and Source)
 				 */
 				consentRecordRepo.save(existingCr);
-				consentRecordRepo.save(pairedCr);
+				consentRecordRepo.save(existingPairedCr);
 
 				throw new ChangeConsentStatusException(
-						"There was an error while sending the Consent Status Record to the Source Service: "
+						"There was an error while sending the Consent Status Record to the "
+								+ existingPairedCr.getPayload().getRoleSpecificPart().getRole() + " Service: "
 								+ e.getMessage());
 			}
 
@@ -1614,11 +1622,32 @@ public class ConsentManagerController implements IConsentManagerController {
 			 * Auditing for Consent Update (Third party reuse case)
 			 **************************************************************************/
 			// Audit for Update Consent
-			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, pairedCr.getAccountId(),
+			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, existingPairedCr.getAccountId(),
 					existingLegalBasis, "Consent Status updated", existingUsageRules, serviceId, pairedServiceId,
 					newConcepts, existingConcepts, actionType, lastStatus, existingCrCommonPart.getCrId()));
 
 		} else {
+
+			try {
+
+				consentRecordRepo.save(updatedSignedCr);
+
+				ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
+				clientService.sendUpdatedConsentRecordToService(
+						serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain(), updatedSignedCr);
+
+			} catch (Exception e) {
+
+				/*
+				 * Rollback stored CR
+				 */
+
+				consentRecordRepo.save(existingCr);
+
+				throw new ChangeConsentStatusException(
+						"There was an error while sending the Consent Status Record to the Sink Service: "
+								+ e.getMessage());
+			}
 
 			/***************************************************************************
 			 * Auditing for Consent Update (Within service case)
@@ -1627,10 +1656,11 @@ public class ConsentManagerController implements IConsentManagerController {
 			clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, existingCr.getAccountId(),
 					existingLegalBasis, "Consent Status updated", existingUsageRules, serviceId, serviceId, newConcepts,
 					existingConcepts, actionType, lastStatus, existingCrCommonPart.getCrId()));
+
 		}
 
 		/*
-		 * Audit of consent sending (Either Case)
+		 * Audit of consent sending (Both Cases)
 		 */
 		clientService.callAddEventLog(new ConsentEventLog(now, EventType.CONSENT, existingCr.getAccountId(),
 				existingLegalBasis, "Consent Record sent", existingUsageRules, serviceId, pairedServiceId, newConcepts,
@@ -1642,7 +1672,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		return ResponseEntity.created(UriComponentsBuilder
 				.fromHttpUrl(consentManagerHost
 						+ "/accounts/{accountId}/servicelinks/{slrId}/consents/{crId}/statuses/{recordId}")
-				.build(existingCr.getAccountId(), crId, slrId, newCsrId)).body(updatedCr);
+				.build(existingCr.getAccountId(), crId, slrId, newCsrId)).body(updatedSignedCr);
 
 	}
 

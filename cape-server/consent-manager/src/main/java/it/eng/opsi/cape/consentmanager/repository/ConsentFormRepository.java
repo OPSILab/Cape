@@ -24,10 +24,10 @@ import it.eng.opsi.cape.consentmanager.model.ConsentForm;
 
 public interface ConsentFormRepository extends MongoRepository<ConsentForm, String> {
 
-	List<ConsentForm> findBySurrogateIdAndSinkIdAndUsageRules_purposeId(String surrogateId, String sinkId,
+	List<ConsentForm> findBySurrogateIdAndSinkServiceIdAndUsageRules_purposeId(String surrogateId, String sinkId,
 			String purposeId);
 
-	List<ConsentForm> findBySurrogateIdAndSinkIdAndSourceIdAndUsageRules_purposeId(String surrogateId,
+	List<ConsentForm> findBySurrogateIdAndSinkServiceIdAndSourceServiceIdAndUsageRules_purposeId(String surrogateId,
 			String sinkId, String sourceId, String purposeId);
 
 	Long deleteConsentFormBySurrogateId(String surrogateId);

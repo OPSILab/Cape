@@ -23,18 +23,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.jwk.RSAKey;
 
 import it.eng.opsi.cape.consentmanager.model.linking.ServicePopKey;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
+@NoArgsConstructor
+@SuperBuilder
 public class ConsentRecordSourceRoleSpecificPart extends ConsentRecordRoleSpecificPart {
 
 	@NotNull

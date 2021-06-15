@@ -39,4 +39,5 @@ public interface ConsentRecordRepository
 	public Optional<ConsentRecordSigned> findByPayload_commonPart_surrogateIdAndPayload_commonPart_crId(
 			String surrogateId, String crId);
 
+	public Long deleteConsentRecordSignedByPayload_commonPart_crId(String cdId);
 }

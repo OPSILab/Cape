@@ -51,6 +51,7 @@ import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
 import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentForm;
+import it.eng.opsi.cape.sdk.model.consenting.ConsentFormRequest;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSigned;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordSignedPair;
 import it.eng.opsi.cape.sdk.model.consenting.ConsentRecordStatusEnum;
@@ -124,14 +125,16 @@ public interface ICapeServiceSdkController {
 
 //	public abstract ResponseEntity<String> notifyConsentStatusChanged(String slrId, String crId,  ConsentStatusRecord csr);
 
-	public abstract ResponseEntity<ConsentForm> fetchConsentForm(String surrogateId, String serviceId, String purposeId,
-			String sourceDatasetId, String sourceServiceId) throws ServiceManagerException, CapeSdkManagerException;
+	public abstract ResponseEntity<ConsentForm> fetchConsentForm(ConsentFormRequest request)
+			throws ServiceManagerException, CapeSdkManagerException;
 
-	public abstract ResponseEntity<ConsentRecordSigned> giveConsent(String surrogateId, ConsentForm consentForm);
+	public abstract ResponseEntity<ConsentRecordSigned> giveConsent(ConsentForm consentForm);
 
 	public abstract ResponseEntity<String> storeNewConsentRecord(ConsentRecordSigned cr)
 			throws ServiceLinkRecordNotFoundException, JsonProcessingException, ParseException, JOSEException,
 			ConsentRecordNotValid, ConsentStatusRecordNotValid;
+
+	public abstract ResponseEntity<?> deleteConsentRecord(String crId) throws ConsentRecordNotFoundException;
 
 	public abstract ResponseEntity<String> updateConsentRecordWithNewStatus(String crId, ConsentRecordSigned updatedCr)
 			throws ConsentStatusRecordNotValid, ConsentRecordNotFoundException, ServiceLinkRecordNotFoundException,
@@ -178,10 +181,9 @@ public interface ICapeServiceSdkController {
 			DatasetIdNotFoundException, JOSEException, DataRequestNotValid, CapeSdkManagerException;
 
 	public abstract ResponseEntity<Object> enforceUsageRulesToPayload(String userId, String sinkServiceId,
-			String sourceServiceId,String sinkServiceUrl,
-			String sourceServiceUrl,  String datasetId, String purposeId, String purposeName,
-			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
-			Map<String, Object> dataObject)
+			String sourceServiceId, String sinkServiceUrl, String sourceServiceUrl, String datasetId, String purposeId,
+			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
+			Boolean checkConsentAtOperator, Map<String, Object> dataObject)
 			throws ConsentRecordNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<List<ServiceSignKey>> getRegisteredServicesKeys();

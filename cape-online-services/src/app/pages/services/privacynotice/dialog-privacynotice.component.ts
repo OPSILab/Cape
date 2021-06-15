@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
+import { RoleEnum } from 'src/app/cape-sdk-angular/model/service-link/serviceEntry';
 import { CapeSdkAngularService } from '../../../cape-sdk-angular/cape-sdk-angular.service';
 import { ConsentFormComponent } from '../../../cape-sdk-angular/consent-form/consent-form.component';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
@@ -16,6 +17,7 @@ export class DialogPrivacyNoticeComponent {
   operatorId: string;
   dashboardUrl: string;
   serviceId: string;
+  serviceRole: RoleEnum;
   purposeId: string;
 
   isSubmitDisabled = true;
@@ -48,7 +50,7 @@ export class DialogPrivacyNoticeComponent {
         closeOnBackdropClick: true,
         context: {
           sdkUrl: this.sdkUrl,
-          consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId),
+          consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId, this.serviceRole),
         },
       });
     } catch (error) {

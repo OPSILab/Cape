@@ -48,9 +48,5 @@ public class StartLinkingRequest {
 	@NotBlank(message = "service_id is mandatory")
 	@JsonProperty(value = "service_id")
 	private final String serviceId;
-	
-	@NotBlank(message = "return_url is mandatory")
-	@JsonProperty(value = "return_url")
-	private final String returnUrl;
 
 }
