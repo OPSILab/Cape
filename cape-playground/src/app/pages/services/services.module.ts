@@ -4,10 +4,9 @@ import { ServicesComponent } from './services.component';
 import { ServicesRoutingModule } from './services-routing.module';
 import { NbCardModule, NbRadioModule, NbButtonModule } from '@nebular/theme';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { CapeSdkAngularModule } from '../../cape-sdk-angular/cape-sdk-angular.module';
 
 @NgModule({
-  imports: [CommonModule, NbCardModule, NbRadioModule, NbButtonModule, ServicesRoutingModule, TranslateModule.forChild({}), CapeSdkAngularModule],
+  imports: [CommonModule, NbCardModule, NbRadioModule, NbButtonModule, ServicesRoutingModule, TranslateModule.forChild({})],
   declarations: [ServicesComponent],
   providers: [],
   entryComponents: [ServicesComponent],

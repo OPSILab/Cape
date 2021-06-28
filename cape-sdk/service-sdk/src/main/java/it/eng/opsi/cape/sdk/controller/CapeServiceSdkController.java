@@ -1046,7 +1046,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	}
 
 	@Operation(summary = "Final End point to perform Data Transfer from the Source Service.", tags = {
-			"Data Request" }, responses = {
+			"(Internal) Data Request" }, responses = {
 					@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc/send", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override

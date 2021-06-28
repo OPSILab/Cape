@@ -1,11 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
-import { CapeSdkAngularService, ServiceLinkEvent, ConsentRecordEvent } from '../../../../cape-sdk-angular/cape-sdk-angular.service';
+import { CapeSdkAngularService, ServiceLinkEvent, ConsentRecordEvent, SlStatusEnum, ConsentStatusEnum } from 'cape-sdk-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SlStatusEnum } from '../../../../cape-sdk-angular/model/service-link/serviceLinkStatusRecordPayload';
-import { ConsentStatusEnum } from '../../../../cape-sdk-angular/model/consent/consentStatusRecordPayload';
 
 const sampleChartData: any[] = [
   {

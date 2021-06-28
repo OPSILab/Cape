@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { TranslateService } from '@ngx-translate/core';
-import { CapeSdkAngularService, ServiceLinkEvent, ConsentRecordEvent } from '../../../../cape-sdk-angular/cape-sdk-angular.service';
-import { SlStatusEnum } from '../../../../cape-sdk-angular/model/service-link/serviceLinkStatusRecordPayload';
-import { ConsentStatusEnum } from '../../../../cape-sdk-angular/model/consent/consentStatusRecordPayload';
+import { CapeSdkAngularService, ServiceLinkEvent, ConsentRecordEvent, SlStatusEnum, ConsentStatusEnum } from 'cape-sdk-angular';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

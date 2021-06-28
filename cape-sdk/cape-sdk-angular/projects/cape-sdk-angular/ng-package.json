@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/cape-sdk-angular",
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "@nebular/theme": "@nebular/theme",
+      "@ngx-translate/core": "@ngx-translate/core",
+      "@ngx-translate/http-loader": "@ngx-translate/http-loader"
+    }
+  },
+  "assets": ["./assets"]
+}

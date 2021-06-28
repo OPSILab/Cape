@@ -6,8 +6,8 @@ import { WeightComponent } from './weight/weight.component';
 import { MyMeasurementsRoutingModule } from './mymeasurements-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { NbCardModule, NbRadioModule, NbButtonModule } from '@nebular/theme';
-import { CapeSdkAngularModule } from '../../../cape-sdk-angular/cape-sdk-angular.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CapeSdkAngularModule } from 'cape-sdk-angular';
 
 @NgModule({
   declarations: [MyMeasurementsComponent, CholesterolComponent, WeightComponent],

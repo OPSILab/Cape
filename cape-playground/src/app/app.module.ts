@@ -32,6 +32,7 @@ import { NbAuthModule, NbOAuth2AuthStrategy } from '@nebular/auth';
 import { OidcJWTToken } from './auth/model/oidc';
 import { AuthGuard } from './auth/services/auth.guard';
 import { OidcUserInformationService } from './auth/services/oidc-user-information.service';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 //export function createTranslateLoader(http: HttpClient) {
 //  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,9 +41,13 @@ import { OidcUserInformationService } from './auth/services/oidc-user-informatio
 export function HttpLoaderFactory(http: HttpClient) {
   return new MultiTranslateHttpLoader(http, [
     { prefix: './assets/i18n/', suffix: '.json' },
-    { prefix: './app/cape-sdk-angular/assets/i18n/', suffix: '.json' },
+    { prefix: './assets/cape/i18n/', suffix: '.json' },
   ]);
 }
+
+// export function HttpLoaderFactory(http: HttpClient) {
+//   return new TranslateHttpLoader(http);
+// }
 
 @NgModule({
   declarations: [AppComponent],

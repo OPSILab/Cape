@@ -1,69 +1,83 @@
 <nb-card class="">
-  <nb-card-header> <h3> {{ 'general.services.mywellness.cholesterol.title' | translate }} </h3></nb-card-header>
+  <nb-card-header>
+    <h3>{{ 'general.services.mywellness.cholesterol.title' | translate }}</h3></nb-card-header
+  >
   <nb-card-body>
-
     <div class="p-2 row">
       <div class="col-md-auto">
-        <pre class="h5 my-1 row lead">{{ 'general.services.mywellness.cholesterol.intro' | translate: { 'name' : accountId } }}</pre>
+        <pre class="h5 my-1 row lead">{{ 'general.services.mywellness.cholesterol.intro' | translate: { name: accountId } }}</pre>
         <hr />
-        <pre class="mt-3 row" style="font-family: Roboto;font-size:1.0rem">{{ 'general.services.mywellness.cholesterol.text' | translate }}</pre>
+        <pre class="mt-3 row" style="font-family: Roboto; font-size: 1rem">{{ 'general.services.mywellness.cholesterol.text' | translate }}</pre>
       </div>
     </div>
 
     <nb-card accent="info">
       <nb-card-header></nb-card-header>
       <nb-card-body class="text-center h6">
-        <div *ngIf="!isRegisteredService; else serviceRegistered;">{{'general.services.mywellness.cholesterol.no_cape_registered' | translate }}</div>
-        <ng-template  #serviceRegistered >
-          <pre *ngIf="!capeLinkStatus || capeLinkStatus === 'Removed'; else linked;" style="font-family: Roboto;font-size:1.0rem;line-height: 1.6;">
-           {{'general.services.mywellness.cholesterol.no_cape_linked' | translate }}
-        </pre>
+        <div *ngIf="!isRegisteredService; else serviceRegistered">{{ 'general.services.mywellness.cholesterol.no_cape_registered' | translate }}</div>
+        <ng-template #serviceRegistered>
+          <pre *ngIf="!capeLinkStatus || capeLinkStatus === 'Removed'; else linked" style="font-family: Roboto; font-size: 1rem; line-height: 1.6">
+           {{ 'general.services.mywellness.cholesterol.no_cape_linked' | translate }}
+        </pre
+          >
         </ng-template>
         <ng-template #linked>
-          <pre *ngIf="!capeConsentStatus || capeConsentStatus !== 'Active'; else consentGiven;" style="font-family: Roboto;font-size:1.0rem;line-height: 1.6;"> {{'general.services.mywellness.cholesterol.cape_linked' | translate }} {{'general.services.mywellness.cholesterol.no_cape_consent' | translate }}  </pre>
+          <pre *ngIf="!capeConsentStatus || capeConsentStatus !== 'Active'; else consentGiven" style="font-family: Roboto; font-size: 1rem; line-height: 1.6">
+ {{ 'general.services.mywellness.cholesterol.cape_linked' | translate }} {{ 'general.services.mywellness.cholesterol.no_cape_consent' | translate }}  </pre
+          >
         </ng-template>
         <ng-template #consentGiven>
-          <pre class="pb-2 m-2" *ngIf="capeConsentStatus === 'Active'" style="font-family: Roboto;font-size:1.0rem;line-height: 1.6;"> {{'general.services.mywellness.cholesterol.cape_consent_given' | translate }} </pre>
+          <pre class="pb-2 m-2" *ngIf="capeConsentStatus === 'Active'" style="font-family: Roboto; font-size: 1rem; line-height: 1.6">
+ {{ 'general.services.mywellness.cholesterol.cape_consent_given' | translate }} </pre
+          >
           <div class="row mt-4 justify-content-center">
-            <ngx-charts-line-chart [view]="view"
-                                   [scheme]="colorScheme"
-                                   [results]="multi"
-                                   [gradient]="gradient"
-                                   [xAxis]="showXAxis"
-                                   [yAxis]="showYAxis"
-                                   [legend]="showLegend"
-                                   [showXAxisLabel]="showXAxisLabel"
-                                   [showYAxisLabel]="showYAxisLabel"
-                                   [xAxisLabel]="xAxisLabel"
-                                   [yAxisLabel]="yAxisLabel"
-                                   [autoScale]="autoScale"
-                                   [timeline]="timeline"
-                                   [animations]="animations">
+            <ngx-charts-line-chart
+              [view]="view"
+              [scheme]="colorScheme"
+              [results]="multi"
+              [gradient]="gradient"
+              [xAxis]="showXAxis"
+              [yAxis]="showYAxis"
+              [legend]="showLegend"
+              [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel"
+              [xAxisLabel]="xAxisLabel"
+              [yAxisLabel]="yAxisLabel"
+              [autoScale]="autoScale"
+              [timeline]="timeline"
+              [animations]="animations"
+            >
             </ngx-charts-line-chart>
           </div>
           <div class="row m-3 justify-content-center">{{ 'general.services.mywellness.cholesterol.additionalInfoText' | translate }}</div>
           <div class="row mt-2 justify-content-center">
-            <div *ngIf="ageConsentActive" class="col-md-auto m-1 p-3 border border-primary"><strong>{{ 'general.services.mywellness.cholesterol.ageText' | translate }}&nbsp;</strong>{{sampleAge}}</div>
-            <div *ngIf="sexConsentActive" class="col-md-auto m-1 p-3 border border-primary"><strong>{{ 'general.services.mywellness.cholesterol.sexText' | translate }}&nbsp;</strong>{{sampleSex}}</div>
+            <div *ngIf="ageConsentActive" class="col-md-auto m-1 p-3 border border-primary">
+              <strong>{{ 'general.services.mywellness.cholesterol.ageText' | translate }}&nbsp;</strong>{{ sampleAge }}
+            </div>
+            <div *ngIf="sexConsentActive" class="col-md-auto m-1 p-3 border border-primary">
+              <strong>{{ 'general.services.mywellness.cholesterol.sexText' | translate }}&nbsp;</strong>{{ sampleSex }}
+            </div>
           </div>
         </ng-template>
       </nb-card-body>
     </nb-card>
-
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-center">
-    <cape-sdk-angular [locale]="locale"
-                      [operatorId]="operatorId"
-                      [dashboardUrl]="dashboardUrl"
-                      [sdkUrl]="sdkUrl"
-                      [userId]="accountId"
-                      [serviceId]="serviceId"
-                      [serviceName]="serviceName"
-                      [returnUrl]="returnUrl"
-                      [purposeId]="purposeId"
-                      [sourceServiceId]="sourceServiceId"
-                      [sourceDatasetId]="sourceDatasetId"
-                      [checkConsentAtOperator]="checkConsentAtOperator" class="">
-    </cape-sdk-angular>
+    <lib-cape-sdk-angular
+      [locale]="locale"
+      [operatorId]="operatorId"
+      [dashboardUrl]="dashboardUrl"
+      [sdkUrl]="sdkUrl"
+      [userId]="accountId"
+      [serviceId]="serviceId"
+      [serviceName]="serviceName"
+      [returnUrl]="returnUrl"
+      [purposeId]="purposeId"
+      [sourceServiceId]="sourceServiceId"
+      [sourceDatasetId]="sourceDatasetId"
+      [checkConsentAtOperator]="checkConsentAtOperator"
+      class=""
+    >
+    </lib-cape-sdk-angular>
   </nb-card-footer>
 </nb-card>

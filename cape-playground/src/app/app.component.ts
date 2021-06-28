@@ -72,6 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
       refresh: {
         endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
         grantType: NbOAuth2GrantType.REFRESH_TOKEN,
+        method: 'post',
       },
     });
   }

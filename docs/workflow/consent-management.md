@@ -4,7 +4,7 @@ CaPe End Users can manage the overall lifecycle of their own Data Usage Consents
 
 ![consent-management](consent-management.png)
 
-#Data Usage Control
+# Data Usage Control
 
 Service processing data or Source Service providing data to Sink, relying on Consent Enforcement and Data Transfer previously described,
 can deliver Data Usage Control.

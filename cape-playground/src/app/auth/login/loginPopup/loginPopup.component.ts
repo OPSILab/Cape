@@ -47,6 +47,13 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       if (authResult.isSuccess() && authResult.getToken()?.isValid()) {
         this.completeLogin(authResult.getToken() as OidcJWTToken);
       } else if (authResult.getErrors().length > 0) this.openDialog(this.errorDialogTemplateRef, { error: { message: authResult.getErrors().toString() } });
+    } else {
+      sessionStorage.setItem('queryParamsBeforeLogin', JSON.stringify(this.queryParams));
+      const authResult = await this.authService.authenticate((this.configService.config as AppConfig).system.auth.authProfile).toPromise();
+
+      if (authResult.isSuccess() && authResult.getToken()?.isValid()) {
+        this.completeLogin(authResult.getToken() as OidcJWTToken);
+      } else if (authResult.getErrors().length > 0) this.openDialog(this.errorDialogTemplateRef, { error: { message: authResult.getErrors().toString() } });
     }
   }
 
