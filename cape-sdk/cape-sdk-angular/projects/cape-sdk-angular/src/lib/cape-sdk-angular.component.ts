@@ -330,15 +330,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
   async startLinkingAfterServiceLogin() {
     try {
-      await this.capeService.linkFromOperator(
-        this.sdkUrl,
-        this.sessionCode,
-        this.operatorId,
-        this.serviceId,
-        this.serviceName,
-        this.userId,
-        this.returnUrl
-      );
+      await this.capeService.linkFromOperator(this.sdkUrl, this.sessionCode, this.operatorId, this.serviceId, this.serviceName, this.userId);
 
       const successMessage: string = this.translateService.instant('general.services.linkingSuccessfulMessage', {
         serviceId: this.serviceId,

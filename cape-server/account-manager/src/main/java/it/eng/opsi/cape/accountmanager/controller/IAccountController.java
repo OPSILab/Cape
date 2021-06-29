@@ -43,7 +43,7 @@ public interface IAccountController {
 
 	public abstract ResponseEntity<Account> getAccount(String accountId) throws AccountNotFoundException;
 
-	public abstract ResponseEntity<Account> deleteAccount(String accountId) throws AccountNotFoundException;
+	public abstract ResponseEntity<Account> deleteAccount(String accountId) throws AccountNotFoundException, AccountManagerException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<Account> updateAccount(String accountId, @Valid Account account)
 			throws AccountNotFoundException;

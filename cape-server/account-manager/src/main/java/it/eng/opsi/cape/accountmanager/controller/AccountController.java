@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.bson.types.ObjectId;
@@ -65,6 +67,7 @@ import it.eng.opsi.cape.accountmanager.ApplicationProperties;
 import it.eng.opsi.cape.accountmanager.model.Account;
 import it.eng.opsi.cape.accountmanager.model.AccountExport;
 import it.eng.opsi.cape.accountmanager.model.AccountInfo;
+import it.eng.opsi.cape.accountmanager.model.SurrogateIdServiceIdRecord;
 import it.eng.opsi.cape.accountmanager.model.audit.AuditLog;
 import it.eng.opsi.cape.accountmanager.model.audit.EventLog;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
@@ -164,14 +167,25 @@ public class AccountController implements IAccountController {
 			@ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@Override
 	@DeleteMapping(value = "/accounts/{accountId}")
-	public ResponseEntity<Account> deleteAccount(@PathVariable String accountId) throws AccountNotFoundException {
+	public ResponseEntity<Account> deleteAccount(@PathVariable String accountId)
+			throws AccountNotFoundException, AccountManagerException, ServiceDescriptionNotFoundException {
+
+		Account existingAccount = this.getAccount(accountId).getBody();
+
+		List<SurrogateIdServiceIdRecord> accountSurrogateIdServiceIdRecords = existingAccount.getServiceLinkRecords()
+				.stream().map(slr -> new SurrogateIdServiceIdRecord(slr.getPayload().getSurrogateId(),
+						slr.getPayload().getServiceId()))
+				.collect(Collectors.toList());
+
+		clientService.callDeleteUserSurrogateLinkFromSDKs(accountSurrogateIdServiceIdRecords);
 
 		if (accountRepo.deleteAccountBy_idOrUsername(accountId, accountId) == 0L)
-			throw new AccountNotFoundException("No Account with Id: " + accountId + " found");
+			throw new AccountManagerException("There was an error while deleting Account: " + accountId);
 
 		clientService.callDeleteLinkingSessions(accountId);
 		clientService.callDeleteAuditLog(accountId);
 		clientService.callDeleteConsentRecords(accountId);
+
 		return ResponseEntity.noContent().build();
 
 	}

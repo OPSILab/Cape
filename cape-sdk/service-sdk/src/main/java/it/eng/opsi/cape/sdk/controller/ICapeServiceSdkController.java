@@ -199,5 +199,5 @@ public interface ICapeServiceSdkController {
 
 	public abstract ResponseEntity<Account> createCapeAccount(Account account);
 
-//	public abstract ResponseEntity<Account> notifyCapeAccountDeletion(List<String> surrogateIds);
+	public abstract ResponseEntity<?> deleteUserToSurrogateId(String surrogateId) throws CapeSdkManagerException;
 }

@@ -128,12 +128,12 @@
 			<version>1.5.8</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springdoc</groupId> -->
-<!-- 			<artifactId>springdoc-openapi-data-rest</artifactId> -->
-<!-- 			<version>1.5.8</version> -->
-<!-- 		</dependency> -->
-		
+		<!-- <dependency> -->
+		<!-- <groupId>org.springdoc</groupId> -->
+		<!-- <artifactId>springdoc-openapi-data-rest</artifactId> -->
+		<!-- <version>1.5.8</version> -->
+		<!-- </dependency> -->
+
 
 	</dependencies>
 
@@ -145,6 +145,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+					<arguments>--enable-preview</arguments>
+					<jvmArguments>--enable-preview</jvmArguments>
 				</configuration>
 				<executions>
 					<execution>
@@ -165,6 +167,14 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<compilerArgs>--enable-preview</compilerArgs>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springdoc</groupId>

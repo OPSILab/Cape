@@ -1128,20 +1128,29 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-//	@Operation(summary="Notify to this SDK a Cape Account deletion.", description = "Notify to this SDK that a CaPe Account has been deleted by passing the SurrogateIds for which associated Service Links and Consent Record are to be disabled/withdrawn.", tags = { "Account" }, responses = {
-//			@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
-//	@Override
-//	@DeleteMapping(value = "/accounts")
-//	public ResponseEntity<Account> notifyCapeAccountDeletion(@RequestBody List<String> surrogateIds) {
-//		return null;
-//
-//		/*
-//		 * For each input SurrogateId: 
-//		 * 
-//		 * - Set matching Service Link Record to "Removed"
-//		 * - Set related Consent Records to ?
-//		 */
-//	}
+	@Operation(summary = "Delete User - Surrogate Link.", description = "Used by Account Manager due to an account deletion.", tags = {
+			"Account" }, responses = {
+					@ApiResponse(description = "Returns 201 Created with the created Account.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))) })
+	@Override
+	@DeleteMapping(value = "/userSurrogateIdLink/{surrogateId}")
+	public ResponseEntity<?> deleteUserToSurrogateId(@PathVariable String surrogateId) throws CapeSdkManagerException {
+
+		/*
+		 * For each input SurrogateId:
+		 * 
+		 * - Set matching Service Link Record to "Removed"? - Set related Consent
+		 * Records to Withdrawn?
+		 * 
+		 * For now delete only userSurrogateIdLink
+		 */
+		Long deletedCount = 0L;
+		deletedCount += userSurrogateIdRepo.deleteUserSurrogateIdLinkBySurrogateId(surrogateId);
+
+		if (deletedCount != 1)
+			throw new CapeSdkManagerException("There was an error while deleting UserSurrogateIdLink");
+
+		return ResponseEntity.noContent().build();
+	}
 
 	@Operation(summary = "Enforce Usage Rules associated to a User Consent to the input body to filter fields disallowed by the matching Consent Record. Use the Active Consent Record matched (if any) by input UserId, Sink Service Id and Source Service Id. Optionally the Consent Record to match can be filtered by Dataset Id, Purpose Category and Processing Category.", tags = {
 			"Data Request" }, responses = {

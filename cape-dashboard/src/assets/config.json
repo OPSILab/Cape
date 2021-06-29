@@ -10,7 +10,7 @@
     "auditLogUrl": "http://localhost:8081/auditlog-manager",
     "consentManagerUrl": "http://localhost:8083/consent-manager",
     "auth": {
-      "idmHost": "https://www.cape-suite.eu",
+      "idmHost": "http://localhost:8099",
       "clientId": "cape-server",
       "disableAuth": "false",
       "authProfile": "oidc",

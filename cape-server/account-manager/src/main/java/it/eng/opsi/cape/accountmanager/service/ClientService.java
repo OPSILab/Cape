@@ -18,6 +18,7 @@ package it.eng.opsi.cape.accountmanager.service;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ import it.eng.opsi.cape.exception.AccountManagerException;
 import it.eng.opsi.cape.exception.AuditLogNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.SessionNotFoundException;
+import it.eng.opsi.cape.accountmanager.model.SurrogateIdServiceIdRecord;
 import it.eng.opsi.cape.accountmanager.model.audit.AuditDataMapping;
 import it.eng.opsi.cape.accountmanager.model.audit.AuditLog;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
@@ -76,8 +78,8 @@ public class ClientService {
 			throws AccountManagerException, ServiceDescriptionNotFoundException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<ServiceEntry> response = restTemplate.getForEntity(serviceRegistryHost + "/api/v1/services/{id}",
-				ServiceEntry.class, serviceId);
+		ResponseEntity<ServiceEntry> response = restTemplate
+				.getForEntity(serviceRegistryHost + "/api/v2/services/{serviceId}", ServiceEntry.class, serviceId);
 
 		HttpStatus responseStatus = response.getStatusCode();
 
@@ -85,7 +87,7 @@ public class ClientService {
 			return response.getBody();
 
 		else if (responseStatus == HttpStatus.NOT_FOUND) {
-			throw new ServiceDescriptionNotFoundException("The service with Id: " + serviceId + "was not found");
+			throw new ServiceDescriptionNotFoundException("The service with Id: " + serviceId + " was not found");
 		} else
 			throw new AccountManagerException(
 					"There was an error while retrieving Service Description from Service Registry");
@@ -220,6 +222,24 @@ public class ClientService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * For each surrogateId present in ServiceLinks of input accountId, retrieve
+	 * relative Service Description to get SDK url to be called
+	 */
+	public void callDeleteUserSurrogateLinkFromSDKs(List<SurrogateIdServiceIdRecord> surrogateIdRecords) throws AccountManagerException, ServiceDescriptionNotFoundException {
+
+		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+
+		for (SurrogateIdServiceIdRecord record : surrogateIdRecords) {
+
+			ServiceEntry serviceDescription = this.getServiceDescriptionFromRegistry(record.serviceId());
+			String sdkUrl = serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain();
+
+			restTemplate.delete(sdkUrl + "/api/v2/userSurrogateIdLink/{surrogateId}", record.surrogateId());
+		}
+
 	}
 
 }

@@ -4,7 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { LinkingResponseData } from './model/service-link/linkingResponseData';
-import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
 import { SurrogateIdResponse } from './model/service-link/surrogateIdResponse';
 import { OperatorDescription } from './model/service-link/operatorDescription';
 import { ServiceLinkRecordDoubleSigned } from './model/service-link/serviceLinkRecordDoubleSigned';
@@ -24,6 +23,7 @@ import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } f
 import { QuerySortEnum } from './model/querySortEnum';
 import { ErrorDialogService } from './error-dialog/error-dialog.service';
 import { UserSurrogateIdLink } from './model/service-link/userSurrogateIdLink';
+import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
 
 export enum LinkingFromEnum {
   Service = 'Service',
@@ -69,7 +69,7 @@ export class CapeSdkAngularService {
     serviceUserId: string,
     returnUrl: string,
     cdr: ChangeDetectorRef
-  ) {
+  ): Promise<void> {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
@@ -82,7 +82,7 @@ export class CapeSdkAngularService {
     /*
      * Operator returned Message
      * */
-    window.onmessage = async (event: any) => {
+    window.onmessage = async (event: MessageEvent<Record<string, string>>) => {
       const result: string = event.data.result;
       const message: string = event.data.message;
       const resSurrogateId: string = event.data.surrogateId;
@@ -95,7 +95,7 @@ export class CapeSdkAngularService {
         this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
 
         // link userId - surrogateId
-        const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
+        await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
 
         // Trigger components subscribed to the Linking Completed event
         this.linkSubject.next({ serviceId: resServiceId, status: SlStatusEnum.Active, surrogateId: resSurrogateId } as ServiceLinkEvent);
@@ -115,15 +115,13 @@ export class CapeSdkAngularService {
     operatorId: string,
     serviceId: string,
     serviceName: string,
-    serviceUserId: string,
-    returnUrl: string
-  ) {
+    serviceUserId: string
+  ): Promise<void> {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
-
-    const userSurrogateLink: UserSurrogateIdLink = await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
+    await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId);
+    await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
   }
 
   async automaticLinkFromService(
@@ -134,7 +132,7 @@ export class CapeSdkAngularService {
     serviceUserEmail: string,
     locale: string,
     returnUrl: string
-  ) {
+  ): Promise<UserSurrogateIdLink> {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
@@ -144,8 +142,9 @@ export class CapeSdkAngularService {
 
     try {
       // Start Service Linking with retrieved Linking Session Code
-      const linkingResponse: LinkingResponseData = await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId, returnUrl);
+      await this.startServiceLinking(sdkUrl, sessionCode, surrogateId, operatorId, serviceId);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error?.error.innerError.innerError.error == 'it.eng.opsi.cape.exception.AccountNotFoundException') {
         // Call SDK API to Create Account using as accountId the accountId of the Service
         await this.createCapeAccount(sdkUrl, serviceUserId, serviceUserEmail, locale);
@@ -165,7 +164,13 @@ export class CapeSdkAngularService {
    *
    * */
 
-  async getServiceLinkingSessionCode(sdkUrl: string, serviceUserId: string, surrogateId: string, serviceId: string, returnUrl: string) {
+  async getServiceLinkingSessionCode(
+    sdkUrl: string,
+    serviceUserId: string,
+    surrogateId: string,
+    serviceId: string,
+    returnUrl: string
+  ): Promise<string> {
     return this.http
       .get(
         `${sdkUrl}/api/v2/slr/linking/sessionCode?serviceId=${serviceId}&userId=${serviceUserId}&surrogateId=${surrogateId}&returnUrl=${returnUrl}&forceLinking=true`,
@@ -181,16 +186,21 @@ export class CapeSdkAngularService {
    * or background linking from service and transparent to User ( automatic acceptance of service linking)
    *
    * */
-  public startServiceLinking(sdkUrl: string, sessionCode: string, surrogateId: string, operatorId: string, serviceId: string, returnUrl: string) {
-    const startLinkingBody: StartLinkingRequest = {
-      session_code: sessionCode,
-      surrogate_id: surrogateId,
-      service_id: serviceId,
-      operator_id: operatorId,
-      return_url: returnUrl,
-    };
-
-    return this.http.post<LinkingResponseData>(`${sdkUrl}/api/v2/slr/linking`, startLinkingBody).toPromise();
+  public startServiceLinking(
+    sdkUrl: string,
+    sessionCode: string,
+    surrogateId: string,
+    operatorId: string,
+    serviceId: string
+  ): Promise<LinkingResponseData> {
+    return this.http
+      .post<LinkingResponseData>(`${sdkUrl}/api/v2/slr/linking`, {
+        session_code: sessionCode,
+        surrogate_id: surrogateId,
+        service_id: serviceId,
+        operator_id: operatorId,
+      } as StartLinkingRequest)
+      .toPromise();
   }
 
   public generateSurrogateId(sdkUrl: string, operatorId: string, serviceUserId: string): Promise<SurrogateIdResponse> {
@@ -259,7 +269,7 @@ export class CapeSdkAngularService {
 
   public getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(
     sdkUrl: string,
-    serviceUserId,
+    serviceUserId: string,
     serviceId: string,
     operatorId: string
   ): Promise<UserSurrogateIdLink> {
