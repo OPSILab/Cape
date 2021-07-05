@@ -5,7 +5,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { LinkingResponseData } from './model/service-link/linkingResponseData';
 import { SurrogateIdResponse } from './model/service-link/surrogateIdResponse';
-import { OperatorDescription } from './model/service-link/operatorDescription';
+import { DataOperatorDescription } from './model/service-link/dataOperatorDescription';
 import { ServiceLinkRecordDoubleSigned } from './model/service-link/serviceLinkRecordDoubleSigned';
 import { SlStatusEnum } from './model/service-link/serviceLinkStatusRecordPayload';
 import { ServiceLinkStatusRecordSigned } from './model/service-link/serviceLinkStatusRecordSigned';
@@ -17,13 +17,15 @@ import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSi
 import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecordSinkRoleSpecificPart';
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
-import { ServiceEntry } from './model/service-link/serviceEntry';
+import { RoleEnum, ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
 import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from './model/processingBasis';
 import { QuerySortEnum } from './model/querySortEnum';
 import { ErrorDialogService } from './error-dialog/error-dialog.service';
 import { UserSurrogateIdLink } from './model/service-link/userSurrogateIdLink';
 import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
+import { ConsentFormRequest } from './model/consent/consentFormRequest';
+import { UsageRules } from './model/consent/UsageRules';
 
 export enum LinkingFromEnum {
   Service = 'Service',
@@ -73,11 +75,11 @@ export class CapeSdkAngularService {
     const surrogateIdResponse = await this.generateSurrogateId(sdkUrl, operatorId, serviceUserId);
     const surrogateId = surrogateIdResponse.surrogate_id;
 
-    const operatorDescription = await this.getOperatorDescription(sdkUrl, operatorId);
+    const dataOperatorDescription = await this.getDataOperatorDescription(sdkUrl, operatorId);
 
-    const operatorLinkingUrl = operatorDescription.operatorUrls.linkingUri;
+    const dataOperatorLinkingUrl = dataOperatorDescription.operatorUrls.linkingUri;
 
-    if (operatorLinkingUrl === undefined || operatorLinkingUrl === '') throw new Error('The Operator Linking Url is not valid or empty');
+    if (dataOperatorLinkingUrl === undefined || dataOperatorLinkingUrl === '') throw new Error('The Operator Linking Url is not valid or empty');
 
     /*
      * Operator returned Message
@@ -92,7 +94,7 @@ export class CapeSdkAngularService {
       if (resSurrogateId !== surrogateId || resServiceId !== serviceId || resReturnUrl !== returnUrl)
         this.errorDialogService.openErrorDialog(new Error(this.translateService.instant('general.services.linkingParamMismatch')));
       else if (result === 'SUCCESS') {
-        this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
+        this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 3000 });
 
         // link userId - surrogateId
         await this.linkSurrogateId(sdkUrl, serviceUserId, surrogateId, serviceId, operatorId);
@@ -100,11 +102,11 @@ export class CapeSdkAngularService {
         // Trigger components subscribed to the Linking Completed event
         this.linkSubject.next({ serviceId: resServiceId, status: SlStatusEnum.Active, surrogateId: resSurrogateId } as ServiceLinkEvent);
         cdr.detectChanges();
-      } else if (result === 'CANCELLED') this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 5000 });
+      } else if (result === 'CANCELLED') this.toastrService.primary('', message, { position: NbGlobalLogicalPosition.BOTTOM_END, duration: 3000 });
     };
 
     window.open(
-      `${operatorLinkingUrl}?surrogateId=${surrogateId}&serviceId=${serviceId}&serviceName=${serviceName}&returnUrl=${returnUrl}&locale=${locale}&linkingFrom=Service`,
+      `${dataOperatorLinkingUrl}?surrogateId=${surrogateId}&serviceId=${serviceId}&serviceName=${serviceName}&returnUrl=${returnUrl}&locale=${locale}&linkingFrom=Service`,
       '_blank'
     );
   }
@@ -239,7 +241,7 @@ export class CapeSdkAngularService {
 
     this.toastrService.primary('', this.translateService.instant('general.services.enableSuccessfulMessage', { serviceName: serviceName }), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
-      duration: 4500,
+      duration: 3000,
     });
     this.emitServiceLinkEvent({ serviceId: serviceId, status: SlStatusEnum.Active, surrogateId: surrogateId, slrId: slrId } as ServiceLinkEvent);
 
@@ -259,7 +261,7 @@ export class CapeSdkAngularService {
 
     this.toastrService.primary('', this.translateService.instant('general.services.disableSuccessfulMessage', { serviceName: serviceName }), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
-      duration: 4500,
+      duration: 3000,
     });
 
     this.emitServiceLinkEvent({ serviceId: serviceId, status: SlStatusEnum.Removed, surrogateId: surrogateId, slrId: slrId } as ServiceLinkEvent);
@@ -278,8 +280,8 @@ export class CapeSdkAngularService {
       .toPromise();
   }
 
-  public getOperatorDescription(sdkUrl: string, operatorId: string): Promise<OperatorDescription> {
-    return this.http.get<OperatorDescription>(`${sdkUrl}/api/v2/operatorDescriptions/${operatorId}`).toPromise();
+  public getDataOperatorDescription(sdkUrl: string, operatorId: string): Promise<DataOperatorDescription> {
+    return this.http.get<DataOperatorDescription>(`${sdkUrl}/api/v2/dataOperatorDescriptions/${operatorId}`).toPromise();
   }
 
   public getServiceLinkRecordBySurrogateIdAndServiceId(
@@ -326,6 +328,7 @@ export class CapeSdkAngularService {
     serviceId: string,
     operatorId: string,
     purposeId: string,
+    requesterRole: RoleEnum,
     sourceServiceId?: string,
     sourceDatasetId?: string
   ): Promise<ConsentForm> {
@@ -336,14 +339,20 @@ export class CapeSdkAngularService {
       operatorId
     );
 
-    let fetchConsentFormUrl = `${sdkUrl}/api/v2/users/surrogates/${userSurrogateLink.surrogateId}/service/${serviceId}/purpose/${purposeId}/consentForm`;
-
-    if (sourceServiceId && sourceDatasetId) fetchConsentFormUrl += `?sourceServiceId=${sourceServiceId}&sourceDatasetId=${sourceDatasetId}`;
-    return this.http.get<ConsentForm>(fetchConsentFormUrl).toPromise();
+    return this.http
+      .post<ConsentForm>(`${sdkUrl}/api/v2/consents/consentForm`, {
+        requester_surrogate_id: userSurrogateLink.surrogateId,
+        requester_role: requesterRole,
+        purpose_id: purposeId,
+        sink_service_id: serviceId,
+        source_service_id: sourceServiceId,
+        source_service_dataset_id: sourceDatasetId,
+      } as ConsentFormRequest)
+      .toPromise();
   }
 
   public async giveConsent(sdkUrl: string, consentForm: ConsentForm): Promise<ConsentRecordSigned> {
-    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/users/surrogates/${consentForm.surrogate_id}/consents`, consentForm).toPromise();
+    return this.http.post<ConsentRecordSigned>(`${sdkUrl}/api/v2/consents`, consentForm).toPromise();
   }
 
   public async getConsentsBySurrogateIdAndQuery(
@@ -426,7 +435,7 @@ export class CapeSdkAngularService {
         usage_rules:
           consent.consentStatusList.length > 1
             ? consent.consentStatusList[consent.consentStatusList.length - 1].payload.consent_usage_rules
-            : (consent.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules,
+            : consent.payload.common_part.usage_rules,
         request_from: ChangeConsentStatusRequestFrom.Service,
       } as ChangeConsentStatusRequest)
       .toPromise();
@@ -438,7 +447,7 @@ export class CapeSdkAngularService {
 
     this.toastrService.primary('', this.translateService.instant('general.consent.disableSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
-      duration: 4500,
+      duration: 3000,
     });
 
     this.emitConsentRecordEvent({
@@ -456,7 +465,7 @@ export class CapeSdkAngularService {
 
     this.toastrService.primary('', this.translateService.instant('general.consent.enableSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
-      duration: 4500,
+      duration: 3000,
     });
 
     this.emitConsentRecordEvent({
@@ -474,7 +483,7 @@ export class CapeSdkAngularService {
 
     this.toastrService.primary('', this.translateService.instant('general.consent.withdrawSuccessfulMessage'), {
       position: NbGlobalLogicalPosition.BOTTOM_END,
-      duration: 4500,
+      duration: 3000,
     });
 
     this.emitConsentRecordEvent({

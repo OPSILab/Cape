@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SinkUsageRules } from './sinkUsageRules';
+import { UsageRules } from './usageRules';
 import { ResourceSet } from './resourceSet';
 
 export interface ConsentStatusRecordPayload {
@@ -19,7 +19,7 @@ export interface ConsentStatusRecordPayload {
   source_surrogate_id?: string;
   consent_status: ConsentStatusEnum;
   consent_resource_set?: ResourceSet;
-  consent_usage_rules?: SinkUsageRules;
+  consent_usage_rules?: UsageRules;
   iat: string;
   prev_record_id: string;
 }

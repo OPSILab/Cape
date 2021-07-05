@@ -5,10 +5,9 @@ import { NbDialogRef, NbToastrService, NbGlobalLogicalPosition } from '@nebular/
 import { TranslateService } from '@ngx-translate/core';
 import { CapeSdkAngularService, ConsentRecordEvent } from '../cape-sdk-angular.service';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
-import { ConsentStatusEnum } from '../model/consent/consentStatusRecordPayload';
 
 @Component({
-  selector: 'app-consent-form',
+  selector: 'lib-app-consent-form',
   templateUrl: './consent-form.component.html',
   styleUrls: ['./consent-form.component.scss'],
 })
@@ -38,21 +37,31 @@ export class ConsentFormComponent implements OnInit {
       ),
       shareWith: new FormGroup(
         Object.fromEntries(
-          this.consentForm.usage_rules.shareWith.map((shareWith) => [shareWith.orgName, new FormControl({ value: true, disabled: shareWith.required })])
+          this.consentForm.usage_rules.shareWith.map((shareWith) => [
+            shareWith.orgName,
+            new FormControl({ value: true, disabled: shareWith.required }),
+          ])
         )
       ),
+      collectionOperatorId: new FormControl(''),
     });
   }
 
-  async giveConsent() {
-    const dataMappingControls = new Map(Object.entries((this.userConsentForm.controls.dataMapping as FormGroup).controls).map((obj) => [obj[0], obj[1]]));
+  async giveConsent(): Promise<void> {
+    const dataMappingControls = new Map(
+      Object.entries((this.userConsentForm.controls.dataMapping as FormGroup).controls).map((obj) => [obj[0], obj[1]])
+    );
     const shareWithControls = new Map(Object.entries((this.userConsentForm.controls.shareWith as FormGroup).controls).map((obj) => [obj[0], obj[1]]));
 
     this.consentForm.resource_set.datasets[0].dataMappings = this.consentForm.resource_set.datasets[0].dataMappings.filter(
       (concept) => dataMappingControls.get(concept.name)?.value
     );
-    this.consentForm.usage_rules.shareWith = this.consentForm.usage_rules.shareWith.filter((shareWith) => shareWithControls.get(shareWith.orgName)?.value);
+    this.consentForm.usage_rules.shareWith = this.consentForm.usage_rules.shareWith.filter(
+      (shareWith) => shareWithControls.get(shareWith.orgName)?.value
+    );
 
+    // Set in the consentForm (if any) collection operator Id from input control
+    this.consentForm.collection_operator_id = (this.userConsentForm.controls.collectionOperatorId as FormControl).value as string;
     try {
       const newConsentRecordSigned = await this.capeService.giveConsent(this.sdkUrl, this.consentForm);
       this.toastrService.primary('', this.translateService.instant('general.consent.giveConsentSuccessful'), {

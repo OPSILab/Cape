@@ -35,7 +35,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import it.eng.opsi.cape.accountmanager.ErrorResponse.ApiSubError;
 import it.eng.opsi.cape.accountmanager.ErrorResponse.ApiValidationError;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordAlreadyPresentException;
@@ -79,7 +79,7 @@ public class AccountManagerExceptionHandler extends ResponseEntityExceptionHandl
 	@ExceptionHandler(ServiceLinkStatusRecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	protected ResponseEntity<ErrorResponse> ServiceLinkStatusRecordNotFoundException(
-			OperatorDescriptionNotFoundException ex, HttpServletRequest req) {
+			DataOperatorDescriptionNotFoundException ex, HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
@@ -91,9 +91,9 @@ public class AccountManagerExceptionHandler extends ResponseEntityExceptionHandl
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
-	@ExceptionHandler(OperatorDescriptionNotFoundException.class)
+	@ExceptionHandler(DataOperatorDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleDataOperatorNotFound(DataOperatorDescriptionNotFoundException ex, HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}

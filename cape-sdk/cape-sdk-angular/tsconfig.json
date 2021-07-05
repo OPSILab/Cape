@@ -4,7 +4,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "cape-sdk-angular": ["dist/cape-sdk-angular/cape-sdk-angular", "dist/cape-sdk-angular"]
+      "cape-sdk-angular": ["dist/cape-sdk-angular/cape-sdk-angular", "dist/cape-sdk-angular"],
+      "@angular/*": ["./node_modules/@angular/*"],
+      "@nebular/*": ["./node_modules/@nebular/*"],
+      "@ngx-translate/*": ["./node_modules/@ngx-translate/*"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -19,6 +22,8 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "preserveSymlinks": true,
+    "allowedNonPeerDependencies": true
   }
 }

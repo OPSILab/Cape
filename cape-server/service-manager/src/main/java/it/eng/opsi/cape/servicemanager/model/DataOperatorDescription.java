@@ -49,8 +49,8 @@ import lombok.AccessLevel;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Document(collection = "operatorDescriptions")
-public class OperatorDescription implements Serializable {
+@Document(collection = "dataOperatorDescriptions")
+public class DataOperatorDescription implements Serializable {
 
 	/**
 	 * 

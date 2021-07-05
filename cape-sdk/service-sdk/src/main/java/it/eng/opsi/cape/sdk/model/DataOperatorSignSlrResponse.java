@@ -28,7 +28,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class OperatorSignSlrResponse {
+public class DataOperatorSignSlrResponse {
 
 	@NonNull
 	private JWSObject accountSignedSlr;

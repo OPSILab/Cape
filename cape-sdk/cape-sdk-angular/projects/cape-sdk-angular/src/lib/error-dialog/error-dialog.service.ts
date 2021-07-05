@@ -6,10 +6,11 @@ import { NbDialogService } from '@nebular/theme';
 export class ErrorDialogService {
   constructor(private modalService: NbDialogService) {}
 
-  openErrorDialog(error: unknown) {
+  openErrorDialog(error: unknown, dashboardUrl?: string): void {
     this.modalService.open(ErrorDialogComponent, {
       context: {
         error: error,
+        dashboardUrl: dashboardUrl,
       },
       hasScroll: true,
     });

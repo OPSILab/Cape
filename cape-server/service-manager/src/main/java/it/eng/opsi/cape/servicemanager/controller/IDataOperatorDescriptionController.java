@@ -24,23 +24,23 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.JOSEException;
 
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
-import it.eng.opsi.cape.servicemanager.model.OperatorDescription;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.servicemanager.model.DataOperatorDescription;
 import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenPayload;
 import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenResponse;
 
-public interface IOperatorDescriptionController {
+public interface IDataOperatorDescriptionController {
 
-	public abstract ResponseEntity<OperatorDescription> createOperatorDescription(OperatorDescription description)
+	public abstract ResponseEntity<DataOperatorDescription> createDataOperatorDescription(DataOperatorDescription description)
 			throws JOSEException, CertIOException, IOException;
 
-	public abstract ResponseEntity<OperatorDescription> getOperatorDescription(String operatorId)
-			throws OperatorDescriptionNotFoundException;
+	public abstract ResponseEntity<DataOperatorDescription> getDataOperatorDescription(String operatorId)
+			throws DataOperatorDescriptionNotFoundException;
 
-	public abstract ResponseEntity<String> deleteOperatorDescription(String operatorId)
-			throws OperatorDescriptionNotFoundException;
+	public abstract ResponseEntity<String> deleteDataOperatorDescription(String operatorId)
+			throws DataOperatorDescriptionNotFoundException;
 
-	public abstract ResponseEntity<AuthorisationTokenResponse> signAuthorisationToken(String operatorId,
-			AuthorisationTokenPayload payload) throws OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException;
+	public abstract ResponseEntity<AuthorisationTokenResponse> signAuthorisationToken(String dataOperatorId,
+			AuthorisationTokenPayload payload) throws DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException;
 
 }

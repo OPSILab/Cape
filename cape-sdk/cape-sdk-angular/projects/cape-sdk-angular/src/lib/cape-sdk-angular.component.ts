@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, AfterViewChecked, TemplateRef, OnDestroy } from '@angular/core';
-import { NbMenuService, NbMenuItem, NbToastrService, NbDialogService, NbDialogRef, NbGlobalLogicalPosition } from '@nebular/theme';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, TemplateRef, OnDestroy } from '@angular/core';
+import { NbMenuService, NbMenuItem, NbToastrService, NbDialogService, NbDialogRef } from '@nebular/theme';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from './error-dialog/error-dialog.service';
@@ -12,6 +13,7 @@ import { Subject } from 'rxjs';
 import { ConsentFormComponent } from './consent-form/consent-form.component';
 import { ConsentRecordSigned } from './model/consent/consentRecordSigned';
 import { ConsentStatusEnum } from './model/consent/consentStatusRecordPayload';
+import { RoleEnum } from './model/service-link/serviceEntry';
 
 @Component({
   selector: 'lib-cape-sdk-angular',
@@ -56,6 +58,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   private userId: string;
 
   public isServiceRegistered = false;
+  private serviceRole: RoleEnum;
   private serviceLinkRecord: ServiceLinkRecordDoubleSigned;
   private consentRecord: ConsentRecordSigned;
   private linkingFrom: LinkingFromEnum;
@@ -93,12 +96,12 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     private dialogService: NbDialogService,
     private translateService: TranslateService
   ) {
-    this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') }];
+    this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') as string }];
     this.translateService.setDefaultLang('en');
     this.translateService.use(this.locale);
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     /*
      * Register Menu Actions
      */
@@ -114,23 +117,21 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
           switch (target) {
             case 'Link Service':
               this.capeService.serviceLinkStatus$.pipe(takeUntil(this.unsubscribe)).subscribe(async (event) => {
-                event = event;
-
                 if (event?.serviceId === this.serviceId)
                   this.menuItems = [
                     {
-                      title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+                      title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
                       target: 'Disable Service Link',
                     },
                     {
-                      title: this.translateService.instant('general.goToDashboard'),
+                      title: this.translateService.instant('general.goToDashboard') as string,
                     },
                   ];
 
                 // If the sourceServiceId is undefined -> This service itself is the source, don't push Give Consent option
                 if (!this.sourceServiceId)
                   this.menuItems.push({
-                    title: this.translateService.instant('general.consent.giveConsentLabel'),
+                    title: this.translateService.instant('general.consent.giveConsentLabel') as string,
                     target: 'Give Consent',
                   });
 
@@ -163,7 +164,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
               await this.disableServiceLink();
               break;
             case 'Give Consent':
-              await this.openConsentForm();
+              await this.openConsentForm(this.dashboardUrl);
               break;
             case 'Disable Consent':
               await this.disableConsent();
@@ -189,9 +190,11 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
      * */
     try {
       const serviceDescription = await this.capeService.getRegisteredService(this.sdkUrl, this.serviceId);
+      this.serviceRole = serviceDescription.role;
 
       if (serviceDescription) this.isServiceRegistered = this.capeService.emitIsRegisteredValue(true);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
       else {
         this.isServiceRegistered = this.capeService.emitIsRegisteredValue(false);
@@ -214,17 +217,18 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         status: this.serviceLinkStatus,
       } as ServiceLinkEvent);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
     }
 
     if (!this.serviceLinkStatus)
       this.menuItems.push({
-        title: this.translateService.instant('general.services.linkServiceLabel'),
+        title: this.translateService.instant('general.services.linkServiceLabel') as string,
         target: 'Link Service',
       });
     else if (this.serviceLinkStatus === SlStatusEnum.Removed)
       this.menuItems.push({
-        title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+        title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
         target: 'Enable Service Link',
       });
     else {
@@ -232,7 +236,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
        * Service Linked and Link active. Check Consent Record
        */
       this.menuItems.push({
-        title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+        title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
         target: 'Disable Service Link',
       });
 
@@ -257,34 +261,35 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
           status: this.consentRecord?.consentStatusList[this.consentRecord?.consentStatusList.length - 1]?.payload,
         } as ConsentRecordEvent);
       } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
       }
 
       if (this.consentStatus === ConsentStatusEnum.Active)
         this.menuItems.push(
           {
-            title: this.translateService.instant('general.consent.disableConsentLabel'),
+            title: this.translateService.instant('general.consent.disableConsentLabel') as string,
             target: 'Disable Consent',
           },
           {
-            title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+            title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
             target: 'Withdraw Consent',
           }
         );
       else if (this.consentStatus === ConsentStatusEnum.Disabled)
         this.menuItems.push(
           {
-            title: this.translateService.instant('general.consent.enableConsentLabel'),
+            title: this.translateService.instant('general.consent.enableConsentLabel') as string,
             target: 'Enable Consent',
           },
           {
-            title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+            title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
             target: 'Withdraw Consent',
           }
         );
       else if (this.sourceServiceId)
         this.menuItems.push({
-          title: this.translateService.instant('general.consent.giveConsentLabel'),
+          title: this.translateService.instant('general.consent.giveConsentLabel') as string,
           target: 'Give Consent',
         });
     }
@@ -292,7 +297,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     this.cdr.detectChanges();
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
     const queryParams = this.route.snapshot.queryParams;
     /*
      * If it comes from a linking started from Cape, go to the linking dialog
@@ -305,18 +310,18 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
       this.openedDialog = this.dialogService.open(this.linkingDialog, {
         context: {
-          sessionCode: queryParams.sessionCode,
-          returnUrl: queryParams.returnUrl,
+          sessionCode: queryParams.sessionCode as string,
+          returnUrl: queryParams.returnUrl as string,
         },
         hasScroll: true,
       });
 
-      this.sessionCode = queryParams.sessionCode;
-      this.locale = queryParams.locale || 'en';
+      this.sessionCode = queryParams.sessionCode as string;
+      this.locale = (queryParams.locale as string) || 'en';
       this.initialLocale = this.translateService.currentLang;
       this.translateService.use(this.locale);
-      this.returnUrl = queryParams.returnUrl;
-      this.linkingFrom = queryParams.linkingFrom;
+      this.returnUrl = queryParams.returnUrl as string;
+      this.linkingFrom = queryParams.linkingFrom as LinkingFromEnum;
       //this.cdr.detectChanges();
     }
   }
@@ -328,14 +333,14 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     this.unsubscribe.complete();
   }
 
-  async startLinkingAfterServiceLogin() {
+  async startLinkingAfterServiceLogin(): Promise<void> {
     try {
       await this.capeService.linkFromOperator(this.sdkUrl, this.sessionCode, this.operatorId, this.serviceId, this.serviceName, this.userId);
 
       const successMessage: string = this.translateService.instant('general.services.linkingSuccessfulMessage', {
         serviceId: this.serviceId,
         serviceName: this.serviceName,
-      });
+      }) as string;
 
       this.openedDialog = this.dialogService.open(this.linkedDialog, {
         context: {
@@ -348,9 +353,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  closeLinkedDialogAndReturnToOperator(message: string) {
+  closeLinkedDialogAndReturnToOperator(message: string): void {
     window.onunload = () => {
-      window.opener.postMessage(
+      (window.opener as Window).postMessage(
         {
           result: 'SUCCESS',
           message: message,
@@ -363,8 +368,8 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     window.close();
   }
 
-  closeLinkedDialog(message: string) {
-    window.opener.postMessage(
+  closeLinkedDialog(message: string): void {
+    (window.opener as Window).postMessage(
       {
         result: 'SUCCESS',
         message: message,
@@ -377,11 +382,11 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     location.replace(location.href.split('?')[0]);
   }
 
-  cancel() {
-    window.opener.postMessage(
+  cancel(): void {
+    (window.opener as Window).postMessage(
       {
         result: 'CANCELLED',
-        message: this.translateService.instant('general.services.linkingCancelledMessage'),
+        message: this.translateService.instant('general.services.linkingCancelledMessage') as string,
         serviceId: this.serviceId,
         returnUrl: this.returnUrl,
       },
@@ -393,10 +398,10 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     window.close();
   }
 
-  async openConsentForm() {
+  async openConsentForm(dashboardUrl: string): Promise<void> {
     try {
       this.dialogService.open(ConsentFormComponent, {
-        hasScroll: true,
+        hasScroll: false,
         autoFocus: true,
         closeOnBackdropClick: true,
         context: {
@@ -407,6 +412,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
             this.serviceId,
             this.operatorId,
             this.purposeId,
+            this.serviceRole,
             this.sourceServiceId,
             this.sourceDatasetId
           ),
@@ -417,24 +423,24 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         if (event?.consentRecord) {
           this.consentRecord = event.consentRecord;
           this.menuItems = [
-            { title: this.translateService.instant('general.goToDashboard') },
+            { title: this.translateService.instant('general.goToDashboard') as string },
             {
-              title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
               target: 'Disable Service Link',
             },
             {
-              title: this.translateService.instant('general.consent.disableConsentLabel'),
+              title: this.translateService.instant('general.consent.disableConsentLabel') as string,
               target: 'Disable Consent',
             },
             {
-              title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+              title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
               target: 'Withdraw Consent',
             },
           ];
         }
       });
     } catch (error) {
-      this.errorDialogService.openErrorDialog(error);
+      this.errorDialogService.openErrorDialog(error, dashboardUrl);
     }
   }
 
@@ -450,9 +456,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         )
       );
       this.menuItems = [
-        { title: this.translateService.instant('general.goToDashboard') },
+        { title: this.translateService.instant('general.goToDashboard') as string },
         {
-          title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+          title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
           target: 'Disable Service Link',
         },
       ];
@@ -461,11 +467,11 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         case ConsentStatusEnum.Active:
           this.menuItems.push(
             {
-              title: this.translateService.instant('general.consent.disableConsentLabel'),
+              title: this.translateService.instant('general.consent.disableConsentLabel') as string,
               target: 'Disable Consent',
             },
             {
-              title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+              title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
               target: 'Withdraw Consent',
             }
           );
@@ -473,11 +479,11 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         case ConsentStatusEnum.Disabled:
           this.menuItems.push(
             {
-              title: this.translateService.instant('general.consent.enableConsentLabel'),
+              title: this.translateService.instant('general.consent.enableConsentLabel') as string,
               target: 'Enable Consent',
             },
             {
-              title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+              title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
               target: 'Withdraw Consent',
             }
           );
@@ -485,7 +491,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         default:
           if (this.sourceServiceId)
             this.menuItems.push({
-              title: this.translateService.instant('general.consent.giveConsentLabel'),
+              title: this.translateService.instant('general.consent.giveConsentLabel') as string,
               target: 'Give Consent',
             });
       }
@@ -508,9 +514,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         )
       );
       this.menuItems = [
-        { title: this.translateService.instant('general.goToDashboard') },
+        { title: this.translateService.instant('general.goToDashboard') as string },
         {
-          title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+          title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
           target: 'Enable Service Link',
         },
       ];
@@ -535,9 +541,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     try {
       this.consentRecord.consentStatusList.push(await this.capeService.disableConsent(this.sdkUrl, this.consentRecord));
       this.menuItems = [
-        { title: this.translateService.instant('general.goToDashboard') },
+        { title: this.translateService.instant('general.goToDashboard') as string },
         {
-          title: this.translateService.instant('general.consent.enableConsentLabel'),
+          title: this.translateService.instant('general.consent.enableConsentLabel') as string,
           target: 'Enable Consent',
         },
       ];
@@ -545,11 +551,11 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
       this.menuItems.push(
         this.serviceLinkStatus === SlStatusEnum.Active
           ? {
-              title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
               target: 'Disable Service Link',
             }
           : {
-              title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
               target: 'Enable Service Link',
             }
       );
@@ -564,9 +570,9 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     try {
       this.consentRecord.consentStatusList.push(await this.capeService.enableConsent(this.sdkUrl, this.consentRecord));
       this.menuItems = [
-        { title: this.translateService.instant('general.goToDashboard') },
+        { title: this.translateService.instant('general.goToDashboard') as string },
         {
-          title: this.translateService.instant('general.consent.disableConsentLabel'),
+          title: this.translateService.instant('general.consent.disableConsentLabel') as string,
           target: 'Disable Consent',
         },
       ];
@@ -574,17 +580,18 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
       this.menuItems.push(
         this.serviceLinkStatus === SlStatusEnum.Active
           ? {
-              title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
               target: 'Disable Service Link',
             }
           : {
-              title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
               target: 'Enable Service Link',
             }
       );
 
       this.cdr.detectChanges();
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.status === 409) {
         this.openConsentUpdateConflictDialog(
           error,
@@ -596,7 +603,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  openConsentUpdateConflictDialog(error: unknown, consentUpdateConflict: TemplateRef<any>, serviceId: string, slrId: string) {
+  openConsentUpdateConflictDialog(error: unknown, consentUpdateConflict: TemplateRef<unknown>, serviceId: string, slrId: string): void {
     this.dialogService.open(consentUpdateConflict, {
       context: {
         error: error,
@@ -612,21 +619,21 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   async withdrawConsent(): Promise<void> {
     try {
       this.consentRecord.consentStatusList.push(await this.capeService.withdrawConsent(this.sdkUrl, this.consentRecord));
-      this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') }];
+      this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') as string }];
       if (this.sourceServiceId)
         this.menuItems.push({
-          title: this.translateService.instant('general.consent.giveConsentLabel'),
+          title: this.translateService.instant('general.consent.giveConsentLabel') as string,
           target: 'Give Consent',
         });
 
       this.menuItems.push(
         this.serviceLinkStatus === SlStatusEnum.Active
           ? {
-              title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
               target: 'Disable Service Link',
             }
           : {
-              title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+              title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
               target: 'Enable Service Link',
             }
       );
@@ -637,7 +644,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  async refreshStatus() {
+  async refreshStatus(): Promise<void> {
     try {
       this.serviceLinkRecord = await this.capeService.getServiceLinkRecordByUserIdAndServiceId(
         this.sdkUrl,
@@ -650,25 +657,26 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
         status: this.serviceLinkRecord?.serviceLinkStatuses[this.serviceLinkRecord.serviceLinkStatuses.length - 1]?.payload.sl_status,
       } as ServiceLinkEvent);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
     }
 
-    this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') }];
+    this.menuItems = [{ title: this.translateService.instant('general.goToDashboard') as string }];
 
     if (!this.serviceLinkStatus)
       this.menuItems.push({
-        title: this.translateService.instant('general.services.linkServiceLabel'),
+        title: this.translateService.instant('general.services.linkServiceLabel') as string,
         target: 'Link Service',
       });
     else if (this.serviceLinkStatus === SlStatusEnum.Removed)
       this.menuItems.push({
-        title: this.translateService.instant('general.services.enableServiceLinkLabel'),
+        title: this.translateService.instant('general.services.enableServiceLinkLabel') as string,
         target: 'Enable Service Link',
       });
     else {
       // Service Linked. Consent?
       this.menuItems.push({
-        title: this.translateService.instant('general.services.disableServiceLinkLabel'),
+        title: this.translateService.instant('general.services.disableServiceLinkLabel') as string,
         target: 'Disable Service Link',
       });
 
@@ -693,34 +701,35 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
           status: this.consentRecord?.consentStatusList[this.consentRecord?.consentStatusList.length - 1]?.payload,
         } as ConsentRecordEvent);
       } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (error.status !== 404) this.errorDialogService.openErrorDialog(error);
       }
 
       if (this.consentStatus === ConsentStatusEnum.Active)
         this.menuItems.push(
           {
-            title: this.translateService.instant('general.consent.disableConsentLabel'),
+            title: this.translateService.instant('general.consent.disableConsentLabel') as string,
             target: 'Disable Consent',
           },
           {
-            title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+            title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
             target: 'Withdraw Consent',
           }
         );
       else if (this.consentStatus === ConsentStatusEnum.Disabled)
         this.menuItems.push(
           {
-            title: this.translateService.instant('general.consent.enableConsentLabel'),
+            title: this.translateService.instant('general.consent.enableConsentLabel') as string,
             target: 'Enable Consent',
           },
           {
-            title: this.translateService.instant('general.consent.withdrawConsentLabel'),
+            title: this.translateService.instant('general.consent.withdrawConsentLabel') as string,
             target: 'Withdraw Consent',
           }
         );
       else
         this.menuItems.push({
-          title: this.translateService.instant('general.consent.giveConsentLabel'),
+          title: this.translateService.instant('general.consent.giveConsentLabel') as string,
           target: 'Give Consent',
         });
     }

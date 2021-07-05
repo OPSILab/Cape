@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SinkUsageRules } from './sinkUsageRules';
+import { UsageRules } from './usageRules';
 import { ResourceSet } from './resourceSet';
 import { ConsentStatusEnum } from './consentStatusRecordPayload';
 import { ChangeConsentStatusRequestFrom } from './changeSlrStatusRequestFrom';
@@ -17,6 +17,6 @@ import { ChangeConsentStatusRequestFrom } from './changeSlrStatusRequestFrom';
 export interface ChangeConsentStatusRequest {
   status: ConsentStatusEnum;
   resource_set: ResourceSet;
-  usage_rules: SinkUsageRules;
+  usage_rules: UsageRules;
   request_from: ChangeConsentStatusRequestFrom;
 }

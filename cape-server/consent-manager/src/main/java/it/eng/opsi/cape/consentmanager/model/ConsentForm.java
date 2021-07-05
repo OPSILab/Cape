@@ -103,7 +103,7 @@ public class ConsentForm {
 	@NonNull
 	@NotNull
 	@Valid
-	private SinkUsageRules usageRules;
+	private UsageRules usageRules;
 
 	@JsonProperty(value = "jurisdiction")
 	@NonNull
@@ -141,5 +141,9 @@ public class ConsentForm {
 	@NonNull
 	@NotNull
 	private Role requesterSurrogateRole;
+
+	@Schema(description = "Identifier of the physical operator collecting the Consent on behalf of the Data Subject (e.g. after Data Subject gave previously the consent offline, for instance by paper). Identifier values can have any meaning, according to specific agreement made with the Service Provider")
+	@JsonProperty(value = "collection_operator_id")
+	private String collectionOperatorId;
 
 }

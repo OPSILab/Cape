@@ -28,6 +28,7 @@
       "closeAndReturnToOperatorButton": "Close and return to CaPe",
       "forceLinkingButton": "Force Linking",
       "linkingCancelledMessage": "Service Linking has been cancelled",
+      "openCapeDashboardToLinkService": "Open Cape Dashboard to link the Service",
       "linkingSuccessfulHeader": "Service linked to your Cape Account",
       "linkingSuccessfulMessage": "The Service {{serviceName}} with Id: {{serviceId}} has been linked successfully to your Cape Account",
       "enableSuccessfulMessage": "The Link for Service {{serviceName}} has been enabled successfully",
@@ -77,7 +78,9 @@
           "objection": "You have the right of rectification or erasure, to restrict processing or to object to processing for the stated purpose",
           "erasure": "The data will be retained until your account on this service is active or your explicit request of erasure."
         },
-        "policyRef": "Policy reference:"
+        "policyRef": "Policy reference:",
+        "additionalOptions": "Additional options",
+        "collectionOperator": "If the consent is collected by a third party operator, insert your operator identifier (agreed with the Service Provider) below:"
       }
     }
   }

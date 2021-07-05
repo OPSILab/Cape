@@ -79,7 +79,7 @@ import it.eng.opsi.cape.consentmanager.model.Dataset;
 import it.eng.opsi.cape.consentmanager.model.Policy;
 import it.eng.opsi.cape.consentmanager.model.RSDescription;
 import it.eng.opsi.cape.consentmanager.model.ResourceSet;
-import it.eng.opsi.cape.consentmanager.model.SinkUsageRules;
+import it.eng.opsi.cape.consentmanager.model.UsageRules;
 import it.eng.opsi.cape.consentmanager.model.ConsentSignResponse;
 import it.eng.opsi.cape.consentmanager.model.audit.ConsentActionType;
 import it.eng.opsi.cape.consentmanager.model.audit.ConsentEventLog;
@@ -218,7 +218,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		ProcessingBasis servicePurpose = serviceDescription.getProcessingBases().stream()
 				.filter(basis -> basis.getPurposeId().equals(purposeId)).findFirst().get();
 
-		SinkUsageRules serviceUsageRule = new SinkUsageRules(purposeId, servicePurpose.getPurposeCategory(),
+		UsageRules serviceUsageRule = new UsageRules(purposeId, servicePurpose.getPurposeCategory(),
 				servicePurpose.getDescription(), servicePurpose.getLegalBasis(), servicePurpose.getPurposeName(),
 				servicePurpose.getProcessingCategories(), new Policy(servicePurpose.getPolicyRef(), "", ""),
 				servicePurpose.getStorage(), servicePurpose.getRecipients(), servicePurpose.getShareWith(),
@@ -358,7 +358,7 @@ public class ConsentManagerController implements IConsentManagerController {
 						sourceServiceDescription.getServiceDescriptionVersion(),
 						sourceServiceDescription.getServiceDescriptionSignature(),
 						serviceDescription.getServiceInstance().getServiceProvider().getBusinessId(),
-						request.getRequesterSurrogateRole());
+						request.getRequesterSurrogateRole(), "");
 			else
 				consentForm = new ConsentForm(rsId, otherPartySurrogateId, requesterSurrogateId, sourceServiceId,
 						sinkServiceId, sourceServiceDescription.getName(), serviceDescription.getName(),
@@ -372,7 +372,7 @@ public class ConsentManagerController implements IConsentManagerController {
 						sourceServiceDescription.getServiceDescriptionVersion(),
 						sourceServiceDescription.getServiceDescriptionSignature(),
 						serviceDescription.getServiceInstance().getServiceProvider().getBusinessId(),
-						request.getRequesterSurrogateRole());
+						request.getRequesterSurrogateRole(), "");
 
 		}
 
@@ -553,7 +553,7 @@ public class ConsentManagerController implements IConsentManagerController {
 
 		ResourceSet proposedResourceSet = consentForm.getResourceSet();
 		Dataset proposedDataset = proposedResourceSet.getDatasets().get(0);
-		SinkUsageRules proposedUsageRules = consentForm.getUsageRules();
+		UsageRules proposedUsageRules = consentForm.getUsageRules();
 		DataMapping[] proposedConcepts = proposedDataset.getDataMappings().stream().toArray(DataMapping[]::new);
 
 		/*****************************************************************************
@@ -629,6 +629,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		 * (Sink)
 		 * 
 		 ************************************************************************************/
+		String requesterServiceId = consentForm.getRequesterSurrogateRole().equals(Role.SINK) ? serviceId : sourceId;
 		CommonPart consentCommonPart = new CommonPart(appProperty.getCape().getVersion(), consentRecordId, null,
 				existingSlrPayload.getSurrogateId(), consentForm.getSourceSurrogateId(), slrId, null, serviceId,
 				consentForm.getSinkName(), consentForm.getSinkHumanReadableDescriptions(),
@@ -636,11 +637,12 @@ public class ConsentManagerController implements IConsentManagerController {
 				consentForm.getSourceHumanReadableDescriptions(), consentForm.getServiceDescriptionVersion(),
 				consentForm.getServiceDescriptionSignature(), consentForm.getSourceServiceDescriptionVersion(),
 				consentForm.getSourceServiceDescriptionSignature(), consentForm.getServiceProviderBusinessId(),
-				resourceSetDescription, consentForm.getJurisdiction(), consentForm.getDataController(), now, now, null,
-				null, operatorId, ConsentRecordStatusEnum.Active, null);
+				resourceSetDescription, proposedUsageRules, consentForm.getJurisdiction(),
+				consentForm.getDataController(), now, now, null, null, operatorId,
+				consentForm.getCollectionOperatorId(), requesterServiceId, ConsentRecordStatusEnum.Active, null);
 
 		ConsentRecordSinkRoleSpecificPart sinkRolePart = ConsentRecordSinkRoleSpecificPart.builder()
-				.usageRules(proposedUsageRules).role(ConsentRecordRoleEnum.SINK).build();
+				.role(ConsentRecordRoleEnum.SINK).build();
 		ConsentRecordPayload crPayload = new ConsentRecordPayload(consentCommonPart, sinkRolePart, null);
 
 		ConsentStatusRecordPayload csrPayload = new ConsentStatusRecordPayload(consentStatusRecordId,
@@ -1442,8 +1444,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		CommonPart existingCrCommonPart = existingCr.getPayload().getCommonPart();
 		ResourceSet existingResourceSet = existingCrCommonPart.getRsDescription().getResourceSet();
 		String serviceId = existingCrCommonPart.getSubjectId();
-		SinkUsageRules existingUsageRules = ((ConsentRecordSinkRoleSpecificPart) existingCr.getPayload()
-				.getRoleSpecificPart()).getUsageRules();
+		UsageRules existingUsageRules = existingCr.getPayload().getCommonPart().getUsageRules();
 		LegalBasis existingLegalBasis = existingUsageRules.getLegalBasis();
 		ConsentStatusRecordPayload lastCsrPayload = existingCr.getConsentStatusList()
 				.get(existingCr.getConsentStatusList().size() - 1).getPayload();

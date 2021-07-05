@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogRef } from '@nebular/theme';
+import { ErrorResponse } from '../model/errorResponse';
 
 @Component({
   selector: 'error-dialog',
@@ -19,21 +20,40 @@ import { NbDialogRef } from '@nebular/theme';
           <strong>Status: {{ error.status }}</strong>
         </div>
       </nb-card-body>
+      <nb-card-footer class="d-flex justify-content-end">
+        <button nbButton ghost shape="rectangle" size="medium" (click)="closeModal(error)">
+          {{ 'general.services.closeButton' | translate }}
+        </button>
+        <button
+          *ngIf="error.error?.innerError?.error == 'it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException'"
+          nbButton
+          ghost
+          shape="rectangle"
+          size="medium"
+          (click)="openCapeDashboard()"
+        >
+          {{ 'general.services.openCapeDashboardToLinkService' | translate }}
+        </button>
+      </nb-card-footer>
     </nb-card>
   `,
 })
 export class ErrorDialogComponent {
   error;
-  service;
+  dashboardUrl: string;
 
   constructor(public ref: NbDialogRef<unknown>, private router: Router) {}
 
-  closeModal(error) {
-    if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401) {
+  openCapeDashboard(): void {
+    window.open(`${this.dashboardUrl}/pages/services/availableServices`, '_blank');
+  }
+
+  closeModal(error: ErrorResponse): void {
+    if (error.status === 0 || error.status === 401) {
       localStorage.removeItem('accountId');
       localStorage.removeItem('accountEmail');
       localStorage.removeItem('auth_app_token');
-      this.router.navigate(['/']);
+      void this.router.navigate(['/']);
     }
 
     this.ref.close();

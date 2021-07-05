@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import it.eng.opsi.cape.consentmanager.model.ConsentRecordStatusEnum;
-import it.eng.opsi.cape.consentmanager.model.SinkUsageRules;
+import it.eng.opsi.cape.consentmanager.model.UsageRules;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import lombok.AllArgsConstructor;
@@ -42,7 +42,7 @@ public class ConsentEventLog extends EventLog {
 
 	@NotNull(message = "usageRule field is mandatory")
 	@Valid
-	private SinkUsageRules usageRules;
+	private UsageRules usageRules;
 
 	@NotBlank(message = "sinkId field is mandatory")
 	private String sinkId;
@@ -62,7 +62,7 @@ public class ConsentEventLog extends EventLog {
 	private String consentRecordId;
 
 	public ConsentEventLog(ZonedDateTime created, EventType type, String accountId, LegalBasis legalBasis,
-			String message, SinkUsageRules usageRules, String sinkId, String sourceId, DataMapping[] dataConcepts,
+			String message, UsageRules usageRules, String sinkId, String sourceId, DataMapping[] dataConcepts,
 			DataMapping[] previousConcepts, ConsentActionType action, ConsentRecordStatusEnum previousStatus,
 			String consentRecordId) {
 		super(created, type, accountId, legalBasis, message);

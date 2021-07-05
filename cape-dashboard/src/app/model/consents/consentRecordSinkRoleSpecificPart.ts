@@ -1,7 +1,6 @@
-import { SinkUsageRules } from './sinkUsageRules';
+import { UsageRules } from './usageRules';
 import { ConsentRecordRoleSpecificPart } from './consentRecordRoleSpecificPart';
 
 export interface ConsentRecordSinkRoleSpecificPart extends ConsentRecordRoleSpecificPart {
-  usage_rules: SinkUsageRules;
   source_cr_id: string;
 }

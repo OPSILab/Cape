@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 82",
+    "start": "ng serve --port 82 ",
     "build": "ng build",
     "build:prod": "npm run build -- --prod --aot",
     "test": "ng test",
@@ -16,7 +16,7 @@
   },
   "private": true,
   "dependencies": {
-    "cape-sdk-angular": "^1.0.17",
+    "cape-sdk-angular": "1.0.24",
     "@akveo/ng2-completer": "^9.0.1",
     "@angular/animations": "11.2.12",
     "@angular/cdk": "11.2.11",

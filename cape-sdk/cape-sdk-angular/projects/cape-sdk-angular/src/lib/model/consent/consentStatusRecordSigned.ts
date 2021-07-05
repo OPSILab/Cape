@@ -13,6 +13,6 @@ import { ConsentStatusRecordPayload } from './consentStatusRecordPayload';
 
 export interface ConsentStatusRecordSigned {
   payload: ConsentStatusRecordPayload;
-  signature: object;
-  _protected: object;
+  signature: Record<string, unknown>;
+  _protected: Record<string, unknown>;
 }

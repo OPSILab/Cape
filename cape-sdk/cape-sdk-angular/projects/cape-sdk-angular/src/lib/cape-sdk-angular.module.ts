@@ -10,6 +10,7 @@ import {
   NbCardModule,
   NbCheckboxModule,
   NbAccordionModule,
+  NbInputModule,
 } from '@nebular/theme';
 import { CapeSdkAngularComponent } from './cape-sdk-angular.component';
 import { CapeSdkAngularService } from './cape-sdk-angular.service';
@@ -20,7 +21,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-export function HttpLoaderFactory(http: HttpClient) {
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, '/assets/cape/i18n/', '.json');
 }
 
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NbLayoutModule,
     NbButtonModule,
     NbCheckboxModule,
+    NbInputModule,
     NbMenuModule,
     NbAccordionModule,
     NbDialogModule.forChild(),

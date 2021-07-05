@@ -68,7 +68,7 @@ public class ConsentStatusRecordPayload {
 
 	@JsonProperty(value = "consent_usage_rules")
 	@Valid
-	private SinkUsageRules consentUsageRules;
+	private UsageRules consentUsageRules;
 
 	@JsonProperty(value = "iat")
 	@NotNull

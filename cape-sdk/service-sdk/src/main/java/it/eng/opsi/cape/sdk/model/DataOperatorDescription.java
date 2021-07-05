@@ -41,7 +41,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OperatorDescription implements Serializable {
+public class DataOperatorDescription implements Serializable {
 
 /**
 	 * 

@@ -35,12 +35,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ConsentRecordSinkRoleSpecificPart extends ConsentRecordRoleSpecificPart {
 
-	@NonNull
-	@NotNull
-	@Valid
-	@JsonProperty("usage_rules")
-	private SinkUsageRules usageRules;
-
 	@JsonProperty("source_cr_id")
 	private String sourceCrId;
 

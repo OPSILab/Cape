@@ -16,14 +16,10 @@
  ******************************************************************************/
 package it.eng.opsi.cape.consentmanager.model;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -34,12 +30,6 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 public class ConsentRecordSinkRoleSpecificPart extends ConsentRecordRoleSpecificPart {
-
-	@NonNull
-	@NotNull
-	@Valid
-	@JsonProperty("usage_rules")
-	private SinkUsageRules usageRules;
 
 	@JsonProperty("source_cr_id")
 	private String sourceCrId;

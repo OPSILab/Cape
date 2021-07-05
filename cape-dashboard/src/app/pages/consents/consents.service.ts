@@ -6,7 +6,7 @@ import { ConsentRecordSignedPair } from '../../model/consents/consentRecordSigne
 import { ServiceLinkRecordDoubleSigned } from '../../model/service-linking/serviceLinkRecordDoubleSigned';
 import { ResourceSet } from '../../model/consents/resourceSet';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
-import { SinkUsageRules } from '../../model/consents/sinkUsageRules';
+import { UsageRules } from '../../model/consents/usageRules';
 import { ChangeConsentStatusRequest } from '../../model/consents/changeConsentStatusRequest';
 import { DataMapping } from '../../model/dataMapping';
 import { ProcessingBasis, ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
@@ -135,7 +135,7 @@ export class ConsentsService {
     crId: string,
     resourceSet: ResourceSet,
     status: ConsentStatusEnum,
-    usageRules: SinkUsageRules
+    usageRules: UsageRules
   ): Promise<ConsentRecordSigned> {
     const url = `${this.consentsApiPath}/api/v2/accounts/${this.accountId}/servicelinks/${slrId}/consents/${crId}/statuses`;
 

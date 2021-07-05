@@ -25,7 +25,7 @@ import com.nimbusds.jose.JOSEException;
 
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
@@ -43,7 +43,7 @@ import it.eng.opsi.cape.servicemanager.model.linking.account.FinalStoreSlrRespon
 public interface IServiceManagerController {
 
 	public abstract ResponseEntity<String> startLinkingFromOperatorRedirectToService(String accountId, String serviceId,
-			Boolean forceLinking) throws OperatorDescriptionNotFoundException, ServiceManagerException,
+			Boolean forceLinking) throws DataOperatorDescriptionNotFoundException, ServiceManagerException,
 			ServiceDescriptionNotFoundException, ConflictingSessionFoundException;
 	
 		public abstract ResponseEntity<String> startLinkingFromServiceAfterOperatorLogin(String accountId,
@@ -53,7 +53,7 @@ public interface IServiceManagerController {
 
 	public abstract ResponseEntity<FinalStoreSlrResponse> linkService(ContinueLinkingRequest request)
 			throws SessionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
+			DataOperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
 			SessionStateNotAllowedException;
 
 	public abstract ResponseEntity<LinkingSession> getLinkingSessionByCode(String sessionCode) throws SessionNotFoundException;
@@ -66,13 +66,13 @@ public interface IServiceManagerController {
 	public abstract ResponseEntity<ServiceLinkStatusRecordSigned> disableServiceLink(String accountId, String serviceId,
 			String slrId, ChangeSlrStatusRequestFrom requestFrom)
 			throws ServiceManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
+			DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException;
 
 	public abstract ResponseEntity<ServiceLinkStatusRecordSigned> enableServiceLink(String accountId, String serviceId,
 			String slrId, ChangeSlrStatusRequestFrom requestFrom)
 			throws ServiceManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
+			DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException;
 
 	public abstract ResponseEntity<Object> deleteLinkingSessionsByAccountId(String accountId);

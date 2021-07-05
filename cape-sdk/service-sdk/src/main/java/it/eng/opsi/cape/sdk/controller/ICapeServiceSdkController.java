@@ -35,7 +35,7 @@ import it.eng.opsi.cape.exception.ConsentStatusNotValidException;
 import it.eng.opsi.cape.exception.ConsentStatusRecordNotValid;
 import it.eng.opsi.cape.exception.DataRequestNotValid;
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
@@ -45,7 +45,7 @@ import it.eng.opsi.cape.exception.ServiceSignKeyNotFoundException;
 import it.eng.opsi.cape.exception.SessionNotFoundException;
 import it.eng.opsi.cape.exception.SessionStateNotAllowedException;
 import it.eng.opsi.cape.exception.UserSurrogateIdLinkNotFoundException;
-import it.eng.opsi.cape.sdk.model.OperatorDescription;
+import it.eng.opsi.cape.sdk.model.DataOperatorDescription;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
 import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
 import it.eng.opsi.cape.sdk.model.account.Account;
@@ -70,11 +70,11 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 
 public interface ICapeServiceSdkController {
 
-	public abstract ResponseEntity<OperatorDescription> getOperatorDescription(String operatorId)
-			throws OperatorDescriptionNotFoundException, ServiceManagerException;
+	public abstract ResponseEntity<DataOperatorDescription> getDataOperatorDescription(String operatorId)
+			throws DataOperatorDescriptionNotFoundException, ServiceManagerException;
 
 	public abstract ResponseEntity<FinalLinkingResponse> startServiceLinking(StartLinkingRequest request)
-			throws ServiceManagerException, OperatorDescriptionNotFoundException, JOSEException,
+			throws ServiceManagerException, DataOperatorDescriptionNotFoundException, JOSEException,
 			ServiceDescriptionNotFoundException, SessionNotFoundException;
 
 	public abstract ResponseEntity<SurrogateIdResponse> generateSurrogateId(String operatorId, String userId);

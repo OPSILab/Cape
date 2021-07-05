@@ -70,15 +70,15 @@ import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jose.util.X509CertUtils;
 
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
-import it.eng.opsi.cape.servicemanager.model.OperatorDescription;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.servicemanager.model.DataOperatorDescription;
 import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenPayload;
 import it.eng.opsi.cape.servicemanager.model.consenting.AuthorisationTokenResponse;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordDoubleSigned.ServiceLinkRecordSignature;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordPayload;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordSigned;
-import it.eng.opsi.cape.servicemanager.repository.OperatorDescriptionRepository;
+import it.eng.opsi.cape.servicemanager.repository.DataOperatorDescriptionRepository;
 import it.eng.opsi.cape.serviceregistry.data.Cert;
 
 @Service
@@ -88,13 +88,13 @@ public class CryptoService {
 	private ObjectMapper payloadMapper;
 
 	@Autowired
-	private OperatorDescriptionRepository operatorRepo;
+	private DataOperatorDescriptionRepository operatorRepo;
 
 	/*
 	 * Create a new JWK Pair for Operator and a X509 certificate for Public Key and
-	 * put all in OperatorDescription
+	 * put all in DataOperatorDescription
 	 */
-	public OperatorDescription createOperatorKeyPairAndCert(OperatorDescription operator)
+	public DataOperatorDescription createOperatorKeyPairAndCert(DataOperatorDescription operator)
 			throws JOSEException, CertIOException, IOException {
 
 		String operatorId = operator.getOperatorId();
@@ -116,10 +116,10 @@ public class CryptoService {
 
 	}
 
-	public RSAKey getKeyPairByOperatorId(String operatorId) throws OperatorDescriptionNotFoundException {
+	public RSAKey getKeyPairByOperatorId(String operatorId) throws DataOperatorDescriptionNotFoundException {
 
 		return operatorRepo.getKeyPairByOperatorId(operatorId)
-				.orElseThrow(() -> new OperatorDescriptionNotFoundException(
+				.orElseThrow(() -> new DataOperatorDescriptionNotFoundException(
 						"Operator or key pair for Operator id: " + operatorId + " was not found"));
 	}
 
@@ -181,7 +181,7 @@ public class CryptoService {
 	/*
 	 * Get Operator Public key (JWK) from Operator X509 certificate
 	 */
-	public RSAKey getPublicKeyFromCertificate(OperatorDescription operator) throws JOSEException {
+	public RSAKey getPublicKeyFromCertificate(DataOperatorDescription operator) throws JOSEException {
 
 		/*
 		 * Get the Certificate PEM encoding from x5c field TODO Alternatively GET the

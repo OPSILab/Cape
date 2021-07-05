@@ -42,7 +42,7 @@ public class ChangeConsentStatusRequest {
 	@NotNull(message = "usage_rules field is mandatory")
 	@Valid
 	@JsonProperty(value = "usage_rules")
-	SinkUsageRules usageRules;
+	UsageRules usageRules;
 
 	@NotNull(message = "request_from field is mandatory")
 

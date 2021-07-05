@@ -36,7 +36,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
@@ -75,9 +75,9 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 		return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_JSON).body(error);
 	}
 
-	@ExceptionHandler(OperatorDescriptionNotFoundException.class)
+	@ExceptionHandler(DataOperatorDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(DataOperatorDescriptionNotFoundException ex, HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}

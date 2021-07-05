@@ -11,5 +11,10 @@
  */
 
 export interface ConsentRecordRoleSpecificPart {
+  role: ConsentRecordRoleSpecificPartRoleEnum;
   type: string;
+}
+export enum ConsentRecordRoleSpecificPartRoleEnum {
+  Sink = 'Sink',
+  Source = 'Source',
 }

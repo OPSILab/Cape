@@ -37,7 +37,9 @@
       "serviceName": "MyMeasurements",
       "purposes": {
         "cholesterol": {
-          "purposeId": "1"
+          "purposeId": "1",
+          "datasetId": "D_1",
+          "sinkServiceId": "MYW20"
         },
         "weight": {
           "purposeId": "2"

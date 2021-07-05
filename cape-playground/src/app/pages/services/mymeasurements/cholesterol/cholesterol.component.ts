@@ -69,7 +69,9 @@ export class CholesterolComponent implements OnInit {
   public sdkUrl: string;
   public operatorId: string;
   public dashboardUrl: string;
-  public serviceId: string;
+  public serviceId: string; // Will act as SourceServiceId in Consent Form
+  public datasetId: string; // Will act as SourceDatasetId in Consent Form
+  public sinkServiceId: string;
   public serviceName: string;
   public serviceUrl: string;
   public returnUrl: string;
@@ -121,6 +123,8 @@ export class CholesterolComponent implements OnInit {
     this.dashboardUrl = this.config.system.dashboardUrl;
     this.sdkUrl = this.config.services.sdkUrl;
     this.purposeId = this.config.services.mymeasurements.purposes.cholesterol.purposeId;
+    this.sinkServiceId = this.config.services.mymeasurements.purposes.cholesterol.sinkServiceId;
+    this.datasetId = this.config.services.mymeasurements.purposes.cholesterol.datasetId;
     this.serviceId = this.config.services.mymeasurements.serviceId;
     this.serviceName = this.config.services.mymeasurements.serviceName;
     this.serviceUrl = this.config.services.mymeasurements.serviceUrl;

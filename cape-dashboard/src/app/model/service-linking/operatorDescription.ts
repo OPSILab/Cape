@@ -14,7 +14,7 @@ import { ServiceProvider } from './serviceProvider';
 import { OperatorUrls } from './operatorUrls';
 import { Cert } from './cert';
 
-export interface OperatorDescription {
+export interface DataOperatorDescription {
   operatorId: string;
   serviceProvider?: ServiceProvider;
   operatorServiceDescriptionVersion?: string;

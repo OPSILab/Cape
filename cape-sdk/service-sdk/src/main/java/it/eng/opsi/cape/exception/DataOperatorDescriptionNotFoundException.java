@@ -16,14 +16,14 @@
  ******************************************************************************/
 package it.eng.opsi.cape.exception;
 
-public class OperatorDescriptionNotFoundException extends Exception {
+public class DataOperatorDescriptionNotFoundException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public OperatorDescriptionNotFoundException(String message) {
+	public DataOperatorDescriptionNotFoundException(String message) {
 		super(message);
 	};
 

@@ -42,7 +42,7 @@ public class ConsentEventLog extends EventLog {
 
 	@NotNull(message = "usageRules field is mandatory")
 	@Valid
-	private SinkUsageRules usageRules;
+	private UsageRules usageRules;
 
 	@NotBlank(message = "sinkId field is mandatory")
 	private String sinkId;
@@ -62,7 +62,7 @@ public class ConsentEventLog extends EventLog {
 	private String consentRecordId;
 
 	public ConsentEventLog(ZonedDateTime created, EventType type, String accountId, LegalBasis legalBasis,
-			String message, SinkUsageRules usageRule, String sinkId, String sourceId, DataMapping[] dataConcepts,
+			String message, UsageRules usageRule, String sinkId, String sourceId, DataMapping[] dataConcepts,
 			DataMapping[] previousConcepts, ConsentActionType action, ConsentRecordStatusEnum previousStatus,
 			String consentRecordId) {
 		super(created, type, accountId, legalBasis, message);

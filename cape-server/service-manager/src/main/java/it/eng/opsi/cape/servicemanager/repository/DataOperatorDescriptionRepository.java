@@ -23,13 +23,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.nimbusds.jose.jwk.RSAKey;
 
-import it.eng.opsi.cape.servicemanager.model.OperatorDescription;
+import it.eng.opsi.cape.servicemanager.model.DataOperatorDescription;
 
-public interface OperatorDescriptionRepository extends MongoRepository<OperatorDescription, String> {
+public interface DataOperatorDescriptionRepository extends MongoRepository<DataOperatorDescription, String> {
 
-	public Optional<OperatorDescription> findByOperatorId(String operatorId);
+	public Optional<DataOperatorDescription> findByOperatorId(String operatorId);
 
-	public Long deleteOperatorDescriptionByOperatorId(String operatorId);
+	public Long deleteDataOperatorDescriptionByOperatorId(String operatorId);
 
 	@Aggregation(pipeline = { "{ $match: { operatorId : ?0}}", "{ $replaceRoot: { newRoot : '$keyPair'}}" })
 	public Optional<RSAKey> getKeyPairByOperatorId(String operatorId);

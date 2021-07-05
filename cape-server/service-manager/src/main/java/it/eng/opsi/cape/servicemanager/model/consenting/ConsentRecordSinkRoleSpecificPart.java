@@ -39,7 +39,7 @@ public class ConsentRecordSinkRoleSpecificPart extends ConsentRecordRoleSpecific
 	@NotNull
 	@Valid
 	@JsonProperty("usage_rules")
-	private SinkUsageRules usageRules;
+	private UsageRules usageRules;
 
 	@JsonProperty("source_cr_id")
 	private String sourceCrId;

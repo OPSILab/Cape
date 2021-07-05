@@ -15,7 +15,7 @@ import { Storage } from '../storage';
 import { Obligation } from '../obligation';
 import { ProcessingBasisLegalBasis, ProcessingBasisProcessingCategories, ProcessingBasisRecipients } from '../processingBasis';
 
-export interface SinkUsageRules {
+export interface UsageRules {
   purposeId: string;
   purposeCategory: string;
   legalBasis: ProcessingBasisLegalBasis;

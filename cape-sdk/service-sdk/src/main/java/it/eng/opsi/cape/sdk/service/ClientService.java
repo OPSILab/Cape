@@ -31,12 +31,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceManagerException;
 import it.eng.opsi.cape.exception.SessionNotFoundException;
 import it.eng.opsi.cape.sdk.ApplicationProperties;
-import it.eng.opsi.cape.sdk.model.OperatorDescription;
+import it.eng.opsi.cape.sdk.model.DataOperatorDescription;
 import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
@@ -82,12 +82,12 @@ public class ClientService {
 		consentManagerHost = this.appProperty.getCape().getConsentManager().getHost();
 	}
 
-	public OperatorDescription fetchOperatorDescription(String operatorId)
-			throws ServiceManagerException, OperatorDescriptionNotFoundException {
+	public DataOperatorDescription fetchOperatorDescription(String operatorId)
+			throws ServiceManagerException, DataOperatorDescriptionNotFoundException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
-		ResponseEntity<OperatorDescription> response = restTemplate.getForEntity(
-				serviceManagerHost + "/api/v2/operatorDescriptions/{operatorId}", OperatorDescription.class,
+		ResponseEntity<DataOperatorDescription> response = restTemplate.getForEntity(
+				serviceManagerHost + "/api/v2/dataOperatorDescriptions/{operatorId}", DataOperatorDescription.class,
 				operatorId);
 		HttpStatus responseStatus = response.getStatusCode();
 
@@ -95,7 +95,7 @@ public class ClientService {
 			return response.getBody();
 
 		else if (responseStatus == HttpStatus.NOT_FOUND) {
-			throw new OperatorDescriptionNotFoundException("The operator with Id: " + operatorId + "was not found");
+			throw new DataOperatorDescriptionNotFoundException("The operator with Id: " + operatorId + " was not found");
 		} else
 			throw new ServiceManagerException(
 					"There was an error while retrieving Service Description from Service Manager");

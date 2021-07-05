@@ -1,5 +1,5 @@
 import { ConsentStatusEnum } from '../consents/consentStatusRecordPayload';
-import { SinkUsageRules } from '../consents/sinkUsageRules';
+import { UsageRules } from '../consents/usageRules';
 import { ProcessingBasisLegalBasis } from '../processingBasis';
 import { DataMapping } from '../dataMapping';
 
@@ -25,7 +25,7 @@ export interface EventLog {
 export enum EventType {
   Consent = 'Consent',
   ServiceLink = 'ServiceLink',
-  DataProcessing = 'DataProcessing'
+  DataProcessing = 'DataProcessing',
 }
 
 export interface ServiceLinkEventLog extends EventLog {
@@ -36,7 +36,7 @@ export interface ServiceLinkEventLog extends EventLog {
 }
 
 export interface ConsentEventLog extends EventLog {
-  usageRules: SinkUsageRules;
+  usageRules: UsageRules;
   sinkId: string;
   sourceId: string;
   dataConcepts: DataMapping[];
@@ -50,21 +50,19 @@ export interface AuditDataMapping extends DataMapping {
   count: number;
 }
 
-
 export enum ConsentActionType {
   GIVE = 'Give',
   UPDATE = 'Update',
   DISABLE = 'Disable',
   ACTIVATE = 'Activate',
   WITHDRAW = 'Withdraw',
-  SEND = 'Send'
+  SEND = 'Send',
 }
-
 
 export enum ServiceLinkActionType {
   CREATE = 'Create',
   DISABLE = 'Disable',
-  DELETE = 'Delete'
+  DELETE = 'Delete',
 }
 
 export interface DateRange {

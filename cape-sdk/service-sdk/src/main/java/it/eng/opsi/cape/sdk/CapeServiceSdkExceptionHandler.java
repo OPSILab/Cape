@@ -38,7 +38,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import it.eng.opsi.cape.exception.ConsentRecordNotFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
@@ -75,9 +75,9 @@ public class CapeServiceSdkExceptionHandler extends ResponseEntityExceptionHandl
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
-	@ExceptionHandler(OperatorDescriptionNotFoundException.class)
+	@ExceptionHandler(DataOperatorDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(OperatorDescriptionNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleDataOperatorNotFound(DataOperatorDescriptionNotFoundException ex, HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}

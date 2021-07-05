@@ -37,7 +37,7 @@ import it.eng.opsi.cape.serviceregistry.data.Storage;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SinkUsageRules {
+public class UsageRules {
 
 	@NotBlank(message = "purposeId field is mandatory")
 	private String purposeId;

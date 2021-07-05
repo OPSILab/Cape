@@ -9,21 +9,20 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SinkUsageRules } from './sinkUsageRules';
+import { UsageRules } from './UsageRules';
 import { ResourceSet } from './resourceSet';
 
 export interface ConsentStatusRecordPayload {
   record_id: string;
   version: string;
   surrogate_id: string;
-  cr_id: string;
+  source_surrogate_id?: string;
   consent_status: ConsentStatusEnum;
   consent_resource_set?: ResourceSet;
-  consent_usage_rules?: SinkUsageRules;
+  consent_usage_rules?: UsageRules;
   iat: string;
   prev_record_id: string;
 }
-
 export enum ConsentStatusEnum {
   Active = 'Active',
   Disabled = 'Disabled',

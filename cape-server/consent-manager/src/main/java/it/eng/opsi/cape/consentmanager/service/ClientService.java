@@ -43,6 +43,7 @@ import it.eng.opsi.cape.consentmanager.model.audit.EventLog;
 import it.eng.opsi.cape.consentmanager.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConsentManagerException;
+import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
@@ -179,19 +180,27 @@ public class ClientService {
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 		ResponseEntity<ServiceLinkRecordDoubleSigned> response = null;
 
-		response = restTemplate.getForEntity(UriComponentsBuilder
-				.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{accountId}/services/{serviceId}/servicelink")
-				.build(accountId, serviceId), ServiceLinkRecordDoubleSigned.class);
+		try {
+			response = restTemplate.getForEntity(UriComponentsBuilder
+					.fromHttpUrl(accountManagerHost + "/api/v2/accounts/{accountId}/services/{serviceId}/servicelink")
+					.build(accountId, serviceId), ServiceLinkRecordDoubleSigned.class);
+		} catch (RestTemplateException e) {
+			if (e.getStatusCode().equals(HttpStatus.NOT_FOUND))
+				throw new ServiceLinkRecordNotFoundException("No Service Link Record was found for Account Id: "
+						+ accountId + " and Service Id: " + serviceId);
 
+		}
+		
 		HttpStatus status = response.getStatusCode();
 
 		if (status.equals(HttpStatus.NOT_FOUND))
 			throw new ServiceLinkRecordNotFoundException(
-					"No Service Link Record was found for Account Id:" + accountId + " and Service Id: " + serviceId);
+					"No Service Link Record was found for Account Id: " + accountId + " and Service Id: " + serviceId);
 		else if (!status.is2xxSuccessful())
 			throw new ConsentManagerException("There was an error while getting the Service Link Record");
 
 		return response.getBody();
+
 	}
 
 	public ServiceLinkRecordDoubleSigned callGetServiceLinkRecordByAccountIdAndSlrId(String accountId, String slrId)
@@ -311,7 +320,7 @@ public class ClientService {
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 		return restTemplate.exchange(RequestEntity.post(UriComponentsBuilder
-				.fromHttpUrl(serviceManagerHost + "/api/v2/operatorDescriptions/{operatorId}/signToken")
+				.fromHttpUrl(serviceManagerHost + "/api/v2/dataOperatorDescriptions/{operatorId}/signToken")
 				.build(operatorId)).body(tokenPayload), AuthorisationTokenResponse.class).getBody();
 
 	}

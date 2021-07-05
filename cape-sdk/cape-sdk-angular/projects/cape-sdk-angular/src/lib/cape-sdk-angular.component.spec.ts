@@ -8,7 +8,7 @@ describe('CapeSdkAngularComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [CapeSdkAngularComponent],
       }).compileComponents();
     })

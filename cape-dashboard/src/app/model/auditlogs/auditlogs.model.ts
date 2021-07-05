@@ -1,5 +1,5 @@
 import { ConsentStatusEnum } from '../consents/consentStatusRecordPayload';
-import { SinkUsageRules } from '../consents/sinkUsageRules';
+import { UsageRules } from '../consents/usageRules';
 import { ProcessingBasisLegalBasis } from '../processingBasis';
 import { DataMapping } from '../dataMapping';
 
@@ -36,7 +36,7 @@ export interface ServiceLinkEventLog extends EventLog {
 }
 
 export interface ConsentEventLog extends EventLog {
-  usageRules: SinkUsageRules;
+  usageRules: UsageRules;
   sinkId: string;
   sourceId: string;
   dataConcepts: DataMapping[];

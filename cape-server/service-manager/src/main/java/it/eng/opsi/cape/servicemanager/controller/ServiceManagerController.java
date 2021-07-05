@@ -55,7 +55,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
@@ -65,7 +65,7 @@ import it.eng.opsi.cape.exception.SessionNotFoundException;
 import it.eng.opsi.cape.exception.SessionStateNotAllowedException;
 import it.eng.opsi.cape.servicemanager.ApplicationProperties;
 import it.eng.opsi.cape.servicemanager.ServiceManager;
-import it.eng.opsi.cape.servicemanager.model.OperatorDescription;
+import it.eng.opsi.cape.servicemanager.model.DataOperatorDescription;
 import it.eng.opsi.cape.servicemanager.model.ServicePopKey;
 import it.eng.opsi.cape.servicemanager.model.audit.EventType;
 import it.eng.opsi.cape.servicemanager.model.audit.ServiceLinkActionType;
@@ -89,7 +89,7 @@ import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordSign
 import it.eng.opsi.cape.servicemanager.model.linking.account.AccountSignSlrResponse;
 import it.eng.opsi.cape.servicemanager.model.linking.account.ServiceLinkInitResponse;
 import it.eng.opsi.cape.servicemanager.model.linking.service.ServiceSignSlrResponse;
-import it.eng.opsi.cape.servicemanager.repository.OperatorDescriptionRepository;
+import it.eng.opsi.cape.servicemanager.repository.DataOperatorDescriptionRepository;
 import it.eng.opsi.cape.servicemanager.service.ClientService;
 import it.eng.opsi.cape.servicemanager.service.CryptoService;
 import it.eng.opsi.cape.serviceregistry.data.Cert;
@@ -109,7 +109,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	private final String operatorId;
 
 	@Autowired
-	OperatorDescriptionRepository operatorRepo;
+	DataOperatorDescriptionRepository operatorRepo;
 
 	@Autowired
 	ClientService clientService;
@@ -130,7 +130,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * (Linking started from Operator) Initiate Service Linking from Operator ---->
 	 * Service Manager
 	 * 
-	 * @throws OperatorDescriptionNotFoundException
+	 * @throws DataOperatorDescriptionNotFoundException
 	 * @throws ServiceDescriptionNotFoundException
 	 * @throws ServiceManagerException
 	 * @throws ConflictingSessionFoundException
@@ -144,7 +144,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	public ResponseEntity<String> startLinkingFromOperatorRedirectToService(@PathVariable("accountId") String accountId,
 			@PathVariable("serviceId") String serviceId,
 			@RequestParam(name = "forceLinking", defaultValue = "false") Boolean forceLinking)
-			throws OperatorDescriptionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
+			throws DataOperatorDescriptionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
 			ConflictingSessionFoundException {
 
 		/*
@@ -193,8 +193,8 @@ public class ServiceManagerController implements IServiceManagerController {
 
 			String serviceLoginUri = serviceDescription.getServiceInstance().getServiceUrls().getLoginUri();
 
-			OperatorDescription operatorDescription = operatorRepo.findByOperatorId(operatorId).orElseThrow(
-					() -> new OperatorDescriptionNotFoundException("No operator found with Id: " + operatorId));
+			DataOperatorDescription operatorDescription = operatorRepo.findByOperatorId(operatorId).orElseThrow(
+					() -> new DataOperatorDescriptionNotFoundException("No operator found with Id: " + operatorId));
 			String operatorLinkingReturnUrl = operatorDescription.getOperatorUrls().getLinkingRedirectUri();
 
 			HttpHeaders headers = new HttpHeaders();
@@ -218,7 +218,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * (Linking started from Service) Initiate linking after Operator login or with
 	 * forceCode automatically from Service ----> Service Manager
 	 * 
-	 * @throws OperatorDescriptionNotFoundException
+	 * @throws DataOperatorDescriptionNotFoundException
 	 * @throws ServiceDescriptionNotFoundException
 	 * @throws ServiceManagerException
 	 * @throws ConflictingSessionFoundException
@@ -328,7 +328,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * @throws SessionNotFoundException
 	 * @throws ServiceDescriptionNotFoundException
 	 * @throws ServiceManagerException
-	 * @throws OperatorDescriptionNotFoundException
+	 * @throws DataOperatorDescriptionNotFoundException
 	 * @throws JOSEException
 	 * @throws ParseException
 	 * @throws JsonProcessingException
@@ -343,7 +343,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	@PostMapping(value = "/slr/link")
 	public ResponseEntity<FinalStoreSlrResponse> linkService(@RequestBody @Valid ContinueLinkingRequest request)
 			throws SessionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
+			DataOperatorDescriptionNotFoundException, JOSEException, JsonProcessingException, ParseException,
 			SessionStateNotAllowedException {
 
 		String sessionCode = request.getSessionCode();
@@ -395,8 +395,8 @@ public class ServiceManagerController implements IServiceManagerController {
 		/*
 		 * Get Operator Description
 		 */
-		OperatorDescription operatorDescription = operatorRepo.findByOperatorId(operatorId).orElseThrow(
-				() -> new OperatorDescriptionNotFoundException("No operator found with Id: " + operatorId));
+		DataOperatorDescription operatorDescription = operatorRepo.findByOperatorId(operatorId).orElseThrow(
+				() -> new DataOperatorDescriptionNotFoundException("No operator found with Id: " + operatorId));
 
 		/*
 		 * Get Operator Public key (JWK) from Operator X509 certificate
@@ -607,7 +607,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			@PathVariable String serviceId, @PathVariable String slrId,
 			@RequestParam ChangeSlrStatusRequestFrom requestFrom)
 			throws ServiceManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
+			DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException {
 
 		return changeSlrStatus(accountOrSurrogateId, serviceId, slrId, ServiceLinkActionType.DISABLE, requestFrom);
@@ -622,7 +622,7 @@ public class ServiceManagerController implements IServiceManagerController {
 			@PathVariable String serviceId, @PathVariable String slrId,
 			@RequestParam ChangeSlrStatusRequestFrom requestFrom)
 			throws ServiceManagerException, ServiceLinkRecordNotFoundException, ServiceDescriptionNotFoundException,
-			OperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
+			DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException {
 
 		return changeSlrStatus(accountOrSurrogateId, serviceId, slrId, ServiceLinkActionType.ENABLE, requestFrom);
@@ -630,7 +630,7 @@ public class ServiceManagerController implements IServiceManagerController {
 
 	private ResponseEntity<ServiceLinkStatusRecordSigned> changeSlrStatus(String accountOrSurrogateId, String serviceId,
 			String slrId, ServiceLinkActionType actionType, ChangeSlrStatusRequestFrom requestFrom)
-			throws ServiceManagerException, ServiceLinkRecordNotFoundException, OperatorDescriptionNotFoundException,
+			throws ServiceManagerException, ServiceLinkRecordNotFoundException, DataOperatorDescriptionNotFoundException,
 			JsonProcessingException, JOSEException, ServiceDescriptionNotFoundException,
 			ServiceLinkStatusConflictingException, AccountNotFoundException {
 

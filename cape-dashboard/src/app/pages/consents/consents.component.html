@@ -253,44 +253,44 @@
                     <nb-accordion>
                       <nb-accordion-item [expanded]="true">
                         <nb-accordion-item-header class="bg-light bg-gradient">
-                          <h5 class="h6 pr-3">{{ consent.sink.payload.role_specific_part.usage_rules.purposeName }}</h5>
+                          <h5 class="h6 pr-3">{{ consent.sink.payload.common_part.usage_rules.purposeName }}</h5>
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.purpose_category' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.purposeCategory }}
+                            {{ consent.sink.payload.common_part.usage_rules.purposeCategory }}
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.processing_categories' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.processingCategories }}
+                            {{ consent.sink.payload.common_part.usage_rules.processingCategories }}
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.legal_basis' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.legalBasis }}
+                            {{ consent.sink.payload.common_part.usage_rules.legalBasis }}
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.policy_refs' | translate }}: </span>
-                            <a href="{{ consent.sink.payload.role_specific_part.usage_rules.policy.policyRef }}" target="_blank"
+                            <a href="{{ consent.sink.payload.common_part.usage_rules.policy.policyRef }}" target="_blank"
                               ><nb-icon icon="external-link-outline"></nb-icon
                             ></a>
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.storage' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.storage.location }} ({{
-                              consent.sink.payload.role_specific_part.usage_rules.storage.duration
+                            {{ consent.sink.payload.common_part.usage_rules.storage.location }} ({{
+                              consent.sink.payload.common_part.usage_rules.storage.duration
                             }})
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.services.recipients' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.recipients }}
+                            {{ consent.sink.payload.common_part.usage_rules.recipients }}
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.consents.termination' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.termination }}
+                            {{ consent.sink.payload.common_part.usage_rules.termination }}
                           </div>
                           <div class="my-1">
                             <span class="subtitle">{{ 'general.consents.collectionmethod' | translate }}: </span>
-                            {{ consent.sink.payload.role_specific_part.usage_rules.collectionMethod }}
+                            {{ consent.sink.payload.common_part.usage_rules.collectionMethod }}
                           </div>
                         </nb-accordion-item-body>
                       </nb-accordion-item>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package it.eng.opsi.cape.sdk.model.consenting;
+package it.eng.opsi.cape.consentmanager.model;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ import it.eng.opsi.cape.serviceregistry.data.Storage;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SinkUsageRules {
+public class UsageRules {
 
 	@NotBlank(message = "purposeId field is mandatory")
 	private String purposeId;

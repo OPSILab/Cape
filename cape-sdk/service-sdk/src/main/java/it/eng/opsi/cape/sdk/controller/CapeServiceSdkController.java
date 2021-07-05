@@ -69,7 +69,7 @@ import it.eng.opsi.cape.exception.ConsentStatusNotValidException;
 import it.eng.opsi.cape.exception.ConsentStatusRecordNotValid;
 import it.eng.opsi.cape.exception.DataRequestNotValid;
 import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
-import it.eng.opsi.cape.exception.OperatorDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
@@ -82,7 +82,7 @@ import it.eng.opsi.cape.exception.UserSurrogateIdLinkNotFoundException;
 import it.eng.opsi.cape.sdk.ApplicationProperties;
 import it.eng.opsi.cape.sdk.model.ServicePopKey;
 import it.eng.opsi.cape.sdk.model.ServiceSignKey;
-import it.eng.opsi.cape.sdk.model.OperatorDescription;
+import it.eng.opsi.cape.sdk.model.DataOperatorDescription;
 import it.eng.opsi.cape.sdk.model.SurrogateIdResponse;
 import it.eng.opsi.cape.sdk.model.account.Account;
 import it.eng.opsi.cape.sdk.model.consenting.ChangeConsentStatusRequest;
@@ -185,21 +185,21 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	}
 
 	@Operation(summary = "Get Operator Description for CaPe by Operator Id", tags = {
-			"Operator Description" }, responses = {
-					@ApiResponse(description = "Returns the requested Operator Description.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OperatorDescription.class))) })
+			"Data Operator Description" }, responses = {
+					@ApiResponse(description = "Returns the requested Operator Description.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataOperatorDescription.class))) })
 	@Override
-	@GetMapping(value = "/operatorDescriptions/{operatorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<OperatorDescription> getOperatorDescription(@PathVariable("operatorId") String operatorId)
-			throws OperatorDescriptionNotFoundException, ServiceManagerException {
+	@GetMapping(value = "/dataOperatorDescriptions/{operatorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DataOperatorDescription> getDataOperatorDescription(@PathVariable("operatorId") String operatorId)
+			throws DataOperatorDescriptionNotFoundException, ServiceManagerException {
 
 		/*
 		 * Check if operator exists TODO user its linkingRedirectUri to return new SLR
 		 * to the appopriate URL (asynch push service?)
 		 */
 
-		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
+		DataOperatorDescription dataOperatorDescription = clientService.fetchOperatorDescription(operatorId);
 
-		return ResponseEntity.ok().body(operatorDescription);
+		return ResponseEntity.ok().body(dataOperatorDescription);
 	}
 
 	@Operation(summary = "Get Service Linking sessionCode from Service Manager to start Automatic Service Linking", tags = {
@@ -231,7 +231,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@Override
 	@PostMapping(value = "/slr/linking", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FinalLinkingResponse> startServiceLinking(@RequestBody @Valid StartLinkingRequest request)
-			throws ServiceManagerException, OperatorDescriptionNotFoundException, JOSEException,
+			throws ServiceManagerException, DataOperatorDescriptionNotFoundException, JOSEException,
 			ServiceDescriptionNotFoundException, SessionNotFoundException {
 
 		ServicePopKey popKey = null;
@@ -245,7 +245,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * to the appopriate URL (asynch push service?)
 		 */
 
-		OperatorDescription operatorDescription = clientService.fetchOperatorDescription(operatorId);
+		DataOperatorDescription dataOperatorDescription = clientService.fetchOperatorDescription(operatorId);
 
 		/*
 		 * Get session by input sessionCode and check its serviceId matches the ones in

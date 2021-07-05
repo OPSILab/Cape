@@ -15,7 +15,7 @@ import { OperatorUrls } from './operatorUrls';
 import { Cert } from './cert';
 import { SupportedProfilesEnum } from '../supportedProfilesEnum';
 
-export interface OperatorDescription {
+export interface DataOperatorDescription {
   operatorId: string;
   serviceProvider?: ServiceProvider;
   operatorServiceDescriptionVersion?: string;

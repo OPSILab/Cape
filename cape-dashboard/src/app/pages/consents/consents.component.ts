@@ -15,7 +15,7 @@ import { ShareWith } from '../../model/shareWith';
 import { HumanReadableDescription } from '../../model/humanReadableDescription';
 import { ConsentRecordSigned } from '../../model/consents/consentRecordSigned';
 import { ResourceSet } from '../../model/consents/resourceSet';
-import { SinkUsageRules } from '../../model/consents/sinkUsageRules';
+import { UsageRules } from '../../model/consents/usageRules';
 import { ServiceEntry } from '../../model/service-linking/serviceEntry';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
@@ -240,7 +240,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     // TODO Change if we will use more datasets per resource set
     const lastDataset: Dataset = consent.payload.common_part.rs_description.resource_set.datasets[0];
 
-    const lastUsageRules: SinkUsageRules = (consent.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules;
+    const lastUsageRules: UsageRules = consent.payload.common_part.usage_rules;
 
     if (this.changedDataMapping[consentIndex])
       lastDataset.dataMappings = this.lastClickedDataMapping.get(consentIndex).reduce((result: DataMapping[], concept: DataMapping) => {
@@ -403,7 +403,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       consentStatusLength > 1
         ? consent.sink.consentStatusList[consentStatusLength - 1].payload.consent_resource_set.datasets[0]
         : consent.sink.payload.common_part.rs_description.resource_set.datasets[0];
-    const consentShareWith: ShareWith[] = (consent.sink.payload.role_specific_part as ConsentRecordSinkRoleSpecificPart).usage_rules.shareWith;
+    const consentShareWith: ShareWith[] = consent.sink.payload.common_part.usage_rules.shareWith;
 
     const purposeId: string = consentDataset.purposeId;
     const sinkShareWith: ShareWith[] = (await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))

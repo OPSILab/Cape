@@ -36,7 +36,7 @@ import it.eng.opsi.cape.auditlogmanager.model.audit.AuditDataMapping;
 import it.eng.opsi.cape.auditlogmanager.model.consent.ConsentActionType;
 import it.eng.opsi.cape.auditlogmanager.model.consent.ConsentEventLog;
 import it.eng.opsi.cape.auditlogmanager.model.consent.ConsentRecordStatusEnum;
-import it.eng.opsi.cape.auditlogmanager.model.consent.SinkUsageRules;
+import it.eng.opsi.cape.auditlogmanager.model.consent.UsageRules;
 import it.eng.opsi.cape.auditlogmanager.model.event.EventLog;
 import it.eng.opsi.cape.auditlogmanager.model.event.EventType;
 import it.eng.opsi.cape.auditlogmanager.model.servicelink.ChangeSlrStatusRequestFrom;
@@ -105,7 +105,7 @@ public class EventAuditLogManager {
 			ConsentEventLog consentEvent = (ConsentEventLog) event;
 			ConsentActionType consentAction = consentEvent.getAction();
 			ConsentRecordStatusEnum previousStatus = consentEvent.getPreviousStatus();
-			SinkUsageRules usageRules = consentEvent.getUsageRules();
+			UsageRules usageRules = consentEvent.getUsageRules();
 			Storage storage = usageRules.getStorage();
 			DataMapping[] processedConcepts = consentEvent.getDataConcepts();
 			List<ProcessingCategory> processingCategories = usageRules.getProcessingCategories();

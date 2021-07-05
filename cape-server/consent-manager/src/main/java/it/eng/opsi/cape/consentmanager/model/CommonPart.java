@@ -127,6 +127,12 @@ public class CommonPart {
 	private RSDescription rsDescription;
 
 	@NonNull
+	@NotNull
+	@Valid
+	@JsonProperty("usage_rules")
+	private UsageRules usageRules;
+
+	@NonNull
 	@NotBlank
 	private String jurisdiction;
 
@@ -151,7 +157,17 @@ public class CommonPart {
 
 	@NonNull
 	@NotBlank
-	private String operator;
+	private String dataOperatorId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "collection_operator_id")
+	private String collectionOperatorId;
+
+	@NonNull
+	@NotBlank
+	@JsonProperty(value = "requester_service_id")
+	private String requesterServiceId;
 
 	@NonNull
 	@NotBlank(message = "consent_status is mandatory")
