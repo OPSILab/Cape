@@ -12,7 +12,6 @@
 import { RSAKey } from './rSAKey';
 import { ServiceProvider } from './serviceProvider';
 import { OperatorUrls } from './operatorUrls';
-import { Cert } from './cert';
 import { SupportedProfilesEnum } from '../supportedProfilesEnum';
 
 export interface DataOperatorDescription {
@@ -20,7 +19,7 @@ export interface DataOperatorDescription {
   serviceProvider?: ServiceProvider;
   operatorServiceDescriptionVersion?: string;
   supportedProfiles?: Array<SupportedProfilesEnum>;
-  cert?: Cert;
+  cert?: ServiceProvider;
   keyPair?: RSAKey;
   operatorUrls: OperatorUrls;
   createdOnDate?: string;

@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { EventLog, EventType, DateRange, ConsentEventLog, ServiceLinkEventLog } from '../../model/auditlogs/auditlogs.model';
-import { ProcessingBasisLegalBasis, ProcessingBasisProcessingCategories } from '../../model/processingBasis';
+import { ProcessingBasisLegalBasisEnum, ProcessingBasisProcessingCategoriesEnum } from '../../model/processingBasis';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -24,9 +24,9 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
   dateRangeFilter: DateRange;
   eventLogs: Record<string, unknown>[];
 
-  public processingCategoryEnum = ProcessingBasisProcessingCategories;
+  public processingCategoryEnum = ProcessingBasisProcessingCategoriesEnum;
   public processingCategoryOptions: string[];
-  public legalBasisEnum = ProcessingBasisLegalBasis;
+  public legalBasisEnum = ProcessingBasisLegalBasisEnum;
   public legalBasisOptions: string[];
 
   public filtersForm = new FormGroup({

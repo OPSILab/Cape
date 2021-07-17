@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-import { RoleEnum } from '../service-link/serviceEntry';
+import { RoleEnum } from '../service-linking/serviceEntry';
 
 export interface ConsentFormRequest {
   /**

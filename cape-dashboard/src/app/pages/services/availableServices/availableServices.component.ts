@@ -12,9 +12,9 @@ import { NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
 import { AppConfig } from '../../../model/appConfig';
 
-import { HumanReadableDescription } from '../../../model/humanReadableDescription';
-import { Description2 } from '../../../model/description2';
 import { ProcessingBasis } from '../../../model/processingBasis';
+import { TextualDescription3 } from '../../../model/service-linking/textualDescription3';
+import { TextualDescription2 } from '../../../model/service-linking/textualDescription2';
 export interface AvailableServiceRow extends ServiceEntry {
   locale: string;
 }
@@ -86,7 +86,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     return availableServiceDescr.processingBases.map((processingBase) => {
       return {
         ...processingBase,
-        description: processingBase.description.reduce((filtered: Description2[], description: Description2) => {
+        description: processingBase.description.reduce((filtered: TextualDescription2[], description: TextualDescription2) => {
           if (this.locale !== 'en' && description.locale === this.locale) filtered = [description, ...filtered];
           else if (description.locale === 'en') filtered = [...filtered, description];
           return filtered;
@@ -95,8 +95,8 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getLocalizedDescription(availableServiceDescr: ServiceEntry): HumanReadableDescription[] {
-    return availableServiceDescr.humanReadableDescription.reduce((filtered: HumanReadableDescription[], description: HumanReadableDescription) => {
+  private getLocalizedDescription(availableServiceDescr: ServiceEntry): TextualDescription3[] {
+    return availableServiceDescr.humanReadableDescription.reduce((filtered: TextualDescription3[], description: TextualDescription3) => {
       if (this.locale !== 'en' && description.locale === this.locale) filtered = [description, ...filtered];
       else if (description.locale === 'en') filtered = [...filtered, description];
       return filtered;
@@ -136,7 +136,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
             type: 'textarea',
           },
           width: '65%',
-          valuePrepareFunction: (cell: HumanReadableDescription[]) => cell[0]?.description,
+          valuePrepareFunction: (cell: TextualDescription3[]) => cell[0]?.description,
         },
         details: {
           title: this.detailsLabel,

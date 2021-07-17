@@ -15,6 +15,6 @@ import { JWSHeader } from './jWSHeader';
 export interface ServiceLinkStatusRecordSigned {
   header: JWSHeader;
   payload: ServiceLinkStatusRecordPayload;
-  signature: object;
-  _protected: object;
+  signature: Record<string, unknown>;
+  _protected: Record<string, unknown>;
 }

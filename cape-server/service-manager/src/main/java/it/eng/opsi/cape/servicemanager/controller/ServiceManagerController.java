@@ -92,7 +92,7 @@ import it.eng.opsi.cape.servicemanager.model.linking.service.ServiceSignSlrRespo
 import it.eng.opsi.cape.servicemanager.repository.DataOperatorDescriptionRepository;
 import it.eng.opsi.cape.servicemanager.service.ClientService;
 import it.eng.opsi.cape.servicemanager.service.CryptoService;
-import it.eng.opsi.cape.serviceregistry.data.Cert;
+import it.eng.opsi.cape.serviceregistry.data.ServiceCertificate;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import lombok.extern.slf4j.Slf4j;
@@ -358,7 +358,7 @@ public class ServiceManagerController implements IServiceManagerController {
 		String serviceSdkHost = serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain();
 		String serviceDescriptionVersion = serviceDescription.getServiceDescriptionVersion();
 		String serviceName = serviceDescription.getName();
-		Cert serviceCertificate = serviceDescription.getServiceInstance().getCert();
+		ServiceCertificate serviceCertificate = serviceDescription.getServiceInstance().getCert();
 
 		/*
 		 * Get session by input sessionCode, check if is in an allowed State and if its

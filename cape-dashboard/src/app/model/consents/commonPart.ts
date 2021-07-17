@@ -11,9 +11,8 @@
  */
 import { DataController } from '../dataController';
 import { RSDescription } from './rSDescription';
-import { HumanReadableDescription } from '../humanReadableDescription';
+import { TextualDescription3 } from '../service-linking/textualDescription3';
 import { UsageRules } from './usageRules';
-import { ConsentStatusEnum } from './consentStatusRecordPayload';
 
 export interface CommonPart {
   jurisdiction: string;
@@ -22,7 +21,6 @@ export interface CommonPart {
   nbf?: string;
   exp?: string;
   dataOperatorId: string;
-  collectionOperatorId?: string;
   version: string;
   cr_id: string;
   cr_pair_id?: string;
@@ -32,19 +30,25 @@ export interface CommonPart {
   source_slr_id?: string;
   subject_id: string;
   subject_name: string;
-  subject_humanreadable_descriptions: Array<HumanReadableDescription>;
+  subject_humanreadable_descriptions: Array<TextualDescription3>;
   source_subject_id?: string;
   source_subject_name?: string;
-  source_subject_humanreadable_descriptions?: Array<HumanReadableDescription>;
+  source_subject_humanreadable_descriptions?: Array<TextualDescription3>;
   service_description_version: string;
   service_description_signature?: string;
   source_service_description_version?: string;
   source_service_description_signature?: string;
   service_provider_business_id: string;
-  requesterServiceId: string;
   rs_description: RSDescription;
   usage_rules: UsageRules;
   data_controller: DataController;
-  consent_status: ConsentStatusEnum;
+  collection_operator_id?: string;
+  requester_service_id: string;
+  consent_status: CommonPartConsentStatusEnum;
   consent_statuses_signature?: Record<string, unknown>;
+}
+export enum CommonPartConsentStatusEnum {
+  Active = 'Active',
+  Disabled = 'Disabled',
+  Withdrawn = 'Withdrawn',
 }

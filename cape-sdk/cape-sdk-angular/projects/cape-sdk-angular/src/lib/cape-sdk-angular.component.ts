@@ -34,7 +34,10 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   private sdkUrl: string;
 
   @Input()
-  private serviceId: string;
+  private serviceRole: RoleEnum;
+
+  @Input()
+  private sinkServiceId: string;
 
   @Input()
   public serviceName: string;
@@ -57,8 +60,8 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
   @Input()
   private userId: string;
 
+  private serviceId: string;
   public isServiceRegistered = false;
-  private serviceRole: RoleEnum;
   private serviceLinkRecord: ServiceLinkRecordDoubleSigned;
   private consentRecord: ConsentRecordSigned;
   private linkingFrom: LinkingFromEnum;
@@ -103,6 +106,12 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
 
   async ngOnInit(): Promise<void> {
     /*
+    Set as serviceId either the input sinkServiceId or sourceServiceId, depending on input Role
+    */
+    this.serviceId = this.serviceRole === RoleEnum.Sink ? this.sinkServiceId : this.sourceServiceId;
+    /*
+
+
      * Register Menu Actions
      */
     this.nbMenuService
@@ -128,12 +137,10 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
                     },
                   ];
 
-                // If the sourceServiceId is undefined -> This service itself is the source, don't push Give Consent option
-                if (!this.sourceServiceId)
-                  this.menuItems.push({
-                    title: this.translateService.instant('general.consent.giveConsentLabel') as string,
-                    target: 'Give Consent',
-                  });
+                this.menuItems.push({
+                  title: this.translateService.instant('general.consent.giveConsentLabel') as string,
+                  target: 'Give Consent',
+                });
 
                 this.serviceLinkRecord = await this.capeService.getServiceLinkRecordByUserIdAndServiceId(
                   this.sdkUrl,
@@ -190,7 +197,6 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
      * */
     try {
       const serviceDescription = await this.capeService.getRegisteredService(this.sdkUrl, this.serviceId);
-      this.serviceRole = serviceDescription.role;
 
       if (serviceDescription) this.isServiceRegistered = this.capeService.emitIsRegisteredValue(true);
     } catch (error) {
@@ -247,8 +253,8 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
             this.sdkUrl,
             this.checkConsentAtOperator,
             this.userId,
-            this.serviceId,
-            undefined,
+            this.sinkServiceId,
+            this.sourceServiceId,
             undefined,
             undefined,
             this.purposeId
@@ -409,7 +415,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
           consentForm: await this.capeService.fetchConsentForm(
             this.sdkUrl,
             this.userId,
-            this.serviceId,
+            this.sinkServiceId,
             this.operatorId,
             this.purposeId,
             this.serviceRole,

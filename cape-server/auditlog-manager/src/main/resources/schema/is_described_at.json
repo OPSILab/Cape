@@ -1,0 +1,174 @@
+{
+	"type": "array",
+	"title": "Service Data Description",
+	"description": "Array of objects describing Service Data (Datasets).",
+	"format": "tabs",
+	"items": {
+		"type": "object",
+		"required": [
+			"datasetId",
+			"dataMapping"
+		],
+		"title": "Dataset",
+		"description": "Service dataset description (IsDescribedAt) describes the type and structure of the set of personal data processed by the Service. Each dataset will be linked in one or more specific processing base object.",
+		"options": {
+			"collapsed": false
+		},
+		"format": "categories",
+		"properties": {
+			"datasetId": {
+				"type": "string",
+				"title": "Dataset ID",
+				"description": "Dataset unique identifier.",
+				"minLength": 3
+			},
+			"description": {
+				"$ref": "./serviceEntry.json#/definitions/humanReadableDescription"
+			},
+			"datasetSchema": {
+				"type": "object",
+				"title": "Dataset Schema",
+				"description": "Object describing Dataset schema (JSON-LD).",
+				"properties": {
+					"context": {
+						"type": "string",
+						"format": "textarea",
+						"description": "JSON-LD @context for the dataset."
+					},
+					"type": {
+						"type": "string",
+						"format": "textarea",
+						"description": "JSON-LD @type for the dataset."
+					},
+					"id": {
+						"type": "string",
+						"description": "JSON-LD @id for the dataset."
+					}
+				}
+			},
+			"dataStructureSpecification": {
+				"type": "string",
+				"title": "Data Structure",
+				"format": "url",
+				"description": "URL pointing to further description of the data (e.g. to JSON schema)."
+			},
+			"distribution": {
+				"type": "object",
+				"title": "Distribution",
+				"format": "categories",
+				"description": "Object describing distribution point of the Datasets.",
+				"properties": {
+					"distributionId": {
+						"type": "string",
+						"title": "Distribution ID",
+						"description": "Unique identifier of the Distribution."
+					},
+					"accessUrl": {
+						"type": "string",
+						"title": "Acces URL",
+						"description": "URL where data is available. The resource at the access URL may contain information about how to get the Dataset."
+					},
+					"description": {
+						"type": "array",
+						"description": "Localized description of Distribution.",
+						"format": "tabs",
+						"items": {
+							"type": "object",
+							"title": "Textual Description",
+							"options": {
+								"collapsed": false
+							},
+							"properties": {
+								"locale": {
+									"type": "string",
+									"description": "Language used in textual description, in ISO 639-1 format.",
+									"enumSource": "possible_langs",
+									"watch": {
+										"possible_langs": "root.language"
+									}
+								},
+								"description": {
+									"type": "string",
+									"description": "Textual description of the Distribution in specified language.",
+									"format": "textarea"
+								}
+							},
+							"required": [
+								"locale",
+								"description"
+							]
+						}
+					},
+					"format": {
+						"type": "string",
+						"title": "Format",
+						"description": "Data format (i.e json, csv...)"
+					}
+				}
+			},
+			"dataMapping": {
+				"type": "array",
+				"format": "tabs",
+				"description": "Array of objects describing mapping of each Service specific data with a personal data concept belonging to a controlled vocabulary.",
+				"items": {
+					"type": "object",
+					"title": "Data Mapping",
+					"id": "arr_item",
+					"headerTemplate": "{{ self.name }}",
+					"properties": {
+						"property": {
+							"type": "string",
+							"title": "Property",
+							"description": "The property name of Data Concept at the Service (i.e. specific field in a form).",
+							"minLength": 1
+						},
+						"conceptId": {
+							"$ref": "./concepts.json"
+						},
+						"name": {
+							"type": "string",
+							"options": {
+								"hidden": true
+							}
+						},
+						"type": {
+							"type": "string",
+							"description": "Type of Data: Text, Video, Image, Audio.",
+							"title": "Type",
+							"format": "select2",
+							"enum": [
+								"text",
+								"video",
+								"image",
+								"audio"
+							],
+							"options": {
+								"enum_titles": [
+									"Text",
+									"Video",
+									"Image",
+									"Audio"
+								],
+								"input_width": "85px",
+								"grid_columns": 12
+							},
+							"default": "text"
+						},
+						"required": {
+							"type": "boolean",
+							"title": "Required",
+							"description": "If the property is mandatory when used in a dataset."
+						}
+					},
+					"required": [
+						"property",
+						"conceptId",
+						"name",
+						"type",
+						"required"
+					]
+				}
+			}
+		}
+	}
+}

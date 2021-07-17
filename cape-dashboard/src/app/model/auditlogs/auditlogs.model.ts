@@ -1,6 +1,6 @@
 import { ConsentStatusEnum } from '../consents/consentStatusRecordPayload';
 import { UsageRules } from '../consents/usageRules';
-import { ProcessingBasisLegalBasis } from '../processingBasis';
+import { ProcessingBasisLegalBasisEnum } from '../processingBasis';
 import { DataMapping } from '../dataMapping';
 
 export interface AuditLog {
@@ -17,7 +17,7 @@ export interface AuditLog {
 export interface EventLog {
   created: Date;
   accountId: string;
-  legalBasis: ProcessingBasisLegalBasis;
+  legalBasis: ProcessingBasisLegalBasisEnum;
   message: string;
   type: EventType;
 }

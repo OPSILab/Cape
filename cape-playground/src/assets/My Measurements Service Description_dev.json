@@ -2,7 +2,6 @@
   "serviceId": "MYM20",
   "name": "My Measurements",
   "identifier": "http://localhost:82/cape-playground/pages/services/my-measurements",
-  "issued": "2020-27-08T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
@@ -74,12 +73,12 @@
         {
           "locale": "en",
           "description": "This dataset represents the cholesterol measurements (in mg/dl).",
-          "keyword": []
+          "keywords": []
         },
         {
           "locale": "it",
           "description": "Questo dataset rappresenta le misurazioni del colesterolo (in mg/dl).",
-          "keyword": []
+          "keywords": []
         }
       ],
       "datasetSchema": {

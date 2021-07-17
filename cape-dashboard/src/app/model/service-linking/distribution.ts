@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Description1 } from './description1';
+import { TextualDescription1 } from './textualDescription1';
 
 export interface Distribution {
   distributionId?: string;
   accessUrl?: string;
-  description?: Array<Description1>;
+  description?: Array<TextualDescription1>;
   format?: string;
 }

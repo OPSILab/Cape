@@ -8,7 +8,7 @@ describe('ConsentFormComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [ConsentFormComponent],
       }).compileComponents();
     })

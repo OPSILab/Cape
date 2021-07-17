@@ -1,19 +1,21 @@
-import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { AfterContentInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { JSONEditor } from '@json-editor/json-editor/dist/jsoneditor.js';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as $ from 'jquery';
-import { NbDialogService, NbToastrConfig } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
 import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prompt.component';
 import { DialogImportPromptComponent } from './dialog-import-prompt/dialog-import-prompt.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { NgxConfigureService } from 'ngx-configure';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 
-//import { ToasterConfig } from 'angular2-toaster';
-//import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalLogicalPosition, NbGlobalPhysicalPosition, NbGlobalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig, System } from '../../../model/appConfig';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
@@ -24,63 +26,70 @@ import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
   styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
-  private doc: any;
   private editor: any;
-  private serviceId: string;
-  private serviceData: ServiceEntry = {};
+  public serviceId: string;
+  private serviceData: ServiceEntry;
   loading = false;
   public readOnly = false;
   private config: AppConfig;
   private systemConfig: System;
   apiRoot: string;
   schemaDir: string;
-  public onEdit = false;
+  public isNew = false;
 
   @ViewChild('confirmSaveDialog', { static: false }) confirmSaveDialogTemplate: TemplateRef<any>;
   @ViewChild('confirmUpdateDialog', { static: false }) confirmUpdateDialogTemplate: TemplateRef<any>;
+  @ViewChild('confirmOverwriteDialog', { static: false }) confirmOverwriteDialogTemplate: TemplateRef<any>;
 
   constructor(
-    @Inject(DOCUMENT) document,
+    @Inject(DOCUMENT) private document: Document,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private route: ActivatedRoute,
     private availablesServicesService: AvailableServicesService,
-    configService: NgxConfigureService,
+    private configService: NgxConfigureService,
     private errorDialogService: ErrorDialogService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private cdr: ChangeDetectorRef
   ) {
-    this.doc = document;
-    this.config = configService.config as AppConfig;
+    this.config = this.configService.config as AppConfig;
     this.systemConfig = this.config.system;
     this.schemaDir =
       (this.systemConfig.serviceEditorUrl.includes('localhost') ? '' : this.systemConfig.serviceEditorUrl) + this.systemConfig.editorSchemaPath;
     this.loading = true;
   }
 
-  ngOnDestroy(): void {
-    if (this.readOnly) sessionStorage.removeItem('readOnly');
-  }
-
   ngAfterContentInit(): void {
     if (this.readOnly) sessionStorage.setItem('readOnly', 'true');
   }
 
-  async ngOnInit() {
-    this.serviceId = this.route.snapshot.params['serviceId'];
+  async ngOnInit(): Promise<void> {
+    this.serviceId = this.route.snapshot.params['serviceId'] as string;
     this.readOnly = <boolean>this.route.snapshot.params['readOnly'];
+    sessionStorage.removeItem('isTouched');
     if (this.serviceId) {
       this.serviceData = await this.availablesServicesService.getService(this.serviceId);
-      this.onEdit = true;
+    } else {
+      this.isNew = true;
     }
 
     this.initializeEditor(this.serviceData);
     // this.loading = true;
   }
 
-  initializeEditor(serviceData: ServiceEntry) {
-    const elem = this.doc.getElementById('editor');
+  ngOnDestroy(): void {
+    if (this.readOnly) sessionStorage.removeItem('readOnly');
+    sessionStorage.removeItem('isTouched');
+  }
 
-    var editor = new JSONEditor(elem, {
+  readSessionStorageValue(key: string): string {
+    return sessionStorage.getItem(key);
+  }
+
+  initializeEditor(serviceData: ServiceEntry): void {
+    const elem = this.document.getElementById('editor');
+
+    const editor = new JSONEditor(elem, {
       ajax: true,
       schema: { $ref: this.schemaDir },
       startval: serviceData,
@@ -92,29 +101,35 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
       required_by_default: true,
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.editor = editor;
-
+    let isFirstChange = true;
     // Hook up the validation indicator to update its status whenever the editor changes
     editor.on('change', function () {
+      if (!isFirstChange) sessionStorage.setItem('isTouched', 'true');
+      else isFirstChange = false;
       // Get an array of errors from the validator
-      var errors = editor.validate();
-      var indicator = document.getElementById('valid_indicator');
+      // const errors = editor.validate();
+      // const indicator = document.getElementById('valid_indicator');
       // watcher on concepts fields
-      var watcherCallback = function (path) {
-        let value = JSON.stringify(this.getEditor(path).getValue());
-        console.log('field with path: [' + path + '] changed to [' + JSON.stringify(this.getEditor(path).getValue()) + ']');
-        console.log(this.getEditor(path));
+      const watcherCallback = function (path) {
+        const value = JSON.stringify(this.getEditor(path).getValue() as Record<string, unknown>);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        console.log(`field with path: [${path as string}] changed to [${JSON.stringify(this.getEditor(path).getValue())}]`);
+
         if (value !== '"undefined"' && value !== '""') {
-          var e = $('select[name="' + this.getEditor(path).formname + '"]');
-          var nameValue = e[0].options[e[0].selectedIndex].text;
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          const e = $('select[name="' + this.getEditor(path).formname + '"]');
+          const nameValue = e[0].options[e[0].selectedIndex].text;
           //console.log(path.substr(0, path.lastIndexOf(".") + 1) + ".name");
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           this.getEditor(path.substr(0, path.lastIndexOf('.') + 1) + 'name').setValue(nameValue);
         }
       };
-      for (var key in editor.editors) {
-        var regex = '.conceptId';
+      for (const key in editor.editors) {
+        const regex = '.conceptId';
 
-        if (editor.editors.hasOwnProperty(key) && key.match(regex)) {
+        if (Object.prototype.hasOwnProperty.call(editor.editors, key) && RegExp(regex).exec(key)) {
           editor.watch(key, watcherCallback.bind(editor, key));
         }
       }
@@ -125,35 +140,36 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     editor.on('ready', function () {
       editor.getEditor('root.serviceInstance.cert.x5u').disable();
       editor.getEditor('root.serviceInstance.cert.x5c').disable();
+
       this.loading = false;
       $('nb-spinner').remove();
       if (sessionStorage.getItem('readOnly') === 'true') editor.disable();
     });
   }
 
-  closeSpinner() {
+  closeSpinner(): void {
     console.log('closing');
     this.loading = false;
     $('nb-spinner').remove();
   }
 
-  saveAsFile() {
+  saveAsFile(): void {
     this.dialogService.open(DialogNamePromptComponent).onClose.subscribe((name) => name && this.saveFile(name));
   }
 
-  importAsFile() {
-    this.dialogService.open(DialogImportPromptComponent).onClose.subscribe((name) => name && this.importFile(name));
+  importAsFile(): void {
+    this.dialogService.open(DialogImportPromptComponent).onClose.subscribe((jsonContent) => {
+      this.editor.setValue(jsonContent);
+      this.editor.getEditor('root.serviceInstance.cert.x5u').disable();
+      this.editor.getEditor('root.serviceInstance.cert.x5c').disable();
+      this.serviceId = jsonContent.serviceId as string;
+    });
   }
 
-  importFile(name) {
-    console.log(name);
-
-    this.editor.setValue(name);
-  }
-
-  saveFile(name) {
-    var example = this.editor.getValue(),
-      filename = name + '.json',
+  saveFile(name: string): void {
+    this.errorDialogService;
+    const example = this.editor.getValue() as Record<string, unknown>,
+      filename = `${name}.json`,
       blob = new Blob([JSON.stringify(example, null, 2)], {
         type: 'application/json;charset=utf-8',
       });
@@ -161,7 +177,7 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(blob, filename);
     } else {
-      var a = document.createElement('a');
+      const a = document.createElement('a');
       a.download = filename;
       a.href = URL.createObjectURL(blob);
       a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
@@ -176,40 +192,83 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  stopLoading() {
+  stopLoading(): void {
     console.log(this.loading);
     this.loading = false;
   }
 
-  openSaveToRegistryDialog() {
-    const payload = this.editor.getValue();
+  openSaveToRegistryDialog(): void {
+    const payload = this.editor.getValue() as ServiceEntry;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const validationErrors = this.editor.validate();
 
-    const ref = this.dialogService.open(this.confirmSaveDialogTemplate, {
-      context: {
-        name: payload.name,
-        callback: async () => {
-          try {
-            await this.availablesServicesService.saveService(payload);
-            this.showToast(
-              'success',
-
-              this.translateService.instant('general.editor.save_success', {
-                name: payload.name,
-              }),
-              ''
-            );
-            ref.close();
-          } catch (error) {
-            this.errorDialogService.openErrorDialog(error);
-          }
+    if (validationErrors.length > 0)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      this.errorDialogService.openErrorDialog({ error: 'EDITOR_VALIDATION_ERROR', validationErrors: validationErrors });
+    else {
+      const ref = this.dialogService.open(this.confirmSaveDialogTemplate, {
+        context: {
+          name: payload.name,
+          callback: async () => {
+            try {
+              await this.availablesServicesService.saveService(payload);
+              this.isNew = false;
+              this.showToast(
+                'success',
+                this.translateService.instant('general.editor.save_success', {
+                  name: payload.name,
+                }),
+                ''
+              );
+              this.isNew = false;
+              sessionStorage.removeItem('isTouched');
+              ref.close();
+            } catch (error) {
+              ref.close();
+              if (error.error.error === 'org.springframework.dao.DuplicateKeyException') this.openOverwriteToRegistryDialog();
+              else this.errorDialogService.openErrorDialog(error);
+            }
+          },
         },
-      },
-    });
+      });
+    }
   }
 
-  openUpdateToRegistryDialog() {
-    const payload = this.editor.getValue();
-    const ref = this.dialogService.open(this.confirmUpdateDialogTemplate, {
+  openUpdateToRegistryDialog(): void {
+    const payload = this.editor.getValue() as ServiceEntry;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const validationErrors = this.editor.validate();
+
+    if (validationErrors.length > 0)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      this.errorDialogService.openErrorDialog({ error: 'EDITOR_VALIDATION_ERROR', validationErrors: validationErrors });
+    else {
+      const ref = this.dialogService.open(this.confirmUpdateDialogTemplate, {
+        context: {
+          name: payload.name,
+          callback: async () => {
+            try {
+              await this.availablesServicesService.updateService(payload, payload.serviceId);
+              this.showToast(
+                'success',
+                this.translateService.instant('general.editor.update_success', {
+                  name: payload.name,
+                }),
+                ''
+              );
+              ref.close();
+            } catch (error) {
+              this.errorDialogService.openErrorDialog(error);
+            }
+          },
+        },
+      });
+    }
+  }
+
+  openOverwriteToRegistryDialog(): void {
+    const payload = this.editor.getValue() as ServiceEntry;
+    const ref = this.dialogService.open(this.confirmOverwriteDialogTemplate, {
       context: {
         name: payload.name,
         callback: async () => {
@@ -217,13 +276,14 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
             await this.availablesServicesService.updateService(payload, payload.serviceId);
             this.showToast(
               'success',
-
               this.translateService.instant('general.editor.update_success', {
                 name: payload.name,
               }),
               ''
             );
             ref.close();
+            this.isNew = false;
+            sessionStorage.removeItem('isTouched');
           } catch (error) {
             this.errorDialogService.openErrorDialog(error);
           }
@@ -233,14 +293,14 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private showToast(type: NbComponentStatus, title: string, body: string) {
-    const config = {
-      status: type,
-      destroyByClick: true,
-      duration: 2500,
-      hasIcon: false,
-      position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
-      preventDuplicates: true,
-    } as Partial<NbToastrConfig>;
+    // const config = {
+    //   status: type,
+    //   destroyByClick: true,
+    //   duration: 2500,
+    //   hasIcon: false,
+    //   position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
+    //   preventDuplicates: true,
+    // } as Partial<NbToastrConfig>;
 
     this.toastrService.show(body, title);
   }

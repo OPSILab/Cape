@@ -79,7 +79,7 @@ import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkRecordDoubleSign
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordPayload;
 import it.eng.opsi.cape.servicemanager.model.linking.ServiceLinkStatusRecordSigned;
 import it.eng.opsi.cape.servicemanager.repository.DataOperatorDescriptionRepository;
-import it.eng.opsi.cape.serviceregistry.data.Cert;
+import it.eng.opsi.cape.serviceregistry.data.ServiceCertificate;
 
 @Service
 public class CryptoService {
@@ -108,7 +108,7 @@ public class CryptoService {
 		X509Certificate operatorCertificate = buildX509Certificate(operatorId, operatorId, rsaJWK);
 
 		// Set x5c field with the PEM encoded certificate
-		Cert operatorCertField = new Cert();
+		ServiceCertificate operatorCertField = new ServiceCertificate();
 		operatorCertField.getX5c().add(pemEncodeX509Certificate(operatorCertificate));
 		operator.setCert(operatorCertField);
 

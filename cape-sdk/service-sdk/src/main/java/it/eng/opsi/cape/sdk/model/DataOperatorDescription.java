@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import it.eng.opsi.cape.serviceregistry.data.Cert;
+import it.eng.opsi.cape.serviceregistry.data.ServiceCertificate;
 import it.eng.opsi.cape.serviceregistry.data.ServiceProvider;
 import it.eng.opsi.cape.serviceregistry.data.SupportedProfile;
 import lombok.AccessLevel;
@@ -60,7 +60,7 @@ public class DataOperatorDescription implements Serializable {
 
 	private List<SupportedProfile> supportedProfiles;
 
-	private Cert cert;
+	private ServiceCertificate cert;
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)

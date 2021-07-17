@@ -11,18 +11,17 @@ import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { ConsentRecordSignedPair } from '../../model/consents/consentRecordSignedPair';
 import { Dataset } from '../../model/consents/dataset';
 import { DataMapping } from '../../model/dataMapping';
-import { ShareWith } from '../../model/shareWith';
-import { HumanReadableDescription } from '../../model/humanReadableDescription';
 import { ConsentRecordSigned } from '../../model/consents/consentRecordSigned';
 import { ResourceSet } from '../../model/consents/resourceSet';
 import { UsageRules } from '../../model/consents/usageRules';
 import { ServiceEntry } from '../../model/service-linking/serviceEntry';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
 import { LinkedServicesService } from '../services/linkedServices/linkedServices.service';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
 import { QuerySortEnum } from '../../model/querySortEnum';
-import { ConsentRecordSinkRoleSpecificPart } from '../../model/consents/consentRecordSinkRoleSpecificPart';
+import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from '../../model/processingBasis';
+import { Organization } from '../../model/service-linking/organization';
+import { TextualDescription3 } from '../../model/service-linking/textualDescription3';
 
 @Component({
   selector: 'consent',
@@ -43,7 +42,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   public changedShareWith: boolean[];
   public lastClickedIndex: number;
   public lastClickedDataMapping: Map<number, DataMapping[]> = new Map<number, DataMapping[]>();
-  public lastClickedShareWith: Map<number, ShareWith[]> = new Map<number, ShareWith[]>();
+  public lastClickedShareWith: Map<number, Organization[]> = new Map<number, Organization[]>();
   public consents: ConsentRecordSignedPair[];
   public services: ServiceEntry[];
 
@@ -51,9 +50,9 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   private consentUpdateConflict: TemplateRef<unknown>;
 
   @Input() loading = true;
-  public processingCategoryEnum = ProcessingBasisProcessingCategories;
+  public processingCategoryEnum = ProcessingBasisProcessingCategoriesEnum;
   public processingCategoryOptions;
-  public purposeCategoryEnum = ProcessingBasisPurposeCategory;
+  public purposeCategoryEnum = ProcessingBasisPurposeCategoryEnum;
   public purposeCategoryOptions;
 
   public changeStatusButtons;
@@ -124,8 +123,8 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<void> {
     this.isCollapsed = [];
     this.changedDataMapping = [];
@@ -177,7 +176,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     }-${dateTime.getDate()} ${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
   }
 
-  getLocalizedHumanReadableDescription(descriptions: HumanReadableDescription[], locale?: string): string {
+  getLocalizedHumanReadableDescription(descriptions: TextualDescription3[], locale?: string): string {
     return descriptions.find((d) => d.locale === (locale ? locale : this.currentLocale))?.description;
   }
 
@@ -254,7 +253,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       }, []);
 
     if (this.changedShareWith[consentIndex])
-      lastUsageRules.shareWith = this.lastClickedShareWith.get(consentIndex).reduce((result: ShareWith[], shareWith: ShareWith) => {
+      lastUsageRules.shareWith = this.lastClickedShareWith.get(consentIndex).reduce((result: Organization[], shareWith: Organization) => {
         if (shareWith.current || shareWith.required) {
           const shareWithAux = { ...shareWith };
           delete shareWithAux.current;
@@ -394,7 +393,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getShareWithByConsentIndex(consentIndex: number): Promise<ShareWith[]> {
+  async getShareWithByConsentIndex(consentIndex: number): Promise<Organization[]> {
     const consent: ConsentRecordSignedPair = this.consents[consentIndex];
     const consentStatusLength = consent.sink.consentStatusList.length;
 
@@ -403,14 +402,15 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       consentStatusLength > 1
         ? consent.sink.consentStatusList[consentStatusLength - 1].payload.consent_resource_set.datasets[0]
         : consent.sink.payload.common_part.rs_description.resource_set.datasets[0];
-    const consentShareWith: ShareWith[] = consent.sink.payload.common_part.usage_rules.shareWith;
+    const consentShareWith: Organization[] = consent.sink.payload.common_part.usage_rules.shareWith;
 
     const purposeId: string = consentDataset.purposeId;
-    const sinkShareWith: ShareWith[] = (await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId))
-      .shareWith;
+    const sinkShareWith: Organization[] = (
+      await this.consentService.getServiceProcessingBasis(consent.sink.payload.common_part.subject_id, purposeId)
+    ).shareWith;
 
-    const consentShareWithMap: Map<string, ShareWith> = new Map(consentShareWith.map((consentShare) => [consentShare.orgName, consentShare]));
-    const sinkShareWithMap: Map<string, ShareWith> = new Map(sinkShareWith.map((sinkShare) => [sinkShare.orgName, sinkShare]));
+    const consentShareWithMap: Map<string, Organization> = new Map(consentShareWith.map((consentShare) => [consentShare.orgName, consentShare]));
+    const sinkShareWithMap: Map<string, Organization> = new Map(sinkShareWith.map((sinkShare) => [sinkShare.orgName, sinkShare]));
 
     for (const [orgName, share] of sinkShareWithMap) {
       share.initial = consentShareWithMap.has(orgName);

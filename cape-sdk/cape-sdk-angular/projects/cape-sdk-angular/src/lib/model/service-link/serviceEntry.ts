@@ -10,35 +10,103 @@
  * Do not edit the class manually.
  */
 import { ProcessingBasis } from '../processingBasis';
-import { HumanReadableDescription } from '../humanReadableDescription';
-import { HasCompetentAuthority } from './hasCompetentAuthority';
+import { CompetentAuthority } from './competentAuthority';
+import { Dataset } from './dataset';
+import { LanguageEnum } from './languageEnum';
+import { SectorEnum } from './SectorEnum';
+import { ServiceEntryTypeEnum } from './serviceEntryTypeEnum';
 import { ServiceInstance } from './serviceInstance';
-import { IsDescribedAt } from './isDescribedAt';
-import { SupportedProfilesEnum } from '../supportedProfilesEnum';
+import { TextualDescription3 } from './textualDescription3';
+import { ServiceEntryThematicAreaEnum } from './thematicAreaEnum';
 
 export interface ServiceEntry {
-  serviceId?: string;
-  name?: string;
+  serviceId: string;
+  name: string;
   identifier?: string;
   issued?: string;
-  createdByUserId?: string;
-  serviceDescriptionVersion?: string;
+  createdByUserId: string;
+  serviceDescriptionVersion: string;
+  serviceDescriptionSignature?: string;
   serviceIconUrl?: string;
-  status?: string;
-  supportedProfiles?: Array<SupportedProfilesEnum>;
+  status?: ServiceEntryStatusEnum;
+  supportedProfiles: Set<SupportedProfilesEnum>;
   spatial?: string;
-  lifeEvent?: string;
-  businessEvent?: string;
-  sector?: Array<string>;
-  type?: Array<string>;
-  thematicArea?: Array<string>;
-  language?: Array<string>;
-  hasCompetentAuthority?: HasCompetentAuthority;
-  humanReadableDescription?: Array<HumanReadableDescription>;
-  serviceInstance?: ServiceInstance;
-  isDescribedAt?: Array<IsDescribedAt>;
-  processingBases?: Array<ProcessingBasis>;
-  role?: RoleEnum;
+  lifeEvent?: LifeEventEnum;
+  businessEvent?: BusinessEventEnum;
+  sector?: Set<SectorEnum>;
+  type: Set<ServiceEntryTypeEnum>;
+  thematicArea: Set<ServiceEntryThematicAreaEnum>;
+  language: Set<LanguageEnum>;
+  hasCompetentAuthority: CompetentAuthority;
+  humanReadableDescription: Array<TextualDescription3>;
+  serviceInstance: ServiceInstance;
+  isDescribedAt: Array<Dataset>;
+  processingBases: Array<ProcessingBasis>;
+  role: RoleEnum;
+}
+
+export enum ServiceEntryStatusEnum {
+  Completed = 'Completed',
+  Deprecated = 'Deprecated',
+  UnderDevelopment = 'UnderDevelopment',
+  WithDrawn = 'WithDrawn',
+}
+
+export enum SupportedProfilesEnum {
+  Contract = 'Contract',
+  Consenting = 'Consenting',
+  _3rdPartyReUse = '3rd party re-use',
+  Notification = 'Notification',
+  Objection = 'Objection',
+}
+
+export enum LifeEventEnum {
+  Empty = '',
+  Other = 'other',
+  HavingAChild = 'Having a child',
+  BecomingASocialCaretaker = 'Becoming a (social) caretaker',
+  StartingEducation = 'Starting education',
+  LookingForANewJob = 'Looking for a new job',
+  LosingQuittingAJob = 'Losing/quitting a job',
+  LookingForAPlaceToLive = 'Looking for a place to live',
+  ChangingRelationshipStatus = 'Changing relationship status',
+  DrivingAVehicle = 'Driving a vehicle',
+  TravellingAbroad = 'Travelling abroad',
+  MovingToFromTheCountry = 'Moving to/from the country',
+  GoingIntoMilitaryService = 'Going into military service',
+  FacingAnEmergencyHealthProblem = 'Facing an emergency / health problem',
+  FacingACrime = 'Facing a crime',
+  Retirement = 'Retirement',
+  DeathOfARelative = 'Death of a relative',
+}
+
+export enum BusinessEventEnum {
+  Empty = '',
+  Other = 'other',
+  _1StartingBusiness = '1. Starting business',
+  _11RegisteringACompany = '1.1 Registering a company',
+  _12NeedingALicencePermitOrCertificateToStartOrContinueAnActivity = '1.2Needing a licence, permit or certificate to start or continue an activity',
+  _13RegisteringIntellectualProperty = '1.3 Registering Intellectual Property',
+  _14RegisteringABranch = '1.4 Registering a branch',
+  _15StartingANewActivity = '1.5 Starting a new activity',
+  _16FinancingACompany = '1.6 Financing a company',
+  _17HiringAnEmployee = '1.7 Hiring an employee ',
+  _2StartingCrossBorderBusiness = '2. Starting cross-border business',
+  _21RegisteringACrossBorderBusiness = '2.1 Registering a cross-border business',
+  _22RegisteringABranch = '2.2 Registering a branch',
+  _3DoingBusiness = '3. Doing business',
+  _31FinancingACompany = '3.1 Financing a company',
+  _32NeedingALicencePermitOrCertificateToStartOrContinueAnActivity = '3.2 Needing a licence, permit or certificate to start or continue an activity',
+  _33RegisteringIntellectualProperty = '3.3 Registering Intellectual Property',
+  _34HiringAnEmployee = '3.4 Hiring an employee',
+  _35ParticipatingInPublicProcurement = '3.5 Participating in public procurement',
+  _36NotifyingAndReportingToAuthorities = '3.6 Notifying and reporting to authorities',
+  _37StartingANewActivity = '3.7 Starting a new activity',
+  _38RegisteringABranch = '3.8 Registering a branch',
+  _39HavingProblemsInPayingCreditors = '3.9 Having problems in paying creditors',
+  _4ClosingBusiness = '4. Closing business',
+  _41RestructuringOfACompany = '4.1 Restructuring of a company',
+  _42DissolutionOfACompany = '4.2 Dissolution of a company',
 }
 
 export enum RoleEnum {

@@ -2,7 +2,6 @@
   "serviceId": "MYW20",
   "name": "My Wellness",
   "identifier": "https://www.cape-suite.eu/cape-playground/pages/services/my-wellness",
-  "issued": "2020-18-06T13:48:00Z",
   "createdByUserId": "Cape Developers",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
@@ -75,12 +74,12 @@
         {
           "locale": "en",
           "description": "This dataset represents data used for the MyCholesterol purpose",
-          "keyword": []
+          "keywords": []
         },
         {
           "locale": "it",
           "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyCholesterol",
-          "keyword": []
+          "keywords": []
         }
       ],
       "datasetSchema": {
@@ -125,12 +124,12 @@
         {
           "locale": "en",
           "description": "This dataset represents data used for the MyWeight purpose",
-          "keyword": []
+          "keywords": []
         },
         {
           "locale": "it",
           "description": "Questo dataset rappresenta i dati utilizzati per il purpose MyWeight",
-          "keyword": []
+          "keywords": []
         }
       ],
       "datasetSchema": {

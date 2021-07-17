@@ -1,102 +1,128 @@
 {
+  "definitions": {
+    "humanReadableDescription": {
+      "type": "array",
+      "description": " Array of localized textual descriptions.",
+      "format": "tabs",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "title": "Textual Description",
+        "headerTemplate": "Locale ({{ self.locale }}) ",
+        "options": {
+          "collapsed": false
+        },
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Language used in textual description, in ISO 639-1 format.",
+            "watch": {
+              "possible_langs": "root.language"
+            },
+            "enumSource": "possible_langs"
+          },
+          "description": {
+            "type": "string",
+            "description": "Textual description of the Service in specified language.",
+            "format": "textarea"
+          },
+          "keywords": {
+            "type": "array",
+            "title": "Keywords",
+            "description": "Keyword tags related to textual description.",
+            "uniqueItems": true,
+            "format": "select",
+            "options": {
+              "tags": true
+            },
+            "items": {
+              "type": "string",
+              "title": "Tag",
+              "id": "arr_item"
+            }
+          }
+        },
+        "required": ["locale", "description"]
+      }
+    }
+  },
   "title": "ServiceEntry",
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://example.com/root.json",
   "type": "object",
-
   "format": "categories",
-
   "properties": {
     "serviceId": {
       "type": "string",
       "title": "Service ID",
-      "options": {
-        "infoText": "Unique ID for the service"
-      }
+      "default": "",
+      "description": "Unique ID for the service.",
+      "minLength": 5
     },
     "name": {
       "type": "string",
-      "title": "Service Name"
+      "title": "Service Name",
+      "minLength": 1,
+      "description": "Service Name"
     },
     "identifier": {
       "type": "string",
       "title": "Service Identifier",
-
-      "format": "url",
-      "links": [
-        {
-          "rel": "Open Service page",
-          "href": "{{self}}",
-          "target": "_blank"
-        }
-      ],
-      "options": {
-        "infoText": "If URI exist, otherwise the same of Service ID"
-      }
+      "description": "Service URI if exists, otherwise the same of Service Id."
     },
     "issued": {
       "type": "string",
-      "title": "Created"
+      "format": "date-time",
+      "title": "Issued at",
+      "description": "Timestamp of the Service creation.",
+      "options": { "hidden": true }
     },
     "createdByUserId": {
       "type": "string",
-      "title": "Creator"
+      "title": "Created by User Id",
+      "description": "User Id of Service Editor (e.g. Data Controller).",
+      "minLength": 3
     },
     "serviceDescriptionVersion": {
       "type": "string",
-      "title": "Version"
+      "title": "Service Description version",
+      "description": "Service description version number."
+    },
+    "serviceDescriptionSignature": {
+      "title": "Service Description Signature",
+      "type": "string",
+      "description": "JWS signature (signed with Service private key) of the Service Description",
+      "options": { "hidden": true }
     },
     "serviceIconUrl": {
       "type": "string",
-      "title": "Service Icon URL",
-      "format": "url",
-
-      "links": [
-        {
-          "rel": "Service Logo",
-          "href": "{{self}}",
-          "mediaType": "image"
-        }
-      ]
+      "title": "Service Icon Url",
+      "description": "URL pointing to Service Icon file"
     },
-
     "status": {
       "type": "string",
-      "title": "Status",
+      "title": "Service Description status",
+      "description": "Status of Service Description (Allowed values: *Completed*, *Deprecated*, *UnderDevelopment*, *Withdrawn*)",
+      "default": "Completed",
       "enum": ["Completed", "Deprecated", "UnderDevelopment", "WithDrawn"]
     },
-
-    "role": {
-      "type": "string",
-      "title": "Role in data processing",
-      "enum": ["Sink", "Source"],
-      "options": {
-        "infoText": "Role in data processing: Sink or Source"
-      }
-    },
-
     "supportedProfiles": {
       "type": "array",
-      "title": "Service Profiles",
-      "format": "select2",
-      "uniqueItems": true,
+      "title": "Supported profiles",
+      "description": " Type of Data processing regulation profiles supported by the Service, according to My Data specification (Allowed values: *contract*, *consenting*, *3rd party re-use*, *notification*, *objection*)",
+      "default": "Consenting",
       "items": {
         "type": "string",
         "format": "select",
         "title": "Type",
-
-        "enum": [
-          "Contract",
-          "Consenting",
-          "3rd party re-use",
-          "Notification",
-          "Objection"
-        ]
-      }
+        "enum": ["Contract", "Consenting", "3rd party re-use", "Notification", "Objection"]
+      },
+      "format": "select2",
+      "uniqueItems": true
     },
     "spatial": {
       "$ref": "./spatials.json"
     },
-
     "lifeEvent": {
       "$ref": "./life_event.json"
     },
@@ -111,15 +137,15 @@
       "$ref": "./types.json"
     },
     "thematicArea": {
-      "$ref": "./thematicarea.json"
+      "$ref": "./thematic_area.json"
     },
     "language": {
       "$ref": "./locale.json"
     },
     "hasCompetentAuthority": {
-      "title": "Public Organisation",
+      "title": "Competent Authority",
+      "description": "If public Servivce, link to a Public Organization, which is the responsible Agent for the delivery of the Public Service.",
       "type": "object",
-      "format": "grid",
       "properties": {
         "prefLabel": {
           "type": "string",
@@ -132,9 +158,9 @@
     },
     "humanReadableDescription": {
       "type": "array",
-      "title": "Description",
+      "title": "Textual Description",
+      "description": " Array of localized textual descriptions.",
       "format": "tabs",
-      "uniqueItems": true,
       "items": {
         "type": "object",
         "title": "Locale",
@@ -145,18 +171,21 @@
         "properties": {
           "locale": {
             "type": "string",
-            "enumSource": "possible_langs",
+            "description": "Language used in textual description, in ISO 639-1 format.",
             "watch": {
               "possible_langs": "root.language"
-            }
+            },
+            "enumSource": "possible_langs"
           },
           "description": {
             "type": "string",
+            "description": "Textual description of the Service in specified language.",
             "format": "textarea"
           },
           "keywords": {
             "type": "array",
             "title": "Keywords",
+            "description": "Keyword tags related to textual description.",
             "uniqueItems": true,
             "format": "select",
             "options": {
@@ -173,399 +202,23 @@
       }
     },
     "serviceInstance": {
-      "type": "object",
-      "title": "Service Instance",
-      "format": "categories",
-      "properties": {
-        "serviceProvider": {
-          "type": "object",
-          "title": "Service Provider",
-          "properties": {
-            "businessId": {
-              "type": "string",
-              "title": "Business ID"
-            },
-            "name": {
-              "type": "string",
-              "title": "Name"
-            },
-            "address1": {
-              "type": "string",
-              "title": "Address1"
-            },
-            "address2": {
-              "type": "string",
-              "title": "Address2"
-            },
-            "postalcode": {
-              "type": "string",
-              "title": "Postal Code"
-            },
-            "city": {
-              "type": "string",
-              "title": "City"
-            },
-            "state": {
-              "type": "string",
-              "title": "State"
-            },
-            "country": {
-              "type": "string",
-              "title": "Country"
-            },
-            "email": {
-              "type": "string",
-              "title": "Email"
-            },
-            "phone": {
-              "type": "string",
-              "title": "Phone"
-            },
-            "jurisdiction": {
-              "type": "string",
-              "title": "Jurisdiction"
-            }
-          }
-        },
-        "cert": {
-          "type": "object",
-          "title": "Service Certificate",
-          "properties": {
-            "x5u": {
-              "type": "string",
-              "title": "x5u",
-              "options": {
-                "infoText": "URL pointing to service's x.509 certificate"
-              }
-            },
-            "x5c": {
-              "type": "array",
-              "title": "x5c",
-              "format": "tabs",
-              "options": {
-                "infoText": "X.509 Certificate Chain"
-              },
-              "items": {
-                "type": "string",
-                "title": "certificate"
-              }
-            }
-          }
-        },
-        "serviceUrls": {
-          "type": "object",
-          "title": "Service URLs",
-          "description": "Object describing service URLs",
-          "properties": {
-            "libraryDomain": {
-              "type": "string",
-              "title": "Library Domain",
-              "options": {
-                "infoText": "Service's integration library domain (https://host:port)"
-              }
-            },
-            "loginUri": {
-              "type": "string",
-              "title": "Login URI",
-              "options": {
-                "infoText": "URI for login"
-              }
-            },
-            "linkingRedirectUri": {
-              "type": "string",
-              "title": "Linking Redirect URI",
-              "options": {
-                "infoText": "Redirect URI after service linking"
-              }
-            },
-            "objectionUri": {
-              "type": "string",
-              "title": "Objection URI",
-              "options": {
-                "infoText": "URI for objection"
-              }
-            },
-            "notificationUri": {
-              "type": "string",
-              "title": "Notification URI",
-              "options": {
-                "infoText": "URI for subscribing notifications"
-              }
-            }
-          }
-        },
-        "dataController": {
-          "type": "object",
-          "title": "Data Controller",
-          "description": "Data Controller",
-          "required": [
-            "piiController",
-            "onBehalf",
-            "org",
-            "contact",
-            "address",
-            "email",
-            "phone"
-          ],
-          "properties": {
-            "piiController": {
-              "type": "string",
-              "title": "Controller Name",
-              "description": ""
-            },
-            "onBehalf": {
-              "type": "boolean",
-              "title": "On Behalf",
-              "description": ""
-            },
-            "org": {
-              "type": "string",
-              "title": "Organization Name",
-              "description": ""
-            },
-            "contact": {
-              "type": "string",
-              "title": "Contact",
-              "description": ""
-            },
-            "address": {
-              "type": "string",
-              "title": "Address",
-              "description": ""
-            },
-            "email": {
-              "type": "string",
-              "title": "Email",
-              "description": ""
-            },
-            "phone": {
-              "type": "string",
-              "title": "Phone",
-              "description": ""
-            },
-            "operatorName": {
-              "type": "string",
-              "title": "Operator Name",
-              "description": ""
-            }
-          }
-        }
-      }
+      "$ref": "./service_instance.json"
     },
-    "isDescribedAt": {
-      "type": "array",
-      "title": "Service Data Description",
-      "format": "tabs",
-      "items": {
-        "type": "object",
-        "title": "DataSet",
-        "options": {
-          "collapsed": false
-        },
-        "format": "categories",
-        "properties": {
-          "datasetId": {
-            "type": "string",
-            "title": "DataSet ID"
-          },
-          "description": {
-            "type": "array",
-            "title": "Description",
-            "format": "tabs",
-            "uniqueItems": true,
-            "items": {
-              "type": "object",
-              "title": "Locale",
-              "headerTemplate": "Locale ({{ self.locale }}) ",
-              "options": {
-                "collapsed": false
-              },
-              "properties": {
-                "locale": {
-                  "type": "string",
-                  "enumSource": "possible_langs",
-                  "watch": {
-                    "possible_langs": "root.language"
-                  }
-                },
-                "description": {
-                  "type": "string",
-                  "format": "textarea"
-                },
-                "keyword": {
-                  "type": "array",
-                  "title": "Keywords",
-                  "uniqueItems": true,
-                  "format": "select",
-                  "options": {
-                    "tags": true
-                  },
-                  "items": {
-                    "type": "string",
-                    "title": "Tag",
-                    "id": "arr_item"
-                  }
-                }
-              },
-              "required": ["locale", "description"]
-            }
-          },
-          "datasetSchema": {
-            "type": "object",
-            "title": "Dataset Schema",
-            "description": "Object describing dataset's schema",
-            "properties": {
-              "context": {
-                "type": "string",
-                "format": "textarea",
-                "options": {
-                  "infoText": "JSON-LD context for the dataset"
-                }
-              },
-              "type": {
-                "type": "string",
-                "format": "textarea",
-                "options": {
-                  "infoText": "JSON-LD type for the dataset"
-                }
-              },
-
-              "id": {
-                "type": "string",
-                "options": {
-                  "infoText": "JSON-LD id for the dataset"
-                }
-              }
-            }
-          },
-          "dataStructureSpecification": {
-            "type": "string",
-            "title": "Data Structure",
-            "format": "url",
-            "options": {
-              "infoText": "URL pointing to further description of the data, e.g to JSON schema"
-            }
-          },
-          "distribution": {
-            "type": "object",
-            "title": "Distribution",
-            "format": "categories",
-            "description": "Distribution point",
-            "properties": {
-              "distributionId": {
-                "type": "string",
-                "title": "Distribution ID",
-                "options": {
-                  "infoText": "ID for distribution"
-                }
-              },
-              "accessUrl": {
-                "type": "string",
-                "title": "Acces URL",
-                "options": {
-                  "infoText": "URL where data is available. The resource at the access URL may contain information about how to get the Dataset"
-                }
-              },
-
-              "description": {
-                "type": "array",
-                "title": "Description",
-                "format": "tabs",
-                "uniqueItems": true,
-                "items": {
-                  "type": "object",
-                  "title": "Locale",
-                  "headerTemplate": "Locale ({{ self.locale }}) ",
-                  "options": {
-                    "collapsed": false
-                  },
-                  "properties": {
-                    "locale": {
-                      "type": "string",
-                      "enumSource": "possible_langs",
-                      "watch": {
-                        "possible_langs": "root.language"
-                      }
-                    },
-                    "description": {
-                      "type": "string",
-                      "format": "textarea"
-                    }
-                  },
-                  "required": ["locale", "description"]
-                }
-              },
-              "format": {
-                "type": "string",
-                "title": "Format",
-                "options": {
-                  "infoText": "Format of data"
-                }
-              }
-            }
-          },
-          "dataMapping": {
-            "type": "array",
-            "format": "tabs",
-            "title": "Data Mapping",
-            "items": {
-              "type": "object",
-              "title": "Field",
-              "id": "arr_item",
-              "headerTemplate": "{{ self.name }}",
-              "properties": {
-                "property": {
-                  "type": "string",
-                  "title": "Property"
-                },
-
-                "conceptId": {
-                  "$ref": "./concepts.json"
-                },
-                "name": {
-                  "type": "string",
-                  "options": {
-                    "hidden": true
-                  }
-                },
-                "type": {
-                  "type": "string",
-                  "title": "Type",
-                  "format": "select2",
-                  "enum": ["text", "video", "image", "audio"],
-                  "options": {
-                    "enum_titles": ["Text", "Video", "Image", "Audio"],
-                    "input_width": "85px",
-                    "grid_columns": 12
-                  },
-                  "default": "text"
-                },
-                "required": {
-                  "type": "boolean",
-                  "title": "Required",
-                  "enum": [true, false],
-                  "options": {
-                    "enum_titles": ["True", "False"],
-                    "grid_columns": 12
-                  },
-                  "default": 1
-                }
-              },
-              "required": ["property", "conceptId", "name", "type", "required"]
-            }
-          }
-        },
-        "required": ["datasetId", "distribution", "dataMapping"]
-      }
-    },
+    "isDescribedAt": { "$ref": "./is_described_at.json" },
     "processingBases": {
       "type": "array",
-      "title": "Processing",
+      "title": "Data Processing Bases",
       "format": "tabs",
       "description": "It collects the different legal basis and requirements for personal data processing according to EU data protection Rules (Art. 6 GDPR). It describes describe different situations where a company or an organisation is allowed to collect or reuse your personal information: contract, legal obligation, vital interest, public interest, legitimate interest and consent",
       "items": {
-        "$ref": "./processing.json"
+        "$ref": "./processing_basis.json"
       }
+    },
+    "role": {
+      "type": "string",
+      "title": "Service Role in data processing: Sink (Data Requester) or Source (Data Provider)",
+      "description": "Role that the Service will have in data processing and related Consents: Sink (Data Requester) or Source (Data Provider) ",
+      "enum": ["Sink", "Source"]
     }
   }
 }

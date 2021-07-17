@@ -1,4 +1,4 @@
 export enum ChangeSlrStatusRequestFrom {
   Service = 'SERVICE',
-  Operator = 'OPERATOR'
+  Operator = 'OPERATOR',
 }

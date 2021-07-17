@@ -14,18 +14,16 @@ import { ConsentForm } from './model/consent/consentForm';
 import { ConsentRecordSigned } from './model/consent/consentRecordSigned';
 import { ConsentStatusEnum, ConsentStatusRecordPayload } from './model/consent/consentStatusRecordPayload';
 import { ConsentStatusRecordSigned } from './model/consent/consentStatusRecordSigned';
-import { ConsentRecordSinkRoleSpecificPart } from './model/consent/consentRecordSinkRoleSpecificPart';
 import { ChangeConsentStatusRequestFrom } from './model/consent/changeSlrStatusRequestFrom';
 import { ChangeConsentStatusRequest } from './model/consent/changeConsentStatusRequest';
 import { RoleEnum, ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
-import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from './model/processingBasis';
+import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from './model/processingBasis';
 import { QuerySortEnum } from './model/querySortEnum';
 import { ErrorDialogService } from './error-dialog/error-dialog.service';
 import { UserSurrogateIdLink } from './model/service-link/userSurrogateIdLink';
 import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
 import { ConsentFormRequest } from './model/consent/consentFormRequest';
-import { UsageRules } from './model/consent/UsageRules';
 
 export enum LinkingFromEnum {
   Service = 'Service',
@@ -335,7 +333,7 @@ export class CapeSdkAngularService {
     const userSurrogateLink: UserSurrogateIdLink = await this.getLinkSurrogateIdByUserIdAndServiceIdAndOperatorId(
       sdkUrl,
       serviceUserId,
-      serviceId,
+      requesterRole == RoleEnum.Sink ? serviceId : sourceServiceId,
       operatorId
     );
 
@@ -365,8 +363,8 @@ export class CapeSdkAngularService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories,
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategory?: ProcessingBasisProcessingCategoriesEnum,
     iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
@@ -397,8 +395,8 @@ export class CapeSdkAngularService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategory?: ProcessingBasisProcessingCategories,
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategory?: ProcessingBasisProcessingCategoriesEnum,
     iatSort?: QuerySortEnum
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { ActivatedRoute } from '@angular/router';
 import { AppConfig, System } from '../../model/appConfig';
-import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'login',

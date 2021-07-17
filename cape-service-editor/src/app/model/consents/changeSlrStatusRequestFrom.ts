@@ -1,4 +1,4 @@
 export enum ChangeConsentStatusRequestFrom {
   Service = 'Service',
-  Operator = 'Operator'
+  Operator = 'Operator',
 }

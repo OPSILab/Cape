@@ -14,17 +14,17 @@ import { JWSAlgorithm } from './jWSAlgorithm';
 import { JWK } from './jWK';
 
 export interface JWSHeader {
-  customParams?: { [key: string]: object };
-  parsedBase64URL?: object;
+  customParams?: { [key: string]: Record<string, unknown> };
+  parsedBase64URL?: Record<string, unknown>;
   jwk?: JWK;
   algorithm?: JWSAlgorithm;
   keyID?: string;
   x509CertURL?: string;
-  x509CertChain?: Array<object>;
+  x509CertChain?: Array<Record<string, unknown>>;
   jwkurl?: string;
   includedParams?: Array<string>;
-  x509CertThumbprint?: object;
-  x509CertSHA256Thumbprint?: object;
+  x509CertThumbprint?: Record<string, unknown>;
+  x509CertSHA256Thumbprint?: Record<string, unknown>;
   type?: JOSEObjectType;
   contentType?: string;
   criticalParams?: Array<string>;

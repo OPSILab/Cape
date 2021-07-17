@@ -3,13 +3,13 @@ import { NbDialogRef, NbDialogService } from '@nebular/theme';
 
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
-import { IsDescribedAt } from '../../../model/service-linking/isDescribedAt';
+import { Dataset } from '../../../model/service-linking/Dataset';
 import { TranslateService } from '@ngx-translate/core';
 import { LinkedServiceRow } from './linkedServices.component';
 import { ProcessingBasis } from '../../../model/processingBasis';
-import { HumanReadableDescription } from '../../../model/humanReadableDescription';
-import { Description2 } from '../../../model/description2';
 import { Router } from '@angular/router';
+import { TextualDescription2 } from '../../../model/service-linking/textualDescription2';
+import { TextualDescription3 } from '../../../model/service-linking/textualDescription3';
 
 @Component({
   templateUrl: './linkedServiceInfoRender.component.html',
@@ -54,7 +54,7 @@ export class LinkedServiceInfoRenderComponent {
     });
   }
 
-  mapDatasetsConcept(datasets: Array<IsDescribedAt>): Map<string, string[]> {
+  mapDatasetsConcept(datasets: Array<Dataset>): Map<string, string[]> {
     return datasets.reduce(
       (map, dataset) =>
         map.set(
@@ -77,7 +77,7 @@ export class LinkedServiceInfoRenderComponent {
     return linkedServicePurpose.map((processingBase) => {
       return {
         ...processingBase,
-        description: processingBase.description.reduce((filtered: Description2[], description: Description2) => {
+        description: processingBase.description.reduce((filtered: TextualDescription2[], description: TextualDescription2) => {
           if (this.value.locale !== 'en' && description.locale === this.value.locale) filtered = [description, ...filtered];
           else if (description.locale === 'en') filtered = [...filtered, description];
           return filtered;
@@ -86,8 +86,8 @@ export class LinkedServiceInfoRenderComponent {
     });
   }
 
-  private getLocalizedDescription(availableServiceDescr: HumanReadableDescription[]): HumanReadableDescription[] {
-    return availableServiceDescr.reduce((filtered: HumanReadableDescription[], description: HumanReadableDescription) => {
+  private getLocalizedDescription(availableServiceDescr: TextualDescription3[]): TextualDescription3[] {
+    return availableServiceDescr.reduce((filtered: TextualDescription3[], description: TextualDescription3) => {
       if (this.value.locale !== 'en' && description.locale === this.value.locale) filtered = [description, ...filtered];
       else if (description.locale === 'en') filtered = [...filtered, description];
       return filtered;

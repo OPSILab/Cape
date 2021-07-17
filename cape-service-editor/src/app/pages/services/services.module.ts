@@ -5,11 +5,9 @@ import { AvailableServicesComponent } from './availableServices/availableService
 import { AvailableServicesService } from './availableServices/availableServices.service';
 import { ServicesRoutingModule } from './services-routing.module';
 import { ServiceInfoRenderComponent } from './availableServices/serviceInfoRender.component';
-import { RegisterButtonRenderComponent } from './availableServices/registerButtonRender.component';
 import { EditorComponent } from './service-editor/editor.component';
 import { DialogNamePromptComponent } from './service-editor/dialog-name-prompt/dialog-name-prompt.component';
 import { DialogImportPromptComponent } from './service-editor/dialog-import-prompt/dialog-import-prompt.component';
-import { EditButtonRenderComponent } from './availableServices/edit-button-render.component';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   NbAccordionModule,
@@ -24,7 +22,6 @@ import {
   NbTabsetModule,
 } from '@nebular/theme';
 import { ActionsServiceMenuRenderComponent } from './availableServices/actionsServiceMenuRender.component';
-import { ActivatedRouteSnapshot } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -49,17 +46,10 @@ import { ActivatedRouteSnapshot } from '@angular/router';
     EditorComponent,
     DialogNamePromptComponent,
     DialogImportPromptComponent,
-    EditButtonRenderComponent,
-    RegisterButtonRenderComponent,
+
     ActionsServiceMenuRenderComponent,
   ],
   providers: [AvailableServicesService],
-  entryComponents: [
-    ActionsServiceMenuRenderComponent,
-    RegisterButtonRenderComponent,
-    ServiceInfoRenderComponent,
-    DialogNamePromptComponent,
-    DialogImportPromptComponent,
-  ],
+  entryComponents: [ActionsServiceMenuRenderComponent, ServiceInfoRenderComponent, DialogNamePromptComponent, DialogImportPromptComponent],
 })
 export class ServicesModule {}

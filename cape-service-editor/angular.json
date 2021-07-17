@@ -32,7 +32,13 @@
               "src/app/@theme/styles/styles.scss",
               "node_modules/select2/dist/css/select2.min.css"
             ],
-            "scripts": ["node_modules/pace-js/pace.min.js", "node_modules/jquery/dist/jquery.js", "node_modules/select2/dist/js/select2.js"]
+            "scripts": [
+              "node_modules/pace-js/pace.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/select2/dist/js/select2.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
           },
           "configurations": {
             "production": {

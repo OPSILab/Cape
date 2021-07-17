@@ -27,7 +27,6 @@ import {
   NbWindowModule,
   NbCardModule,
   NbBadgeModule,
-  NbIconModule,
 } from '@nebular/theme';
 import { ErrorDialogModule } from './pages/error-dialog/error-dialog.module';
 import { HttpConfigInterceptor } from './http.interceptor';
@@ -40,7 +39,7 @@ import { OidcJWTToken } from './auth/model/oidc';
 import { AuthGuard } from './auth/services/auth.guard';
 import { LoginModule } from './auth/login/login.module';
 
-export function createTranslateLoader(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 

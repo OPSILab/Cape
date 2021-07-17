@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'general.menu.dashboard',
     icon: 'pie-chart-outline',
-    link: '/pages/dashboard',
+    link: '/pages',
   },
   {
     title: 'general.menu.consents_logs_group',

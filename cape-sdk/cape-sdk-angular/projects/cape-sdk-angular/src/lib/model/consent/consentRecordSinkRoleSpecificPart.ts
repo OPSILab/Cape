@@ -1,4 +1,3 @@
-import { UsageRules } from './UsageRules';
 import { ConsentRecordRoleSpecificPart } from './consentRecordRoleSpecificPart';
 
 export interface ConsentRecordSinkRoleSpecificPart extends ConsentRecordRoleSpecificPart {

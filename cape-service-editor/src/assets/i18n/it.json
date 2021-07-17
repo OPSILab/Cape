@@ -252,7 +252,11 @@
       "update_success": "Il Servizio {{name}} è stato salvato con successo!",
       "download": "Download",
       "confirm_delete": "Il Servizio {{name}} verrà eliminato, procedere?",
-      "delete_success": "Il Servizio {{name}} è stato eliminato con successo!"
+      "delete_success": "Il Servizio {{name}} è stato eliminato con successo!",
+      "confirm_overwrite": "Il Servizio {{name}} è già esistente, vuoi sovrascriverlo?",
+      "overwrite": "SOVRASCRIVI",
+      "validationErrors": "Ci sono degli errori di validazione nella descrizione del Servizio inserita.",
+      "path": "Posizione"
     },
     "connectors": {
       "connector": "Connector",

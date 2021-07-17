@@ -12,11 +12,11 @@
 import { ServiceUrls } from './serviceUrls';
 import { DataController } from '../dataController';
 import { ServiceProvider } from './serviceProvider';
-import { Cert } from './cert';
+import { ServiceCertificate } from './serviceCertificate';
 
 export interface ServiceInstance {
   serviceProvider?: ServiceProvider;
-  cert?: Cert;
+  cert?: ServiceCertificate;
   serviceUrls?: ServiceUrls;
   dataController?: DataController;
 }

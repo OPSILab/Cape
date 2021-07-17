@@ -9,30 +9,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Description2 } from './description2';
-import { ShareWith } from './shareWith';
 import { Storage } from './storage';
 import { Obligation } from './obligation';
+import { TextualDescription2 } from './service-linking/textualDescription2';
+import { Organization } from './service-linking/organization';
 
 export interface ProcessingBasis {
-  purposeId?: string;
-  purposeName?: string;
-  legalBasis?: ProcessingBasisLegalBasis;
-  purposeCategory?: ProcessingBasisPurposeCategory;
-  processingCategories?: Array<ProcessingBasisProcessingCategories>;
-  description?: Array<Description2>;
-  requiredDatasets?: Array<string>;
-  storage?: Storage;
-  recipients?: Array<ProcessingBasisRecipients>;
-  shareWith?: Array<ShareWith>;
-  obligations?: Array<Obligation>;
-  policyRef?: string;
-  collectionMethod?: string;
+  purposeId: string;
+  purposeName: string;
+  legalBasis: ProcessingBasisLegalBasisEnum;
+  purposeCategory: ProcessingBasisPurposeCategoryEnum;
+  processingCategories: Set<ProcessingBasisProcessingCategoriesEnum>;
+  description: Array<TextualDescription2>;
+  requiredDatasets: Set<string>;
+  storage: Storage;
+  recipients: Set<ProcessingBasisRecipientsEnum>;
+  shareWith: Array<Organization>;
+  obligations: Array<Obligation>;
+  policyRef: string;
+  collectionMethod: string;
   collectionOperator?: string;
-  termination?: string;
+  termination: string;
 }
 
-export enum ProcessingBasisLegalBasis {
+export enum ProcessingBasisLegalBasisEnum {
   Consent = 'Consent',
   Contract = 'Contract',
   LegalObligation = 'Legal obligation',
@@ -41,7 +41,7 @@ export enum ProcessingBasisLegalBasis {
   LegitimateInterest = 'Legitimate interest',
 }
 
-export enum ProcessingBasisPurposeCategory {
+export enum ProcessingBasisPurposeCategoryEnum {
   AcademicResearch = 'AcademicResearch',
   AccessControl = 'AccessControl',
   Advertising = 'Advertising ',
@@ -83,7 +83,7 @@ export enum ProcessingBasisPurposeCategory {
   UsageAnalytics = 'UsageAnalytics',
   UserInterfacePersonalisation = 'UserInterfacePersonalisation',
 }
-export enum ProcessingBasisProcessingCategories {
+export enum ProcessingBasisProcessingCategoriesEnum {
   Acquire = 'Acquire',
   Adapt = 'Adapt',
   Align = 'Align',
@@ -125,7 +125,7 @@ export enum ProcessingBasisProcessingCategories {
   Transmit = 'Transmit',
 }
 
-export enum ProcessingBasisRecipients {
+export enum ProcessingBasisRecipientsEnum {
   Ours = 'Ours',
   Delivery = 'Delivery',
   Same = 'Same',

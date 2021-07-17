@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { NgxConfigureService } from 'ngx-configure';
 import { AuditLog, EventLog, DateRange } from '../../model/auditlogs/auditlogs.model';
-import { ProcessingBasisProcessingCategories, ProcessingBasisLegalBasis } from '../../model/processingBasis';
+import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisLegalBasisEnum } from '../../model/processingBasis';
 import { AppConfig } from '../../model/appConfig';
 
 @Injectable()
@@ -31,9 +31,9 @@ export class AuditLogsService {
   }
 
   getFilteredEventLogs(
-    legalBasisFilter: ProcessingBasisLegalBasis[],
+    legalBasisFilter: ProcessingBasisLegalBasisEnum[],
     dateRangeFilter: DateRange,
-    processingFilter: ProcessingBasisProcessingCategories[]
+    processingFilter: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<EventLog[]> {
     let queryParams = new HttpParams();
     if (legalBasisFilter) for (const legalBasis of legalBasisFilter) queryParams = queryParams.append('legalBasis', legalBasis);

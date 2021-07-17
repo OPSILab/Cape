@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"it.eng.opsi.cape.serviceregistry.data","l":"ServiceEntry.Role"},{"p":"it.eng.opsi.cape.serviceregistry.data","l":"ServiceEntry"}];updateSearchResults();

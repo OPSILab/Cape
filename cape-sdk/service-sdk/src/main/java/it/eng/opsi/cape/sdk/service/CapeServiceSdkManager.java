@@ -53,7 +53,7 @@ import it.eng.opsi.cape.sdk.model.linking.ServiceLinkRecordDoubleSigned;
 import it.eng.opsi.cape.sdk.model.linking.ServiceLinkStatusRecordSigned;
 import it.eng.opsi.cape.sdk.repository.ServicePopKeyRepository;
 import it.eng.opsi.cape.sdk.repository.ServiceSignKeyRepository;
-import it.eng.opsi.cape.serviceregistry.data.Cert;
+import it.eng.opsi.cape.serviceregistry.data.ServiceCertificate;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 
 @Service
@@ -150,7 +150,7 @@ public class CapeServiceSdkManager {
 				serviceSignKey);
 
 		serviceDescription.getServiceInstance()
-				.setCert(new Cert("", Arrays.asList(pemEncodedX509PublicKeyCertificate)));
+				.setCert(new ServiceCertificate("", Arrays.asList(pemEncodedX509PublicKeyCertificate)));
 
 		/*
 		 * Sign the Service Description with the generated Service Sign key

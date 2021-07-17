@@ -17,6 +17,8 @@
 package it.eng.opsi.cape.serviceregistry.controller;
 
 import java.net.URI;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -152,6 +154,10 @@ public class ServiceRegistryController implements IServiceRegistryController {
 		// Service to Cape
 		service.getServiceInstance().setCert(null);
 
+		// If identifier is blank, set as the Service Url
+		if (StringUtils.isBlank(service.getIdentifier()))
+			service.setIdentifier(service.getServiceId());
+
 		// Derive Domain Uri from Base Url of Service Login Uri
 		if (StringUtils.isBlank(service.getServiceInstance().getServiceUrls().getDomain())) {
 			service.getServiceInstance().getServiceUrls()
@@ -164,6 +170,7 @@ public class ServiceRegistryController implements IServiceRegistryController {
 					service.getServiceInstance().getServiceUrls().getLibraryDomain() + "/api/v2/slr/linking");
 		}
 
+		service.setIssued(ZonedDateTime.now(ZoneId.of("UTC")));
 		ServiceEntry result = serviceRepo.insert(service);
 
 		return ResponseEntity.created(URI.create(serviceRegistryPublicUrl + "/services/" + result.getServiceId()))
@@ -182,6 +189,11 @@ public class ServiceRegistryController implements IServiceRegistryController {
 				() -> new ServiceNotFoundException("No Service description found for Service Id: " + serviceId));
 		ServiceEntry result;
 
+
+		// If identifier is blank, set as the Service Url
+		if (StringUtils.isBlank(service.getIdentifier()))
+			service.setIdentifier(service.getServiceId());
+		
 		// Check if Service has Cert -> then is registered on Cape, reject Description
 		// update
 		if (existingService.getServiceInstance().getCert() != null

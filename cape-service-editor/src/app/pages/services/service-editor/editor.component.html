@@ -1,24 +1,38 @@
 <nb-card>
-  <nb-card-header class="h3">
-    {{ 'general.editor.title' | translate }}
-  </nb-card-header>
+  <nb-card-header class="h3"> {{ 'general.editor.title' | translate }}{{ serviceId ? ':' : '' }}&nbsp;{{ serviceId }} </nb-card-header>
 
   <nb-card-body *ngIf="!readOnly" class="row justify-content-center">
-    <ng-container *ngIf="onEdit; then editButton; else createButton"> </ng-container>
+    <ng-container *ngIf="!isNew; then updateButton; else createButton"> </ng-container>
 
     <ng-template #createButton>
-      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary" (click)="openSaveToRegistryDialog()">
+      <button
+        nbButton
+        class="mx-4"
+        shape="rectangle"
+        size="medium"
+        status="primary"
+        (click)="openSaveToRegistryDialog()"
+        [disabled]="readSessionStorageValue('isTouched') !== 'true'"
+      >
         {{ 'general.save' | translate }}
         <i class="mx-1 material-icons">save</i>
       </button>
     </ng-template>
-    <ng-template #editButton>
-      <button nbButton class="mx-4" shape="rectangle" size="medium" status="primary" (click)="openUpdateToRegistryDialog()">
+    <ng-template #updateButton>
+      <button
+        nbButton
+        class="mx-4"
+        shape="rectangle"
+        size="medium"
+        status="primary"
+        (click)="openUpdateToRegistryDialog()"
+        [disabled]="readSessionStorageValue('isTouched') !== 'true'"
+      >
         {{ 'general.editor.update' | translate }}
         <i class="mx-1 material-icons">save</i>
       </button>
     </ng-template>
-    <button nbButton class="mx-4" shape="rectangle" size="medium" status="warning" (click)="saveAsFile()">
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="warning" (click)="saveAsFile()" [disabled]="isNew">
       {{ 'general.editor.export' | translate }}
       <i class="mx-1 fas fa-file-export fa-lg"></i>
     </button>
@@ -54,6 +68,21 @@
     <nb-card-footer class="d-flex justify-content-center">
       <button nbButton status="primary" size="small" (click)="data.callback()">
         {{ 'general.editor.update' | translate }}
+      </button>
+      <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
+        {{ 'general.cancel' | translate }}
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- Existing Service modal - Ask overwrite ng-template -->
+<ng-template #confirmOverwriteDialog let-data let-ref="dialogRef">
+  <nb-card status="primary">
+    <nb-card-body class="p-5">{{ 'general.editor.confirm_overwrite' | translate: { name: data.name } }}</nb-card-body>
+    <nb-card-footer class="d-flex justify-content-center">
+      <button nbButton status="primary" size="small" (click)="data.callback()">
+        {{ 'general.editor.overwrite' | translate }}
       </button>
       <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
         {{ 'general.cancel' | translate }}

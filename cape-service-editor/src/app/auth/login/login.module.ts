@@ -7,7 +7,6 @@ import { NbLayoutModule, NbSidebarModule, NbCardModule, NbCheckboxModule, NbButt
 import { TranslateModule } from '@ngx-translate/core';
 import { LoginService } from './login.service';
 import { LoginPopupComponent } from './loginPopup/loginPopup.component';
-import { AccountService } from '../../pages/account/account.service';
 
 @NgModule({
   imports: [
@@ -23,6 +22,6 @@ import { AccountService } from '../../pages/account/account.service';
     TranslateModule.forChild({}),
   ],
   declarations: [LoginComponent, LoginPopupComponent],
-  providers: [LoginService, AccountService],
+  providers: [LoginService],
 })
 export class LoginModule {}

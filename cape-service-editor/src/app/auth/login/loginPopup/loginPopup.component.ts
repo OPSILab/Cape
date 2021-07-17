@@ -1,7 +1,6 @@
 import { Component, ViewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
 
-import { LoginService } from '../login.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { Subject } from 'rxjs';

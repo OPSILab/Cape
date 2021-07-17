@@ -11,9 +11,15 @@
  */
 
 export interface DataMapping {
-  property?: string;
-  conceptId?: string;
-  name?: string;
-  type?: string;
-  required?: boolean;
+  property: string;
+  conceptId: string;
+  name: string;
+  type: DataMappingTypeEnum;
+  required: boolean;
+}
+export enum DataMappingTypeEnum {
+  Text = 'text',
+  Video = 'video',
+  Image = 'image',
+  Audio = 'audio',
 }

@@ -1,23 +1,23 @@
 import { ConsentStatusEnum } from '../consents/consentStatusRecordPayload';
 import { UsageRules } from '../consents/usageRules';
-import { ProcessingBasisLegalBasis } from '../processingBasis';
+import { ProcessingBasisLegalBasisEnum } from '../processingBasis';
 import { DataMapping } from '../dataMapping';
 
 export interface AuditLog {
   linkedServicesCount: number;
   givenConsentsCount: number;
   totalProcessedPersonalDataCount: number;
-  processedPersonalDataCount: object;
-  processingCategoryPersonalData: object;
-  purposeCategoryCount: object;
-  legalBasisCount: object;
-  storageLocationPersonalData: object;
+  processedPersonalDataCount: Record<string, AuditDataMapping>;
+  processingCategoryPersonalData: Record<string, Record<string, AuditDataMapping>>;
+  purposeCategoryCount: Record<string, number>;
+  legalBasisCount: Record<string, number>;
+  storageLocationPersonalData: Record<string, Record<string, AuditDataMapping>>;
 }
 
 export interface EventLog {
   created: Date;
   accountId: string;
-  legalBasis: ProcessingBasisLegalBasis;
+  legalBasis: ProcessingBasisLegalBasisEnum;
   message: string;
   type: EventType;
 }

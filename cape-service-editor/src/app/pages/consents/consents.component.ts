@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ConsentInfoLinkRenderComponent } from './consentInfoRender.component';
 import { ConsentsService } from './consents.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxConfigureService } from 'ngx-configure';
@@ -10,19 +9,20 @@ import { LoginService } from '../../auth/login/login.service';
 import { QuerySortEnum } from '../../model/querySortEnum';
 import { ConsentRecordSigned } from '../../model/consents/consentRecordSigned';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AppConfig } from '../../model/appConfig';
 
 @Component({
   selector: 'consents-smart-table',
   templateUrl: './consents.component.html',
   styleUrls: ['./consents.component.scss'],
 })
-export class ConsentsComponent {
-  private serviceLabel: string = 'Service';
-  private sourceLabel: string = 'Source';
-  private surrogateLabel: string = 'User Id';
-  private purposeLabel: string = 'Purpose';
-  private issuedLabel: string = 'Issued';
-  private statusLabel: string = 'Status';
+export class ConsentsComponent implements OnInit {
+  private serviceLabel = 'Service';
+  private sourceLabel = 'Source';
+  private surrogateLabel = 'User Id';
+  private purposeLabel = 'Purpose';
+  private issuedLabel = 'Issued';
+  private statusLabel = 'Status';
 
   public settings: unknown;
   private locale: string;
@@ -43,10 +43,12 @@ export class ConsentsComponent {
     this.settings = this.loadTableSettings();
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     try {
-      this.locale = this.configService.config.i18n.locale; // TODO change with user language preferences
-      this.source.load((await this.consentsService.getConsents(QuerySortEnum.ASC)).filter((consent) => consent.payload.common_part.role == 'Sink'));
+      this.locale = (this.configService.config as AppConfig).i18n.locale; // TODO change with user language preferences
+      void this.source.load(
+        (await this.consentsService.getConsents(QuerySortEnum.ASC)).filter((consent) => consent.payload.role_specific_part.role == 'Sink')
+      );
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error?.error?.statusCode === '401') {
@@ -55,13 +57,13 @@ export class ConsentsComponent {
     }
   }
 
-  loadTableSettings() {
-    this.serviceLabel = this.translate.instant('general.services.service');
-    this.sourceLabel = this.translate.instant('general.consents.dataprovider');
-    this.surrogateLabel = this.translate.instant('general.consents.surrogateid');
-    this.purposeLabel = this.translate.instant('general.consents.purpose');
-    this.issuedLabel = this.translate.instant('general.consents.issued');
-    this.statusLabel = this.translate.instant('general.consents.status');
+  loadTableSettings(): Record<string, unknown> {
+    this.serviceLabel = this.translate.instant('general.services.service') as string;
+    this.sourceLabel = this.translate.instant('general.consents.dataprovider') as string;
+    this.surrogateLabel = this.translate.instant('general.consents.surrogateid') as string;
+    this.purposeLabel = this.translate.instant('general.consents.purpose') as string;
+    this.issuedLabel = this.translate.instant('general.consents.issued') as string;
+    this.statusLabel = this.translate.instant('general.consents.status') as string;
 
     return {
       mode: 'external',
@@ -129,9 +131,9 @@ export class ConsentsComponent {
    ***************************/
 
   async onFilterSubmit(): Promise<void> {
-    this.source.load(
+    await this.source.load(
       (await this.consentsService.getConsentsByUserIdAndQuery(this.filtersForm.get('user').value, QuerySortEnum.ASC)).filter(
-        (consent) => consent.payload.common_part.role == 'Sink'
+        (consent) => consent.payload.role_specific_part.role == 'Sink'
       )
     );
   }

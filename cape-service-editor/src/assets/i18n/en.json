@@ -250,7 +250,11 @@
       "update_success": "Service {{name}} successfully updated!",
       "download": "Download",
       "confirm_delete": "Service {{name}} will be deleted, proceed?",
-      "delete_success": "Service {{name}} successfully deleted!"
+      "delete_success": "Service {{name}} successfully deleted!",
+      "confirm_overwrite": "Service {{name}} is already existing, do you want to overwrite it?",
+      "overwrite": "OVERWRITE",
+      "validationErrors": "There are validation errors in the Service description.",
+      "path": "Path"
     },
     "connectors": {
       "connector": "Connector",

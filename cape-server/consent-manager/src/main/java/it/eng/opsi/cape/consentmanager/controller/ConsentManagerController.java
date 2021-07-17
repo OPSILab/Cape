@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -105,7 +106,6 @@ import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusNotValidException;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
-import it.eng.opsi.cape.serviceregistry.data.IsDescribedAt;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
@@ -433,7 +433,7 @@ public class ConsentManagerController implements IConsentManagerController {
 			throws DataMappingNotFoundException {
 
 		List<Dataset> resourceSetDatasets;
-		List<String> requiredSinkDatasetIds;
+		Set<String> requiredSinkDatasetIds;
 		String matchingPurposeName;
 
 		try {
@@ -448,8 +448,8 @@ public class ConsentManagerController implements IConsentManagerController {
 					+ service.getServiceId());
 		}
 
-		Map<String, IsDescribedAt> sinkDatasetMap = service.getIsDescribedAt().stream()
-				.collect(Collectors.toMap(IsDescribedAt::getDatasetId, Function.identity()));
+		Map<String, it.eng.opsi.cape.serviceregistry.data.Dataset> sinkDatasetMap = service.getIsDescribedAt().stream()
+				.collect(Collectors.toMap(it.eng.opsi.cape.serviceregistry.data.Dataset::getDatasetId, Function.identity()));
 
 		resourceSetDatasets = new ArrayList<Dataset>();
 		requiredSinkDatasetIds.forEach(
@@ -464,7 +464,7 @@ public class ConsentManagerController implements IConsentManagerController {
 			ServiceEntry source) throws DataMappingNotFoundException, DatasetIdNotFoundException {
 
 		List<DataMapping> matchingDataMapping = new ArrayList<DataMapping>();
-		List<String> requiredSinkDatasetIds = null;
+		Set<String> requiredSinkDatasetIds = null;
 		String matchingPurposeName;
 		/* Get the datasets required by the input Purpose Id */
 		try {
@@ -478,11 +478,11 @@ public class ConsentManagerController implements IConsentManagerController {
 					+ " was not found in the processing bases description of the sink with ID: " + sink.getServiceId());
 		}
 
-		Map<String, IsDescribedAt> sinkDatasetMap = sink.getIsDescribedAt().stream()
-				.collect(Collectors.toMap(IsDescribedAt::getDatasetId, Function.identity()));
+		Map<String, it.eng.opsi.cape.serviceregistry.data.Dataset> sinkDatasetMap = sink.getIsDescribedAt().stream()
+				.collect(Collectors.toMap(it.eng.opsi.cape.serviceregistry.data.Dataset::getDatasetId, Function.identity()));
 
 		/* Get the sourceDataset according to the input sourceDatasetId */
-		IsDescribedAt sourceDataset = null;
+		it.eng.opsi.cape.serviceregistry.data.Dataset sourceDataset = null;
 		try {
 			sourceDataset = source.getIsDescribedAt().stream().filter(d -> d.getDatasetId().equals(sourceDatasetId))
 					.findFirst().get();
@@ -501,7 +501,7 @@ public class ConsentManagerController implements IConsentManagerController {
 		 */
 
 		for (String sinkDatasetId : requiredSinkDatasetIds) {
-			IsDescribedAt sinkDataset = sinkDatasetMap.get(sinkDatasetId);
+			it.eng.opsi.cape.serviceregistry.data.Dataset sinkDataset = sinkDatasetMap.get(sinkDatasetId);
 
 			if (sinkDataset == null)
 				throw new DatasetIdNotFoundException("The Sink Dataset Id found in the purpose with id: " + purposeId

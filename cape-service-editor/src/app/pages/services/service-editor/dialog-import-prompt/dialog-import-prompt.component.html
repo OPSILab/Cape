@@ -1,21 +1,23 @@
 <nb-card>
   <nb-card-header class="d-flex align-content-center justify-content-between">
-    <h5 class=""> {{'general.editor.import'|translate}}</h5>
-    <button nbButton appearance="outline" shape="semi-round" size="tiny" status="info" (click)="cancel();">
+    <h5 class="">{{ 'general.editor.import' | translate }}</h5>
+    <button nbButton appearance="outline" shape="semi-round" size="tiny" status="info" (click)="cancel()">
       <i class="material-icons">close</i>
     </button>
   </nb-card-header>
   <nb-card-body class="m-2 p-4">
-    <div class="row justify-content-center">{{'general.editor.select_file'|translate}}</div>
-    <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-    <div class="row justify-content-center mt-3 pt-2">
-      <button nbButton class="mr-2" size="medium" status="danger"
-        (click)="fileInput.click()">{{'general.editor.browse'|translate}}</button>
-      <button nbButton [disabled]="selectedFile === undefined" class="ml-2" size="medium" status="success"
-        (click)="onUpload()">{{'general.editor.upload'|translate}}</button>
+    <div class="row justify-content-center p-3">{{ 'general.editor.select_file' | translate }}</div>
+    <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput />
+    <div class="row justify-content-center mt-3 p-1">
+      <button nbButton class="mr-2" size="medium" status="danger" (click)="fileInput.click()">{{ 'general.editor.browse' | translate }}</button>
+      <button nbButton [disabled]="selectedFile === undefined" class="ml-2" size="medium" status="success" (click)="onUpload()">
+        {{ 'general.editor.upload' | translate }}
+      </button>
     </div>
   </nb-card-body>
-  <nb-card-footer *ngIf='selectedFile'>
-    <p *ngIf='selectedFile'><b>{{'general.editor.selected'|translate}}:&nbsp;</b> <i> {{selectedFile.name}}</i></p>
+  <nb-card-footer *ngIf="selectedFile">
+    <p *ngIf="selectedFile">
+      <b>{{ 'general.editor.selected' | translate }}:&nbsp;</b> <i> {{ selectedFile.name }}</i>
+    </p>
   </nb-card-footer>
 </nb-card>

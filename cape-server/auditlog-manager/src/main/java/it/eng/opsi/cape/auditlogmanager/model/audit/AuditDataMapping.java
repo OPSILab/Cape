@@ -31,7 +31,7 @@ public class AuditDataMapping extends DataMapping {
 	@NotNull(message = "count is mandatory")
 	private Integer count;
 
-	public AuditDataMapping(String property, String conceptId, String name, String type, Boolean required) {
+	public AuditDataMapping(String property, String conceptId, String name, DataMapping.Type type, Boolean required) {
 
 		super(property, conceptId, name, type, required);
 	}

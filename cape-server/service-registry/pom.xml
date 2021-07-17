@@ -183,6 +183,10 @@
 					<includeAdditionalProperties>false</includeAdditionalProperties>
 					<includeConstructors>true</includeConstructors>
 					<useTitleAsClassname>true</useTitleAsClassname>
+					<removeOldOutput>true</removeOldOutput>
+					<useCommonsLang3>true</useCommonsLang3>
+					<dateTimeType>java.time.ZonedDateTime</dateTimeType>
+					<includeJsr303Annotations>true</includeJsr303Annotations>
 				</configuration>
 				<executions>
 					<execution>

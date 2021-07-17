@@ -1,6 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
-import { IsDescribedAt } from '../../../model/service-linking/isDescribedAt';
+import { Dataset } from '../../../model/service-linking/dataset';
 import { TranslateService } from '@ngx-translate/core';
 import { AvailableServiceRow } from './availableServices.component';
 
@@ -32,7 +32,7 @@ export class ServiceInfoRenderComponent {
     });
   }
 
-  mapDatasetsConcept(datasets: Array<IsDescribedAt>): Map<string, string[]> {
+  mapDatasetsConcept(datasets: Array<Dataset>): Map<string, string[]> {
     return datasets.reduce(
       (map, dataset) =>
         map.set(

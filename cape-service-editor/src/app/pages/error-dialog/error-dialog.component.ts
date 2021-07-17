@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Location } from '@angular/common';
 import { LoginService } from '../../auth/login/login.service';
@@ -13,31 +13,55 @@ import { LoginService } from '../../auth/login/login.service';
         </button>
       </nb-card-header>
       <nb-card-body class="m-3">
-        <div class="row p-1">{{ error.message }}</div>
-        <div *ngIf="error.error" class="row justify-content-center p-1">{{ error.error.message }}</div>
-        <div class="row p-1 mt-1 justify-content-center">
-          <strong>Status: {{ error.status }}</strong>
-        </div>
+        <ng-container *ngIf="error.error && error.error !== 'EDITOR_VALIDATION_ERROR'; then genericError; else validationError"> </ng-container>
+
+        <ng-template #genericError>
+          <div class="row p-1">{{ error.message }}</div>
+          <div class="row justify-content-center p-1">{{ error.error.message }}</div>
+          <div class="row p-1 mt-1 justify-content-center">
+            <strong>Status: {{ error.status }}</strong>
+          </div>
+        </ng-template>
+
+        <ng-template #validationError>
+          <div class="row p-1 justify-content-center">{{ 'general.editor.validationErrors' | translate }}</div>
+          <div class="row p-3">
+            <table class="table table-striped">
+              <thead class="thead-light text-center">
+                <tr>
+                  <th scope="col">{{ 'general.error' | translate }}</th>
+                  <th scope="col">{{ 'general.editor.path' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr *ngFor="let valError of error.validationErrors" class="">
+                  <td>{{ valError.message }}</td>
+                  <td>
+                    {{ valError.path }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-template>
       </nb-card-body>
     </nb-card>
   `,
 })
-export class ErrorDialogComponent implements OnInit {
+export class ErrorDialogComponent {
   public error;
 
   constructor(public ref: NbDialogRef<unknown>, private _location: Location, private loginService: LoginService) {}
 
-  ngOnInit() {}
-
-  closeModal(error) {
+  closeModal(error: { [key: string]: { cause?: string } }): void {
     if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
-      this.loginService.logout();
+      void this.loginService.logout().catch((error) => console.log(error));
     // else
     //   this.backClicked();
     this.ref.close();
   }
 
-  backClicked() {
+  backClicked(): void {
     this._location.back();
   }
 }

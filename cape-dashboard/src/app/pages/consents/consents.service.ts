@@ -9,7 +9,7 @@ import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPaylo
 import { UsageRules } from '../../model/consents/usageRules';
 import { ChangeConsentStatusRequest } from '../../model/consents/changeConsentStatusRequest';
 import { DataMapping } from '../../model/dataMapping';
-import { ProcessingBasis, ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
+import { ProcessingBasis, ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from '../../model/processingBasis';
 import { AvailableServicesService } from '../services/availableServices/availableServices.service';
 import { ServiceEntry } from '../../model/service-linking/serviceEntry';
 import { ChangeConsentStatusRequestFrom } from '../../model/consents/changeSlrStatusRequestFrom';
@@ -43,8 +43,8 @@ export class ConsentsService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<ConsentRecordSigned[]> {
     let queryParams = new HttpParams();
 
@@ -86,8 +86,8 @@ export class ConsentsService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<ConsentRecordSignedPair[]> {
     let queryParams = new HttpParams();
 

@@ -40,14 +40,14 @@ export class AvailableServicesService {
   }
 
   deregisterService(serviceId: string): Promise<ServiceEntry> {
-    return this.http.delete(`${this.sdkUrl}/api/v2/services/${serviceId}`).toPromise();
+    return this.http.delete<ServiceEntry>(`${this.sdkUrl}/api/v2/services/${serviceId}`).toPromise();
   }
 
-  updateService(service: Object, serviceId: string): Promise<ServiceEntry> {
-    return this.http.put(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`, service).toPromise();
+  updateService(service: ServiceEntry, serviceId: string): Promise<ServiceEntry> {
+    return this.http.put<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`, service).toPromise();
   }
 
   deleteService(serviceId: string): Promise<ServiceEntry> {
-    return this.http.delete(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`).toPromise();
+    return this.http.delete<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services/${serviceId}`).toPromise();
   }
 }

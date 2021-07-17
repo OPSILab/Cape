@@ -15,7 +15,7 @@ import { UserClaims } from '../../../auth/model/oidc';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
-  userPictureOnly: boolean = false;
+  userPictureOnly = false;
   user: UserClaims;
 
   themes = [
@@ -52,8 +52,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
-    this.loggedUserMenu.push({ title: this.translateService.instant('login.logout_button'), link: '' });
+  ngOnInit(): void {
+    this.loggedUserMenu.push({ title: this.translateService.instant('login.logout_button') as string, link: '' });
     this.currentTheme = this.themeService.currentTheme;
     this.userService.onUserChange().subscribe((user: UserClaims) => (this.user = user));
 
@@ -72,18 +72,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.themeService
       .onThemeChange()
       .pipe(
-        map(({ name }) => name),
+        map(({ name }) => name as string),
         takeUntil(this.destroy$)
       )
       .subscribe((themeName) => (this.currentTheme = themeName));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  changeTheme(themeName: string) {
+  changeTheme(themeName: string): void {
     this.themeService.changeTheme(themeName);
   }
 
@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  navigateHome() {
+  navigateHome(): boolean {
     this.menuService.navigateHome();
     return false;
   }

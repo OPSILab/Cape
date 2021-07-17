@@ -10,21 +10,21 @@
  * Do not edit the class manually.
  */
 import { Policy } from './policy';
-import { ShareWith } from '../shareWith';
 import { Storage } from '../storage';
 import { Obligation } from '../obligation';
-import { ProcessingBasisLegalBasis, ProcessingBasisProcessingCategories, ProcessingBasisRecipients } from '../processingBasis';
+import { ProcessingBasisLegalBasisEnum, ProcessingBasisProcessingCategoriesEnum, ProcessingBasisRecipientsEnum } from '../processingBasis';
+import { Organization } from '../service-linking/organization';
 
 export interface UsageRules {
   purposeId: string;
   purposeCategory: string;
-  legalBasis: ProcessingBasisLegalBasis;
+  legalBasis: ProcessingBasisLegalBasisEnum;
   purposeName: string;
-  processingCategories: Array<ProcessingBasisProcessingCategories>;
+  processingCategories: Array<ProcessingBasisProcessingCategoriesEnum>;
   policy: Policy;
   storage?: Storage;
-  recipients?: Array<ProcessingBasisRecipients>;
-  shareWith?: Array<ShareWith>;
+  recipients?: Array<ProcessingBasisRecipientsEnum>;
+  shareWith?: Array<Organization>;
   obligations?: Array<Obligation>;
   collectionMethod?: string;
   termination?: string;

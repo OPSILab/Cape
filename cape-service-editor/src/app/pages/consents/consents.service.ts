@@ -1,31 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { NgxConfigureService } from 'ngx-configure';
 import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPayload';
-import { ProcessingBasisProcessingCategories, ProcessingBasisPurposeCategory } from '../../model/processingBasis';
+import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from '../../model/processingBasis';
 import { QuerySortEnum } from '../../model/querySortEnum';
 import { ConsentRecordSigned } from '../../model/consents/consentRecordSigned';
 import { AppConfig } from '../../model/appConfig';
 
 @Injectable({ providedIn: 'root' })
 export class ConsentsService {
-  service: any;
   sdkUrl: string;
   checkConsentAtOperator: boolean;
 
   public config: AppConfig;
 
-  token: string = `Bearer ${localStorage.getItem('tokenData')}`;
-  accountId: string = localStorage.getItem('accountData');
-  userId: string;
-
   constructor(configService: NgxConfigureService, private http: HttpClient) {
-    this.config = configService.config;
+    this.config = configService.config as AppConfig;
     this.sdkUrl = this.config.system.sdkUrl;
     this.checkConsentAtOperator = this.config.system.checkConsentAtOperator;
-
-    if ((this.userId = localStorage.getItem('userData'))) JSON.parse(this.userId).userId;
   }
 
   getConsents(
@@ -37,9 +30,9 @@ export class ConsentsService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
-  ): Promise<any> {
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
+  ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));
     params = iatSort ? params.set('iatSort', iatSort) : params;
@@ -58,7 +51,7 @@ export class ConsentsService {
       });
 
     return this.http
-      .get(this.sdkUrl + '/api/v2/consents', {
+      .get<ConsentRecordSigned[]>(this.sdkUrl + '/api/v2/consents', {
         params: params,
       })
       .toPromise();
@@ -73,8 +66,8 @@ export class ConsentsService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));
@@ -107,8 +100,8 @@ export class ConsentsService {
     status?: ConsentStatusEnum,
     purposeId?: string,
     purposeName?: string,
-    purposeCategory?: ProcessingBasisPurposeCategory,
-    processingCategories?: ProcessingBasisProcessingCategories[]
+    purposeCategory?: ProcessingBasisPurposeCategoryEnum,
+    processingCategories?: ProcessingBasisProcessingCategoriesEnum[]
   ): Promise<ConsentRecordSigned[]> {
     let params = new HttpParams();
     params = params.set('checkConsentAtOperator', String(this.checkConsentAtOperator));

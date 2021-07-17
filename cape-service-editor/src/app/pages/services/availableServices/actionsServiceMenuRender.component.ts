@@ -1,9 +1,8 @@
-import { Component, Input, Output, OnInit, TemplateRef, ChangeDetectorRef, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, TemplateRef, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { NgxConfigureService } from 'ngx-configure';
-import { map, filter, takeUntil } from 'rxjs/operators';
-import { combineLatest, Observable, Subscription, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {
   NbMenuService,
   NbToastrService,
@@ -95,14 +94,14 @@ import { LoginService } from '../../../auth/login/login.service';
 })
 export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
   @Input() value: AvailableServiceRow;
-  @Output() updateResult = new EventEmitter<any>();
+  @Output() updateResult = new EventEmitter<unknown>();
 
   private unsubscribe: Subject<void> = new Subject();
   actions: NbMenuItem[];
 
-  @ViewChild('confirmDeleteDialog', { static: false }) confirmDeleteDialogTemplate: TemplateRef<any>;
-  @ViewChild('confirmRegisterDialog', { static: false }) confirmRegisterDialog: TemplateRef<any>;
-  @ViewChild('confirmDeRegisterDialog', { static: false }) confirmDeRegisterDialog: TemplateRef<any>;
+  @ViewChild('confirmDeleteDialog', { static: false }) confirmDeleteDialogTemplate: TemplateRef<unknown>;
+  @ViewChild('confirmRegisterDialog', { static: false }) confirmRegisterDialog: TemplateRef<unknown>;
+  @ViewChild('confirmDeRegisterDialog', { static: false }) confirmDeRegisterDialog: TemplateRef<unknown>;
 
   constructor(
     private availableServicesService: AvailableServicesService,
@@ -120,7 +119,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
     return this.value.serviceInstance.cert?.x5c ? true : false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.actions = this.translatedActionLabels();
     this.menuService
       .onItemClick()
@@ -186,14 +185,14 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
   }
 
   onEdit(serviceId: string): void {
-    this.router.navigate(['/pages/services/service-editor', { serviceId: serviceId }]);
+    void this.router.navigate(['/pages/services/service-editor', { serviceId: serviceId }]);
   }
 
   viewConsents(serviceId: string): void {
-    this.router.navigate(['/pages/consents/register', { serviceId: serviceId }]);
+    void this.router.navigate(['/pages/consents/register', { serviceId: serviceId }]);
   }
 
-  openRegisterDialog() {
+  openRegisterDialog(): void {
     this.dialogService
       .open(this.confirmRegisterDialog, {
         hasScroll: false,
@@ -202,11 +201,11 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
         },
       })
       .onClose.subscribe((confirm) => {
-        if (confirm) this.onRegisterService();
+        if (confirm) void this.onRegisterService();
       });
   }
 
-  openDeRegisterDialog() {
+  openDeRegisterDialog(): void {
     this.dialogService
       .open(this.confirmDeRegisterDialog, {
         hasScroll: false,
@@ -215,11 +214,11 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
         },
       })
       .onClose.subscribe((confirm) => {
-        if (confirm) this.onDeRegisterService();
+        if (confirm) void this.onDeRegisterService();
       });
   }
 
-  onRegisterService = async () => {
+  onRegisterService = async (): Promise<void> => {
     try {
       this.value = (await this.availableServicesService.registerService(this.value.serviceId)) as AvailableServiceRow;
       this.showToast('primary', this.translate.instant('general.services.service_registered_message', { serviceName: this.value.name }), '');
@@ -233,7 +232,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
     }
   };
 
-  onDeRegisterService = async () => {
+  onDeRegisterService = async (): Promise<void> => {
     try {
       await this.availableServicesService.deregisterService(this.value.serviceId);
 
@@ -249,7 +248,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
     }
   };
 
-  openDeleteFromRegistryDialog() {
+  openDeleteFromRegistryDialog(): void {
     const ref = this.dialogService.open(this.confirmDeleteDialogTemplate, {
       context: {
         serviceName: this.value.name,

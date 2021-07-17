@@ -24,11 +24,11 @@ export interface JWK {
   keyUse?: KeyUse;
   keyOperations?: Array<KeyOperationsEnum>;
   x509CertURL?: string;
-  x509CertChain?: Array<object>;
+  x509CertChain?: Array<Record<string, unknown>>;
   parsedX509CertChain?: Array<JWKParsedX509CertChain>;
-  requiredParams?: { [key: string]: object };
-  x509CertThumbprint?: object;
-  x509CertSHA256Thumbprint?: object;
+  requiredParams?: { [key: string]: Record<string, unknown> };
+  x509CertThumbprint?: Record<string, unknown>;
+  x509CertSHA256Thumbprint?: Record<string, unknown>;
 }
 export enum KeyOperationsEnum {
   Sign = 'sign',

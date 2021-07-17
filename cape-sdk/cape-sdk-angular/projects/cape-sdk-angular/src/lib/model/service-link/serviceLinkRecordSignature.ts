@@ -13,6 +13,6 @@ import { JWSHeader } from './jWSHeader';
 
 export interface ServiceLinkRecordSignature {
   header: JWSHeader;
-  signature: object;
-  _protected: object;
+  signature: Record<string, unknown>;
+  _protected: Record<string, unknown>;
 }

@@ -1,15 +1,8 @@
 {
   "title": "Person",
   "type": "object",
-  "format":"categories",
-  "required": [
-    "name",
-    "age",
-    "favorite_color",
-    "gender",
-    "location",
-    "pets"
-  ],
+  "format": "categories",
+  "required": ["name", "age", "favorite_color", "gender", "location", "pets"],
   "properties": {
     "name": {
       "type": "string",
@@ -31,10 +24,7 @@
     },
     "gender": {
       "type": "string",
-      "enum": [
-        "male",
-        "female"
-      ]
+      "enum": ["male", "female"]
     },
     "location": {
       "type": "object",
@@ -70,13 +60,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "cat",
-              "dog",
-              "bird",
-              "reptile",
-              "other"
-            ],
+            "enum": ["cat", "dog", "bird", "reptile", "other"],
             "default": "dog"
           },
           "name": {

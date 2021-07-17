@@ -14,7 +14,7 @@ import { ConsentStatusRecordSigned } from './consentStatusRecordSigned';
 
 export interface ConsentRecordSigned {
   payload: ConsentRecordPayload;
-  signature: object;
+  signature: Record<string, unknown>;
   consentStatusList?: Array<ConsentStatusRecordSigned>;
-  _protected: object;
+  _protected: Record<string, unknown>;
 }

@@ -6,10 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { AppConfig } from '../../model/appConfig';
-import { mergeMap, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
-import { combineLatest } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,7 +31,7 @@ export class AuthGuard implements CanActivate {
     return this.authService.isAuthenticated().pipe(
       switchMap((authenticated) => {
         if (!authenticated) {
-          this.router.navigate(['/login'], {
+          void this.router.navigate(['/login'], {
             queryParams: {
               ...route.queryParams,
               redirectAfterLogin: routerState.url.split('?')[0],
@@ -42,7 +41,7 @@ export class AuthGuard implements CanActivate {
           return this.accessChecker.isGranted('view', route.url.toString()).pipe(
             tap((isGranted) => {
               if (!isGranted)
-                this.router.navigate(['/pages/dashboard'], {
+                void this.router.navigate(['/pages'], {
                   queryParams: {
                     ...route.queryParams,
                     redirectAfterLogin: routerState.url.split('?')[0],

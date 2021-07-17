@@ -11,7 +11,7 @@
  */
 
 export interface OtherPrimesInfo {
-  primeFactor?: object;
-  factorCRTCoefficient?: object;
-  factorCRTExponent?: object;
+  primeFactor?: Record<string, unknown>;
+  factorCRTCoefficient?: Record<string, unknown>;
+  factorCRTExponent?: Record<string, unknown>;
 }

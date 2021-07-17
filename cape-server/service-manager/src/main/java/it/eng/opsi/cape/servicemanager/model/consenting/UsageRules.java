@@ -22,8 +22,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import it.eng.opsi.cape.serviceregistry.data.Description__2;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import it.eng.opsi.cape.servicemanager.utils.ProcessingCategoriesOrderedSetConverter;
+import it.eng.opsi.cape.servicemanager.utils.RecipientsOrderedSetConverter;
 import it.eng.opsi.cape.serviceregistry.data.Obligation;
+import it.eng.opsi.cape.serviceregistry.data.Organization;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.PurposeCategory;
 import lombok.AllArgsConstructor;
@@ -31,8 +35,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingCategory;
 import it.eng.opsi.cape.serviceregistry.data.Recipient;
-import it.eng.opsi.cape.serviceregistry.data.ShareWith;
 import it.eng.opsi.cape.serviceregistry.data.Storage;
+import it.eng.opsi.cape.serviceregistry.data.TextualDescription__2;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,7 +50,7 @@ public class UsageRules {
 	private PurposeCategory purposeCategory;
 
 	@NotNull(message = "purposeDescription field is mandatory")
-	private List<Description__2> purposeDescription;
+	private List<TextualDescription__2> purposeDescription;
 
 	@NotNull(message = "legalBasis field is mandatory")
 	private LegalBasis legalBasis;
@@ -55,6 +59,7 @@ public class UsageRules {
 	private String purposeName;
 
 	@NotNull(message = "processingCategories field is mandatory")
+	@JsonSerialize(converter = ProcessingCategoriesOrderedSetConverter.class)
 	private List<ProcessingCategory> processingCategories;
 
 	@Valid
@@ -63,9 +68,10 @@ public class UsageRules {
 
 	private Storage storage;
 
+	@JsonSerialize(converter = RecipientsOrderedSetConverter.class)
 	private List<Recipient> recipients;
 
-	private List<ShareWith> shareWith;
+	private List<Organization> shareWith;
 
 	private List<Obligation> obligations;
 

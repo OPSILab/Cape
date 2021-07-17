@@ -24,7 +24,7 @@ export interface JWKParsedX509CertChain {
   tbscertificate?: Array<string>;
   signature?: Array<string>;
   basicConstraints?: number;
-  issuerAlternativeNames?: Array<Array<object>>;
+  issuerAlternativeNames?: Array<Array<Record<string, unknown>>>;
   issuerUniqueID?: Array<boolean>;
   keyUsage?: Array<boolean>;
   notAfter?: string;
@@ -32,7 +32,7 @@ export interface JWKParsedX509CertChain {
   sigAlgName?: string;
   sigAlgOID?: string;
   sigAlgParams?: Array<string>;
-  subjectAlternativeNames?: Array<Array<object>>;
+  subjectAlternativeNames?: Array<Array<Record<string, unknown>>>;
   subjectDN?: JWKIssuerDN;
   subjectUniqueID?: Array<boolean>;
   criticalExtensionOIDs?: Array<string>;

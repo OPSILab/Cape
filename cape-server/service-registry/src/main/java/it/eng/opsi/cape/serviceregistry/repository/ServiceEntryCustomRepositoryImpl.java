@@ -32,7 +32,7 @@ import it.eng.opsi.cape.exception.DatasetIdNotFoundException;
 import it.eng.opsi.cape.exception.PurposeIdNotFoundException;
 import it.eng.opsi.cape.exception.ServiceNotFoundException;
 import it.eng.opsi.cape.serviceregistry.data.DataMapping;
-import it.eng.opsi.cape.serviceregistry.data.IsDescribedAt;
+import it.eng.opsi.cape.serviceregistry.data.Dataset;
 import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
 import it.eng.opsi.cape.serviceregistry.model.ServiceReport;
@@ -43,6 +43,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepository {
 
@@ -82,11 +83,11 @@ public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepos
 				.orElseThrow(() -> new PurposeIdNotFoundException(
 						"The purpose with id: " + purposeId + " was not found for the Service Id: " + serviceId));
 
-		List<String> requiredDatasets = matchingPurpose.getRequiredDatasets();
+		Set<String> requiredDatasets = matchingPurpose.getRequiredDatasets();
 
 		for (String requiredDatasetId : requiredDatasets) {
 
-			IsDescribedAt matchingDataset = service.getIsDescribedAt().stream()
+			Dataset matchingDataset = service.getIsDescribedAt().stream()
 					.filter(d -> d.getDatasetId().equals(requiredDatasetId)).findFirst()
 					.orElseThrow(() -> new DatasetIdNotFoundException("The required dataset with id: "
 							+ requiredDatasetId + " was not found in the Service Entry with id: " + serviceId));
@@ -105,7 +106,7 @@ public class ServiceEntryCustomRepositoryImpl implements ServiceEntryCustomRepos
 		if (service == null)
 			throw new ServiceNotFoundException("The service Entry with id: " + serviceId + " was not found");
 
-		List<IsDescribedAt> datasets = service.getIsDescribedAt();
+		List<Dataset> datasets = service.getIsDescribedAt();
 
 		return datasets.stream().filter(p -> p.getDatasetId().equals(datasetId)).findFirst()
 				.orElseThrow(() -> new DatasetIdNotFoundException(

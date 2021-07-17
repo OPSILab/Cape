@@ -1,28 +1,13 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule, NbCardModule } from '@nebular/theme';
+import { NbMenuModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
-import { PagesMenuTranslator } from './pages-menu-translator';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 
-
-
 @NgModule({
-  imports: [
-    PagesRoutingModule,
-    ThemeModule,
-    NbMenuModule,
-    DashboardModule,
-    
-  ],
-  declarations: [
-    PagesComponent,
-  ],
-  providers: [
-    PagesMenuTranslator,
-  ]
+  imports: [PagesRoutingModule, ThemeModule, NbMenuModule],
+  declarations: [PagesComponent],
+  providers: [],
 })
-export class PagesModule {
-}
+export class PagesModule {}

@@ -1,10 +1,12 @@
 {
   "type": "string",
   "title": "Concept",
+  "description": "Concept identifier referred to a specific personal data (i.e HL7, FOAF, VCARD, etc..).",
   "format": "select2",
   "options": {
     "grid_columns": 12
-    },
+  },
+  "minLength": 1,
   "enumSource": [
     {
       "source": [
@@ -12,7 +14,7 @@
           "title": "",
           "value": ""
         },
-	      {
+        {
           "title": "Blood Glucose",
           "value": "blood_glucose"
         },
@@ -26,7 +28,7 @@
         },
         {
           "title": "Age",
-          "value": "personal_details_age" 
+          "value": "personal_details_age"
         },
         {
           "title": "Username/Email",

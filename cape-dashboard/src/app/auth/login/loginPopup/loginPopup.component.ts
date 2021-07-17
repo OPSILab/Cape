@@ -2,7 +2,7 @@ import { Component, ViewChild, TemplateRef, OnDestroy, AfterViewInit } from '@an
 import { NgxConfigureService } from 'ngx-configure';
 
 import { LoginService } from '../login.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Params, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { AppConfig } from '../../../model/appConfig';
 import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { Subject } from 'rxjs';

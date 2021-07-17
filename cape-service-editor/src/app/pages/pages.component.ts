@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NbAccessChecker } from '@nebular/security';
 import { NbMenuItem } from '@nebular/theme';
-import { take } from 'rxjs/operators';
 
-import { PagesMenuTranslator } from './pages-menu-translator';
+import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-pages',
@@ -15,14 +17,15 @@ import { PagesMenuTranslator } from './pages-menu-translator';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent implements OnInit, OnDestroy {
   public menu: NbMenuItem[];
   private hideServicesMenu: boolean;
   private hideConsentsMenu: boolean;
+  private unsubscribe: Subject<void> = new Subject();
 
-  constructor(private translator: PagesMenuTranslator, private accessChecker: NbAccessChecker) {}
+  constructor(private translateService: TranslateService, private cdr: ChangeDetectorRef, private accessChecker: NbAccessChecker) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.accessChecker
       .isGranted('view', 'services')
       .pipe(take(1))
@@ -75,6 +78,28 @@ export class PagesComponent implements OnInit {
     ];
 
     // if put on constructor it will doing twice when refresh a page.
-    this.menu = this.translator.translate(MENU_ITEMS);
+    this.menu = this.translate(MENU_ITEMS);
+    this.translateService.onLangChange.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
+      this.menu = this.translate(MENU_ITEMS);
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy');
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  translate(menuItems: NbMenuItem[]): NbMenuItem[] {
+    return menuItems.map((item) => {
+      return {
+        ...item,
+        title: this.translateService.instant(item.title) as string,
+        // children: item.children.map((child) => {
+        //   return { ...child, title: this.translateService.instant(child.title) as string };
+        // }),
+      } as NbMenuItem;
+    });
   }
 }

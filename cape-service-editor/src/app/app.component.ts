@@ -3,7 +3,7 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NbMenuService } from '@nebular/theme';
 import { NbIconLibraries } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
     /******
      * Set either currentLocale on Local storage or locale in App config as current Translate language
      */
-    this.translateService.use(localStorage.getItem('currentLocale') || this.configService.config.i18n.locale);
+    this.translateService.use(localStorage.getItem('currentLocale') || (this.configService.config as AppConfig).i18n.locale);
 
     /******
      * Configure Oidc Auth Strategy
@@ -93,7 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.menuService
       .onItemClick()
       .pipe(takeUntil(this.unsubscribe))
@@ -102,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     console.log('ngOnDestroy');
     this.unsubscribe.next();
     this.unsubscribe.complete();
