@@ -93,6 +93,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "cape-playground:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "cape-playground:build:production"
+            }
           }
         },
         "extract-i18n": {

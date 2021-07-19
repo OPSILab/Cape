@@ -4,7 +4,7 @@ import { Ge1Component } from './ge1.component';
 import { Ge1RoutingModule } from './ge1-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { NbCardModule, NbRadioModule, NbButtonModule } from '@nebular/theme';
-import { CapeSdkAngularModule } from '../../../cape-sdk-angular/cape-sdk-angular.module';
+import { CapeSdkAngularModule } from 'cape-sdk-angular';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({

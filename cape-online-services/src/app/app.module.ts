@@ -40,7 +40,7 @@ import { AuthGuard } from './auth/services/auth.guard';
 export function HttpLoaderFactory(http: HttpClient) {
   return new MultiTranslateHttpLoader(http, [
     { prefix: './assets/i18n/', suffix: '.json' },
-    { prefix: './app/cape-sdk-angular/assets/i18n/', suffix: '.json' },
+    { prefix: './assets/cape/i18n/', suffix: '.json' },
   ]);
 }
 

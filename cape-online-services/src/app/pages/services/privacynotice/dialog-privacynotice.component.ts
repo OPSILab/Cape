@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
-import { RoleEnum } from 'src/app/cape-sdk-angular/model/service-link/serviceEntry';
-import { CapeSdkAngularService } from '../../../cape-sdk-angular/cape-sdk-angular.service';
-import { ConsentFormComponent } from '../../../cape-sdk-angular/consent-form/consent-form.component';
-import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
+import { RoleEnum, CapeSdkAngularService, ConsentFormComponent } from 'cape-sdk-angular';
+import { ErrorDialogService } from 'cape-sdk-angular';
 
 @Component({
   selector: 'ngx-dialog-privacynotice',

@@ -1,6 +1,6 @@
 {
   "name": "cape-sdk-angular",
-  "version": "1.0.24",
+  "version": "1.0.29",
   "peerDependencies": {
     "@angular/common": "^11.2.12",
     "@angular/core": "^11.2.12",

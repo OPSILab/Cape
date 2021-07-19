@@ -2,20 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { NgxConfigureService } from 'ngx-configure';
 import { NbDialogService } from '@nebular/theme';
-import { CapeSdkAngularService, UserSurrogateIdLink } from '../../cape-sdk-angular/cape-sdk-angular.service';
 import { TranslateService } from '@ngx-translate/core';
-import { SlStatusEnum } from '../../cape-sdk-angular/model/service-link/serviceLinkStatusRecordPayload';
-import { ConsentStatusEnum } from '../../cape-sdk-angular/model/consent/consentStatusRecordPayload';
 
 import { DialogPersonalAttributesComponent } from './personalattributes-dialogue/dialog-personalattributes.component';
 
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
-import { ConsentRecordSigned } from 'src/app/cape-sdk-angular/model/consent/consentRecordSigned';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
-import { LoginService } from 'src/app/auth/login/login.service';
+import { CapeSdkAngularService, RoleEnum, ConsentRecordSigned, SlStatusEnum, ConsentStatusEnum } from 'cape-sdk-angular';
 import { NbAuthService } from '@nebular/auth';
 import { AppConfig } from 'src/app/model/appConfig';
-import { RoleEnum } from 'src/app/cape-sdk-angular/model/service-link/serviceEntry';
+import { ErrorDialogService } from '../error-dialog/error-dialog.service';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',

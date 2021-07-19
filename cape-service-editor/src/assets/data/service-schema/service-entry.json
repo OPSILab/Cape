@@ -57,7 +57,7 @@
       "title": "Service ID",
       "default": "",
       "description": "Unique ID for the service.",
-      "minLength": 5
+      "minLength": 3
     },
     "name": {
       "type": "string",

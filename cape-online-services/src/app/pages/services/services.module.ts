@@ -4,10 +4,11 @@ import { ServicesComponent } from './services.component';
 import { ServicesRoutingModule } from './services-routing.module';
 import { NbCardModule, NbRadioModule, NbButtonModule, NbInputModule, NbCheckboxModule, NbAccordionModule, NbIconModule } from '@nebular/theme';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { CapeSdkAngularModule } from '../../cape-sdk-angular/cape-sdk-angular.module';
+import { CapeSdkAngularModule } from 'cape-sdk-angular';
 import { DialogPersonalAttributesComponent } from './personalattributes-dialogue/dialog-personalattributes.component';
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ErrorDialogModule } from '../error-dialog/error-dialog.module';
 
 @NgModule({
   imports: [
@@ -18,12 +19,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NbInputModule,
     ServicesRoutingModule,
     TranslateModule.forChild({}),
-    CapeSdkAngularModule,
     NbCheckboxModule,
     NbAccordionModule,
     NbIconModule,
     FormsModule,
     ReactiveFormsModule,
+    CapeSdkAngularModule,
+    ErrorDialogModule,
   ],
   declarations: [ServicesComponent, DialogPersonalAttributesComponent, DialogPrivacyNoticeComponent],
   providers: [],

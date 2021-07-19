@@ -23,7 +23,15 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": ["src/favicon.png", "src/assets", "src/app/cape-sdk-angular/assets"],
+            "assets": [
+              "src/favicon.png",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/cape-sdk-angular/assets",
+                "output": "/assets/cape"
+              }
+            ],
             "styles": [
               "src/index.css",
               "src/styles.scss",
@@ -49,8 +57,9 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": false,
+              "preserveSymlinks": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,

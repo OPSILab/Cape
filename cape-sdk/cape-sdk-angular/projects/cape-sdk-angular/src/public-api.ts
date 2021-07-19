@@ -5,6 +5,10 @@
 export * from './lib/cape-sdk-angular.service';
 export * from './lib/cape-sdk-angular.component';
 export * from './lib/cape-sdk-angular.module';
+export * from './lib/consent-form/consent-form.component';
+export * from './lib/error-dialog/error-dialog.module';
+export * from './lib/error-dialog/error-dialog.service';
+export * from './lib/error-dialog/error-dialog.component';
 
 export * from './lib/model/errorResponse';
 export * from './lib/model/dataController';

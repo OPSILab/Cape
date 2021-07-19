@@ -16,6 +16,7 @@ import { LoginService } from 'src/app/auth/login/login.service';
       <nb-card-body class="m-3">
         <div class="row p-1">{{ error.message }}</div>
         <div *ngIf="error.error" class="row justify-content-center p-1">{{ error.error.message }}</div>
+        <div>{{ error.error.message }}</div>
         <div class="row p-1 mt-1 justify-content-center">
           <strong>Status: {{ error.status }}</strong>
         </div>
