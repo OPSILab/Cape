@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UsageRules } from './UsageRules';
+import { UsageRules } from './usageRules';
 import { ResourceSet } from './resourceSet';
 import { ConsentStatusEnum } from './consentStatusRecordPayload';
 import { ChangeConsentStatusRequestFrom } from './changeSlrStatusRequestFrom';

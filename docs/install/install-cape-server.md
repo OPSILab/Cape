@@ -27,17 +27,17 @@ Two installation modes are available:
 
 Once you have installed Cape Server, you must follow following steps to start using its APIs directly, through Dashboards or through Cape SDK.
 
- - Create Operator Description
+ - Create Data Operator Description
  
 ---
-### Create Operator Description
-In particular, you have to create the **OperatorDescription**, which will describe the installed instance of Cape Server.
+### Create Data Operator Description
+In particular, you have to create the **DataOperatorDescription**, which will describe the installed instance of Cape Server.
 
 **NOTE**. This Operator (intended according to the My Data specification) is not to be confused with the Service Provider's operator that will interact with Cape by the means of Data Controller Dashboard and Cape SDK/APIs.
 
-#### Operator Description model
+#### Data Operator Description model
 
-Following table describes the **Operator Description** model:
+Following table describes the **Data Operator Description** model:
 
 | Property Name                     | Type         | Description                                                 | Allowed values                                                                      |
 |-----------------------------------|--------------|-------------------------------------------------------------|-------------------------------------------------------------------------------------|
@@ -83,7 +83,7 @@ These Urls depends on how Cape Server is installed,
 
 
 
-#### Create Operator Description via API
+#### Create Data Operator Description via API
 
 In order to create the Operator Description on Cape Server, issue a POST with a JSON body like the following one to the `/api/v2/operatorDescriptions` endpoint of Cape Server's Service Manager component (depending on how you have installed Cape Server. E.g. `http://localhost:8082/service-manager/api/v2/operatorDescriptions`).
 

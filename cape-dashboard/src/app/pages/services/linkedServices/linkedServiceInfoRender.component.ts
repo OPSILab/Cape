@@ -3,7 +3,7 @@ import { NbDialogRef, NbDialogService } from '@nebular/theme';
 
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { ServiceEntry } from '../../../model/service-linking/serviceEntry';
-import { Dataset } from '../../../model/service-linking/Dataset';
+import { Dataset } from '../../../model/service-linking/dataset';
 import { TranslateService } from '@ngx-translate/core';
 import { LinkedServiceRow } from './linkedServices.component';
 import { ProcessingBasis } from '../../../model/processingBasis';

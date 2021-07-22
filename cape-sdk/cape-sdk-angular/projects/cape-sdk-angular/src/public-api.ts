@@ -80,4 +80,4 @@ export { Dataset } from './lib/model/consent/dataset';
 export * from './lib/model/consent/policy';
 export * from './lib/model/consent/rSDescription';
 export * from './lib/model/consent/resourceSet';
-export * from './lib/model/consent/UsageRules';
+export * from './lib/model/consent/usageRules';
