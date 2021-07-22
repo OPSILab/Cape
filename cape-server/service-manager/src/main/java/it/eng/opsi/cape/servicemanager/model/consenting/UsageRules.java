@@ -17,6 +17,7 @@
 package it.eng.opsi.cape.servicemanager.model.consenting;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -60,16 +61,15 @@ public class UsageRules {
 
 	@NotNull(message = "processingCategories field is mandatory")
 	@JsonSerialize(converter = ProcessingCategoriesOrderedSetConverter.class)
-	private List<ProcessingCategory> processingCategories;
+	private Set<ProcessingCategory> processingCategories;
 
-	@Valid
 	@NotNull
 	private Policy policy = new Policy();
 
 	private Storage storage;
 
 	@JsonSerialize(converter = RecipientsOrderedSetConverter.class)
-	private List<Recipient> recipients;
+	private Set<Recipient> recipients;
 
 	private List<Organization> shareWith;
 

@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DialogPersonalAttributesComponent } from './personalattributes-dialogue/dialog-personalattributes.component';
 
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
-import { CapeSdkAngularService, RoleEnum, ConsentRecordSigned, SlStatusEnum, ConsentStatusEnum } from 'cape-sdk-angular';
+import { CapeSdkAngularService, RoleEnum, ConsentRecordSigned, SlStatusEnum, ConsentStatusEnum, CapeSdkDialogService, dialogType } from 'cape-sdk-angular';
 import { NbAuthService } from '@nebular/auth';
 import { AppConfig } from 'src/app/model/appConfig';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
@@ -42,6 +42,7 @@ export class ServicesComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private errorDialogService: ErrorDialogService,
+    private capeDialogService: CapeSdkDialogService,
     private dialogService: NbDialogService,
     private authService: NbAuthService
   ) {
@@ -128,15 +129,23 @@ export class ServicesComponent implements OnInit {
         );
 
         // Auto activate existing SLR but in Removed status
-        if (serviceLinkRecord.serviceLinkStatuses.pop().payload.sl_status == SlStatusEnum.Removed)
-          await this.capeService.enableServiceLink(
-            this.sdkUrl,
-            serviceLinkRecord.payload.link_id,
-            serviceLinkRecord.payload.surrogate_id,
-            serviceId,
-            serviceName
+        if (serviceLinkRecord.serviceLinkStatuses.pop().payload.sl_status == SlStatusEnum.Removed) {
+          // await this.capeService.enableServiceLink(
+          //   this.sdkUrl,
+          //   serviceLinkRecord.payload.link_id,
+          //   serviceLinkRecord.payload.surrogate_id,
+          //   serviceId,
+          //   serviceName
+          // );
+          await this.capeDialogService.openCapeDialog(
+            dialogType.enableServiceLink,
+            this.capeService.enableServiceLink,
+            [this.sdkUrl, serviceLinkRecord.payload.link_id, serviceLinkRecord.payload.surrogate_id, serviceId, serviceName],
+            '',
+            ''
           );
-
+          return false;
+        }
         return true;
       } else {
         linkSurrogateId = await this.capeService.automaticLinkFromService(

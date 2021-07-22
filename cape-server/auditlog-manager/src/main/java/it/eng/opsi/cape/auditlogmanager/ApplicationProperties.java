@@ -47,6 +47,9 @@ public class ApplicationProperties {
 	@NoArgsConstructor
 	public class Cape {
 
+		@NotNull
+		private Boolean enableAuth;
+		
 		@Valid
 		private AccountManager accountManager = new AccountManager();
 

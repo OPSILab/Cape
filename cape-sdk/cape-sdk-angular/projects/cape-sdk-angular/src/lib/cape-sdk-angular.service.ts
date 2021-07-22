@@ -20,7 +20,7 @@ import { RoleEnum, ServiceEntry } from './model/service-link/serviceEntry';
 import { Account } from './model/account/account.model';
 import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from './model/processingBasis';
 import { QuerySortEnum } from './model/querySortEnum';
-import { ErrorDialogService } from './error-dialog/error-dialog.service';
+import { CapeSdkDialogService } from './cape-sdk-dialog/cape-sdk-dialog.service';
 import { UserSurrogateIdLink } from './model/service-link/userSurrogateIdLink';
 import { StartLinkingRequest } from './model/service-link/startLinkingRequest';
 import { ConsentFormRequest } from './model/consent/consentFormRequest';
@@ -55,7 +55,7 @@ export class CapeSdkAngularService {
 
   constructor(
     private http: HttpClient,
-    private errorDialogService: ErrorDialogService,
+    private errorDialogService: CapeSdkDialogService,
     private toastrService: NbToastrService,
     private translateService: TranslateService
   ) {}
@@ -226,13 +226,13 @@ export class CapeSdkAngularService {
       .toPromise();
   }
 
-  public async enableServiceLink(
+  public enableServiceLink = async (
     sdkUrl: string,
     slrId: string,
     surrogateId: string,
     serviceId: string,
     serviceName: string
-  ): Promise<ServiceLinkStatusRecordSigned> {
+  ): Promise<ServiceLinkStatusRecordSigned> => {
     const newServiceStatusRecord = await this.http
       .put<ServiceLinkStatusRecordSigned>(`${sdkUrl}/api/v2/slr/${slrId}/surrogate/${surrogateId}/services/${serviceId}`, {})
       .toPromise();
@@ -244,7 +244,7 @@ export class CapeSdkAngularService {
     this.emitServiceLinkEvent({ serviceId: serviceId, status: SlStatusEnum.Active, surrogateId: surrogateId, slrId: slrId } as ServiceLinkEvent);
 
     return newServiceStatusRecord;
-  }
+  };
 
   public async disableServiceLink(
     sdkUrl: string,

@@ -15,7 +15,7 @@ import { ProcessingBasis } from '../../../model/processingBasis';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LoginService } from '../../../auth/login/login.service';
-import { TextualDescription3 } from '../../../model/service-linking/textualDescription3';
+import { TextualDescription } from '../../../model/service-linking/textualDescription';
 import { TextualDescription2 } from '../../../model/service-linking/textualDescription2';
 
 export interface AvailableServiceRow extends ServiceEntry {
@@ -100,8 +100,8 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getLocalizedDescription(availableServiceDescr: ServiceEntry): TextualDescription3[] {
-    return availableServiceDescr.humanReadableDescription.reduce((filtered: TextualDescription3[], description: TextualDescription3) => {
+  private getLocalizedDescription(availableServiceDescr: ServiceEntry): TextualDescription[] {
+    return availableServiceDescr.humanReadableDescription.reduce((filtered: TextualDescription[], description: TextualDescription) => {
       if (this.locale !== 'en' && description.locale === this.locale) filtered = [description, ...filtered];
       else if (description.locale === 'en') filtered = [...filtered, description];
       return filtered;
@@ -143,7 +143,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
             type: 'textarea',
           },
           width: '65%',
-          valuePrepareFunction: (cell: TextualDescription3[]) => cell[0]?.description,
+          valuePrepareFunction: (cell: TextualDescription[]) => cell[0]?.description,
         },
         details: {
           title: this.detailsLabel,

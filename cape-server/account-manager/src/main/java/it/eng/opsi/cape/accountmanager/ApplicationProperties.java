@@ -39,14 +39,15 @@ public class ApplicationProperties {
 	@Valid
 	private Cape cape = new Cape();
 
-//	@Valid
-//	private Idm idm = new Idm();
-
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	public class Cape {
 
+		
+		@NotNull
+		private Boolean enableAuth;
+		
 		@Valid
 		private AccountManager accountManager = new AccountManager();
 

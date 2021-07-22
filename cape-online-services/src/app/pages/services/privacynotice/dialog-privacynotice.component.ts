@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
-import { RoleEnum, CapeSdkAngularService, ConsentFormComponent } from 'cape-sdk-angular';
-import { ErrorDialogService } from 'cape-sdk-angular';
+import { RoleEnum, CapeSdkAngularService, ConsentFormComponent, CapeSdkDialogService } from 'cape-sdk-angular';
 
 @Component({
   selector: 'ngx-dialog-privacynotice',
@@ -21,7 +20,7 @@ export class DialogPrivacyNoticeComponent {
   isSubmitDisabled = true;
 
   constructor(
-    private errorDialogService: ErrorDialogService,
+    private errorDialogService: CapeSdkDialogService,
     protected ref: NbDialogRef<DialogPrivacyNoticeComponent>,
     private translateService: TranslateService,
     private dialogService: NbDialogService,

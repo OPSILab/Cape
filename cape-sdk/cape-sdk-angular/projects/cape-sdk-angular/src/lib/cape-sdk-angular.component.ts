@@ -3,7 +3,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, 
 import { NbMenuService, NbMenuItem, NbToastrService, NbDialogService, NbDialogRef } from '@nebular/theme';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorDialogService } from './error-dialog/error-dialog.service';
+import { CapeSdkDialogService } from './cape-sdk-dialog/cape-sdk-dialog.service';
 import { LinkingFromEnum, ConsentRecordEvent, ServiceLinkEvent } from './cape-sdk-angular.service';
 import { CapeSdkAngularService } from './cape-sdk-angular.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -95,7 +95,7 @@ export class CapeSdkAngularComponent implements OnInit, AfterViewInit, OnDestroy
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private errorDialogService: ErrorDialogService,
+    private errorDialogService: CapeSdkDialogService,
     private dialogService: NbDialogService,
     private translateService: TranslateService
   ) {

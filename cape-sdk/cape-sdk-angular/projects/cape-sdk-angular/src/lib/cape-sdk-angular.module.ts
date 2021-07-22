@@ -15,7 +15,7 @@ import {
 import { CapeSdkAngularComponent } from './cape-sdk-angular.component';
 import { CapeSdkAngularService } from './cape-sdk-angular.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ErrorDialogModule } from './error-dialog/error-dialog.module';
+import { CapeSdkDialogModule } from './cape-sdk-dialog/cape-sdk-dialog.module';
 import { ConsentFormComponent } from './consent-form/consent-form.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -48,7 +48,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NbCardModule,
     NbContextMenuModule,
     NbToastrModule,
-    ErrorDialogModule,
+    CapeSdkDialogModule,
     ReactiveFormsModule,
     TranslateModule.forChild({
       loader: {

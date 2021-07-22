@@ -30,10 +30,10 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 
-RUN ./mvnw install -P docker
+RUN ./mvnw install
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
- 
+
 
 FROM openjdk:15-alpine as deploy
 VOLUME /tmp
@@ -42,4 +42,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 RUN apk add --no-cache bash
-ENTRYPOINT ["java","-cp","app:app/lib/*","it.eng.opsi.cape.accountmanager.AccountManagerApplication"]
+ENTRYPOINT ["java","--enable-preview","-cp","app:app/lib/*","it.eng.opsi.cape.accountmanager.AccountManagerApplication"]

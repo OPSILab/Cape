@@ -16,7 +16,7 @@ import { LanguageEnum } from './languageEnum';
 import { SectorEnum } from './SectorEnum';
 import { ServiceEntryTypeEnum } from './serviceEntryTypeEnum';
 import { ServiceInstance } from './serviceInstance';
-import { TextualDescription3 } from './textualDescription3';
+import { TextualDescription } from './textualDescription';
 import { ServiceEntryThematicAreaEnum } from './thematicAreaEnum';
 
 export interface ServiceEntry {
@@ -38,7 +38,7 @@ export interface ServiceEntry {
   thematicArea: Set<ServiceEntryThematicAreaEnum>;
   language: Set<LanguageEnum>;
   hasCompetentAuthority: CompetentAuthority;
-  humanReadableDescription: Array<TextualDescription3>;
+  humanReadableDescription: Array<TextualDescription>;
   serviceInstance: ServiceInstance;
   isDescribedAt: Array<Dataset>;
   processingBases: Array<ProcessingBasis>;

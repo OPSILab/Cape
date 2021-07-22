@@ -11,7 +11,7 @@
  */
 import { DataController } from '../dataController';
 import { RSDescription } from './rSDescription';
-import { TextualDescription3 } from '../service-link/textualDescription3';
+import { TextualDescription } from '../service-link/textualDescription';
 import { UsageRules } from './usageRules';
 
 export interface CommonPart {
@@ -30,10 +30,10 @@ export interface CommonPart {
   source_slr_id?: string;
   subject_id: string;
   subject_name: string;
-  subject_humanreadable_descriptions: Array<TextualDescription3>;
+  subject_humanreadable_descriptions: Array<TextualDescription>;
   source_subject_id?: string;
   source_subject_name?: string;
-  source_subject_humanreadable_descriptions?: Array<TextualDescription3>;
+  source_subject_humanreadable_descriptions?: Array<TextualDescription>;
   service_description_version: string;
   service_description_signature?: string;
   source_service_description_version?: string;

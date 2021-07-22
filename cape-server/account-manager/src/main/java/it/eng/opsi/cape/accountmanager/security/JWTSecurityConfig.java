@@ -20,7 +20,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer.ExpressionInterceptUrlRegistry;
 import org.springframework.security.config.http.SessionCreationPolicy;
+
+import it.eng.opsi.cape.accountmanager.ApplicationProperties.Cape;
 
 @Configuration
 public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -28,14 +31,22 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${spring.profiles.active:Unknown}")
 	private String activeProfile;
 
+	@Value("${cape.enableAuth}")
+	private Boolean enableAuth;
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().formLogin().disable().headers().httpStrictTransportSecurity().disable().and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
-				.authorizeRequests(authz -> authz.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**")
-						.permitAll().anyRequest().authenticated())
-				.oauth2ResourceServer(oauth2 -> oauth2.jwt());
+		HttpSecurity baseConfig = http.cors().and().csrf().disable().formLogin().disable().headers()
+				.httpStrictTransportSecurity().disable().and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and();
 
+		if (enableAuth)
+			baseConfig
+					.authorizeRequests(authz -> authz.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**")
+							.permitAll().anyRequest().authenticated())
+					.oauth2ResourceServer(oauth2 -> oauth2.jwt());
+		else
+			baseConfig.authorizeRequests(authz -> authz.anyRequest().permitAll());
 	}
 
 }

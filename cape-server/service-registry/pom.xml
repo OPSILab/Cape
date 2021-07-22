@@ -139,11 +139,11 @@
 							<goal>start</goal>
 						</goals>
 					</execution>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>repackage</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
 					<execution>
 						<id>post-integration-test</id>
 						<goals>
@@ -200,4 +200,25 @@
 
 	</build>
 	<description>Service Registry module of CaPe</description>
+	
+	<profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <activatedProperties>dev</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <properties>
+				<activatedProperties>docker</activatedProperties>
+				<maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
+	
+	
 </project>

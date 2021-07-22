@@ -9,7 +9,7 @@ import { LinkedServiceRow } from './linkedServices.component';
 import { ProcessingBasis } from '../../../model/processingBasis';
 import { Router } from '@angular/router';
 import { TextualDescription2 } from '../../../model/service-linking/textualDescription2';
-import { TextualDescription3 } from '../../../model/service-linking/textualDescription3';
+import { TextualDescription } from '../../../model/service-linking/textualDescription';
 
 @Component({
   templateUrl: './linkedServiceInfoRender.component.html',
@@ -86,8 +86,8 @@ export class LinkedServiceInfoRenderComponent {
     });
   }
 
-  private getLocalizedDescription(availableServiceDescr: TextualDescription3[]): TextualDescription3[] {
-    return availableServiceDescr.reduce((filtered: TextualDescription3[], description: TextualDescription3) => {
+  private getLocalizedDescription(availableServiceDescr: TextualDescription[]): TextualDescription[] {
+    return availableServiceDescr.reduce((filtered: TextualDescription[], description: TextualDescription) => {
       if (this.value.locale !== 'en' && description.locale === this.value.locale) filtered = [description, ...filtered];
       else if (description.locale === 'en') filtered = [...filtered, description];
       return filtered;

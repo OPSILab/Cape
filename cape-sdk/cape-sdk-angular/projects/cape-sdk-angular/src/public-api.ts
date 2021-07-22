@@ -6,9 +6,10 @@ export * from './lib/cape-sdk-angular.service';
 export * from './lib/cape-sdk-angular.component';
 export * from './lib/cape-sdk-angular.module';
 export * from './lib/consent-form/consent-form.component';
-export * from './lib/error-dialog/error-dialog.module';
-export * from './lib/error-dialog/error-dialog.service';
-export * from './lib/error-dialog/error-dialog.component';
+export * from './lib/cape-sdk-dialog/cape-sdk-dialog.module';
+export * from './lib/cape-sdk-dialog/cape-sdk-dialog.service';
+export * from './lib/cape-sdk-dialog/error-dialog.component';
+export * from './lib/cape-sdk-dialog/cape-sdk-dialog.component';
 
 export * from './lib/model/errorResponse';
 export * from './lib/model/dataController';
@@ -26,7 +27,6 @@ export * from './lib/model/service-link/datasetSchema';
 export * from './lib/model/service-link/textualDescription';
 export * from './lib/model/service-link/textualDescription1';
 export * from './lib/model/service-link/textualDescription2';
-export * from './lib/model/service-link/textualDescription3';
 
 export * from './lib/model/service-link/distribution';
 export * from './lib/model/errorResponse';

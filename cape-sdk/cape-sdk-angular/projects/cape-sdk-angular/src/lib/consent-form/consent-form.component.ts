@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NbDialogRef, NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { CapeSdkAngularService, ConsentRecordEvent } from '../cape-sdk-angular.service';
-import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { CapeSdkDialogService } from '../cape-sdk-dialog/cape-sdk-dialog.service';
 
 @Component({
   selector: 'lib-app-consent-form',
@@ -22,7 +22,7 @@ export class ConsentFormComponent implements OnInit {
     private capeService: CapeSdkAngularService,
     private toastrService: NbToastrService,
     private translateService: TranslateService,
-    private errorDialogService: ErrorDialogService
+    private errorDialogService: CapeSdkDialogService
   ) {}
 
   ngOnInit(): void {

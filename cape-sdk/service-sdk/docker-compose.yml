@@ -27,7 +27,7 @@ services:
       - APIDOCS_PATH=/api-docs
       - SPRING_LOGGING_LEVEL=INFO
       - MONGO_LOGGING_LEVEL=ERROR
-      - SECURITY_LOGGING_LEVEL=ERROR
+      - SECURITY_LOGGING_LEVEL=DEBUG
       - CAPE_LOGGING_LEVEL=ERROR
       - CAPE_ACCOUNT_MANAGER_URL=http://account-manager:8080/account-manager
       - CAPE_SERVICE_MANAGER_URL=http://service-manager:8082/service-manager
@@ -38,8 +38,9 @@ services:
       - CAPE_SDK_MONGODB_PORT=27017
       - CAPE_SDK_MONGODB_USER=root
       - CAPE_SDK_MONGODB_PASSWORD=root
-      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
-      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=
+      - CAPE_ENABLE_AUTH=false
+      - CAPE_IDM_ISSUER_URI=http://host.docker.internal:8099/auth/realms/Cape
+      - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=http://localhost:81,http://localhost,http://localhost:82,http://localhost:83
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:
       - cape-sdk-network

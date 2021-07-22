@@ -18,8 +18,6 @@ package it.eng.opsi.cape.consentmanager.model;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nimbusds.jose.util.Base64URL;
 
 import it.eng.opsi.cape.serviceregistry.data.DataController;
-import it.eng.opsi.cape.serviceregistry.data.TextualDescription__3;
+import it.eng.opsi.cape.serviceregistry.data.TextualDescription;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -90,7 +88,7 @@ public class CommonPart {
 	@NonNull
 	@NotBlank
 	@JsonProperty(value = "subject_humanreadable_descriptions")
-	private List<TextualDescription__3> subjectHumanReadableDescriptions;
+	private List<TextualDescription> subjectHumanReadableDescriptions;
 
 	@JsonProperty(value = "source_subject_id")
 	private String sourceSubjectId;
@@ -99,7 +97,7 @@ public class CommonPart {
 	private String sourceSubjectName;
 
 	@JsonProperty(value = "source_subject_humanreadable_descriptions")
-	private List<TextualDescription__3> sourceSubjectHumanReadableDescriptions;
+	private List<TextualDescription> sourceSubjectHumanReadableDescriptions;
 
 	@NonNull
 	@NotBlank

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.eng.opsi.cape.serviceregistry.data.DataController;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.Role;
-import it.eng.opsi.cape.serviceregistry.data.TextualDescription__3;
+import it.eng.opsi.cape.serviceregistry.data.TextualDescription;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -88,11 +88,11 @@ public class ConsentForm {
 	private String sinkLibraryDomainUrl;
 
 	@JsonProperty(value = "source_humanreadable_descriptions")
-	private List<TextualDescription__3> sourceHumanReadableDescriptions;
+	private List<TextualDescription> sourceHumanReadableDescriptions;
 
 	@JsonProperty(value = "sink_humanreadable_descriptions")
 	@NonNull
-	private List<TextualDescription__3> sinkHumanReadableDescriptions;
+	private List<TextualDescription> sinkHumanReadableDescriptions;
 
 	@JsonProperty(value = "resource_set")
 	@NonNull

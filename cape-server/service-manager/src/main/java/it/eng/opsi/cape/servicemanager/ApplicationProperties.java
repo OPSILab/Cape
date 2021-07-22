@@ -39,14 +39,14 @@ public class ApplicationProperties {
 	@Valid
 	private Cape cape = new Cape();
 
-//	@Valid
-//	private Idm idm = new Idm();
-
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	public class Cape {
 
+		@NotNull
+		private Boolean enableAuth;
+		
 		@Valid
 		private AccountManager accountManager = new AccountManager();
 
@@ -213,43 +213,5 @@ public class ApplicationProperties {
 		}
 
 	}
-
-//	@Getter
-//	@Setter
-//	@NoArgsConstructor
-//	public class Idm {
-//
-//		@NotBlank
-//		private String host;
-//
-//		@Valid
-//		private Path path;
-//
-//		@Getter
-//		@Setter
-//		@NoArgsConstructor
-//		public class Path {
-//
-//			@NotBlank
-//			private String token;
-//
-//			@NotBlank
-//			private String user;
-//
-//		}
-//
-//		@NotBlank
-//		private String clientId;
-//
-//		@NotBlank
-//		private String clientSecret;
-//
-//		@NotBlank
-//		private String redirectUri;
-//
-//		@NotBlank
-//		private String logoutCallback;
-//
-//	}
 
 }

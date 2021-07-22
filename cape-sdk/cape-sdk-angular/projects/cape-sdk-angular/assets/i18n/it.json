@@ -25,6 +25,7 @@
       "cancelButton": "Annulla",
       "closeButton": "Chiudi",
       "linkButton": "Collega",
+      "enableServiceLinkButton": "Abilita",
       "closeAndReturnToOperatorButton": "Chiudi e ritorna su CaPe",
       "forceLinkingButton": "Forza collegamento",
       "linkingCancelledMessage": "Il collegamento è stato annullato",
@@ -35,7 +36,8 @@
       "disableSuccessfulMessage": "Il collegamento con il Servizio {{serviceName}} è stato disabilitato con successo",
       "operatorIdMismatch": "System operatorId mismatches with the one from Service being linked!'",
       "noServiceIdOperatorLink": "Nessun Service Id specificato duarante il collegamento da CaPe",
-      "linkingParamMismatch": "Surrogate Id, Service ID o Return Url ricevuti da CaPe non corrispondono con quelli inviati!"
+      "linkingParamMismatch": "Surrogate Id, Service ID o Return Url ricevuti da CaPe non corrispondono con quelli inviati!",
+      "askEnableServiceLink": "Il Service Link per questo servizio è disabilitato, vuoi abilitarlo?"
     },
     "consent": {
       "giveConsentLabel": "Dai il Consenso",

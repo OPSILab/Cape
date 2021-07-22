@@ -25,6 +25,7 @@
       "cancelButton": "Cancel",
       "closeButton": "Close",
       "linkButton": "Link",
+      "enableServiceLinkButton": "Enable",
       "closeAndReturnToOperatorButton": "Close and return to CaPe",
       "forceLinkingButton": "Force Linking",
       "linkingCancelledMessage": "Service Linking has been cancelled",
@@ -35,7 +36,8 @@
       "disableSuccessfulMessage": "The Link for Service {{serviceName}} has been disabled successfully",
       "operatorIdMismatch": "System operatorId mismatches with the one from Service being linked!'",
       "noServiceIdOperatorLink": "No Service Id specified while linking from CaPe",
-      "linkingParamMismatch": "Surrogate Id, Service ID or Return Url received from CaPe do not match with the sent ones!"
+      "linkingParamMismatch": "Surrogate Id, Service ID or Return Url received from CaPe do not match with the sent ones!",
+      "askEnableServiceLink": "Service Link for this service is disabled, do you want to enable it?"
     },
     "consent": {
       "giveConsentLabel": "Give Consent",

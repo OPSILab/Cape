@@ -497,11 +497,7 @@ public class ClientService {
 						.build(accountId, slrId, crId))
 				.body(ChangeConsentStatusRequest.builder()
 						.resourceSet(existingCrPayload.getCommonPart().getRsDescription().getResourceSet())
-						.status(newStatus)
-						.usageRules(existingCrPayload.getRoleSpecificPart().getRole().equals(ConsentRecordRoleEnum.SINK)
-								? ((ConsentRecordSinkRoleSpecificPart) existingCrPayload.getRoleSpecificPart())
-										.getUsageRules()
-								: null)
+						.status(newStatus).usageRules(existingCrPayload.getCommonPart().getUsageRules())
 						.requestFrom(requestFrom).build()),
 				ConsentRecordSigned.class);
 

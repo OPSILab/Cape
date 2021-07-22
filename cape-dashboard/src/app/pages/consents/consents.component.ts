@@ -21,7 +21,7 @@ import { ConsentStatusEnum } from '../../model/consents/consentStatusRecordPaylo
 import { QuerySortEnum } from '../../model/querySortEnum';
 import { ProcessingBasisProcessingCategoriesEnum, ProcessingBasisPurposeCategoryEnum } from '../../model/processingBasis';
 import { Organization } from '../../model/service-linking/organization';
-import { TextualDescription3 } from '../../model/service-linking/textualDescription3';
+import { TextualDescription } from '../../model/service-linking/textualDescription';
 
 @Component({
   selector: 'consent',
@@ -176,7 +176,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     }-${dateTime.getDate()} ${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
   }
 
-  getLocalizedHumanReadableDescription(descriptions: TextualDescription3[], locale?: string): string {
+  getLocalizedHumanReadableDescription(descriptions: TextualDescription[], locale?: string): string {
     return descriptions.find((d) => d.locale === (locale ? locale : this.currentLocale))?.description;
   }
 
