@@ -129,9 +129,9 @@ using [Docker](https://www.docker.com/) and [Docker-Compose](https://docs.docker
 
 CaPe SDK Client component will be deployed as Docker containers, based on Tomcat Alpine image (service-sdk) and paired with a MongoDB container (service-sdk-mongo).
 
-Default confiuration will let run the container in the same Docker network of Cape Server (in order to resolve automatically their hostnames).
+Default configuration will let run the container in the same Docker network of Cape Server (in order to resolve automatically their hostnames).
 
-Altough this can be accomplished by building and running each container, is **recommended** to use directly the provided **docker-compose.yml** file, 
+Although this can be accomplished by building and running each container, is **recommended** to use directly the provided **docker-compose.yml** file, 
 which allows you to start the whole stack by pulling already built images published on [Capesuite Docker Hub repository](https://hub.docker.com/search?q=capesuite&type=image).
 
 CaPe SDK folder provides both **DockerFile** files (in each subfolder) and  the **docker-compose** file, in order to use both methods.

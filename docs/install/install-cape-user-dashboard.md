@@ -5,7 +5,7 @@
 </span>
 
 This section covers the steps needed to properly install CaPe User Self-Service Dashboard. 
-It is a Angular portal based on Nebular framework that can be installed in the following ways:
+It is an Angular portal based on [Nebular/Ngx-admin](https://github.com/akveo/nebular) framework that can be installed in the following ways:
 
 -   Build as Angular distribution and deploy natively on a Web Server
 -   Run as Docker containerized environment (recommended)
@@ -178,7 +178,7 @@ Docker Compose allows to run the Docker container by pulling the already built i
 
 In order to accomplish this:
 
-- Move into **`Cape/cape-dasboard`** folder.
+- Move into **`Cape/cape-dashboard`** folder.
   
 - Ensure you modified `config.json` file properly, as described in the section above.
 	

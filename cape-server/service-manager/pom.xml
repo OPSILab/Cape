@@ -147,20 +147,20 @@
 				<executions>
 					<execution>
 						<id>pre-integration-test</id>
-						<goals>
-							<goal>start</goal>
-						</goals>
+<!-- 						<goals> -->
+<!-- 							<goal>start</goal> -->
+<!-- 						</goals> -->
 					</execution>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>repackage</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
 					<execution>
 						<id>post-integration-test</id>
-						<goals>
-							<goal>stop</goal>
-						</goals>
+<!-- 						<goals> -->
+<!-- 							<goal>stop</goal> -->
+<!-- 						</goals> -->
 					</execution>
 				</executions>
 			</plugin>
@@ -169,12 +169,12 @@
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
 				<version>0.2</version>
 				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<phase>integration-test</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>generate</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
 
 				</executions>
 				<configuration>

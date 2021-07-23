@@ -135,20 +135,20 @@
 				<executions>
 					<execution>
 						<id>pre-integration-test</id>
-						<goals>
-							<goal>start</goal>
-						</goals>
+						<!-- <goals> -->
+						<!-- <goal>start</goal> -->
+						<!-- </goals> -->
 					</execution>
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>repackage</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
+					<!-- <execution> -->
+					<!-- <goals> -->
+					<!-- <goal>repackage</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
 					<execution>
 						<id>post-integration-test</id>
-						<goals>
-							<goal>stop</goal>
-						</goals>
+						<!-- <goals> -->
+						<!-- <goal>stop</goal> -->
+						<!-- </goals> -->
 					</execution>
 				</executions>
 			</plugin>
@@ -157,12 +157,12 @@
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
 				<version>0.2</version>
 				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
+					<!-- <execution> -->
+					<!-- <phase>integration-test</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>generate</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
 
 				</executions>
 				<configuration>
@@ -200,25 +200,5 @@
 
 	</build>
 	<description>Service Registry module of CaPe</description>
-	
-	<profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <activatedProperties>dev</activatedProperties>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>docker</id>
-            <properties>
-				<activatedProperties>docker</activatedProperties>
-				<maven.test.skip>true</maven.test.skip>
-            </properties>
-        </profile>
-    </profiles>
-	
-	
+
 </project>
