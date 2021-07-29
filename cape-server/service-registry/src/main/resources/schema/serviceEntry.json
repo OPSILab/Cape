@@ -119,7 +119,7 @@
 			"type": "string",
 			"title": "Service Description status",
 			"description": "Status of Service Description (Allowed values: *Completed*, *Deprecated*, *UnderDevelopment*, *Withdrawn*)",
-			"default": "Completed",
+			"default": "UnderDevelopment",
 			"enum": [
 				"Completed",
 				"Deprecated",

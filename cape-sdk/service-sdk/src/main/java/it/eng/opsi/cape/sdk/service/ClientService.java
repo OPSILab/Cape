@@ -186,7 +186,7 @@ public class ClientService {
 
 	}
 
-	public void unregisterServiceFromRegistry(String serviceId, Boolean deleteServiceDescription)
+	public void unregisterOrDeleteServiceFromRegistry(String serviceId, Boolean deleteServiceDescription)
 			throws ServiceManagerException {
 
 		RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);

@@ -24,7 +24,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CaPe Service Registry</name>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>15</java.version>
 		<springboot.version>2.5.0</springboot.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

@@ -103,8 +103,9 @@
       "type": "string",
       "title": "Service Description status",
       "description": "Status of Service Description (Allowed values: *Completed*, *Deprecated*, *UnderDevelopment*, *Withdrawn*)",
-      "default": "Completed",
-      "enum": ["Completed", "Deprecated", "UnderDevelopment", "WithDrawn"]
+      "default": "UnderDevelopment",
+      "enum": ["Completed", "Deprecated", "UnderDevelopment", "WithDrawn"],
+      "options": { "hidden": true }
     },
     "supportedProfiles": {
       "type": "array",

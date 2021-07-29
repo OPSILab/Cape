@@ -289,7 +289,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 
 	}
 
-	@Operation(summary = "Register a Service existing in the Service Registry as managed by CaPe.", description = "Register the Service as managed by this SDK and create Service key pair and x509 Certificate. Once registered, the Service will be available to the User for service linking.", tags = {
+	@Operation(summary = "Register a Service existing in the Service Registry as managed by CaPe.", description = "Register the Service as managed by this SDK and create Service key pair and x509 Certificate. Once registered, the Service will be available to the User for service linking and will be in Completed status.", tags = {
 			"Service Management" }, responses = {
 					@ApiResponse(description = "Returns 201 CREATED and the Service Description containing generated Public X509 Certificate.", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServiceEntry.class))) })
 	@Override
@@ -308,9 +308,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 					@ApiResponse(description = "Returns 404, no Service or Sign Key was found", responseCode = "404") })
 	@Override
 	@DeleteMapping(value = "/services/{serviceId}")
-	public ResponseEntity<Object> unregisterService(@PathVariable String serviceId,
+	public ResponseEntity<Object> unregisterOrDeleteService(@PathVariable String serviceId,
 			@RequestParam(defaultValue = "false") Boolean deleteServiceDescription)
-			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException {
+			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException {
 
 		sdkManager.unregisterService(serviceId, deleteServiceDescription);
 

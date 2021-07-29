@@ -55,6 +55,7 @@ import it.eng.opsi.cape.sdk.repository.ServicePopKeyRepository;
 import it.eng.opsi.cape.sdk.repository.ServiceSignKeyRepository;
 import it.eng.opsi.cape.serviceregistry.data.ServiceCertificate;
 import it.eng.opsi.cape.serviceregistry.data.ServiceEntry;
+import it.eng.opsi.cape.serviceregistry.data.ServiceEntry.ServiceDescriptionStatus;
 
 @Service
 public class CapeServiceSdkManager {
@@ -159,6 +160,10 @@ public class CapeServiceSdkManager {
 				cryptoService.signServiceDescription(serviceSignKey, serviceDescription).toString());
 
 		/*
+		 * Update Service Description status to Completed
+		 */
+		serviceDescription.setStatus(ServiceDescriptionStatus.COMPLETED);
+		/*
 		 * Update the Service Description at Registry
 		 */
 		clientService.updateServiceDescriptionAtRegistry(serviceDescription);
@@ -180,9 +185,10 @@ public class CapeServiceSdkManager {
 
 	}
 
-	public void unregisterService(String serviceId, Boolean deleteServiceDescription)
-			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException {
+	public void unregisterService(String serviceId, Boolean deleteServiceDescription) throws JOSEException,
+			ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException {
 
+	
 		/*
 		 * Delete Service Sign key pair
 		 */
@@ -191,9 +197,10 @@ public class CapeServiceSdkManager {
 			throw new ServiceSignKeyNotFoundException("The Sign Key for Service Id: " + serviceId + " was not found");
 
 		/*
-		 * Delete Service Description at Service
+		 * Unregister Service Description at Service Registry
 		 */
-		clientService.unregisterServiceFromRegistry(serviceId, deleteServiceDescription);
+		clientService.unregisterOrDeleteServiceFromRegistry(serviceId, deleteServiceDescription);
+
 
 	}
 

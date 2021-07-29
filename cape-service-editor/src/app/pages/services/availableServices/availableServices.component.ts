@@ -28,10 +28,11 @@ export interface AvailableServiceRow extends ServiceEntry {
   styleUrls: ['./availableServices.component.scss'],
 })
 export class AvailableServicesComponent implements OnInit, OnDestroy {
-  private serviceLabel = 'Service';
-  private descriptionLabel = 'Description';
-  private actionsLabel = 'Actions';
-  private detailsLabel = 'Details';
+  private serviceLabel: string;
+  private descriptionLabel: string;
+  private actionsLabel: string;
+  private detailsLabel: string;
+  private statusLabel: string;
 
   public settings: Record<string, unknown>;
   private locale: string;
@@ -119,6 +120,7 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
     this.descriptionLabel = this.translate.instant('general.services.description') as string;
     this.actionsLabel = this.translate.instant('general.services.actions') as string;
     this.detailsLabel = this.translate.instant('general.services.details') as string;
+    this.statusLabel = this.translate.instant('general.services.status') as string;
 
     return {
       mode: 'external',
@@ -153,6 +155,14 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
           type: 'custom',
           valuePrepareFunction: (cell, row: AvailableServiceRow) => row,
           renderComponent: ServiceInfoRenderComponent,
+        },
+        status: {
+          title: this.statusLabel,
+          filter: false,
+          sort: false,
+          width: '5%',
+          type: 'text',
+          valuePrepareFunction: (cell, row: AvailableServiceRow) => row.status,
         },
         actions: {
           title: this.actionsLabel,

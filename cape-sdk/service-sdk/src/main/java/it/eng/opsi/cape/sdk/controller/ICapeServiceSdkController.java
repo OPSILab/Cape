@@ -86,8 +86,8 @@ public interface ICapeServiceSdkController {
 			throws JsonProcessingException, JOSEException, ParseException, ServiceSignKeyNotFoundException,
 			SessionNotFoundException, ServiceManagerException, SessionStateNotAllowedException;
 
-	public abstract ResponseEntity<Object> unregisterService(String serviceId, Boolean deleteServiceDescription)
-			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException;
+	public abstract ResponseEntity<Object> unregisterOrDeleteService(String serviceId, Boolean deleteServiceDescription)
+			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException;
 
 //	public abstract ResponseEntity<ServiceSignKey> replaceAndStoreServiceSignKey(String serviceId, String oldKid);
 

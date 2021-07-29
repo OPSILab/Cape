@@ -16,6 +16,7 @@ import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
 import { AvailableServicesService } from './availableServices.service';
 import { AvailableServiceRow } from './availableServices.component';
 import { LoginService } from '../../../auth/login/login.service';
+import { ServiceEntryStatusEnum } from '../../../model/service-linking/serviceEntry';
 @Component({
   template: `
     <button nbButton outline status="basic" [nbContextMenu]="actions" nbContextMenuTag="service-context-menu{{ value.serviceId }}">
@@ -116,7 +117,7 @@ export class ActionsServiceMenuRenderComponent implements OnInit, OnDestroy {
   ) {}
 
   get registered(): boolean {
-    return this.value.serviceInstance.cert?.x5c ? true : false;
+    return this.value.status == ServiceEntryStatusEnum.Completed ? true : false;
   }
 
   ngOnInit(): void {
