@@ -159,10 +159,12 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
 
   importAsFile(): void {
     this.dialogService.open(DialogImportPromptComponent).onClose.subscribe((jsonContent) => {
-      this.editor.setValue(jsonContent);
-      this.editor.getEditor('root.serviceInstance.cert.x5u').disable();
-      this.editor.getEditor('root.serviceInstance.cert.x5c').disable();
-      this.serviceId = jsonContent.serviceId as string;
+      if (jsonContent) {
+        this.editor.setValue(jsonContent);
+        this.editor.getEditor('root.serviceInstance.cert.x5u').disable();
+        this.editor.getEditor('root.serviceInstance.cert.x5c').disable();
+        this.serviceId = jsonContent.serviceId as string;
+      }
     });
   }
 
@@ -249,6 +251,7 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
           callback: async () => {
             try {
               await this.availablesServicesService.updateService(payload, payload.serviceId);
+              sessionStorage.removeItem('isTouched');
               this.showToast(
                 'success',
                 this.translateService.instant('general.editor.update_success', {

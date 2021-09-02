@@ -234,10 +234,10 @@ public class ClientService {
 
 		for (SurrogateIdServiceIdRecord record : surrogateIdRecords) {
 
-			ServiceEntry serviceDescription = this.getServiceDescriptionFromRegistry(record.serviceId());
+			ServiceEntry serviceDescription = this.getServiceDescriptionFromRegistry(record.getServiceId());
 			String sdkUrl = serviceDescription.getServiceInstance().getServiceUrls().getLibraryDomain();
 
-			restTemplate.delete(sdkUrl + "/api/v2/userSurrogateIdLink/{surrogateId}", record.surrogateId());
+			restTemplate.delete(sdkUrl + "/api/v2/userSurrogateIdLink/{surrogateId}", record.getSurrogateId());
 		}
 
 	}

@@ -87,7 +87,8 @@ public interface ICapeServiceSdkController {
 			SessionNotFoundException, ServiceManagerException, SessionStateNotAllowedException;
 
 	public abstract ResponseEntity<Object> unregisterOrDeleteService(String serviceId, Boolean deleteServiceDescription)
-			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException;
+			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException,
+			ServiceDescriptionNotFoundException;
 
 //	public abstract ResponseEntity<ServiceSignKey> replaceAndStoreServiceSignKey(String serviceId, String oldKid);
 
@@ -154,6 +155,11 @@ public interface ICapeServiceSdkController {
 			String userId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status, String purposeId,
 			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
 			Boolean checkConsentAtOperator, Sort.Direction iatSort);
+
+	public abstract ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndQuery(String serviceId,
+			String userId, String sourceServiceId, String datasetId, String purposeId, String purposeName,
+			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
+			Sort.Direction iatSort) throws ConsentRecordNotFoundException;
 
 	public abstract ResponseEntity<List<ConsentRecordSigned>> getConsentRecordsByBusinessIdAndQuery(String surrogateId,
 			String serviceId, String sourceServiceId, String datasetId, ConsentRecordStatusEnum status,

@@ -10,7 +10,7 @@
     "auditLogUrl": "https://www.cape-suite.eu/cape-server/auditlog-manager",
     "consentManagerUrl": "https://www.cape-suite.eu/cape-server/consent-manager",
     "auth": {
-      "idmHost": "https://www.cape-suite.eu",
+      "idmHost": "https://idm.cape-suite.eu",
       "clientId": "cape-server",
       "disableAuth": "false",
       "authProfile": "oidc",

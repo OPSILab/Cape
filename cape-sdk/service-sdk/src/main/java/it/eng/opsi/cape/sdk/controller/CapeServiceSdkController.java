@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -189,7 +190,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 					@ApiResponse(description = "Returns the requested Operator Description.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataOperatorDescription.class))) })
 	@Override
 	@GetMapping(value = "/dataOperatorDescriptions/{operatorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DataOperatorDescription> getDataOperatorDescription(@PathVariable("operatorId") String operatorId)
+	public ResponseEntity<DataOperatorDescription> getDataOperatorDescription(
+			@PathVariable("operatorId") String operatorId)
 			throws DataOperatorDescriptionNotFoundException, ServiceManagerException {
 
 		/*
@@ -309,8 +311,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 	@Override
 	@DeleteMapping(value = "/services/{serviceId}")
 	public ResponseEntity<Object> unregisterOrDeleteService(@PathVariable String serviceId,
-			@RequestParam(defaultValue = "false") Boolean deleteServiceDescription)
-			throws JOSEException, ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException {
+			@RequestParam(defaultValue = "false") Boolean deleteServiceDescription) throws JOSEException,
+			ServiceManagerException, ServiceSignKeyNotFoundException, ServiceDescriptionNotFoundException {
 
 		sdkManager.unregisterService(serviceId, deleteServiceDescription);
 
@@ -917,6 +919,32 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 						datasetId, status, purposeId, purposeName, purposeCategory, processingCategory, iatSort));
 
 		}
+	}
+
+	@Operation(summary = "Check if there is an Active Consent Record for the input Service Id and UserId (optional parameters are supported)", description = "Optionally can be filtered by Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {
+			"Consent Record" }, responses = {
+					@ApiResponse(description = "Returns the existing Active Consent Record (with 200 as Http Status code), if any, otherwise 404.", responseCode = "200"),
+					@ApiResponse(description = "Returns the existing Active Consent Record (with 200 as Http Status code), if any, otherwise 404.", responseCode = "404") })
+	@GetMapping(value = "/services/{serviceId}/consents/check", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndQuery(@PathVariable String serviceId,
+			@RequestParam(required = false) String userId, @RequestParam(required = false) String sourceServiceId,
+			@RequestParam(required = false) String datasetId,
+			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
+			@RequestParam(required = false) PurposeCategory purposeCategory,
+			@RequestParam(required = false) ProcessingCategory processingCategory,
+			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
+			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) throws ConsentRecordNotFoundException {
+
+		List<ConsentRecordSigned> result = this.getConsentRecordsByServiceIdAndQuery(serviceId, userId, sourceServiceId,
+				datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory, processingCategory,
+				checkConsentAtOperator, iatSort).getBody();
+		if (result.isEmpty())
+			throw new ConsentRecordNotFoundException(
+					"No Active Consent Record found for the input ServiceId and UserId.");
+		else
+			return ResponseEntity.ok(result.get(0));
+
 	}
 
 	@Operation(summary = "Get the list of all signed Consent Records for this Service Provider by using its assigned Business Id.", description = "Optionally can be filtered by SurrogateId, Service Id, Source Service Id, Dataset Id, Consent Status, Purpose Id, Name or Category and Processing Category. Results can be sorted by the value of the iat timestamp of Consent Record(DESC by default). The query can be performed against the SDK local storage (default) or by calling Cape Consent Manager (checkConsentAtOperator=true).", tags = {

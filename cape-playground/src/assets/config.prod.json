@@ -4,7 +4,7 @@
     "playgroundUrl": "https://www.cape-suite.eu/cape-playground",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
     "auth": {
-      "idmHost": "https://www.cape-suite.eu",
+      "idmHost": "https://idm.cape-suite.eu",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",

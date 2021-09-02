@@ -1,20 +1,13 @@
 <?xml version="1.0"?>
-<!--
-  CaPe - A Consent Based Personal Data Suite
-   Copyright (C) 2021 Engineering Ingegneria Informatica S.p.A.
-   
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as published by
-  at your option) any later version.
-  
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Affero General Public License for more details.
-  
-  You should have received a copy of the GNU Affero General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+<!-- CaPe - A Consent Based Personal Data Suite Copyright (C) 2021 Engineering 
+	Ingegneria Informatica S.p.A. This program is free software: you can redistribute 
+	it and/or modify it under the terms of the GNU Affero General Public License 
+	as published by at your option) any later version. This program is distributed 
+	in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+	the implied warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+	See the GNU Affero General Public License for more details. You should have 
+	received a copy of the GNU Affero General Public License along with this 
+	program. If not, see <http://www.gnu.org/licenses/>. -->
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0"
@@ -31,7 +24,7 @@
 	<name>CaPe Auditlog Manager</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>16</java.version>
 		<springboot.version>2.5.0</springboot.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -106,7 +99,7 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -128,11 +121,11 @@
 			<version>1.5.8</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springdoc</groupId> -->
-<!-- 			<artifactId>springdoc-openapi-data-rest</artifactId> -->
-<!-- 			<version>1.5.8</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springdoc</groupId> -->
+		<!-- <artifactId>springdoc-openapi-data-rest</artifactId> -->
+		<!-- <version>1.5.8</version> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 	<build>
@@ -147,20 +140,20 @@
 				<executions>
 					<execution>
 						<id>pre-integration-test</id>
-<!-- 						<goals> -->
-<!-- 							<goal>start</goal> -->
-<!-- 						</goals> -->
+						<!-- <goals> -->
+						<!-- <goal>start</goal> -->
+						<!-- </goals> -->
 					</execution>
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>repackage</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
+					<!-- <execution> -->
+					<!-- <goals> -->
+					<!-- <goal>repackage</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
 					<execution>
 						<id>post-integration-test</id>
-<!-- 						<goals> -->
-<!-- 							<goal>stop</goal> -->
-<!-- 						</goals> -->
+						<!-- <goals> -->
+						<!-- <goal>stop</goal> -->
+						<!-- </goals> -->
 					</execution>
 				</executions>
 			</plugin>
@@ -169,12 +162,12 @@
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
 				<version>0.2</version>
 				<executions>
-<!-- 					<execution> -->
-<!-- 						<phase>integration-test</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>generate</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
+					<!-- <execution> -->
+					<!-- <phase>integration-test</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>generate</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
 
 				</executions>
 				<configuration>

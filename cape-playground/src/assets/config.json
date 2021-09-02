@@ -4,7 +4,7 @@
     "playgroundUrl": "http://localhost:82/cape-playground",
     "dashboardUrl": "http://localhost/cape-dashboard",
     "auth": {
-      "idmHost": "http://localhost:8099",
+      "idmHost": "https://idm.cape-suite.eu",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",

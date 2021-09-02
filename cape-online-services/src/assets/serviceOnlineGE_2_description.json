@@ -1,9 +1,9 @@
 {
   "serviceId": "GE_2",
   "name": "Protezione Civile Iscrizione allerta",
-  "identifier": "https://www.cape-suite.eu/cape-online-services/pages/services",
+  "identifier": "https://www.cape-suite.eu/cape-online-services/pages/services/GE_2",
   "issued": "",
-  "createdByUserId": "",
+  "createdByUserId": "developer",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
   "serviceIconUrl": "",

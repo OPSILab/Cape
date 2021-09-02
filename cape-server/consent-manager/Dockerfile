@@ -42,4 +42,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 RUN apk add --no-cache bash
-ENTRYPOINT ["java","-cp","app:app/lib/*","it.eng.opsi.cape.consentmanager.ConsentManagerApplication"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-cp","app:app/lib/*","it.eng.opsi.cape.consentmanager.ConsentManagerApplication"]

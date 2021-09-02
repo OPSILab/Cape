@@ -39,7 +39,7 @@ services:
       - CAPE_SDK_MONGODB_USER=root
       - CAPE_SDK_MONGODB_PASSWORD=root
       - CAPE_ENABLE_AUTH=true
-      - CAPE_IDM_ISSUER_URI=https://www.cape-suite.eu/auth/realms/Cape
+      - CAPE_IDM_ISSUER_URI=https://idm.cape-suite.eu/auth/realms/Cape
       - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=https://www.cape-suite.eu
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:

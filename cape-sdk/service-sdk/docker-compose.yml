@@ -39,7 +39,7 @@ services:
       - CAPE_SDK_MONGODB_USER=root
       - CAPE_SDK_MONGODB_PASSWORD=root
       - CAPE_ENABLE_AUTH=false
-      - CAPE_IDM_ISSUER_URI=http://host.docker.internal:8099/auth/realms/Cape
+      - CAPE_IDM_ISSUER_URI=https://idm.cape-suite.eu/auth/realms/Cape
       - CAPE_IDM_ALLOWED_ORIGIN_PATTERNS=http://localhost:81,http://localhost,http://localhost:82,http://localhost:83
       - CAPE_IDM_ALLOWED_ORIGINS=
     networks:

@@ -1,6 +1,6 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbWindowModule } from '@nebular/theme';
 import { AppConfig, System } from '../../model/appConfig';
 import { NbAuthService } from '@nebular/auth';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,13 +26,19 @@ export class LoginService {
     this.authRealm = this.environment.auth.authRealm;
   }
 
-  logout = async (): Promise<void> => {
+  logout = async (redirectIntoOpener = false): Promise<void> => {
     localStorage.removeItem('accountId');
     localStorage.removeItem('accountEmail');
 
     const authResult = await this.authService.logout(this.authProfile).toPromise();
     if (authResult.isSuccess()) {
-      window.location.href = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashboardUrl}/login`;
+      const redirectedHref = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashboardUrl}/login`;
+
+      if (redirectIntoOpener) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.opener.location.href = redirectedHref;
+        window.close();
+      } else window.location.href = redirectedHref;
     } else {
       window.alert(this.translateService.instant('login.logout_error'));
     }

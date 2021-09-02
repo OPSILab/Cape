@@ -36,7 +36,7 @@
       {{ 'general.editor.export' | translate }}
       <i class="mx-1 fas fa-file-export fa-lg"></i>
     </button>
-    <button nbButton class="mx-4" shape="rectangle" size="medium" status="danger" (click)="importAsFile()">
+    <button nbButton class="mx-4" shape="rectangle" size="medium" status="danger" (click)="importAsFile()" [disabled]="!isNew">
       {{ 'general.editor.import' | translate }}
       <i class="mx-1 fas fa-file-import fa-lg"></i>
     </button>

@@ -132,8 +132,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
 
   cancelCreateAccount = async (): Promise<void> => {
     try {
-      await this.loginService.logout();
-      this.closeLoginPopup();
+      await this.loginService.logout(true);
     } catch (err) {
       console.log(err);
       this.openDialog(this.errorDialogTemplateRef, {
@@ -153,7 +152,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
   /*
    * Close Login Popup and propagates query Params saved before Login, and eventually append redirectAfterLogin to the Base path
    */
-  closeLoginPopup = (): void => {
+  closeLoginPopup = (idmLogout?: boolean): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const queryParamsBeforeLogin = JSON.parse(sessionStorage.getItem('queryParamsBeforeLogin')) as Record<string, string>;
     const redirectAfterLogin = queryParamsBeforeLogin?.redirectAfterLogin;
@@ -162,8 +161,11 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
 
     if (redirectAfterLogin) {
       const queryString = this.printQueryParamsString(queryParamsBeforeLogin);
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
+      if (idmLogout) window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      else window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else window.opener.document.location.href = this.dashboardUrl;
 

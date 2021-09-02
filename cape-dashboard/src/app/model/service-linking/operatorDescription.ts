@@ -12,14 +12,14 @@
 import { RSAKey } from './rSAKey';
 import { ServiceProvider } from './serviceProvider';
 import { OperatorUrls } from './operatorUrls';
-import { Cert } from './cert';
+import { ServiceCertificate } from './serviceCertificate';
 
 export interface DataOperatorDescription {
   operatorId: string;
   serviceProvider?: ServiceProvider;
   operatorServiceDescriptionVersion?: string;
   supportedProfiles?: Array<SupportedProfilesEnum>;
-  cert?: Cert;
+  cert?: ServiceCertificate;
   keyPair?: RSAKey;
   operatorUrls: OperatorUrls;
   createdOnDate?: string;

@@ -1,9 +1,9 @@
 {
   "serviceId": "GE_1",
   "name": "Iscrizioni servizi 0-6",
-  "identifier": "https://www.cape-suite.eu/cape-online-services/pages/services",
+  "identifier": "https://www.cape-suite.eu/cape-online-services/pages/services/GE_1",
   "issued": "",
-  "createdByUserId": "",
+  "createdByUserId": "developer",
   "serviceDescriptionVersion": "1.0",
   "serviceDescriptionSignature": "",
   "serviceIconUrl": "",

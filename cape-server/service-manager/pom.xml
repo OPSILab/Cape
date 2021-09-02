@@ -24,7 +24,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CaPe Service Manager</name>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>16</java.version>
 		<springboot.version>2.5.0</springboot.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -143,6 +143,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+				    <jvmArguments>--illegal-access=permit</jvmArguments>
 				</configuration>
 				<executions>
 					<execution>

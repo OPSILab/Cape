@@ -21,7 +21,7 @@
 # SOFTWARE.
 ##############################################################################
 
-FROM openjdk:15-alpine as build
+FROM openjdk:16-alpine as build
 
 LABEL maintainer="Engineering Ingegneria Informatica S.p.A."
 
@@ -36,11 +36,11 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
  
 
-FROM openjdk:15-alpine as deploy
+FROM openjdk:16-alpine as deploy
 VOLUME /tmp
 ARG DEPENDENCY=target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 RUN apk add --no-cache bash
-ENTRYPOINT ["java","-cp","app:app/lib/*","it.eng.opsi.cape.servicemanager.ServiceManagerApplication"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","--illegal-access=permit","-cp","app:app/lib/*","it.eng.opsi.cape.servicemanager.ServiceManagerApplication"]
