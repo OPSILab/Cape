@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EventType {
 
-	SERVICE_LINK("ServiceLink"), CONSENT("Consent"), DATA_PROCESSING("DataProcessing");
+	SERVICE_LINK("ServiceLink"), CONSENT("Consent"), DATA_PROCESSING("DataProcessing"), ACCOUNT("Account");
 
 	private String value;
 

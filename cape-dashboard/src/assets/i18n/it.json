@@ -269,11 +269,11 @@
     "eidas_link": "Accedere con un'identità digitale da altro Paese Europeo",
     "loginPopup": {
       "authorize_new_account_data": "Autorizzi ad usare i tuoi dati personali per creare un nuovo CaPe account?",
-      "new_account_use_data": "Cape userà la tua Email, il tuo Nome e Cognome, per ulteriori informazioni vedi la nostra ",
+      "new_account_use_data": "Cape userà la tua &nbsp;<strong>Email&nbsp;</strong>, il tuo &nbsp;<strong>Nome&nbsp;</strong> e &nbsp;<strong>Cognome&nbsp;</strong>, per ulteriori informazioni vedi la nostra ",
       "authorize_and_create": "Autorizza e Crea",
       "do_not_authorize_and_cancel": "Non autorizzo e annulla",
       "error_message": "E' avvenuto un errore contattando CaPe!",
-      "no_cape_account": "Spiacente! Nessun CaPe account associata alla tua mail!"
+      "no_cape_account": "Spiacente! Nessun CaPe account associato alla tua mail!"
     }
   }
 }

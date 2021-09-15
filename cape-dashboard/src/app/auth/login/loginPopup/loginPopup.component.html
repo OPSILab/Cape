@@ -14,6 +14,12 @@
           <p class="h5 row py-4 px-2 text-center">
             {{ 'login.loginPopup.authorize_new_account_data' | translate }}
           </p>
+          <div class="row justify-content-center my-2">
+            <div class="row py-4 px-2 text-center">
+              <div [innerHTML]="'login.loginPopup.new_account_use_data' | translate">&nbsp;</div>
+              <a target="_blank" href="https://www.cape-suite.eu">&nbsp;Privacy Policy</a>
+            </div>
+          </div>
         </nb-card-body>
         <nb-card-footer>
           <div class="row justify-content-center my-2">
@@ -33,12 +39,6 @@
                 {{ 'login.loginPopup.do_not_authorize_and_cancel' | translate }}
               </button>
             </div>
-          </div>
-          <div class="row justify-content-center my-2">
-            <p class="font-weight-bold row py-4 px-2 text-center">
-              {{ 'login.loginPopup.new_account_use_data' | translate }} &nbsp;
-              <a target="_blank" href="https://www.cape-suite.eu">Privacy Policy</a>
-            </p>
           </div>
         </nb-card-footer>
       </nb-card>

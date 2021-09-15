@@ -156,7 +156,7 @@ public interface ICapeServiceSdkController {
 			String purposeName, PurposeCategory purposeCategory, ProcessingCategory processingCategory,
 			Boolean checkConsentAtOperator, Sort.Direction iatSort);
 
-	public abstract ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndQuery(String serviceId,
+	public abstract ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndUserIdAndQuery(String serviceId,
 			String userId, String sourceServiceId, String datasetId, String purposeId, String purposeName,
 			PurposeCategory purposeCategory, ProcessingCategory processingCategory, Boolean checkConsentAtOperator,
 			Sort.Direction iatSort) throws ConsentRecordNotFoundException;

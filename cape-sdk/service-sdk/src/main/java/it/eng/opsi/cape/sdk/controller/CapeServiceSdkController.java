@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
@@ -37,6 +38,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -927,8 +929,8 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 					@ApiResponse(description = "Returns the existing Active Consent Record (with 200 as Http Status code), if any, otherwise 404.", responseCode = "404") })
 	@GetMapping(value = "/services/{serviceId}/consents/check", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndQuery(@PathVariable String serviceId,
-			@RequestParam(required = false) String userId, @RequestParam(required = false) String sourceServiceId,
+	public ResponseEntity<ConsentRecordSigned> checkConsentRecordByServiceIdAndUserIdAndQuery(@PathVariable String serviceId,
+			@RequestParam(required = true) String userId, @RequestParam(required = false) String sourceServiceId,
 			@RequestParam(required = false) String datasetId,
 			@RequestParam(required = false) String purposeId, @RequestParam(required = false) String purposeName,
 			@RequestParam(required = false) PurposeCategory purposeCategory,

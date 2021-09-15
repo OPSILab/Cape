@@ -22,6 +22,7 @@ export interface AccessTokenPayload {
   name: string;
   preferred_username: string;
   sub: string;
+  isSpid: boolean;
 }
 
 export interface OidcToken {

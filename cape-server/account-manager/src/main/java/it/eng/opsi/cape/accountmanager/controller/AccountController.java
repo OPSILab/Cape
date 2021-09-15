@@ -63,13 +63,17 @@ import it.eng.opsi.cape.exception.AuditLogNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusRecordNotFoundException;
+import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import it.eng.opsi.cape.accountmanager.ApplicationProperties;
 import it.eng.opsi.cape.accountmanager.model.Account;
 import it.eng.opsi.cape.accountmanager.model.AccountExport;
 import it.eng.opsi.cape.accountmanager.model.AccountInfo;
 import it.eng.opsi.cape.accountmanager.model.SurrogateIdServiceIdRecord;
+import it.eng.opsi.cape.accountmanager.model.audit.AccountActionType;
+import it.eng.opsi.cape.accountmanager.model.audit.AccountEventLog;
 import it.eng.opsi.cape.accountmanager.model.audit.AuditLog;
 import it.eng.opsi.cape.accountmanager.model.audit.EventLog;
+import it.eng.opsi.cape.accountmanager.model.audit.EventType;
 import it.eng.opsi.cape.accountmanager.model.consenting.ConsentRecordSigned;
 import lombok.extern.slf4j.Slf4j;
 
@@ -139,7 +143,9 @@ public class AccountController implements IAccountController {
 
 		try {
 			clientService.callCreateAuditLog(storedAccount.getUsername());
-
+			clientService.callAddEventLog(new AccountEventLog(ZonedDateTime.now(), EventType.ACCOUNT,
+					storedAccount.getUsername(), LegalBasis.CONSENT,
+					"Account with username: " + storedAccount.getUsername() + " created", AccountActionType.CREATE));
 		} catch (Exception e) {
 			accountRepo.delete(storedAccount);
 			throw e;

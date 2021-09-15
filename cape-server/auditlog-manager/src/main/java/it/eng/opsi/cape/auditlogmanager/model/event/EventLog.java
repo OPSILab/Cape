@@ -46,7 +46,8 @@ import lombok.RequiredArgsConstructor;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({ @Type(value = ServiceLinkEventLog.class, name = "ServiceLink"),
 		@Type(value = ConsentEventLog.class, name = "Consent"),
-		@Type(value = DataProcessingEventLog.class, name = "DataProcessing") })
+		@Type(value = DataProcessingEventLog.class, name = "DataProcessing"),
+		@Type(value = AccountEventLog.class, name= "Account")})
 @Document("eventLogs")
 @RequiredArgsConstructor
 public class EventLog {

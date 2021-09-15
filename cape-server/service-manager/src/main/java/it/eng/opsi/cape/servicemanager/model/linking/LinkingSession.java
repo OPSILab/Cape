@@ -45,6 +45,7 @@ public class LinkingSession {
 	ObjectId _id;
 
 	@NonNull
+	@Indexed(unique = true)
 	private String sessionCode;
 
 	@NonNull
@@ -56,7 +57,6 @@ public class LinkingSession {
 	private String serviceId;
 
 	@NonNull
-	@Indexed(unique = true)
 	private String surrogateId;
 
 	@NonNull

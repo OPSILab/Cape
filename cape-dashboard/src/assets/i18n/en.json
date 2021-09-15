@@ -270,7 +270,7 @@
     "eidas_link": "Sign in with a digital identity from another European Country",
     "loginPopup": {
       "authorize_new_account_data": "Do you authorize to use your personal info to create a new CaPe Account?",
-      "new_account_use_data": "Cape will use your Email, Firstname and Lastname, for further information view our ",
+      "new_account_use_data": "Cape will use your &nbsp;<strong>Email&nbsp;</strong>, &nbsp;<strong>Firstname&nbsp;</strong> and &nbsp;<strong>Lastname&nbsp;</strong>, for further information view our ",
       "authorize_and_create": "Authorize and create",
       "do_not_authorize_and_cancel": "Do not authorize and cancel",
       "error_message": "There was an error while contacting CaPe!",

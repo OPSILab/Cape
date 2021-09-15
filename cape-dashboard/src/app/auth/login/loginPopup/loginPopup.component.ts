@@ -75,6 +75,9 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
 
       localStorage.setItem('accountId', tokenPayload.email);
       localStorage.setItem('accountEmail', tokenPayload.email);
+      sessionStorage.setItem('accountFirstName', tokenPayload.given_name);
+      sessionStorage.setItem('accountFamilyName', tokenPayload.family_name);
+      sessionStorage.setItem('isSpid', String(tokenPayload.isSpid));
     } catch (err) {
       console.log(err);
       this.openDialog(this.errorDialogTemplateRef, {
@@ -115,6 +118,8 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       username: localStorage.accountId as string,
       account_info: {
         email: localStorage.accountEmail as string,
+        firstname: sessionStorage.getItem('accountFirstName'),
+        lastname: sessionStorage.getItem('accountFamilyName'),
       },
       language: this.locale,
     } as Account;
@@ -166,9 +171,19 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       if (idmLogout) window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       else window.opener.document.location.href = this.dashboardUrl + redirectAfterLogin + (queryString ? queryString : '');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    } else window.opener.document.location.href = this.dashboardUrl;
 
+      // In Case of login with SPID, the opener is the SPID node under another domain, is not possible to set its href (Crosso-origin frame)
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    } else if (sessionStorage.getItem('isSpid')?.toString() === 'true') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      window.opener.opener.location.href = this.dashboardUrl;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      window.opener.close();
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      window.opener.document.location.href = this.dashboardUrl;
+    }
     window.close();
   };
 
