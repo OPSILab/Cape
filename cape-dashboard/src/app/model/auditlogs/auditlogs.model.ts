@@ -17,7 +17,7 @@ export interface AuditLog {
 export interface EventLog {
   created: Date;
   accountId: string;
-  legalBasis: ProcessingBasisLegalBasisEnum;
+  legalBasis?: ProcessingBasisLegalBasisEnum;
   message: string;
   type: EventType;
 }
@@ -26,6 +26,7 @@ export enum EventType {
   Consent = 'Consent',
   ServiceLink = 'ServiceLink',
   DataProcessing = 'DataProcessing',
+  Account = 'Account',
 }
 
 export interface ServiceLinkEventLog extends EventLog {
@@ -46,6 +47,10 @@ export interface ConsentEventLog extends EventLog {
   previousStatus: ConsentStatusEnum;
 }
 
+export interface AccountEventLog extends EventLog {
+  action: AccountActionType;
+}
+
 export interface AuditDataMapping extends DataMapping {
   count: number;
 }
@@ -62,6 +67,13 @@ export enum ConsentActionType {
 export enum ServiceLinkActionType {
   CREATE = 'Create',
   DISABLE = 'Disable',
+  DELETE = 'Delete',
+}
+
+export enum AccountActionType {
+  LOGIN = 'Login',
+  LOGOUT = 'Logout',
+  CREATE = 'Create',
   DELETE = 'Delete',
 }
 

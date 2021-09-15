@@ -29,4 +29,10 @@ public class AccountEventLog extends EventLog {
 		this.action = action;
 	}
 
+	public AccountEventLog(ZonedDateTime created, EventType type, String accountId, String message,
+			AccountActionType action) {
+		super(created, type, accountId, message);
+		this.action = action;
+	}
+
 }

@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 @JsonSubTypes({ @Type(value = ServiceLinkEventLog.class, name = "ServiceLink"),
 		@Type(value = ConsentEventLog.class, name = "Consent"),
 		@Type(value = DataProcessingEventLog.class, name = "DataProcessing"),
-		@Type(value = AccountEventLog.class, name= "Account")})
+		@Type(value = AccountEventLog.class, name = "Account") })
 @Document("eventLogs")
 @RequiredArgsConstructor
 public class EventLog {
@@ -68,11 +68,20 @@ public class EventLog {
 	@NonNull
 	private String accountId;
 
-	@NonNull
-	@NotNull
 	private LegalBasis legalBasis;
 
 	@NonNull
 	private String message;
+
+
+	
+	public EventLog(ZonedDateTime created, EventType type, String accountId, LegalBasis legalBasis, String message) {
+		super();
+		this.created = created;
+		this.type = type;
+		this.accountId = accountId;
+		this.legalBasis = legalBasis;
+		this.message = message;
+	}
 
 }

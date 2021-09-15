@@ -195,6 +195,7 @@
       "request_message": "Request message"
     },
     "auditlogs": {
+      "Account": "Account",
       "ServiceLink": "Link to service",
       "Create": "created",
       "Send": "sent",

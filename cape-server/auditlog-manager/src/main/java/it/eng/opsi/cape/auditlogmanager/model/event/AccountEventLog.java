@@ -21,11 +21,17 @@ public class AccountEventLog extends EventLog {
 
 	@NotNull(message = "action field is mandatory")
 	private AccountActionType action;
-	
+
 	public AccountEventLog(ZonedDateTime created, EventType type, String accountId, LegalBasis legalBasis,
 			String message, AccountActionType action) {
 		super(created, type, accountId, legalBasis, message);
 		this.action = action;
 	}
-	
+
+	public AccountEventLog(ZonedDateTime created, EventType type, String accountId, String message,
+			AccountActionType action) {
+		super(created, type, accountId, message);
+		this.action = action;
+	}
+
 }

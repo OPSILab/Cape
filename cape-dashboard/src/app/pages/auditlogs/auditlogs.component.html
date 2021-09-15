@@ -97,6 +97,7 @@
                       <nb-card-body>
                         <div class="col-sm-12" [ngSwitch]="event.context">
                           <ng-container *ngSwitchDefault>
+                            <!-- ConsentEventLog-->
                             <nb-accordion>
                               <nb-accordion-item>
                                 <nb-accordion-item-header>
@@ -214,6 +215,24 @@
                                         <i class="ion-android-checkmark-circle">{{ 'general.auditlogs.view_consent' | translate }}</i>
                                       </button>
                                     </div>
+                                  </div>
+                                </nb-accordion-item-body>
+                              </nb-accordion-item>
+                            </nb-accordion>
+                          </ng-container>
+
+                          <ng-container *ngSwitchCase="'Account'">
+                            <nb-accordion>
+                              <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                  {{ 'general.auditlogs.Account' | translate }} | {{ event.accountId }}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                  <div class="col-sm-12">
+                                    <div class="box-item">
+                                      {{ event.message }}
+                                    </div>
+                                    <hr />
                                   </div>
                                 </nb-accordion-item-body>
                               </nb-accordion-item>

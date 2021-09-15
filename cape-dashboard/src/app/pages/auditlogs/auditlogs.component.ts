@@ -6,7 +6,15 @@ import { LoginService } from '../../auth/login/login.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
-import { EventLog, EventType, DateRange, ConsentEventLog, ServiceLinkEventLog } from '../../model/auditlogs/auditlogs.model';
+import {
+  EventLog,
+  EventType,
+  DateRange,
+  ConsentEventLog,
+  ServiceLinkEventLog,
+  AccountActionType,
+  AccountEventLog,
+} from '../../model/auditlogs/auditlogs.model';
 import { ProcessingBasisLegalBasisEnum, ProcessingBasisProcessingCategoriesEnum } from '../../model/processingBasis';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -169,11 +177,23 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
               serviceId: (event as ServiceLinkEventLog).serviceId,
               serviceName: (event as ServiceLinkEventLog).serviceName,
               serviceUri: (event as ServiceLinkEventLog).serviceUri,
-            };
+              accountId: event.accountId,
+            } as ServiceLinkEventLog;
           }
 
           if (event.type === EventType.DataProcessing) {
             return {};
+          }
+
+          if (event.type === EventType.Account) {
+            return {
+              context: event.type && event.type[0].toUpperCase() + event.type.slice(1),
+              message: event.message,
+              type: this.translate.instant('general.auditlogs.' + event.type) as string,
+              action: this.translate.instant(`general.auditlogs.${(event as AccountEventLog).action}`) as string,
+              created: new Date(event.created),
+              accountId: event.accountId,
+            } as AccountEventLog;
           }
         });
 

@@ -19,6 +19,7 @@ package it.eng.opsi.cape.accountmanager.model.audit;
 import java.time.ZonedDateTime;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -31,6 +32,8 @@ import it.eng.opsi.cape.serviceregistry.data.ProcessingBasis.LegalBasis;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,23 +42,28 @@ import lombok.NoArgsConstructor;
 @JsonSubTypes({ @Type(value = ServiceLinkEventLog.class, name = "ServiceLink"),
 		@Type(value = ConsentEventLog.class, name = "Consent"),
 		@Type(value = DataProcessingEventLog.class, name = "DataProcessing"),
-		@Type(value = AccountEventLog.class, name= "Account")})
+		@Type(value = AccountEventLog.class, name = "Account") })
+@RequiredArgsConstructor
 public class EventLog {
 
 	@Id
 	private ObjectId _id;
 
-	@NotBlank(message = "created field is mandatory")
+	@NotNull(message = "created field is mandatory")
+	@NonNull
 	private ZonedDateTime created;
 
-	@NotBlank(message = "type field is mandatory")
+	@NotNull(message = "type field is mandatory")
+	@NonNull
 	transient private EventType type;
 
 	@NotBlank(message = "accountId field is mandatory")
+	@NonNull
 	private String accountId;
 
 	private LegalBasis legalBasis;
 
+	@NonNull
 	private String message;
 
 	public EventLog(ZonedDateTime created, EventType type, String accountId, LegalBasis legalBasis, String message) {

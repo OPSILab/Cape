@@ -144,8 +144,8 @@ public class AccountController implements IAccountController {
 		try {
 			clientService.callCreateAuditLog(storedAccount.getUsername());
 			clientService.callAddEventLog(new AccountEventLog(ZonedDateTime.now(), EventType.ACCOUNT,
-					storedAccount.getUsername(), LegalBasis.CONSENT,
-					"Account with username: " + storedAccount.getUsername() + " created", AccountActionType.CREATE));
+					storedAccount.getUsername(), "Account with username: " + storedAccount.getUsername() + " created",
+					AccountActionType.CREATE));
 		} catch (Exception e) {
 			accountRepo.delete(storedAccount);
 			throw e;
