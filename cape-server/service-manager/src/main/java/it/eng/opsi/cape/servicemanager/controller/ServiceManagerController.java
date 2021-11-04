@@ -57,6 +57,7 @@ import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
 import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.ServiceDescriptionStatusNotAllowedException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
 import it.eng.opsi.cape.exception.ServiceLinkingRedirectUriMismatchException;
@@ -134,6 +135,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * @throws ServiceDescriptionNotFoundException
 	 * @throws ServiceManagerException
 	 * @throws ConflictingSessionFoundException
+	 * @throws ServiceDescriptionStatusNotAllowedException 
 	 */
 	@Operation(summary = "Start Process of creating Service Link Record (from CaPe).", description = "Entrypoint for creating new Service Link Record with service."
 			+ "Will take Service Id to link with as parameter. Returns redirect to Service Login. This endpoint will start Service Linking process.", tags = {
@@ -144,13 +146,23 @@ public class ServiceManagerController implements IServiceManagerController {
 	public ResponseEntity<String> startLinkingFromOperatorRedirectToService(@PathVariable("accountId") String accountId,
 			@PathVariable("serviceId") String serviceId,
 			@RequestParam(name = "forceLinking", defaultValue = "false") Boolean forceLinking)
-			throws DataOperatorDescriptionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
-			ConflictingSessionFoundException {
+			throws DataOperatorDescriptionNotFoundException, ServiceManagerException,
+			ServiceDescriptionNotFoundException, ConflictingSessionFoundException, ServiceDescriptionStatusNotAllowedException {
 
 		/*
 		 * getServiceDescription
 		 */
 		ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
+
+		/*
+		 * ****************************************************************************
+		 * Check if Service is registered (Status Completed) before starting a Linking
+		 * Session
+		 ***************************/
+		if (!serviceDescription.getStatus().equals(ServiceEntry.ServiceDescriptionStatus.COMPLETED)) {
+			throw new ServiceDescriptionStatusNotAllowedException(
+					"Service Description is not in a Completed status and therefore no Service Linking is possible until finalizing the Service Description status");
+		}
 
 		/*
 		 * generateCode if there is no pending Linking Session for the accountId -
@@ -223,6 +235,7 @@ public class ServiceManagerController implements IServiceManagerController {
 	 * @throws ServiceManagerException
 	 * @throws ConflictingSessionFoundException
 	 * @throws ServiceLinkingRedirectUriMismatchException
+	 * @throws ServiceDescriptionStatusNotAllowedException
 	 */
 	@Operation(summary = "Start Process of creating Service Link Record.", description = "Entrypoint for creating new Service Link Record with service."
 			+ "Will take Service Id to link with as parameter. If forceLinkCode=true return sessionCode to finalize service link from service side (sdk). This endpoint will start Service Linking process.", tags = {
@@ -236,13 +249,22 @@ public class ServiceManagerController implements IServiceManagerController {
 			@RequestParam(name = "forceLinking", defaultValue = "false") Boolean forceLinking,
 			@RequestParam(name = "forceLinkCode", defaultValue = "false") Boolean forceCode)
 			throws ServiceManagerException, ServiceDescriptionNotFoundException, ConflictingSessionFoundException,
-			ServiceLinkingRedirectUriMismatchException {
+			ServiceLinkingRedirectUriMismatchException, ServiceDescriptionStatusNotAllowedException {
 
 		/*
 		 * getServiceDescription
 		 */
 		ServiceEntry serviceDescription = clientService.getServiceDescriptionFromRegistry(serviceId);
 
+		/*
+		 * ****************************************************************************
+		 * Check if Service is registered (Status Completed) before starting a Linking
+		 * Session
+		 ***************************/
+		if (!serviceDescription.getStatus().equals(ServiceEntry.ServiceDescriptionStatus.COMPLETED)) {
+			throw new ServiceDescriptionStatusNotAllowedException(
+					"Service Description is not in a Completed status and therefore no Service Linking is possible until finalizing the Service Description status");
+		}
 		/*
 		 * generateCode if there is no pending Linking Session for the accountId -
 		 * serviceId pair
@@ -630,9 +652,9 @@ public class ServiceManagerController implements IServiceManagerController {
 
 	private ResponseEntity<ServiceLinkStatusRecordSigned> changeSlrStatus(String accountOrSurrogateId, String serviceId,
 			String slrId, ServiceLinkActionType actionType, ChangeSlrStatusRequestFrom requestFrom)
-			throws ServiceManagerException, ServiceLinkRecordNotFoundException, DataOperatorDescriptionNotFoundException,
-			JsonProcessingException, JOSEException, ServiceDescriptionNotFoundException,
-			ServiceLinkStatusConflictingException, AccountNotFoundException {
+			throws ServiceManagerException, ServiceLinkRecordNotFoundException,
+			DataOperatorDescriptionNotFoundException, JsonProcessingException, JOSEException,
+			ServiceDescriptionNotFoundException, ServiceLinkStatusConflictingException, AccountNotFoundException {
 
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
 		ServiceLinkRecordDoubleSigned existingSlr = null;

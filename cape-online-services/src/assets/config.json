@@ -2,7 +2,7 @@
   "system": {
     "operatorId": "cape",
     "onlineServicesUrl": "http://localhost:83/cape-online-services",
-    "dashboardUrl": "http://localhost/cape-dashboard",
+    "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
     "auth": {
       "idmHost": "https://idm.cape-suite.eu",
       "clientId": "cape-service-sdk",

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConsentForm } from '../model/consent/consentForm';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NbDialogRef, NbToastrService, NbGlobalLogicalPosition } from '@nebular/theme';
@@ -15,6 +15,7 @@ export class ConsentFormComponent implements OnInit {
   consentForm: ConsentForm;
   userConsentForm: FormGroup;
   sdkUrl: string;
+  locale: string;
 
   constructor(
     public dialogRef: NbDialogRef<ConsentFormComponent>,
@@ -22,7 +23,8 @@ export class ConsentFormComponent implements OnInit {
     private capeService: CapeSdkAngularService,
     private toastrService: NbToastrService,
     private translateService: TranslateService,
-    private errorDialogService: CapeSdkDialogService
+    private errorDialogService: CapeSdkDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +47,9 @@ export class ConsentFormComponent implements OnInit {
       ),
       collectionOperatorId: new FormControl(''),
     });
+
+    this.translateService.use(this.locale);
+    this.cdr.detectChanges();
   }
 
   async giveConsent(): Promise<void> {

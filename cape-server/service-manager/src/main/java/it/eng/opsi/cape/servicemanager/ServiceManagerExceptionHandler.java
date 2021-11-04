@@ -39,6 +39,7 @@ import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
 import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.RestTemplateException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.ServiceDescriptionStatusNotAllowedException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
 import it.eng.opsi.cape.exception.ServiceLinkingRedirectUriMismatchException;
@@ -77,14 +78,16 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(DataOperatorDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(DataOperatorDescriptionNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleOperatorNotFound(DataOperatorDescriptionNotFoundException ex,
+			HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
 
 	@ExceptionHandler(ServiceDescriptionNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceDescriptionNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleServiceDescripitionNotFound(ServiceDescriptionNotFoundException ex,
+			HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
@@ -98,7 +101,8 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(ServiceLinkRecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected ResponseEntity<ErrorResponse> handleSlrNotFound(ServiceLinkRecordNotFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleSlrNotFound(ServiceLinkRecordNotFoundException ex,
+			HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND, ex, req.getRequestURI()));
 	}
@@ -112,7 +116,8 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(ConflictingSessionFoundException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ConflictingSessionFoundException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ConflictingSessionFoundException ex,
+			HttpServletRequest req) {
 
 //		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT,
 //				ex.getMessage() + " - Current State: " + ex.getCurrentState(), ex));
@@ -122,7 +127,16 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(ServiceLinkStatusConflictingException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ServiceLinkStatusConflictingException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(ServiceLinkStatusConflictingException ex,
+			HttpServletRequest req) {
+
+		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex, req.getRequestURI()));
+	}
+
+	@ExceptionHandler(ServiceDescriptionStatusNotAllowedException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	protected ResponseEntity<ErrorResponse> handleConflictingSessionFound(
+			ServiceDescriptionStatusNotAllowedException ex, HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.CONFLICT, ex, req.getRequestURI()));
 	}
@@ -168,7 +182,8 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleIllegalArgumentError(IllegalArgumentException ex,
+			HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}
@@ -182,7 +197,8 @@ public class ServiceManagerExceptionHandler extends ResponseEntityExceptionHandl
 
 	@ExceptionHandler(SessionStateNotAllowedException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<ErrorResponse> handleSessionStateNotAllowed(SessionStateNotAllowedException ex, HttpServletRequest req) {
+	protected ResponseEntity<ErrorResponse> handleSessionStateNotAllowed(SessionStateNotAllowedException ex,
+			HttpServletRequest req) {
 
 		return buildResponseEntity(new ErrorResponse(HttpStatus.BAD_REQUEST, ex, req.getRequestURI()));
 	}

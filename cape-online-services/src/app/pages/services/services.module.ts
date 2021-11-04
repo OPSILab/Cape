@@ -9,6 +9,8 @@ import { DialogPersonalAttributesComponent } from './personalattributes-dialogue
 import { DialogPrivacyNoticeComponent } from './privacynotice/dialog-privacynotice.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogModule } from '../error-dialog/error-dialog.module';
+import { HttpLoaderFactory } from 'src/app/app.module';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -18,7 +20,13 @@ import { ErrorDialogModule } from '../error-dialog/error-dialog.module';
     NbButtonModule,
     NbInputModule,
     ServicesRoutingModule,
-    TranslateModule.forChild({}),
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
     NbCheckboxModule,
     NbAccordionModule,
     NbIconModule,

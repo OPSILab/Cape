@@ -41,7 +41,7 @@ export class LinkButtonRenderComponent implements OnInit {
       queryParams: {
         serviceId: this.value.serviceId,
         linkingFrom: LinkingFromEnum.Operator,
-        locale: this.value.locale,
+        locale: localStorage.getItem('currentLocale') || this.value.locale,
       },
     });
   }

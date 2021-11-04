@@ -58,6 +58,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
+      defaultLanguage: 'en',
     }),
     NbThemeModule.forRoot({ name: 'cape' }),
     NbLayoutModule,

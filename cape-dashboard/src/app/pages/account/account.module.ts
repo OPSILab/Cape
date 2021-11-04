@@ -14,17 +14,25 @@ import {
 } from '@nebular/theme';
 import { CommonModule } from '@angular/common';
 import { AccountRoutingModule } from './account-routing.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AccountComponent } from './account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from './account.service';
+import { HttpClient } from '@angular/common/http';
+import { createTranslateLoader } from '../../service-linking/service-linking.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AccountRoutingModule,
-    TranslateModule.forChild({}),
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
     NbAccordionModule,
     NbButtonModule,
     NbCardModule,

@@ -64,6 +64,7 @@ export class ServicesComponent implements OnInit {
     this.locale = queryParams.locale || this.config.i18n.locale; // TODO default value taken from User language preferences;
     this.translateService.setDefaultLang('en');
     this.translateService.use(this.locale);
+    sessionStorage.setItem('currentLocale', this.locale);
   }
 
   async onClickGo(serviceId: string, serviceName: string, serviceRole: string, purposeId: string) {
@@ -115,6 +116,7 @@ export class ServicesComponent implements OnInit {
         serviceId,
         this.operatorId
       );
+      
 
       console.log('checking surrogateId ...');
 

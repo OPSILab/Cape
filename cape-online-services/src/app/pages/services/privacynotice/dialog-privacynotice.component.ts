@@ -40,6 +40,7 @@ export class DialogPrivacyNoticeComponent {
   }
 
   async openConsentForm() {
+    this.translateService.use(sessionStorage.getItem('currentLocale'));
     try {
       this.dialogService.open(ConsentFormComponent, {
         hasScroll: true,
@@ -48,6 +49,7 @@ export class DialogPrivacyNoticeComponent {
         context: {
           sdkUrl: this.sdkUrl,
           consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId, this.serviceRole),
+          locale: sessionStorage.getItem('currentLocale') as string,
         },
       });
     } catch (error) {

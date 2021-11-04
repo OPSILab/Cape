@@ -27,6 +27,7 @@ import it.eng.opsi.cape.exception.AccountNotFoundException;
 import it.eng.opsi.cape.exception.ConflictingSessionFoundException;
 import it.eng.opsi.cape.exception.DataOperatorDescriptionNotFoundException;
 import it.eng.opsi.cape.exception.ServiceDescriptionNotFoundException;
+import it.eng.opsi.cape.exception.ServiceDescriptionStatusNotAllowedException;
 import it.eng.opsi.cape.exception.ServiceLinkRecordNotFoundException;
 import it.eng.opsi.cape.exception.ServiceLinkStatusConflictingException;
 import it.eng.opsi.cape.exception.ServiceLinkingRedirectUriMismatchException;
@@ -44,12 +45,12 @@ public interface IServiceManagerController {
 
 	public abstract ResponseEntity<String> startLinkingFromOperatorRedirectToService(String accountId, String serviceId,
 			Boolean forceLinking) throws DataOperatorDescriptionNotFoundException, ServiceManagerException,
-			ServiceDescriptionNotFoundException, ConflictingSessionFoundException;
+			ServiceDescriptionNotFoundException, ConflictingSessionFoundException, ServiceDescriptionStatusNotAllowedException;
 	
 		public abstract ResponseEntity<String> startLinkingFromServiceAfterOperatorLogin(String accountId,
 			String surrogateId, String serviceId, String returnUrl, Boolean forceLinking, Boolean forceCode)
 			throws ServiceManagerException, ServiceDescriptionNotFoundException, ConflictingSessionFoundException,
-			ServiceLinkingRedirectUriMismatchException;
+			ServiceLinkingRedirectUriMismatchException, ServiceDescriptionStatusNotAllowedException;
 
 	public abstract ResponseEntity<FinalStoreSlrResponse> linkService(ContinueLinkingRequest request)
 			throws SessionNotFoundException, ServiceManagerException, ServiceDescriptionNotFoundException,
