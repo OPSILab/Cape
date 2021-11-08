@@ -3,7 +3,7 @@
   <nb-card>
     <nb-card-header>{{ 'general.consents.filters' | translate }}</nb-card-header>
     <nb-card-body>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center p-1">
         <div class="mt-1 col-sm-auto d-flex justify-content-center">
           <nb-select formControlName="status" #statusSelect placeholder="{{ 'general.consents.filter_by_status' | translate }}">
             <nb-option (click)="resetFilter('status')"
@@ -61,9 +61,7 @@
           </nb-select>
         </div>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mt-3">
         <div class="mr-1 col-xs-auto d-flex justify-content-center">
           <button
             nbButton
@@ -90,9 +88,19 @@
           </button>
         </div>
       </div>
-      <div class="row justify-content-start">
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row justify-content-between">
         <button nbButton ghost class="p-2" shape="round" size="small" (click)="ngOnInit()">
           {{ 'general.consents.refresh' | translate }}&nbsp;<i class="material-icons">refresh</i>
+        </button>
+        <nb-toggle #notWithdrawnToogle status="basic" labelPosition="left" [(checked)]="onlyNotWithdrawnChecked" (checkedChange)="ngOnInit()">
+          {{ 'general.consents.show_withdrawn' | translate }}</nb-toggle
+        >
+      </div>
+      <div class="row justify-content-start">
+        <button type="button" nbButton ghost (click)="toggleViewMode()" size="small">
+          <nb-icon icon="list-outline"></nb-icon>
         </button>
       </div>
     </nb-card-footer>
@@ -101,317 +109,367 @@
 
 <!-- Consents Cards-->
 <div *ngIf="loading" class="loader"></div>
-<div *ngIf="!loading" id="forHiding">
+<div *ngIf="!loading" class="p-0 m-0" id="forHiding">
   <div class="row">
     <h5>{{ message }}</h5>
   </div>
-  <div class="row">
-    <div class="col-sm">
-      <nb-card *ngFor="let consent of consents; let consentIndex = index">
-        <nb-card-header>
-          <div class="row justify-content-between">
-            <div class="col-sm-auto align-self-center">
-              <button
-                nbButton
-                class="col-sm-auto col-lg-3 mx-1"
-                size="small"
-                status="{{ button.color }}"
-                *ngFor="let button of changeStatusButtons"
-                (click)="onChangeStatusClick(consentIndex, button.id)"
-                [disabled]="!isActiveButton(consentIndex, button.id)"
-              >
-                {{ button.name }}
-              </button>
+
+  <ng-container *ngIf="viewMode === 'grouped'">
+    <mat-accordion *ngFor="let consentGroup of consentsGrouped | keyvalue; let groupIndex = index" class="example-headers-align pr-1" multi>
+      <!-- Accordion Title -->
+      <mat-expansion-panel class="example-headers-align">
+        <mat-expansion-panel-header class="border border-secondary">
+          <mat-panel-title class="font-weight-bold"> {{ 'general.services.service' | translate }}:&nbsp; {{ consentGroup.key }} </mat-panel-title>
+          <mat-panel-description class="justify-content-end">
+            <div class="justify-content-end">
+              <div class="justify-content-between">
+                <span class="text-success">
+                  <strong>{{ 'general.consents.active' | translate }}:&nbsp; </strong> {{ groupConsentsCount(consentGroup.value).active }}</span
+                >
+                |
+                <span class="text-warning">
+                  <strong>{{ 'general.consents.disabled' | translate }}:&nbsp; </strong> {{ groupConsentsCount(consentGroup.value).disabled }}
+                </span>
+                |
+                <span class="text-danger">
+                  <strong>{{ 'general.consents.withdrawn' | translate }}:&nbsp; </strong> {{ groupConsentsCount(consentGroup.value).withdrawn }}
+                </span>
+              </div>
             </div>
-            <div class="col-sm-auto align-self-center">
-              <button nbButton ghost (click)="openConsentHistory(consentHistory, consentIndex)" size="small">
-                <i class="material-icons">history</i>&nbsp;{{ 'general.consents.history' | translate }}
-              </button>
-            </div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <ng-container *ngFor="let consent of consentGroup.value">
+          <ng-container *ngTemplateOutlet="consentCard; context: { $implicit: consent, consentIndex: consent.consentIndex }"></ng-container>
+        </ng-container>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+
+  <ng-container *ngIf="viewMode === 'list'">
+    <ng-container *ngFor="let consent of consents; let consentIndex = index">
+      <ng-container *ngTemplateOutlet="consentCard; context: { $implicit: consent, consentIndex: consentIndex }"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <br />
+  <br />
+
+  <!-- Template for Consent Cards, used by either view mode -->
+  <ng-template #consentCard let-consent let-consentIndex="consentIndex">
+    <nb-card class="my-3" *ngIf="!(isWithdrawnConsent(consent) && onlyNotWithdrawnChecked)">
+      <nb-card-header>
+        <div class="row justify-content-between">
+          <div class="col-sm-auto align-self-center">
+            <button
+              nbButton
+              class="col-sm-auto col-lg-3 mx-1"
+              size="small"
+              status="{{ button.color }}"
+              *ngFor="let button of changeStatusButtons"
+              (click)="onChangeStatusClick(consentIndex, button.id)"
+              [disabled]="!isActiveButton(consentIndex, button.id)"
+            >
+              {{ button.name }}
+            </button>
           </div>
-        </nb-card-header>
-        <nb-card-body>
-          <table class="table table-hover">
-            <tbody>
-              <ng-container *ngIf="consent.source; then isPair; else isSingle"></ng-container>
-              <ng-template #isPair>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_provider' | translate }}</th>
-                  <td>{{ consent.source.payload.common_part.source_subject_name }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_provider_description' | translate }}</th>
-                  <td>{{ getLocalizedHumanReadableDescription(consent.source.payload.common_part.source_subject_humanreadable_descriptions) }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_requester' | translate }}</th>
-                  <td>{{ consent.sink.payload.common_part.subject_name }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_requester_description' | translate }}</th>
-                  <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
-                </tr>
-              </ng-template>
-              <ng-template #isSingle>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_processor' | translate }}</th>
-                  <td>{{ consent.sink.payload.common_part.subject_name }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{{ 'general.consents.data_processor_description' | translate }}</th>
-                  <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
-                </tr>
-              </ng-template>
-
+          <div class="col-sm-auto align-self-center">
+            <strong>
+              {{ 'general.consents.purpose' | translate }}:&nbsp;{{
+                consent.sink.payload.common_part.rs_description.resource_set.datasets[0].purposeName
+              }}
+            </strong>
+          </div>
+          <div class="col-sm-auto align-self-center">
+            <button nbButton ghost (click)="openConsentHistory(consentHistory, consentIndex)" size="small">
+              <i class="material-icons">history</i>&nbsp;{{ 'general.consents.history' | translate }}
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <table class="table table-hover">
+          <tbody>
+            <ng-container *ngIf="consent.source; then isPair; else isSingle"></ng-container>
+            <ng-template #isPair>
               <tr>
-                <th scope="row">{{ 'general.consents.purpose' | translate }}</th>
-                <td>{{ consent.sink.payload.common_part.rs_description.resource_set.datasets[0].purposeName }}</td>
+                <th scope="row">{{ 'general.consents.data_provider' | translate }}</th>
+                <td>{{ consent.source.payload.common_part.source_subject_name }}</td>
               </tr>
-
-              <!-- Status Details --->
               <tr>
-                <th scope="row">{{ 'general.consents.status' | translate }}</th>
+                <th scope="row">{{ 'general.consents.data_provider_description' | translate }}</th>
                 <td>
-                  {{ consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.consent_status }}
-                  <strong>{{ 'general.consents.since' | translate }} </strong
-                  >{{ consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.iat | date: 'short' }}
+                  {{ getLocalizedHumanReadableDescription(consent.source.payload.common_part.source_subject_humanreadable_descriptions) }}
                 </td>
               </tr>
-            </tbody>
-          </table>
-        </nb-card-body>
-        <nb-card-footer>
-          <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-              <button
-                nbButton
-                id="button{{ consentIndex }}"
-                class="mb-2"
-                [attr.aria-expanded]="!isCollapsed[consentIndex]"
-                (click)="openDetails(consentIndex)"
-              >
-                {{ 'general.consents.details' | translate }}
-                <!--  <nb-icon icon="arrow-circle-down-outline"></nb-icon>-->
-                <i class="material-icons expand_more">expand_more</i>
-                <i class="material-icons expand_less">expand_less</i>
-              </button>
-            </div>
-          </div>
+              <tr>
+                <th scope="row">{{ 'general.consents.data_requester' | translate }}</th>
+                <td>{{ consent.sink.payload.common_part.subject_name }}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'general.consents.data_requester_description' | translate }}</th>
+                <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
+              </tr>
+            </ng-template>
+            <ng-template #isSingle>
+              <tr>
+                <th scope="row">{{ 'general.consents.data_processor' | translate }}</th>
+                <td>{{ consent.sink.payload.common_part.subject_name }}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ 'general.consents.data_processor_description' | translate }}</th>
+                <td>{{ getLocalizedHumanReadableDescription(consent.sink.payload.common_part.subject_humanreadable_descriptions) }}</td>
+              </tr>
+            </ng-template>
 
-          <!-- Consent Detail Collapse-->
-          <div
-            class="row justify-content-center"
-            id="detailsCollapse{{ consentIndex }}"
-            [@expandCollapse]="isCollapsed[consentIndex] ? 'closed' : 'open'"
-          >
-            <div class="row justify-content-center">
-              <div class="col-sm-12">
-                <nb-tabset status="success" class="row" fullWidth>
-                  <!-- Personal Data Tab -->
-                  <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.personal_data' | translate }}">
-                    <table class="table table-hover">
-                      <thead class="thead-light">
-                        <tr>
-                          <th scope="col">{{ 'general.consents.data' | translate }}</th>
-                          <th scope="col">{{ 'general.consents.required' | translate }}</th>
-                          <th scope="col" *ngIf="isActiveConsent(consentIndex)">
-                            {{ 'general.consents.grantconsent' | translate }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let concept of lastClickedDataMapping.get(consentIndex); let conceptIndex = index">
-                          <td>
-                            {{ concept.name }}
-                          </td>
-                          <td>
-                            <nb-icon *ngIf="concept.required" icon="checkmark-outline"></nb-icon>
-                          </td>
-                          <td *ngIf="isActiveConsent(consentIndex)">
-                            <ng-container *ngIf="isActiveConsent(consentIndex) && !concept.required">
-                              <nb-toggle
-                                status="primary"
-                                [checked]="concept.current"
-                                (checkedChange)="changeDataMapping($event, consentIndex, conceptIndex)"
-                              ></nb-toggle>
-                            </ng-container>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="row justify-content-end">
-                      <div class="col-12 text-center text-md-right">
-                        <button nbButton ghost size="small" (click)="openDatasetHistory(datasetHistory, consentIndex)">
-                          <i class="material-icons">history</i>&nbsp;{{ 'general.consents.datasethistory' | translate }}
-                        </button>
-                      </div>
-                    </div>
-                  </nb-tab>
+            <!-- <tr>
+          <th scope="row">{{ 'general.consents.purpose' | translate }}</th>
+          <td>{{ consent.sink.payload.common_part.rs_description.resource_set.datasets[0].purposeName }}</td>
+        </tr> -->
 
-                  <!-- Processing Bases Tab-->
-                  <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.processing_bases' | translate }}">
-                    <nb-accordion>
-                      <nb-accordion-item [expanded]="true">
-                        <nb-accordion-item-header class="bg-light bg-gradient">
-                          <h5 class="h6 pr-3">{{ consent.sink.payload.common_part.usage_rules.purposeName }}</h5>
-                        </nb-accordion-item-header>
-                        <nb-accordion-item-body>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.purpose_category' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.purposeCategory }}
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.processing_categories' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.processingCategories }}
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.legal_basis' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.legalBasis }}
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.policy_refs' | translate }}: </span>
-                            <a href="{{ consent.sink.payload.common_part.usage_rules.policy.policyRef }}" target="_blank"
-                              ><nb-icon icon="external-link-outline"></nb-icon
-                            ></a>
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.storage' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.storage.location }} ({{
-                              consent.sink.payload.common_part.usage_rules.storage.duration
-                            }})
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.services.recipients' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.recipients }}
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.consents.termination' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.termination }}
-                          </div>
-                          <div class="my-1">
-                            <span class="subtitle">{{ 'general.consents.collectionmethod' | translate }}: </span>
-                            {{ consent.sink.payload.common_part.usage_rules.collectionMethod }}
-                          </div>
-                        </nb-accordion-item-body>
-                      </nb-accordion-item>
-                    </nb-accordion>
-                  </nb-tab>
-
-                  <!-- Share With Tab -->
-                  <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.sharedwith' | translate }}">
-                    <table class="table table-hover">
-                      <thead class="thead-light">
-                        <tr>
-                          <th scope="col">{{ 'general.consents.organization' | translate }}</th>
-                          <th scope="col">{{ 'general.consents.business' | translate }}</th>
-                          <th scope="col">{{ 'general.consents.url' | translate }}</th>
-                          <th scope="col">{{ 'general.consents.required' | translate }}</th>
-                          <th scope="col" *ngIf="isActiveConsent(consentIndex)">{{ 'general.consents.enable_sharing' | translate }}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let shareEntry of lastClickedShareWith.get(consentIndex); let shareIndex = index">
-                          <td>
-                            {{ shareEntry.orgName }}
-                          </td>
-                          <td>
-                            {{ shareEntry.businessType }}
-                          </td>
-                          <td>
-                            <a
-                              href="{{ shareEntry.orgUrl.startsWith('http://') ? shareEntry.orgUrl : 'http://' + shareEntry.orgUrl }}"
-                              target="_blank"
-                              ><nb-icon icon="external-link-outline"></nb-icon
-                            ></a>
-                          </td>
-                          <td>
-                            <nb-icon *ngIf="shareEntry.required" icon="checkmark-outline"></nb-icon>
-                          </td>
-                          <td *ngIf="isActiveConsent(consentIndex)">
-                            <ng-container *ngIf="isActiveConsent(consentIndex) && !shareEntry.required">
-                              <nb-toggle
-                                #shareWithToggle
-                                status="primary"
-                                [checked]="shareEntry.current"
-                                (checkedChange)="changeShareWith($event, consentIndex, shareIndex)"
-                              ></nb-toggle>
-                            </ng-container>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </nb-tab>
-
-                  <!-- Data Controller Tab -->
-                  <nb-tab tabTitle="{{ 'general.consents.data_controller' | translate }}">
-                    <table class="table table-hover">
-                      <tbody>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.name' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.piiController }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.onbehalf' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.onBehalf }}</td>
-                        </tr>
-
-                        <tr>
-                          <th scope="row">{{ 'general.consents.organization' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.org }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.contact' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.contact }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.address' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.address }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.email' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.email }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">{{ 'general.consents.phone' | translate }}</th>
-                          <td>{{ consent.sink.payload.common_part.data_controller.phone }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </nb-tab>
-                </nb-tabset>
-              </div>
-            </div>
-
-            <!-- Aggiungi o rimuovi la classe "to-update" per mostrare tooltip e bordo -->
-            <div
-              *ngIf="isActiveConsent(consentIndex)"
-              id="updateButton{{ consentIndex }}"
-              class="mt-2 btn-update"
-              [ngClass]="changedDataMapping[consentIndex] || changedShareWith[consentIndex] ? 'to-update' : ''"
+            <!-- Status Details --->
+            <tr>
+              <th scope="row">{{ 'general.consents.status' | translate }}</th>
+              <td>
+                {{ consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.consent_status }}
+                <strong>{{ 'general.consents.since' | translate }} </strong
+                >{{ consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.iat | date: 'short' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center">
+            <button
+              nbButton
+              id="button{{ consentIndex }}"
+              class="mb-2"
+              [attr.aria-expanded]="!isCollapsed[consentIndex]"
+              (click)="openDetails(consentIndex)"
             >
-              <div class="tooltip bs-tooltip-right">
-                <div class="arrow"></div>
-                <div class="tooltip-inner">{{ 'general.consents.clickupdate' | translate }}</div>
-              </div>
-              <p class="text-center">
-                <button
-                  nbTooltip="{{ 'general.consents.clickupdate' | translate }}"
-                  nbTooltipStatus="warning"
-                  nbButton
-                  id="disableButton{{ consentIndex }}"
-                  type="button"
-                  [disabled]="!changedDataMapping[consentIndex] && !changedShareWith[consentIndex]"
-                  (click)="updateConsent(consentIndex)"
-                >
-                  <i class="ion-android-send">{{ 'general.consents.update' | translate }}</i>
-                </button>
-              </p>
+              {{ 'general.consents.details' | translate }}
+              <!--  <nb-icon icon="arrow-circle-down-outline"></nb-icon>-->
+              <i class="material-icons expand_more">expand_more</i>
+              <i class="material-icons expand_less">expand_less</i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Consent Detail Collapse-->
+        <div
+          class="row justify-content-center"
+          id="detailsCollapse{{ consentIndex }}"
+          [@expandCollapse]="isCollapsed[consentIndex] ? 'closed' : 'open'"
+        >
+          <div class="row justify-content-center">
+            <div class="col-sm-12">
+              <nb-tabset status="success" class="row" fullWidth>
+                <!-- Personal Data Tab -->
+                <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.personal_data' | translate }}">
+                  <table class="table table-hover">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">{{ 'general.consents.data' | translate }}</th>
+                        <th scope="col">{{ 'general.consents.required' | translate }}</th>
+                        <th scope="col" *ngIf="isActiveConsentByIndex(consentIndex)">
+                          {{ 'general.consents.grantconsent' | translate }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let concept of lastClickedDataMapping.get(consentIndex); let conceptIndex = index">
+                        <td>
+                          {{ concept.name }}
+                        </td>
+                        <td>
+                          <nb-icon *ngIf="concept.required" icon="checkmark-outline"></nb-icon>
+                        </td>
+                        <td *ngIf="isActiveConsentByIndex(consentIndex)">
+                          <ng-container *ngIf="isActiveConsentByIndex(consentIndex) && !concept.required">
+                            <nb-toggle
+                              status="primary"
+                              [checked]="concept.current"
+                              (checkedChange)="changeDataMapping($event, consentIndex, conceptIndex)"
+                            ></nb-toggle>
+                          </ng-container>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="row justify-content-end">
+                    <div class="col-12 text-center text-md-right">
+                      <button nbButton ghost size="small" (click)="openDatasetHistory(datasetHistory, consentIndex)">
+                        <i class="material-icons">history</i>&nbsp;{{ 'general.consents.datasethistory' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </nb-tab>
+
+                <!-- Processing Bases Tab-->
+                <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.processing_bases' | translate }}">
+                  <nb-accordion>
+                    <nb-accordion-item [expanded]="true">
+                      <nb-accordion-item-header class="bg-light bg-gradient">
+                        <h5 class="h6 pr-3">{{ consent.sink.payload.common_part.usage_rules.purposeName }}</h5>
+                      </nb-accordion-item-header>
+                      <nb-accordion-item-body>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.purpose_category' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.purposeCategory }}
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.processing_categories' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.processingCategories }}
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.legal_basis' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.legalBasis }}
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.policy_refs' | translate }}: </span>
+                          <a href="{{ consent.sink.payload.common_part.usage_rules.policy.policyRef }}" target="_blank"
+                            ><nb-icon icon="external-link-outline"></nb-icon
+                          ></a>
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.storage' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.storage.location }} ({{
+                            consent.sink.payload.common_part.usage_rules.storage.duration
+                          }})
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.services.recipients' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.recipients }}
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.consents.termination' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.termination }}
+                        </div>
+                        <div class="my-1">
+                          <span class="subtitle">{{ 'general.consents.collectionmethod' | translate }}: </span>
+                          {{ consent.sink.payload.common_part.usage_rules.collectionMethod }}
+                        </div>
+                      </nb-accordion-item-body>
+                    </nb-accordion-item>
+                  </nb-accordion>
+                </nb-tab>
+
+                <!-- Share With Tab -->
+                <nb-tab [responsive]="true" tabTitle="{{ 'general.consents.sharedwith' | translate }}">
+                  <table class="table table-hover">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">{{ 'general.consents.organization' | translate }}</th>
+                        <th scope="col">{{ 'general.consents.business' | translate }}</th>
+                        <th scope="col">{{ 'general.consents.url' | translate }}</th>
+                        <th scope="col">{{ 'general.consents.required' | translate }}</th>
+                        <th scope="col" *ngIf="isActiveConsentByIndex(consentIndex)">
+                          {{ 'general.consents.enable_sharing' | translate }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let shareEntry of lastClickedShareWith.get(consentIndex); let shareIndex = index">
+                        <td>
+                          {{ shareEntry.orgName }}
+                        </td>
+                        <td>
+                          {{ shareEntry.businessType }}
+                        </td>
+                        <td>
+                          <a href="{{ shareEntry.orgUrl.startsWith('http://') ? shareEntry.orgUrl : 'http://' + shareEntry.orgUrl }}" target="_blank"
+                            ><nb-icon icon="external-link-outline"></nb-icon
+                          ></a>
+                        </td>
+                        <td>
+                          <nb-icon *ngIf="shareEntry.required" icon="checkmark-outline"></nb-icon>
+                        </td>
+                        <td *ngIf="isActiveConsentByIndex(consentIndex)">
+                          <ng-container *ngIf="isActiveConsentByIndex(consentIndex) && !shareEntry.required">
+                            <nb-toggle
+                              #shareWithToggle
+                              status="primary"
+                              [checked]="shareEntry.current"
+                              (checkedChange)="changeShareWith($event, consentIndex, shareIndex)"
+                            ></nb-toggle>
+                          </ng-container>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </nb-tab>
+
+                <!-- Data Controller Tab -->
+                <nb-tab tabTitle="{{ 'general.consents.data_controller' | translate }}">
+                  <table class="table table-hover">
+                    <tbody>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.name' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.piiController }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.onbehalf' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.onBehalf }}</td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">{{ 'general.consents.organization' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.org }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.contact' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.contact }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.address' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.address }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.email' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.email }}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{{ 'general.consents.phone' | translate }}</th>
+                        <td>{{ consent.sink.payload.common_part.data_controller.phone }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </nb-tab>
+              </nb-tabset>
             </div>
           </div>
-        </nb-card-footer>
-      </nb-card>
-    </div>
-  </div>
+
+          <!-- Aggiungi o rimuovi la classe "to-update" per mostrare tooltip e bordo -->
+          <div
+            *ngIf="isActiveConsentByIndex(consentIndex)"
+            id="updateButton{{ consentIndex }}"
+            class="mt-2 btn-update"
+            [ngClass]="changedDataMapping[consentIndex] || changedShareWith[consentIndex] ? 'to-update' : ''"
+          >
+            <div class="tooltip bs-tooltip-right">
+              <div class="arrow"></div>
+              <div class="tooltip-inner">{{ 'general.consents.clickupdate' | translate }}</div>
+            </div>
+            <p class="text-center">
+              <button
+                nbTooltip="{{ 'general.consents.clickupdate' | translate }}"
+                nbTooltipStatus="warning"
+                nbButton
+                id="disableButton{{ consentIndex }}"
+                type="button"
+                [disabled]="!changedDataMapping[consentIndex] && !changedShareWith[consentIndex]"
+                (click)="updateConsent(consentIndex)"
+              >
+                <i class="ion-android-send">{{ 'general.consents.update' | translate }}</i>
+              </button>
+            </p>
+          </div>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
 </div>
 
 <!-- Consent History Template -->

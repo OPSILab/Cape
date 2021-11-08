@@ -100,7 +100,8 @@
       "reset": "Ripristina",
       "refresh": "Aggiorna Consensi",
       "apply": "Applica",
-      "force_serviceLink_activation": "Attiva link al servizio e consenso"
+      "force_serviceLink_activation": "Attiva link al servizio e consenso",
+      "show_withdrawn": "Mostra anche consensi revocati"
     },
     "account": {
       "export_account": "Esporta Account",

@@ -22,8 +22,10 @@ import {
   NbTooltipModule,
   NbToggleModule,
   NbDatepickerModule,
+  NbCheckboxModule,
 } from '@nebular/theme';
 import { LinkedServicesService } from '../services/linkedServices/linkedServices.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   imports: [
@@ -37,12 +39,14 @@ import { LinkedServicesService } from '../services/linkedServices/linkedServices
     }),
     TranslateModule.forChild({}),
     NbAccordionModule,
+    MatExpansionModule,
     NbButtonModule,
     NbCardModule,
     NbToggleModule,
     NbIconModule,
     NbTabsetModule,
     NbToggleModule,
+    NbCheckboxModule,
     FormsModule,
     NgbDropdownModule,
     NgbModalModule,

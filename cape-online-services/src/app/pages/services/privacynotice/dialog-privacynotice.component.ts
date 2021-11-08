@@ -50,6 +50,7 @@ export class DialogPrivacyNoticeComponent {
           sdkUrl: this.sdkUrl,
           consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId, this.serviceRole),
           locale: sessionStorage.getItem('currentLocale') as string,
+          showAdditionalOptions: true,
         },
       });
     } catch (error) {

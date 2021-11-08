@@ -44,7 +44,10 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   public lastClickedDataMapping: Map<number, DataMapping[]> = new Map<number, DataMapping[]>();
   public lastClickedShareWith: Map<number, Organization[]> = new Map<number, Organization[]>();
   public consents: ConsentRecordSignedPair[];
+  public consentsGrouped: Record<string, Record<string, unknown>[]>;
   public services: ServiceEntry[];
+  public onlyNotWithdrawnChecked = false;
+  public viewMode = 'grouped';
 
   @ViewChild('consentUpdateConflict')
   private consentUpdateConflict: TemplateRef<unknown>;
@@ -107,8 +110,43 @@ export class ConsentsComponent implements OnInit, OnDestroy {
     const queryParams = this.route.snapshot.queryParams;
 
     await this.getConsents(QuerySortEnum.ASC, queryParams.consentId, queryParams.serviceId);
+
     await this.getServices();
   }
+
+  groupBySubjectId = (list: ConsentRecordSignedPair[]): Record<string, Record<string, unknown>[]> =>
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+
+    list.reduce<Record<string, Record<string, unknown>[]>>((result, currentConsentPair, consentIndex) => {
+      (result[currentConsentPair.sink?.payload?.common_part?.subject_id] =
+        result[currentConsentPair?.sink?.payload?.common_part.subject_id] || []).push({
+        ...currentConsentPair,
+        consentIndex: consentIndex,
+        show: !(this.isWithdrawnConsentByIndex(consentIndex) && this.onlyNotWithdrawnChecked),
+      });
+
+      return result;
+    }, {});
+
+  groupConsentsCount = (list: Record<string, unknown>[]): { active: number; disabled: number; withdrawn: number } =>
+    list.reduce<{ active: number; disabled: number; withdrawn: number }>(
+      (result, current) => {
+        if (this.isWithdrawnConsent((current as unknown) as ConsentRecordSignedPair)) result.withdrawn++;
+        else if (this.isActiveConsent((current as unknown) as ConsentRecordSignedPair)) result.active++;
+        else result.disabled++;
+
+        return result;
+      },
+      {
+        active: 0,
+        disabled: 0,
+        withdrawn: 0,
+      }
+    );
+
+  toggleViewMode = (): void => {
+    this.viewMode = this.viewMode == 'grouped' ? 'list' : 'grouped';
+  };
 
   ngOnDestroy(): void {
     console.log('ngOnDestroy');
@@ -155,6 +193,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
           this.changedDataMapping.push(false);
           this.changedShareWith.push(false);
         });
+      this.consentsGrouped = this.groupBySubjectId(this.consents);
 
       this.loading = false;
     } catch (error) {
@@ -185,11 +224,26 @@ export class ConsentsComponent implements OnInit, OnDestroy {
    *
    * ****************************/
 
-  isActiveConsent(consentIndex: number): boolean {
+  isActiveConsentByIndex(consentIndex: number): boolean {
     return (
       this.consents[consentIndex].sink.consentStatusList[this.consents[consentIndex].sink.consentStatusList.length - 1].payload.consent_status ===
       ConsentStatusEnum.Active
     );
+  }
+
+  isWithdrawnConsentByIndex(consentIndex: number): boolean {
+    return (
+      this.consents[consentIndex].sink.consentStatusList[this.consents[consentIndex].sink.consentStatusList.length - 1].payload.consent_status ===
+      ConsentStatusEnum.Withdrawn
+    );
+  }
+
+  isWithdrawnConsent(consent: ConsentRecordSignedPair): boolean {
+    return consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.consent_status === ConsentStatusEnum.Withdrawn;
+  }
+
+  isActiveConsent(consent: ConsentRecordSignedPair): boolean {
+    return consent.sink.consentStatusList[consent.sink.consentStatusList.length - 1].payload.consent_status === ConsentStatusEnum.Active;
   }
 
   onChangeStatusClick(consentIndex: number, buttonId: number): void {

@@ -16,6 +16,7 @@ export class ConsentFormComponent implements OnInit {
   userConsentForm: FormGroup;
   sdkUrl: string;
   locale: string;
+  showAdditionalOptions = false;
 
   constructor(
     public dialogRef: NbDialogRef<ConsentFormComponent>,

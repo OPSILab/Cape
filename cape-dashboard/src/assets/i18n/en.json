@@ -100,7 +100,8 @@
       "reset": "Reset",
       "refresh": "Refresh Consents",
       "apply": "Apply",
-      "force_serviceLink_activation": "Activate both Service Link and Consent"
+      "force_serviceLink_activation": "Activate both Service Link and Consent",
+      "show_withdrawn": "Show also withdrawn Consents"
     },
     "account": {
       "export_account": "Export Account",

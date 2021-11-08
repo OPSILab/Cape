@@ -85,7 +85,7 @@
           </nb-accordion-item>
         </nb-accordion>
 
-        <nb-accordion class="mt-1">
+        <nb-accordion *ngIf="showAdditionalOptions" class="mt-1">
           <nb-accordion-item>
             <nb-accordion-item-header class="">{{ 'general.consent.form.additionalOptions' | translate }}</nb-accordion-item-header>
             <nb-accordion-item-body>
