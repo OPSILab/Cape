@@ -14,7 +14,7 @@ import { InnerError } from './innerError';
 
 export interface ErrorResponse {
   status?: number;
-  error?: string;
+  error?: string | ErrorResponse;
   message?: string;
   path?: string;
   timestamp?: string;

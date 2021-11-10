@@ -7,6 +7,7 @@ import { ServiceLinkingService } from './service-linking.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ErrorDialogModule } from '../error-dialog/error-dialog.module';
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -22,6 +23,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     NbButtonModule,
     NbToastrModule,
     ServiceLinkingRoutingModule,
+    ErrorDialogModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,

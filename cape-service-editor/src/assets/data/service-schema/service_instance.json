@@ -3,7 +3,7 @@
   "title": "Service Instance",
   "description": "Technical, Service Provider and Data Controller Descriptions of actual instance where service is deployed.",
   "format": "categories",
-  "required": ["serviceProvider", "cert", "serviceUrls", "dataController"],
+  "required": ["serviceProvider", "cert", "serviceUrls", "dataController", "isBackendLinking"],
   "properties": {
     "serviceProvider": {
       "type": "object",
@@ -169,6 +169,12 @@
           "description": "Name of the Operator is describing the Service."
         }
       }
+    },
+    "isBackendLinking": {
+      "type": "boolean",
+      "title": "isBackendLinking",
+      "description": "Discriminates whether the Service linking is made only with backend interactions between SDK and Cape Server, thus without frontend redirects between Cape dashboard and the service.",
+      "default": false
     }
   }
 }

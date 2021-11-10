@@ -178,6 +178,7 @@
       "linkingMessage": "Vuoi collegare il Servizio &nbsp;<strong>{{serviceName}}</strong>&nbsp; con il tuo Cape Account?",
       "linkButton": "Collega",
       "closeAndReturnToServiceButton": "Chiudi e ritorna al servizio",
+      "closeAndGoToServiceButton": "Chiudi e vai al servizio",
       "forceLinkingButton": "Forza collegamento",
       "linkingSuccessfulHeader": "Servizio collegato",
       "linkingSuccessfulMessage": "Il Servizio {{serviceName}} con Id: {{serviceId}} è stato collegato con successo a CaPe",

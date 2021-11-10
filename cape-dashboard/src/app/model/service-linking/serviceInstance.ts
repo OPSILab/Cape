@@ -19,4 +19,5 @@ export interface ServiceInstance {
   cert?: ServiceCertificate;
   serviceUrls?: ServiceUrls;
   dataController?: DataController;
+  isBackendLinking?: boolean;
 }

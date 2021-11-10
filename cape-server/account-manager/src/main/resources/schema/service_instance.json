@@ -7,7 +7,8 @@
 		"serviceProvider",
 		"cert",
 		"serviceUrls",
-		"dataController"
+		"dataController",
+		"isBackendLinking"
 	],
 	"properties": {
 		"serviceProvider": {
@@ -197,6 +198,12 @@
 					"description": "Name of the Operator is describing the Service."
 				}
 			}
+		},
+		"isBackendLinking": {
+			"type": "boolean",
+			"title": "isBackendLinking",
+			"description": "Discriminates whether the Service linking is made only with backend interactions between SDK and Cape Server, thus without frontend redirects between Cape dashboard and the service.",
+			"default": false
 		}
 	}
 }

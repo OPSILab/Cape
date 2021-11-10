@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Location } from '@angular/common';
 import { NgxConfigureService } from 'ngx-configure';
 import { LoginService } from '../auth/login/login.service';
+import { ErrorResponse } from '../model/errorResponse';
 
 @Component({
   selector: 'error-dialog',
@@ -14,10 +15,10 @@ import { LoginService } from '../auth/login/login.service';
       </button>
     </nb-card-header>
     <nb-card-body class="m-3">
-      <div class="row p-1">{{ error.message }}</div>
-      <div *ngIf="error.error" class="row justify-content-center p-1">
-        {{ error.error.message }}
+      <div class="row justify-content-center p-1">
+        <ng-container *ngIf="error.error !== undefined; else noNestedError"> {{ printErrorMessage(error.error) }} </ng-container>
       </div>
+      <ng-template #noNestedError>{{ error.message }}</ng-template>
       <div class="row p-1 mt-1 justify-content-center">
         <strong>Status: {{ error.status }}</strong>
       </div>
@@ -25,7 +26,7 @@ import { LoginService } from '../auth/login/login.service';
   </nb-card> `,
 })
 export class ErrorDialogComponent {
-  error;
+  error: ErrorResponse;
   service;
 
   constructor(
@@ -35,8 +36,12 @@ export class ErrorDialogComponent {
     private loginService: LoginService
   ) {}
 
-  closeModal(error: { [key: string]: { cause?: string } }): void {
-    if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
+  printErrorMessage(toParse: string | ErrorResponse): string {
+    return typeof toParse === 'string' ? (JSON.parse(toParse) as ErrorResponse).message : toParse.message;
+  }
+
+  closeModal(error: ErrorResponse): void {
+    if ((error.error as ErrorResponse).error === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 0 || error.status === 401)
       void this.loginService.logout().catch((error) => console.log(error));
     // else
     //   this.backClicked();

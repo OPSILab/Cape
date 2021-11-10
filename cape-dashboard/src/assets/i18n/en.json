@@ -179,6 +179,7 @@
       "linkingMessage": "Do you want to link the Service &nbsp;<strong>{{serviceName}}</strong>&nbsp; with your Cape Account?",
       "linkButton": "Link",
       "closeAndReturnToServiceButton": "Close and return to the Service",
+      "closeAndGoToServiceButton": "Close and go to the Service",
       "forceLinkingButton": "Force Linking",
       "linkingSuccessfulHeader": "Service linked",
       "linkingSuccessfulMessage": "The Service {{serviceName}} with Id: {{serviceId}} has been linked successfully to CaPe",

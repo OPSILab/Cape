@@ -27,6 +27,7 @@ import {
 import { ActionsServiceLinkMenuRenderComponent } from './linkedServices/actionsServiceLinkMenuRender.component';
 import { ServiceUrlButtonRenderComponent } from './linkedServices/serviceUrlButtonRender.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ServiceLinkingModule } from '../../service-linking/service-linking.module';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     TranslateModule.forChild({}),
     NbWindowModule.forChild(),
     ReactiveFormsModule,
+    ServiceLinkingModule,
   ],
   declarations: [
     AvailableServicesComponent,
