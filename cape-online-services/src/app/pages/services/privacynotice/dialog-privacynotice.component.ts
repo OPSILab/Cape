@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { RoleEnum, CapeSdkAngularService, ConsentFormComponent, CapeSdkDialogService } from 'cape-sdk-angular';
+import { NgxConfigureService } from 'ngx-configure';
+import { AppConfig } from 'src/app/model/appConfig';
 
 @Component({
   selector: 'ngx-dialog-privacynotice',
@@ -16,6 +18,7 @@ export class DialogPrivacyNoticeComponent {
   serviceId: string;
   serviceRole: RoleEnum;
   purposeId: string;
+  showAdditionalOptions: boolean;
 
   isSubmitDisabled = true;
 
@@ -24,8 +27,11 @@ export class DialogPrivacyNoticeComponent {
     protected ref: NbDialogRef<DialogPrivacyNoticeComponent>,
     private translateService: TranslateService,
     private dialogService: NbDialogService,
-    private capeService: CapeSdkAngularService
-  ) {}
+    private capeService: CapeSdkAngularService,
+    private configService: NgxConfigureService
+  ) {
+    this.showAdditionalOptions = (this.configService.config as AppConfig).services.showAdditionalConsentFormOptions;
+  }
 
   cancel() {
     this.ref.close();
@@ -50,7 +56,7 @@ export class DialogPrivacyNoticeComponent {
           sdkUrl: this.sdkUrl,
           consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.accountId, this.serviceId, this.operatorId, this.purposeId, this.serviceRole),
           locale: sessionStorage.getItem('currentLocale') as string,
-          showAdditionalOptions: true,
+          showAdditionalOptions: this.showAdditionalOptions,
         },
       });
     } catch (error) {

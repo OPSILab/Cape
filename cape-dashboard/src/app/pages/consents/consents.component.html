@@ -94,7 +94,7 @@
         <button nbButton ghost class="p-2" shape="round" size="small" (click)="ngOnInit()">
           {{ 'general.consents.refresh' | translate }}&nbsp;<i class="material-icons">refresh</i>
         </button>
-        <nb-toggle #notWithdrawnToogle status="basic" labelPosition="left" [(checked)]="onlyNotWithdrawnChecked" (checkedChange)="ngOnInit()">
+        <nb-toggle status="basic" labelPosition="left" [(checked)]="showWithdrawnChecked" (checkedChange)="ngOnInit()">
           {{ 'general.consents.show_withdrawn' | translate }}</nb-toggle
         >
       </div>
@@ -157,7 +157,7 @@
 
   <!-- Template for Consent Cards, used by either view mode -->
   <ng-template #consentCard let-consent let-consentIndex="consentIndex">
-    <nb-card class="my-3" *ngIf="!(isWithdrawnConsent(consent) && onlyNotWithdrawnChecked)">
+    <nb-card class="my-3" *ngIf="!isWithdrawnConsent(consent) || showWithdrawnChecked">
       <nb-card-header>
         <div class="row justify-content-between">
           <div class="col-sm-auto align-self-center">

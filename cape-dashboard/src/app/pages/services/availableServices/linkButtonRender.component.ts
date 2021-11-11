@@ -8,6 +8,7 @@ import { ServiceLinkingService } from '../../../service-linking/service-linking.
 import { NgxConfigureService } from 'ngx-configure';
 import { AppConfig } from '../../../model/appConfig';
 import { NbDialogRef } from '@nebular/theme';
+import { ErrorResponse } from '../../../model/errorResponse';
 
 @Component({
   template: `
@@ -40,19 +41,22 @@ import { NbDialogRef } from '@nebular/theme';
       <nb-card accent="danger" style="max-width: 95vw; max-height: 95vh">
         <nb-card-header class="d-flex justify-content-between">
           <h5>Error</h5>
-          <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="router.navigate(['/'])">
+          <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="ref.close()">
             <i class="material-icons">close</i>
           </button>
         </nb-card-header>
         <nb-card-body class="m-3">
-          <div class="row">{{ data.error.error ? data.error.error.message : data.error.message }}</div>
+          <div class="row justify-content-center p-1">
+            <ng-container *ngIf="data.error.error !== undefined; else noNestedError"> {{ printErrorMessage(data.error.error) }} </ng-container>
+          </div>
+          <ng-template #noNestedError>{{ data.error.message }}</ng-template>
           <div class="row mt-1 justify-content-center">
             <strong>Status: {{ data.error.status }}</strong>
           </div>
         </nb-card-body>
         <nb-card-footer>
           <div class="row justify-content-center">
-            <button nbButton appearance="outline" shape="rectangle" status="info" (click)="startLinking(true)">
+            <button nbButton appearance="outline" shape="rectangle" status="info" (click)="startServiceLinking()">
               {{ 'general.services.forceLinkingButton' | translate }}
             </button>
           </div>
@@ -106,17 +110,19 @@ export class LinkButtonRenderComponent implements OnInit {
       const operatorId = this.config.system.operatorId;
       const returnUrl = this.value.serviceInstance.serviceUrls.linkingRedirectUri;
 
-      await this.serviceLinkingService.automaticLinkFromOperator(
-        sdkUrl,
-        operatorId,
-        this.value.serviceId,
-        this.value.name,
-        localStorage.getItem('accountId'),
-        returnUrl,
-        this.linkedDialog,
-        this.errorWithOptionDialog
-      );
-      this.isAlreadyLinked = true;
+      this.isAlreadyLinked =
+        (await this.serviceLinkingService.automaticLinkFromOperator(
+          sdkUrl,
+          operatorId,
+          this.value.serviceId,
+          this.value.name,
+          localStorage.getItem('accountId'),
+          returnUrl,
+          this.linkedDialog,
+          this.errorWithOptionDialog
+        )) != undefined
+          ? true
+          : false;
       this.cdr.detectChanges();
     }
   };
@@ -124,5 +130,9 @@ export class LinkButtonRenderComponent implements OnInit {
   public closeAndGoToService(dialogRef: NbDialogRef<unknown>, returnUrl: string): void {
     dialogRef.close();
     window.open(returnUrl, '_blank');
+  }
+
+  printErrorMessage(toParse: string | ErrorResponse): string {
+    return typeof toParse === 'string' ? (JSON.parse(toParse) as ErrorResponse).message : toParse.message;
   }
 }

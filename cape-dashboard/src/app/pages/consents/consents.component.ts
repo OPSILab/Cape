@@ -46,7 +46,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
   public consents: ConsentRecordSignedPair[];
   public consentsGrouped: Record<string, Record<string, unknown>[]>;
   public services: ServiceEntry[];
-  public onlyNotWithdrawnChecked = false;
+  public showWithdrawnChecked = false;
   public viewMode = 'grouped';
 
   @ViewChild('consentUpdateConflict')
@@ -122,7 +122,6 @@ export class ConsentsComponent implements OnInit, OnDestroy {
         result[currentConsentPair?.sink?.payload?.common_part.subject_id] || []).push({
         ...currentConsentPair,
         consentIndex: consentIndex,
-        show: !(this.isWithdrawnConsentByIndex(consentIndex) && this.onlyNotWithdrawnChecked),
       });
 
       return result;

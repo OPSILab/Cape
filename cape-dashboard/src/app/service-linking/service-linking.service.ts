@@ -100,8 +100,12 @@ export class ServiceLinkingService {
       //   this.errorDialogService.openErrorDialog(error as ErrorResponse);
       // }
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      if (error.status === 409 && !error.error.message?.includes('Current State: COMPLETED')) {
+      if (
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        error.status === 409 &&
+        !this.printErrorMessage((error as ErrorResponse).error)?.includes('Current State: COMPLETED') &&
+        !this.printErrorMessage((error as ErrorResponse).error)?.includes('Completed')
+      ) {
         this.dialogService.open(errorWithOptionDialog, {
           context: {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -110,7 +114,13 @@ export class ServiceLinkingService {
           hasScroll: false,
         });
       } else this.errorDialogService.openErrorDialog(error);
+
+      return undefined;
     }
+  }
+
+  printErrorMessage(toParse: string | ErrorResponse): string {
+    return typeof toParse === 'string' ? (JSON.parse(toParse) as ErrorResponse).message : toParse.message;
   }
 
   private async getLocalizedLabel(field: string, locale: string, serviceId: string, serviceName: string): Promise<string> {

@@ -13,7 +13,8 @@
   },
   "services": {
     "sdkUrl": "http://localhost:8085/cape-service-sdk",
-    "checkConsentAtOperator": "true"
+    "checkConsentAtOperator": "true",
+    "showAdditionalConsentFormOptions": false
   },
   "i18n": {
     "locale": "it"
