@@ -1,4 +1,4 @@
-<form [formGroup]="userConsentForm" (ngSubmit)="giveConsent(); dialogRef.close()">
+<form [formGroup]="userConsentForm" (ngSubmit)="giveConsent(); dialogRef.close(true)">
   <nb-card>
     <nb-card-header class="d-flex justify-content-between">
       <h5 class="h5 mr-3">{{ 'general.consent.form.header' | translate }}</h5>
@@ -100,7 +100,7 @@
       <button nbButton type="submit" ghost shape="rectangle" size="medium">
         {{ 'general.consent.giveConsentButton' | translate }}
       </button>
-      <button nbButton ghost shape="rectangle" size="medium" (click)="dialogRef.close()">
+      <button nbButton ghost shape="rectangle" size="medium" (click)="dialogRef.close(false)">
         {{ 'general.consent.cancelButton' | translate }}
       </button>
     </nb-card-footer>

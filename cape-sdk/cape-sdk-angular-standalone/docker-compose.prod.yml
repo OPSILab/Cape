@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  cape-online-services:
+    image: capesuite/cape-sdk-angular-standalone
+    build:
+      context: .
+      args:
+        BASE_HREF: /cape-sdk-angular-standalone/
+    ports:
+      - '84:80'
+    volumes:
+      - ./src/assets/config.prod.json:/usr/share/nginx/html/assets/config.json
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - cape-network
+
+networks:
+  cape-network:
+    name: cape-sdk-angular-standalone-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

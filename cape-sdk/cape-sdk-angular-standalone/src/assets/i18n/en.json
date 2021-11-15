@@ -1,0 +1,31 @@
+{
+  "general": {
+    "logo_text": "CaPe",
+    "home": "Home",
+    "error": "Error",
+    "refresh": "Refresh",
+    "close": "Close",
+    "cancel": "Cancel",
+    "services": {
+      "welcome": " Hi {{name}}, welcome!",
+      "no_name_welcome": "Welcome!",
+      "goButton": "GO"
+    },
+    "missingRequiredInputParam": "One or more of the following input parameters are missing: serviceId, serviceAccountId, returnUrl, cancelReturnUrl, clientAuthToken"
+  },
+  "login": {
+    "enter_button": "Enter",
+    "logout_button": "Logout",
+    "logout_error": "There was an error while perfoming logout",
+    "select_login": "Select your Digital Identity Provider",
+    "login_with_cape_idm": "Login with CaPe",
+    "login_with_cape_idm_description": "CaPe uses natively the Keycloak IdM",
+    "keycloak_idm_link": "Sign in with Keycloak IdM",
+    "login_with_eidas": "Login with eIDAS",
+    "login_with_eidas_description": "The eIDAS regulation is the legislative basis for electronic interactions between businesses, citizens and public authorities.",
+    "eidas_link": "Sign in with a digital identity from another European Country",
+    "loginPopup": {
+      "error_message": "There was an error while contacting CaPe!"
+    }
+  }
+}

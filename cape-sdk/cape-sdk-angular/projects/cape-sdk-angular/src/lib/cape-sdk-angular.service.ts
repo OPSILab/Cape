@@ -320,6 +320,10 @@ export class CapeSdkAngularService {
     }
   }
 
+  public async getServiceDescription(sdkUrl: string, serviceId: string): Promise<ServiceEntry> {
+    return this.http.get<ServiceEntry>(`${sdkUrl}/api/v2/services/${serviceId}`).toPromise();
+  }
+
   public async fetchConsentForm(
     sdkUrl: string,
     serviceUserId: string,
@@ -514,9 +518,9 @@ export class CapeSdkAngularService {
   public createCapeAccount(sdkUrl: string, accountId: string, accountEmail: string, locale: string): Promise<Account> {
     return this.http
       .post<Account>(`${sdkUrl}/api/v2/accounts`, {
-        username: localStorage.serviceAccountId as string,
+        username: accountId,
         account_info: {
-          email: localStorage.serviceAccountEmail as string,
+          email: accountEmail,
         },
         language: locale,
       } as Account)

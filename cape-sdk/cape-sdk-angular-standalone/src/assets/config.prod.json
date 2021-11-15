@@ -1,0 +1,21 @@
+{
+  "system": {
+    "operatorId": "cape",
+    "onlineServicesUrl": "https://www.cape-suite.eu/cape-online-services",
+    "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
+    "auth": {
+      "idmHost": "https://idm.cape-suite.eu",
+      "clientId": "cape-service-sdk",
+      "disableAuth": "false",
+      "authProfile": "oidc",
+      "authRealm": "Cape"
+    }
+  },
+  "services": {
+    "sdkUrl": "https://www.cape-suite.eu/cape-service-sdk",
+    "checkConsentAtOperator": "true"
+  },
+  "i18n": {
+    "locale": "en"
+  }
+}
