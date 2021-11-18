@@ -1,7 +1,7 @@
 {
   "system": {
     "operatorId": "cape",
-    "onlineServicesUrl": "https://www.cape-suite.eu/cape-online-services",
+    "onlineServicesUrl": "https://www.cape-suite.eu/cape-sdk-angular-standalone",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
     "auth": {
       "idmHost": "https://idm.cape-suite.eu",

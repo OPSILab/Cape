@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  cape-online-services:
+  cape-sdk-angular-standalone:
     image: capesuite/cape-sdk-angular-standalone
     build:
       context: .
