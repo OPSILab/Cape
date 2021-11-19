@@ -5,7 +5,7 @@
 CaPe is a consent-based and user-centric platform targeted at organizations acting as Data Processors, in the private or public sector.
 It enables them to take advantage of the value of personal data in compliance with GDPR while providing data subjects the natural need to detain both the use and the protection on their own data.
 
-CaPe acts as an intermediary and creates a communication channel between Data Subjects and Data Controllers
+CaPe acts as an intermediary and creates a communication channel between Data Subjects and Data Controllers.
 
 
 
