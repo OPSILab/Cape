@@ -25,7 +25,7 @@ CaPe is a software developed by
 -   [Install](#install)
 -   [Usage](#usage)
 -   [API](#api)
--   [Cape Sandbox](#cape-sandbox)
+-   [CaPe Sandbox](#cape-sandbox)
 -   [Support / Contact](#support)
 -   [License](#license)
 
@@ -59,8 +59,8 @@ A demo instance of CaPe is available at the following link:
 
 Service integration examples:
 
-- [Cape Playground](https://www.cape-suite.eu/cape-playground)
-- [Cape Online Services](https://www.cape-suite.eu/cape-online-services)
+- [CaPe Playground](https://www.cape-suite.eu/cape-playground)
+- [CaPe Online Services](https://www.cape-suite.eu/cape-online-services)
 
 <a name="support"></a>
 
