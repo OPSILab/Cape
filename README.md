@@ -52,7 +52,7 @@ The SwaggerUI - OpenAPI 3 documentation can be found here:
 
 A demo instance of CaPe is available at the following link:
 
--   [`Cape Suite information site`](https://www.cape-suite.eu)
+-   [`CaPe Suite information site`](https://www.cape-suite.eu)
 -   [`User Self-Service Dashboard instance`](https://www.cape-suite.eu/cape-dashboard)
 -   [`Data Controller Dashboard instance`](https://www.cape-suite.eu/cape-service-editor)
 
