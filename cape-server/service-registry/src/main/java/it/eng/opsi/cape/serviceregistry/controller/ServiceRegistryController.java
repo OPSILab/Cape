@@ -244,7 +244,7 @@ public class ServiceRegistryController implements IServiceRegistryController {
 			return null;
 	}
 
-	@Operation(summary = "Delete CaPe Account by Id or Username. Optionally deletes only the Cert field, in order to be considered unregistered by CaPe.", tags = {
+	@Operation(summary = "Delete Service Entry description by Service Id.", tags = {
 			"Service Entry" }, responses = { @ApiResponse(description = "Returns No Content.", responseCode = "204") })
 	@Override
 	@DeleteMapping(value = "/services/{serviceId}")

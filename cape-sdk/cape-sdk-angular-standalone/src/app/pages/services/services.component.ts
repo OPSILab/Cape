@@ -32,12 +32,10 @@ export class ServicesComponent implements AfterViewInit {
   private serviceAccountId: string;
   private serviceAccountEmail: string;
   private serviceRole: RoleEnum = RoleEnum.Sink;
-  private purposeId: string;
 
   public sdkUrl: string;
   public operatorId: string;
   public dashboardUrl: string;
-  public returnUrl: string;
   public cancelReturnUrl: string;
   public capeLinkStatus: SlStatusEnum;
   public capeConsentStatus: ConsentStatusEnum;
@@ -60,8 +58,7 @@ export class ServicesComponent implements AfterViewInit {
     this.operatorId = this.config.system.operatorId;
     this.dashboardUrl = this.config.system.dashboardUrl;
     this.sdkUrl = this.config.services.sdkUrl;
-
-    // this.returnUrl = this.config.system.onlineServicesUrl;
+    this.cancelReturnUrl = this.config.system.cancelReturnUrl;
     this.checkConsentAtOperator = this.config.services.checkConsentAtOperator;
   }
 
@@ -70,48 +67,38 @@ export class ServicesComponent implements AfterViewInit {
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     this.serviceId = queryParams.serviceId;
-    this.serviceName = queryParams.serviceName;
-    this.serviceRole = queryParams.serviceRole || this.serviceRole;
-    this.serviceAccountId = (queryParams.serviceAccountId as string)?.toLowerCase();
-    this.purposeId = queryParams.purposeId;
-    // this.serviceAccountEmail = localStorage.getItem('serviceAccountEmail');
-    this.returnUrl = queryParams.returnUrl;
-    this.cancelReturnUrl = queryParams.cancelReturnUrl || this.returnUrl;
-    const clientAuthToken = queryParams.clientAuthToken;
+    this.serviceAccountId = localStorage.getItem('serviceAccountId');
 
-    if (this.serviceId == undefined || this.serviceAccountId == undefined || this.returnUrl == undefined || clientAuthToken == undefined)
-      this.errorDialogService.openErrorDialog(new Error(this.translateService.instant('general.missingRequiredInputParam')));
+    this.cancelReturnUrl = queryParams.cancelReturnUrl || this.cancelReturnUrl;
+
+    if (this.serviceId == undefined) this.errorDialogService.openErrorDialog(new Error(this.translateService.instant('general.missingRequiredInputParam')));
     else {
       this.locale = queryParams.locale || this.config.i18n.locale; // TODO default value taken from User language preferences;
       this.showConsentAdditionalOptions = queryParams.showConsentAdditionalOptions || this.showConsentAdditionalOptions;
       this.translateService.setDefaultLang('en');
       this.translateService.use(this.locale);
       sessionStorage.setItem('currentLocale', this.locale);
-      sessionStorage.setItem('authToken', clientAuthToken);
 
-      this.checkAndGo(this.serviceId, this.serviceName, this.serviceRole, this.purposeId);
+      this.checkAndGo(this.serviceId, this.serviceName, this.serviceRole, queryParams.purposeId);
     }
   }
 
   checkAndGo = async (serviceId: string, serviceName: string, serviceRole: RoleEnum, purposeId: string) => {
     try {
-      var checkLinking = await this.onCheckLinking(serviceId, serviceName);
+      const serviceDescription = await this.capeService.getServiceDescription(this.sdkUrl, serviceId);
+      const returnUrl = serviceDescription.serviceInstance.serviceUrls.linkingRedirectUri;
+      var checkLinking = await this.onCheckLinking(serviceId, serviceName || serviceDescription.name, returnUrl);
       console.log(checkLinking);
 
       if (checkLinking) {
-        // If no purposeId in input, get the service description and then its first purposeId
-        if (purposeId == undefined) {
-          const serviceDescription = this.capeService.getServiceDescription(this.sdkUrl, serviceId);
-          this.purposeId = (await serviceDescription).processingBases[0].purposeId;
-        }
         var checkConsent = await this.onCheckConsent(serviceId, purposeId);
         console.log(checkConsent);
 
         if (!checkConsent) {
-          this.openConsentForm(serviceId, serviceRole, purposeId);
+          this.openConsentForm(serviceId, serviceRole, purposeId || serviceDescription.processingBases[0].purposeId, returnUrl);
         } else {
-          // Consent is ok, redirect to the input Return Url
-          window.location.replace(this.returnUrl);
+          // Consent is ok, redirect to the description Return Url
+          window.location.replace(returnUrl);
         }
       }
     } catch (error) {
@@ -119,7 +106,7 @@ export class ServicesComponent implements AfterViewInit {
     }
   };
 
-  onCheckLinking = async (serviceId: string, serviceName: string): Promise<boolean> => {
+  onCheckLinking = async (serviceId: string, serviceName: string, returnUrl: string): Promise<boolean> => {
     let linkSurrogateId;
 
     try {
@@ -170,7 +157,7 @@ export class ServicesComponent implements AfterViewInit {
           this.serviceAccountId,
           this.serviceAccountEmail,
           this.locale,
-          this.returnUrl
+          returnUrl
         );
         if (linkSurrogateId) return true;
       }
@@ -187,7 +174,7 @@ export class ServicesComponent implements AfterViewInit {
             this.serviceAccountId,
             this.serviceAccountEmail,
             this.locale,
-            this.returnUrl
+            returnUrl
           );
           return linkSurrogateId ? true : false;
         } catch (error) {
@@ -235,7 +222,7 @@ export class ServicesComponent implements AfterViewInit {
     }
   };
 
-  async openConsentForm(serviceId: string, serviceRole: RoleEnum, purposeId: string) {
+  async openConsentForm(serviceId: string, serviceRole: RoleEnum, purposeId: string, returnUrl: string) {
     this.translateService.use(sessionStorage.getItem('currentLocale'));
     try {
       this.dialogService
@@ -245,20 +232,13 @@ export class ServicesComponent implements AfterViewInit {
           closeOnBackdropClick: true,
           context: {
             sdkUrl: this.sdkUrl,
-            consentForm: await this.capeService.fetchConsentForm(
-              this.sdkUrl,
-              this.serviceAccountId,
-              this.serviceId,
-              this.operatorId,
-              this.purposeId,
-              this.serviceRole
-            ),
+            consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.serviceAccountId, serviceId, this.operatorId, purposeId, serviceRole),
             locale: sessionStorage.getItem('currentLocale') as string,
             showAdditionalOptions: true,
           },
         })
         .onClose.subscribe((accepted) => {
-          window.location.href = accepted ? this.returnUrl : this.cancelReturnUrl;
+          window.location.href = accepted ? returnUrl : this.cancelReturnUrl;
         });
     } catch (error) {
       this.errorDialogService.openErrorDialog(error);

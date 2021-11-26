@@ -7,13 +7,17 @@ import { switchMap } from 'rxjs/operators';
 Injectable();
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private authService: NbAuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (sessionStorage.getItem('authToken') != undefined)
-      request = request.clone({
-        headers: new HttpHeaders({ Authorization: `Bearer ${sessionStorage.getItem('authToken')}` }),
-      });
-    return next.handle(request);
+    return this.authService.getToken().pipe(
+      switchMap((token: NbAuthToken) => {
+        if (!request.url.includes('openid-connect/token') && token.getValue())
+          request = request.clone({
+            headers: new HttpHeaders({ Authorization: `Bearer ${token.getValue()}` }),
+          });
+        return next.handle(request);
+      })
+    );
   }
 }

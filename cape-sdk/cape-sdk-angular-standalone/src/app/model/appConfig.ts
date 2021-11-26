@@ -8,6 +8,7 @@ export interface System {
   operatorId: string;
   onlineServicesUrl: string;
   dashboardUrl: string;
+  cancelReturnUrl: string;
   auth: Auth;
 }
 

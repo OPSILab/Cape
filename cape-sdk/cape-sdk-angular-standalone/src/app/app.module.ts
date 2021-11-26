@@ -26,12 +26,12 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { HttpConfigInterceptor } from './http.interceptor';
 import { ErrorDialogModule } from './pages/error-dialog/error-dialog.module';
-// import { LoginModule } from './auth/login/login.module';
-// import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
-// import { NbAuthModule, NbOAuth2AuthStrategy } from '@nebular/auth';
-// import { OidcJWTToken } from './auth/model/oidc';
-// import { OidcUserInformationService } from './auth/services/oidc-user-information.service';
-// import { AuthGuard } from './auth/services/auth.guard';
+import { LoginModule } from './auth/login/login.module';
+import { NbRoleProvider } from '@nebular/security';
+import { NbAuthModule, NbOAuth2AuthStrategy } from '@nebular/auth';
+import { OidcJWTToken } from './auth/model/oidc';
+import { OidcUserInformationService } from './auth/services/oidc-user-information.service';
+import { AuthGuard } from './auth/services/auth.guard';
 
 //export function createTranslateLoader(http: HttpClient) {
 //  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -71,7 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NbCheckboxModule,
     NbButtonModule,
     NbToastrModule.forRoot({ position: NbGlobalLogicalPosition.BOTTOM_END }),
-    // LoginModule,
+    LoginModule,
     // NbSecurityModule.forRoot({
     //   accessControl: {
     //     ADMIN: {
@@ -83,22 +83,22 @@ export function HttpLoaderFactory(http: HttpClient) {
     //     },
     //   },
     // }),
-    // NbAuthModule.forRoot({
-    //   strategies: [
-    //     NbOAuth2AuthStrategy.setup({
-    //       name: 'oidc',
-    //       clientId: '',
-    //       token: {
-    //         class: OidcJWTToken,
-    //       },
-    //     }),
-    //   ],
-    // }),
+    NbAuthModule.forRoot({
+      strategies: [
+        NbOAuth2AuthStrategy.setup({
+          name: 'oidc',
+          clientId: '',
+          token: {
+            class: OidcJWTToken,
+          },
+        }),
+      ],
+    }),
   ],
   providers: [
     { provide: NgxConfigureOptions, useClass: AppOptions },
-    // { provide: NbRoleProvider, useClass: OidcUserInformationService },
-    // AuthGuard,
+    { provide: NbRoleProvider, useClass: OidcUserInformationService },
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,

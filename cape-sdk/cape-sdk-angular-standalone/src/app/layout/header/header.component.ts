@@ -3,7 +3,7 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-// import { OidcUserInformationService } from 'src/app/auth/services/oidc-user-information.service';
+import { OidcUserInformationService } from 'src/app/auth/services/oidc-user-information.service';
 import { UserClaims } from 'src/app/auth/model/oidc';
 
 @Component({
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  loggedUserMenu = [{ title: 'Account', link: '/account' }];
+  loggedUserMenu = [];
   userMenu = [{ title: 'Log in', link: '/login' }];
 
   constructor(
@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService,
     private translateService: TranslateService,
-    // private userService: OidcUserInformationService,
+    private userService: OidcUserInformationService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loggedUserMenu.push({ title: this.translateService.instant('login.logout_button') as string, link: '' });
     this.currentTheme = this.themeService.currentTheme;
 
-    // this.userService.onUserChange().subscribe((user: UserClaims) => (this.user = user));
+    this.userService.onUserChange().subscribe((user: UserClaims) => (this.user = user));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService

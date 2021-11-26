@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { ActivatedRoute } from '@angular/router';
 import { AppConfig, System } from '../../model/appConfig';
@@ -8,11 +8,21 @@ import { AppConfig, System } from '../../model/appConfig';
   styleUrls: ['./login.component.scss'],
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   private environment: System;
 
   constructor(private configService: NgxConfigureService, private route: ActivatedRoute) {
     this.environment = (this.configService.config as AppConfig).system;
+  }
+
+  ngAfterViewInit(): void {
+    // return this.authService.isAuthenticated().pipe(
+    //   tap((authenticated) => {
+    //     if (!authenticated) {
+    this.login();
+    //     }
+    //   })
+    // );
   }
 
   public login = (): void => {

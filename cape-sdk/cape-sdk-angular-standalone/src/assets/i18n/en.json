@@ -11,7 +11,7 @@
       "no_name_welcome": "Welcome!",
       "goButton": "GO"
     },
-    "missingRequiredInputParam": "One or more of the following input parameters are missing: serviceId, serviceAccountId, returnUrl, cancelReturnUrl, clientAuthToken"
+    "missingRequiredInputParam": "ServiceId input parameter is missing"
   },
   "login": {
     "enter_button": "Enter",

@@ -2,13 +2,14 @@
   "system": {
     "operatorId": "cape",
     "onlineServicesUrl": "https://www.cape-suite.eu/cape-sdk-angular-standalone",
+    "cancelReturnUrl": "https://smart.comune.genova.it",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
     "auth": {
       "idmHost": "https://idm.cape-suite.eu",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",
-      "authRealm": "Cape"
+      "authRealm": "CapeDev"
     }
   },
   "services": {
