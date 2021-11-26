@@ -12,6 +12,8 @@
 
 CaPe is a consent-based and user-centric platform targeted at organizations acting as Data Processors, in the private or public sector. It enables them to take advantage of the value of personal data in compliance with GDPR while providing data subjects the natural need to detain both the use and the protection on their own data.
 
+CaPe acts as an intermediary and creates a communication channel between Data Subjects and Data Controllers.
+
 CaPe is a software developed by
 [Engineering Ingegneria Informatica SpA](http://www.eng.it) and supported by [EIT Digital](https://www.eitdigital.eu/).
 
@@ -23,7 +25,7 @@ CaPe is a software developed by
 -   [Install](#install)
 -   [Usage](#usage)
 -   [API](#api)
--   [Cape Sandbox](#cape-sandbox)
+-   [CaPe Sandbox](#cape-sandbox)
 -   [Support / Contact](#support)
 -   [License](#license)
 
@@ -39,7 +41,7 @@ The User Guide for CaPe Dashboards can be found at the corresponding section of
 
 ## API
 
-The Cape APIs Introduction can be found at the corresponding section of
+The CaPe APIs Introduction can be found at the corresponding section of
 [Read The Docs](https://cape-suite.readthedocs.io/en/latest/api/index.md).
   
 The SwaggerUI - OpenAPI 3 documentation can be found here:
@@ -50,15 +52,15 @@ The SwaggerUI - OpenAPI 3 documentation can be found here:
 
 A demo instance of CaPe is available at the following link:
 
--   [`Cape Suite information site`](https://www.cape-suite.eu)
+-   [`CaPe Suite information site`](https://www.cape-suite.eu)
 -   [`User Self-Service Dashboard instance`](https://www.cape-suite.eu/cape-dashboard)
 -   [`Data Controller Dashboard instance`](https://www.cape-suite.eu/cape-service-editor)
 
 
 Service integration examples:
 
-- [Cape Playground](https://www.cape-suite.eu/cape-playground)
-- [Cape Online Services](https://www.cape-suite.eu/cape-online-services)
+- [CaPe Playground](https://www.cape-suite.eu/cape-playground)
+- [CaPe Online Services](https://www.cape-suite.eu/cape-online-services)
 
 <a name="support"></a>
 
