@@ -9,7 +9,8 @@
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",
-      "authRealm": "Cape"
+      "authRealm": "Cape",
+      "defaultIdP": ""
     }
   },
   "services": {

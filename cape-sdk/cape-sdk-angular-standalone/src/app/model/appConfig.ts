@@ -18,6 +18,7 @@ export interface Auth {
   disableAuth: string;
   authProfile: string;
   authRealm: string;
+  defaultIdP: string;
 }
 
 export interface Services {

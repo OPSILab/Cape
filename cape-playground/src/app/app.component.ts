@@ -64,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
         state: uuidv4(),
         redirectUri: `${this.appConfig.system.playgroundUrl}/login/loginPopup`,
         responseType: NbOAuth2ResponseType.CODE,
+        params: { kc_idp_hint: this.appConfig.system.auth.defaultIdP },
       },
       redirect: {
         success: '/pages', // welcome page path
