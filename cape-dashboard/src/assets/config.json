@@ -14,7 +14,7 @@
       "clientId": "cape-server",
       "disableAuth": "false",
       "authProfile": "oidc",
-      "authRealm": "CapeDev"
+      "authRealm": "Cape"
     }
   },
   "i18n": {
