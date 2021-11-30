@@ -24,6 +24,7 @@ export interface Auth {
 export interface Services {
   sdkUrl: string;
   checkConsentAtOperator: boolean;
+  showAdditionalConsentFormOptions: boolean;
 }
 
 export interface I18n {

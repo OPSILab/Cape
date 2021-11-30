@@ -1,8 +1,8 @@
 <div class="header-container">
   <div class="logo-container">
-    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+    <!-- <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
-    </a>
+    </a> -->
     <a class="logo" href="#" (click)="navigateHome()"
       ><img class="p-1" src="assets\images\cape-logo.png" style="height: 64px" />
       <!-- <span class="ml-3">{{ 'general.services.no_name_welcome' | translate: { name: user?.name } }}</span> -->
@@ -21,7 +21,7 @@
     <!--<nb-action class="control-item" icon="email-outline"></nb-action>-->
     <!-- <nb-action class="control-item" icon="bell-outline"></nb-action>-->
     <nb-action class="user-action">
-      <nb-user [nbContextMenu]="loggedUserMenu" [onlyPicture]="userPictureOnly" [name]="user?.name" [title]="" [picture]="'assets/images/app/default_user.png'">
+      <nb-user [nbContextMenu]="loggedUserMenu" [onlyPicture]="userPictureOnly" [name]="user.name" [title]="" [picture]="'assets/images/app/default_user.png'">
       </nb-user>
 
       <ng-template #elseBlock>

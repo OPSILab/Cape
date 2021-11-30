@@ -15,7 +15,7 @@
   },
   "private": true,
   "dependencies": {
-    "cape-sdk-angular": "1.0.36",
+    "cape-sdk-angular": "1.0.38",
     "@akveo/ng2-completer": "^9.0.1",
     "@angular/animations": "11.2.12",
     "@angular/cdk": "11.2.11",

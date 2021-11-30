@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NgxConfigureService } from 'ngx-configure';
 import { TranslateService } from '@ngx-translate/core';
 import { CapeSdkAngularService, ServiceLinkEvent, ConsentRecordEvent, SlStatusEnum, ConsentStatusEnum } from 'cape-sdk-angular';
@@ -63,7 +63,7 @@ const sampleChartData: any[] = [
   templateUrl: './cholesterol.component.html',
   styleUrls: ['./cholesterol.component.scss'],
 })
-export class CholesterolComponent implements OnInit {
+export class CholesterolComponent implements OnInit, OnDestroy {
   private config: any;
   public locale: string;
   public sdkUrl: string;

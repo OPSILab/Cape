@@ -53,7 +53,8 @@
       "form": {
         "header": "Data Consent",
         "title": "Data collection and use",
-        "body": "The service requires consent to use data for specific purposes.\r\nCheck the ones you agree to grant consent for the declared purpose.",
+        "body": "The service requires consent to use data for specific purposes.",
+        "dataMapping": "\r\nCheck the ones you agree to grant consent for the declared purpose.",
         "processing": {
           "header": "Purposes and processes",
           "purpose": "These data will be used for:",

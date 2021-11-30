@@ -86,7 +86,8 @@
     "serviceDescriptionVersion": {
       "type": "string",
       "title": "Service Description version",
-      "description": "Service description version number."
+      "description": "Service description version number.",
+      "default": "1.0"
     },
     "serviceDescriptionSignature": {
       "title": "Service Description Signature",

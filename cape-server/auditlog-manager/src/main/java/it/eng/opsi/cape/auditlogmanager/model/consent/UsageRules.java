@@ -58,7 +58,7 @@ public class UsageRules {
 	private List<ProcessingCategory> processingCategories;
 
 	@Valid
-	@NotNull
+//	@NotNull
 	private Policy policy = new Policy();
 
 	private Storage storage;

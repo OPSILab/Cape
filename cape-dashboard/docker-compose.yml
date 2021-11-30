@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        BASE_HREF: /cape-dashboard
+        BASE_HREF: /cape-dashboard/
     ports:
       - '80:80'
     volumes:

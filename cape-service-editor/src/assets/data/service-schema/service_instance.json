@@ -14,7 +14,8 @@
         "businessId": {
           "type": "string",
           "title": "Business ID",
-          "description": "Business ID for Service Provider, must match with the one configured in related Cape SDK instance,"
+          "description": "Business ID for Service Provider, must match with the one configured in related Cape SDK instance.",
+          "minLength": 1
         },
         "name": {
           "type": "string",

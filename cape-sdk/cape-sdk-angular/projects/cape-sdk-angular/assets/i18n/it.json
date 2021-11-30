@@ -53,7 +53,8 @@
       "form": {
         "header": "Consenso Dati",
         "title": "Collezione ed uso dei dati",
-        "body": "Il servizio richiede il consenso ad utilizzare alcuni dati per specifiche finalità.\r\nSeleziona quelle per cui acconsenti a dare il consenso per le finalità dichiarate.",
+        "body": "Il servizio richiede il consenso ad utilizzare alcuni dati per specifiche finalità.",
+        "dataMapping": "\r\nSeleziona quelli per cui acconsenti a dare il consenso per le finalità dichiarate.",
         "processing": {
           "header": "Finalità e processamenti",
           "purpose": "Questi dati verranno usati per:",

@@ -30,14 +30,6 @@ export class ConsentFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.userConsentForm = this.fb.group({
-      dataMapping: new FormGroup(
-        Object.fromEntries(
-          this.consentForm.resource_set.datasets[0].dataMappings.map((concept) => [
-            concept.name,
-            new FormControl({ value: concept.required, disabled: concept.required }),
-          ])
-        )
-      ),
       shareWith: new FormGroup(
         Object.fromEntries(
           this.consentForm.usage_rules.shareWith.map((shareWith) => [
@@ -49,19 +41,35 @@ export class ConsentFormComponent implements OnInit {
       collectionOperatorId: new FormControl(''),
     });
 
+    if (this.consentForm.resource_set.datasets[0] !== undefined)
+      this.userConsentForm.addControl(
+        'dataMapping',
+        new FormGroup(
+          Object.fromEntries(
+            this.consentForm.resource_set.datasets[0].dataMappings.map((concept) => [
+              concept.name,
+              new FormControl({ value: concept.required, disabled: concept.required }),
+            ])
+          )
+        )
+      );
+
     this.translateService.use(this.locale);
     this.cdr.detectChanges();
   }
 
   async giveConsent(): Promise<void> {
-    const dataMappingControls = new Map(
-      Object.entries((this.userConsentForm.controls.dataMapping as FormGroup).controls).map((obj) => [obj[0], obj[1]])
-    );
+    if (this.consentForm.resource_set.datasets[0] !== undefined) {
+      const dataMappingControls = new Map(
+        Object.entries((this.userConsentForm.controls.dataMapping as FormGroup).controls).map((obj) => [obj[0], obj[1]])
+      );
+      this.consentForm.resource_set.datasets[0].dataMappings = this.consentForm.resource_set.datasets[0].dataMappings.filter(
+        (concept) => dataMappingControls.get(concept.name)?.value
+      );
+    }
+
     const shareWithControls = new Map(Object.entries((this.userConsentForm.controls.shareWith as FormGroup).controls).map((obj) => [obj[0], obj[1]]));
 
-    this.consentForm.resource_set.datasets[0].dataMappings = this.consentForm.resource_set.datasets[0].dataMappings.filter(
-      (concept) => dataMappingControls.get(concept.name)?.value
-    );
     this.consentForm.usage_rules.shareWith = this.consentForm.usage_rules.shareWith.filter(
       (shareWith) => shareWithControls.get(shareWith.orgName)?.value
     );
@@ -70,6 +78,7 @@ export class ConsentFormComponent implements OnInit {
     this.consentForm.collection_operator_id = (this.userConsentForm.controls.collectionOperatorId as FormControl).value as string;
     try {
       const newConsentRecordSigned = await this.capeService.giveConsent(this.sdkUrl, this.consentForm);
+      this.dialogRef.close(true);
       this.toastrService.primary('', this.translateService.instant('general.consent.giveConsentSuccessful'), {
         position: NbGlobalLogicalPosition.BOTTOM_END,
         duration: 3500,

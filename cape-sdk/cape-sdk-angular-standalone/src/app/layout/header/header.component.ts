@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { OidcUserInformationService } from 'src/app/auth/services/oidc-user-information.service';
 import { UserClaims } from 'src/app/auth/model/oidc';
+import { NgxConfigureService } from 'ngx-configure';
+import { AppConfig } from 'src/app/model/appConfig';
 
 @Component({
   selector: 'ngx-header',
@@ -15,6 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: UserClaims;
+  appConfig: AppConfig;
 
   themes = [
     {
@@ -47,10 +50,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private breakpointService: NbMediaBreakpointsService,
     private translateService: TranslateService,
     private userService: OidcUserInformationService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private configureService: NgxConfigureService
+  ) {
+    this.appConfig = this.configureService.config;
+  }
 
   ngOnInit() {
+    this.loggedUserMenu.push({
+      title: this.translateService.instant('general.go_to_dashboard') as string,
+      url: this.appConfig.system.dashboardUrl,
+      target: '_blank',
+    });
     this.loggedUserMenu.push({ title: this.translateService.instant('login.logout_button') as string, link: '' });
     this.currentTheme = this.themeService.currentTheme;
 

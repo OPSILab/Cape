@@ -8,21 +8,27 @@ Cape Service SDK will expose the set of APIs to be used both by the Data Control
 
 ## OpenAPI Documentation
 
-The following links provides the Swagger UI interface exposing the OpenAPI 3 documentation of CAPE APIs:
+The following links provide the Swagger UI interfaces exposing the OpenAPI 3 documentation of CAPE APIs:
 
-  - Complete Swagger Ui for Cape Server and Cape SDK [here](https://www.cape-suite.eu/swagger-ui)
-  - Simplified Swagger Ui only documenting Cape SDK APIs, to easily identify APIs that either will be used by Cape Sdk Angular library or from sctrach directly from Service Frontend. [here](https://www.cape-suite.eu/cape-service-sdk/swagger-ui.html)
+  - Cape Server
+    * [Account Manager](https://www.cape-suite.eu/cape-server/account-manager/swagger-ui.html)
+	* [Service Manager](https://www.cape-suite.eu/cape-server/service-manager/swagger-ui.html)
+	* [Consent Manager](https://www.cape-suite.eu/cape-server/consent-manager/swagger-ui.html)
+	* [Auditlog Manager](https://www.cape-suite.eu/cape-server/auditlog-manager/swagger-ui.html)
+	* [Service Registry](https://www.cape-suite.eu/cape-server/service-registry/swagger-ui.html)
+
+  - Cape SDK APIs [here](https://www.cape-suite.eu/cape-service-sdk/swagger-ui.html), to easily identify APIs that either will be used by Cape Sdk Angular library or from scratch directly by Service. 
   
 APis can be directly tried:
 
  -  By clicking at first on `Authorize` either:
      * Using client (e.g. `cape-server` and `cape-service-sdk`) and credentials of an user registered in the CaPe Idm
-     * Copy as Bearer directly a JWT token issued by Cape Idm)
+     * Copy as Bearer directly a JWT token issued by Cape Idm
 	 
  -  Then click each `Try it out` button.
   
 
-The next section will provide a Walktrough in the API set provided by the Cape considering the workflow described in [the Cape Workflow section](../workflow/workflow).
+The next section will provide a Walktrough in the API set provided by Cape considering the workflow described in [the Cape Workflow section](../workflow/workflow).
 
 ---
 

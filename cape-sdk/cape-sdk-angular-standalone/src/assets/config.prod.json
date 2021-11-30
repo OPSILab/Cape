@@ -15,7 +15,8 @@
   },
   "services": {
     "sdkUrl": "https://www.cape-suite.eu/cape-service-sdk",
-    "checkConsentAtOperator": "true"
+    "checkConsentAtOperator": "true",
+    "showAdditionalConsentFormOptions": false
   },
   "i18n": {
     "locale": "en"

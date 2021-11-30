@@ -39,8 +39,8 @@ import lombok.ToString;
 @ToString
 public class Policy {
 
-	@NotBlank(message = "policyRef field is mandatory")
-	public @NotBlank(message = "policyRef field is mandatory") String policyRef;
+//	@NotBlank(message = "policyRef field is mandatory")
+	public String policyRef;
 	public String policyHash;
 	public String policyVersion;
 

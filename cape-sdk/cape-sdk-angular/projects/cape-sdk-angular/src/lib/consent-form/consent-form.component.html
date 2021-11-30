@@ -1,4 +1,4 @@
-<form [formGroup]="userConsentForm" (ngSubmit)="giveConsent(); dialogRef.close(true)">
+<form [formGroup]="userConsentForm" (ngSubmit)="giveConsent()">
   <nb-card>
     <nb-card-header class="d-flex justify-content-between">
       <h5 class="h5 mr-3">{{ 'general.consent.form.header' | translate }}</h5>
@@ -8,15 +8,19 @@
     </nb-card-header>
     <nb-card-body class="m-3">
       <h3>{{ 'general.consent.form.title' | translate }}</h3>
-      <div class="row">
-        <span class="col-md">{{ 'general.consent.form.body' | translate }}</span>
+      <span class="col-md">{{ 'general.consent.form.body' | translate }}</span>
+      <div *ngIf="consentForm.resource_set?.datasets[0] != undefined" class="row">
+        <span class="col-md">{{ 'general.consent.form.dataMapping' | translate }}</span>
       </div>
-      <div class="m-2" formGroupName="dataMapping">
-        <div class="" *ngFor="let concept of consentForm.resource_set.datasets[0].dataMappings">
+      <div *ngIf="consentForm.resource_set.datasets[0] !== undefined" class="m-2" formGroupName="dataMapping">
+        <div class="" *ngFor="let concept of consentForm.resource_set?.datasets[0]?.dataMappings">
           <nb-checkbox [formControlName]="concept.name">{{ concept.name }}</nb-checkbox>
         </div>
       </div>
-      <div class="row m-2 font-weight-bold">
+      <div
+        *ngIf="consentForm.usage_rules.policy.policyRef != undefined && consentForm.usage_rules.policy.policyRef != ''"
+        class="row m-2 font-weight-bold"
+      >
         {{ 'general.consent.form.policyRef' | translate }}
         <a href="{{ consentForm.usage_rules.policy.policyRef }}" class="ml-2">{{ consentForm.usage_rules.policy.policyRef }}</a>
       </div>
@@ -36,7 +40,7 @@
             </nb-accordion-item-body>
           </nb-accordion-item>
 
-          <nb-accordion-item>
+          <nb-accordion-item *ngIf="consentForm.usage_rules.shareWith.length > 0">
             <nb-accordion-item-header>{{ 'general.consent.form.shareWith.header' | translate }}</nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row m-1">{{ 'general.consent.form.shareWith.body' | translate }}</div>

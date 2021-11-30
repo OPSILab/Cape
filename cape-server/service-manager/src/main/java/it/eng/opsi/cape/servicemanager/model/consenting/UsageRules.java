@@ -63,7 +63,7 @@ public class UsageRules {
 	@JsonSerialize(converter = ProcessingCategoriesOrderedSetConverter.class)
 	private Set<ProcessingCategory> processingCategories;
 
-	@NotNull
+//	@NotNull
 	private Policy policy = new Policy();
 
 	private Storage storage;

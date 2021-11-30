@@ -2,6 +2,7 @@
   "general": {
     "logo_text": "CaPe",
     "home": "Home",
+    "go_to_dashboard": "Go to Cape Dashboard",
     "error": "Error",
     "refresh": "Refresh",
     "close": "Close",

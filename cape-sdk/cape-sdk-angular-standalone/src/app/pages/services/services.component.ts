@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras, Params } from '@angular/router';
 import { NgxConfigureService } from 'ngx-configure';
 import { NbDialogService } from '@nebular/theme';
@@ -12,16 +12,19 @@ import {
   CapeSdkDialogService,
   dialogType,
   ConsentFormComponent,
+  ConsentRecordEvent,
 } from 'cape-sdk-angular';
 // import { NbAuthService } from '@nebular/auth';
 import { AppConfig } from 'src/app/model/appConfig';
 import { ErrorDialogService } from '../error-dialog/error-dialog.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
 })
-export class ServicesComponent implements AfterViewInit {
+export class ServicesComponent implements AfterViewInit, OnDestroy {
   config: AppConfig;
   private locale: string;
 
@@ -42,6 +45,7 @@ export class ServicesComponent implements AfterViewInit {
   public checkConsentAtOperator: boolean;
   public showConsentAdditionalOptions = false;
   consentRecord: ConsentRecordSigned;
+  private unsubscribe: Subject<void> = new Subject();
 
   constructor(
     private configService: NgxConfigureService,
@@ -81,6 +85,11 @@ export class ServicesComponent implements AfterViewInit {
 
       this.checkAndGo(this.serviceId, this.serviceName, this.serviceRole, queryParams.purposeId);
     }
+
+    // this.capeService.consentRecordStatus$.pipe(takeUntil(this.unsubscribe)).subscribe(async (event) => {
+    //   event = event as ConsentRecordEvent;
+    //   if (event?.serviceId === this.serviceId) this.capeConsentStatus = event.status.consent_status;
+    // });
   }
 
   checkAndGo = async (serviceId: string, serviceName: string, serviceRole: RoleEnum, purposeId: string) => {
@@ -234,7 +243,7 @@ export class ServicesComponent implements AfterViewInit {
             sdkUrl: this.sdkUrl,
             consentForm: await this.capeService.fetchConsentForm(this.sdkUrl, this.serviceAccountId, serviceId, this.operatorId, purposeId, serviceRole),
             locale: sessionStorage.getItem('currentLocale') as string,
-            showAdditionalOptions: true,
+            showAdditionalOptions: this.config.services.showAdditionalConsentFormOptions,
           },
         })
         .onClose.subscribe((accepted) => {
@@ -243,5 +252,10 @@ export class ServicesComponent implements AfterViewInit {
     } catch (error) {
       this.errorDialogService.openErrorDialog(error);
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
