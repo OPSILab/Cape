@@ -137,13 +137,18 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
 
     //editor.on('ready', this.closeSpinner);
 
-    editor.on('ready', function () {
+    editor.on('ready', () => {
       editor.getEditor('root.serviceInstance.cert.x5u').disable();
       editor.getEditor('root.serviceInstance.cert.x5c').disable();
       editor.getEditor('root.createdByUserId').setValue(localStorage.getItem('accountId'));
       this.loading = false;
       $('nb-spinner').remove();
       if (sessionStorage.getItem('readOnly') === 'true') editor.disable();
+
+      if (!this.isNew) {
+        editor.getEditor('root.identifier').disable();
+        editor.getEditor('root.hasInfo.identifier').disable();
+      }
     });
   }
 

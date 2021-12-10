@@ -15,7 +15,8 @@
       "authProfile": "oidc",
       "authRealm": "Cape",
       "defaultIdP": ""
-    }
+    },
+    "serviceProviderBusinessId": "ENG"
   },
   "i18n": {
     "locale": "en"

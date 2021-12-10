@@ -12,6 +12,7 @@ export interface System {
   serviceEditorUrl: string;
   editorSchemaPath: string;
   auth: Auth;
+  serviceProviderBusinessId: string;
 }
 
 export interface Auth {

@@ -938,7 +938,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 			@RequestParam(defaultValue = "false") Boolean checkConsentAtOperator,
 			@RequestParam(defaultValue = "DESC") Sort.Direction iatSort) throws ConsentRecordNotFoundException {
 
-		List<ConsentRecordSigned> result = this.getConsentRecordsByServiceIdAndQuery(serviceId, userId, sourceServiceId,
+		List<ConsentRecordSigned> result = this.getConsentRecordsByServiceIdAndQuery(serviceId, userId.toLowerCase(), sourceServiceId,
 				datasetId, ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory, processingCategory,
 				checkConsentAtOperator, iatSort).getBody();
 		if (result.isEmpty())
