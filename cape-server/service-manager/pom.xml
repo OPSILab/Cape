@@ -27,6 +27,7 @@
 		<java.version>16</java.version>
 		<springboot.version>2.5.0</springboot.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j2.version>2.15.0</log4j2.version>
 	</properties>
 
 	<dependencyManagement>
