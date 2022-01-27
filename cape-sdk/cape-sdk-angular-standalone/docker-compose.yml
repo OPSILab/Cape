@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        BASE_HREF: /cape-sdk-angular-standalone/
+        BASE_HREF: /cape-sdk-angular-standalone
     ports:
       - '84:80'
     volumes:
