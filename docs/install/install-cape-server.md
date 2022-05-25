@@ -85,7 +85,7 @@ These Urls depends on how Cape Server is installed,
 
 #### Create Data Operator Description via API
 
-In order to create the Operator Description on Cape Server, issue a POST with a JSON body like the following one to the `/api/v2/operatorDescriptions` endpoint of Cape Server's Service Manager component (depending on how you have installed Cape Server. E.g. `http://localhost:8082/service-manager/api/v2/operatorDescriptions`).
+In order to create the Operator Description on Cape Server, issue a POST with a JSON body like the following one to the `/api/v2/dataOperatorDescriptions` endpoint of Cape Server's Service Manager component (depending on how you have installed Cape Server. E.g. ` http://localhost:8082/service-manager/api/v2/dataOperatorDescriptions`).
 
 ```
 {
