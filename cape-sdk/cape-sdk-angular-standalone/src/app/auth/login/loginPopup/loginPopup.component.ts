@@ -61,7 +61,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       // Get Idm User Details to create the associated Cape Account
       const tokenPayload = token.getAccessTokenPayload();
 
-      localStorage.setItem('serviceAccountId', tokenPayload.preferred_username);
+      localStorage.setItem('serviceAccountId', tokenPayload.sub);
       localStorage.setItem('serviceAccountEmail', tokenPayload.email);
 
       /*
