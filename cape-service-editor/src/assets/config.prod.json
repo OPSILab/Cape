@@ -14,7 +14,8 @@
       "disableAuth": "false",
       "authProfile": "oidc",
       "authRealm": "Cape",
-      "defaultIdP": ""
+      "defaultIdP": "",
+      "oidcField": "preferred_username"
     },
     "serviceProviderBusinessId": "ENG"
   },
