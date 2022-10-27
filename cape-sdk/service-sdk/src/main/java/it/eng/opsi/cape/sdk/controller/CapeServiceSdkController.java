@@ -1205,7 +1205,9 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		 * pair
 		 */
 
-		if (StringUtils.isNotBlank(sinkServiceId) && StringUtils.isNotBlank(sourceServiceId))
+		//Robcalla: Updated removing the check to the sourceServiceId 
+		//if (StringUtils.isNotBlank(sinkServiceId) && StringUtils.isNotBlank(sourceServiceId))
+		if (StringUtils.isNotBlank(sinkServiceId))
 			matchingConsents = getConsentRecordsByUserIdAndQuery(userId, sinkServiceId, sourceServiceId, datasetId,
 					ConsentRecordStatusEnum.Active, purposeId, purposeName, purposeCategory, processingCategory,
 					checkConsentAtOperator, Sort.Direction.ASC).getBody();
