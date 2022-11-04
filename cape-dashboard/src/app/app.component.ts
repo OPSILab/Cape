@@ -59,13 +59,13 @@ export class AppComponent implements OnInit, OnDestroy {
       baseEndpoint: this.appConfig.system.auth.idmHost,
       clientAuthMethod: NbOAuth2ClientAuthMethod.NONE,
       token: {
-        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
+        endpoint: `/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
         redirectUri: `${this.appConfig.system.dashboardUrl}/login/loginPopup`,
         class: OidcJWTToken,
         key: 'access_token',
       },
       authorize: {
-        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/auth`,
+        endpoint: `/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/auth`,
         scope: 'openid',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         state: uuidv4(),
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
         failure: null, // stay on the same page
       },
       refresh: {
-        endpoint: `/auth/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
+        endpoint: `/realms/${this.appConfig.system.auth.authRealm}/protocol/openid-connect/token`,
         grantType: NbOAuth2GrantType.REFRESH_TOKEN,
       },
     });

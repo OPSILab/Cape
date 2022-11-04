@@ -9,7 +9,7 @@
     "serviceEditorUrl": "http://localhost:81/cape-service-editor",
     "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
     "auth": {
-      "idmHost": "https://idm.cape-suite.eu",
+      "idmHost": "https://idm.cape-suite.eu/auth",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",
