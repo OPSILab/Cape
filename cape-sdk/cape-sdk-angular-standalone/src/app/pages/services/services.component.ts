@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, NavigationExtras, Params } from '@angular/route
 import { NgxConfigureService } from 'ngx-configure';
 import { NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
+import { ConsentFormComponent2 } from '../consent-form/consent-form.component';
 import {
   CapeSdkAngularService,
   RoleEnum,
@@ -11,7 +12,6 @@ import {
   ConsentStatusEnum,
   CapeSdkDialogService,
   dialogType,
-  ConsentFormComponent,
   ConsentRecordEvent,
 } from 'cape-sdk-angular';
 // import { NbAuthService } from '@nebular/auth';
@@ -235,7 +235,7 @@ export class ServicesComponent implements AfterViewInit, OnDestroy {
     this.translateService.use(sessionStorage.getItem('currentLocale'));
     try {
       this.dialogService
-        .open(ConsentFormComponent, {
+        .open(ConsentFormComponent2, {
           hasScroll: true,
           autoFocus: true,
           closeOnBackdropClick: true,

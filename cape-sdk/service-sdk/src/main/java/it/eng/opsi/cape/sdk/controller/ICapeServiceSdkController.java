@@ -177,7 +177,7 @@ public interface ICapeServiceSdkController {
 			ServiceLinkStatusNotValidException, ServiceDescriptionNotFoundException;
 
 	public abstract ResponseEntity<DataTransferResponse> startDataTransfer(DataTransferRequest dataTransfer,
-			Boolean checkConsentAtOperator, String datasetId) throws ConsentRecordNotFoundException,
+			Boolean checkConsentAtOperator, String datasetId, String authorizationHeader) throws ConsentRecordNotFoundException,
 			JsonMappingException, JsonProcessingException, ParseException, ConsentStatusNotValidException,
 			CapeSdkManagerException, JOSEException, ServiceManagerException, ServiceDescriptionNotFoundException;
 

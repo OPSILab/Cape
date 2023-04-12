@@ -7,7 +7,7 @@ $nb-enable-css-custom-properties: true; // <-- enable css custom properties
 
 $nb-themes: nb-register-theme(
   (
-    layout-padding-top: 2.25rem,
+    layout-padding-top: 0.1rem,
     menu-item-icon-margin: 0 0.5rem 0 0,
     card-height-tiny: 13.5rem,
     card-height-small: 21.1875rem,
@@ -86,13 +86,15 @@ $nb-themes: nb-register-theme(
     color-basic-1100: #111111,
     /* Basic colors - for backgrounds and borders and texts */ /* Status colors states - focus, hover, default, active, disabled  */
       /* Backgrounds and borders - basic, alternative and primary  */ /* Text colors - general and status */
-      /* Fonts and text styles - headings, subtitles, paragraphs, captions, button */ font-family-primary: unquote('Roboto, sans-serif'),
+      /* Fonts and text styles - headings, subtitles, paragraphs, captions, button */ font-family-primary: unquote('Titillium Web'),
     /* Supporting variables - border radius, outline, shadow, divider */ outline-width: 0,
-    outline-color: color-basic-400,
+    outline-color: color-basic-400, 
     shadow: (0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2)),
     /* CUSTOM */ /*Context Menu*/ context-menu-border-radius: 0px,
-    /* header */ header-height: 64px,
-    header-padding: 0px 20px,
+    /* header */ header-height: 0px,
+    /* CUSTOM */layout-padding: 0 0 0 0,
+    /* CUSTOM */header-padding: 0px 0px,
+    /* CUSTOM Actually the background color*/layout-background-color: white,
     /*Links*/ link-text-color: text-success-color,
     link-text-focus-color: text-success-focus-color,
     link-text-hover-color: text-success-hover-color,
@@ -122,7 +124,7 @@ $nb-themes: nb-register-theme(
     toggle-danger-checked-switcher-checkmark-color: color-basic-100,
     button-filled-success-background-color: #00d68f,
     button-filled-success-hover-background-color: #2ce69b,
-    /* CUSTOM for Municipality*/ header-background-color: #152f52,
+    /* CUSTOM for Municipality*/ header-background-color: white,
     header-text-color: white,
     user-name-text-color: white,
     user-title-text-color: white,
@@ -134,7 +136,7 @@ $nb-themes: nb-register-theme(
 
 $nb-themes: nb-register-theme(
   (
-    layout-padding-top: 2.25rem,
+    layout-padding-top: 0rem ,
     menu-item-icon-margin: 0 0.5rem 0 0,
     card-height-tiny: 13.5rem,
     card-height-small: 21.1875rem,

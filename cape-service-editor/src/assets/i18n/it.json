@@ -75,7 +75,7 @@
       "filterbyservice": "Filtra per servizio",
       "filterbypurpose": "Filtra per finalità",
       "filterbyprocessing": "Filtra per processamento",
-      "filterbyuserid": "Filtra per User Id Servizio",
+      "filterbyuserid": "Filtra ID Utente Servizio",
       "active": "Attivo",
       "disabled": "Disabilitato",
       "withdrawn": "Revocato",

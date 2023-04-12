@@ -104,7 +104,8 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.png", "src/assets", "src/app/cape-sdk-angular/assets"],
-            "styles": ["src/styles.scss", "node_modules/bootstrap/scss/bootstrap.scss"],
+            "styles": ["src/styles.scss", 
+              "node_modules/bootstrap/scss/bootstrap.scss"],
             "scripts": []
           }
         },

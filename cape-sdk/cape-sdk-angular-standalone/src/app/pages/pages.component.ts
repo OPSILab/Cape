@@ -6,10 +6,8 @@ import { MENU_ITEMS } from './pages-menu';
   selector: 'ngx-pages',
   styleUrls: ['pages.component.scss'],
   template: `
-    <nb-layout windowMode>
-      <nb-layout-header fixed>
-        <ngx-header></ngx-header>
-      </nb-layout-header>
+    <nb-layout >
+      
 
       <!-- <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive start>
         <nb-menu [items]="menu"></nb-menu>
@@ -19,9 +17,7 @@ import { MENU_ITEMS } from './pages-menu';
         <router-outlet></router-outlet>
       </nb-layout-column>
 
-      <nb-layout-footer fixed>
-        <ngx-footer></ngx-footer>
-      </nb-layout-footer>
+      
     </nb-layout>
   `,
 })

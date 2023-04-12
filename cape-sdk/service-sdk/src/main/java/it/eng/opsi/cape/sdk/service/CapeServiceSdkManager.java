@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -311,10 +312,9 @@ public class CapeServiceSdkManager {
 
 	}
 
-	public RequestEntity<DataTransferRequest> prepareDataRequest(DataRequestAuthorizationPayload authPayload,
-			DataTransferRequest dataRequest) throws CapeSdkManagerException, JsonProcessingException, JOSEException,
-			ServiceManagerException, ServiceDescriptionNotFoundException {
-
+		
+	public String getDataRequestSignatureFromPoPkey (DataRequestAuthorizationPayload authPayload,
+			DataTransferRequest dataRequest) throws CapeSdkManagerException, JsonProcessingException, JOSEException{
 		/*
 		 * Get Pop key from internal repository in order to put its public part in the
 		 * Data Request
@@ -323,26 +323,31 @@ public class CapeServiceSdkManager {
 				() -> new CapeSdkManagerException("No Pop key found for surrogateId: " + dataRequest.getSurrogateId()));
 
 		String dataRequestSignature = cryptoService.signAndSerializeDataRequestAuthorization(popKey, authPayload);
-
+		
+		return dataRequestSignature;
+		
+	}
+	
+	public String getSourceLibraryDomain(DataTransferRequest dataRequest) throws ServiceManagerException, ServiceDescriptionNotFoundException{
+		
 		// Get Consent Pair starting from CrId
 		ConsentRecordSignedPair consentPair = clientService
 				.callGetConsentRecordPairBySurrogateIdAndCrId(dataRequest.getSurrogateId(), dataRequest.getCrId())
 				.getBody();
 
 		// Get Source Service Id from subjectId of Source's Consent
-		String sourceServiceId = consentPair.getSource().getPayload().getCommonPart().getSubjectId();
+		String sourceServiceId = consentPair.getSource().getPayload().getCommonPart().getSourceSubjectId();
 
 		// Get service description to get source library domain
 		ServiceEntry sourceService = clientService.getServiceDescriptionFromRegistry(sourceServiceId, true);
 
 		// Construct data request url
 		String sourceLibraryDomain = sourceService.getServiceInstance().getServiceUrls().getLibraryDomain();
-
-		return RequestEntity
-				.post(URI.create(sourceLibraryDomain + "/api/v2/dc/send?dataset_id=" + dataRequest.getDatasetId()))
-				.header("Authorization", "PoP " + dataRequestSignature).body(dataRequest);
-
+		
+		return sourceLibraryDomain;
 	}
+	
+	
 
 	public Boolean verifyTokenAndDataRequest(String popHeader, ConsentRecordSignedPair consentPair,
 			DataTransferRequest dataRequest)

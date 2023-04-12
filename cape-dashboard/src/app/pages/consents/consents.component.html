@@ -119,7 +119,7 @@
       <!-- Accordion Title -->
       <mat-expansion-panel class="example-headers-align">
         <mat-expansion-panel-header class="border border-secondary">
-          <mat-panel-title class="font-weight-bold"> {{ 'general.services.service' | translate }}:&nbsp; {{ consentGroup.key }} </mat-panel-title>
+          <mat-panel-title class="font-weight-bold"> {{ 'general.services.service' | translate }}:&nbsp; {{ consentGroup.value[0].sink.payload.common_part.subject_name }} </mat-panel-title>
           <mat-panel-description class="justify-content-end">
             <div class="justify-content-end">
               <div class="justify-content-between">

@@ -87,13 +87,13 @@ export class ConsentsComponent implements OnInit {
 
           valuePrepareFunction: (cell, row: ConsentRecordSigned) => row.payload.common_part.source_subject_name,
         },
-        surrogateId: {
+       /* surrogateId: {
           title: this.surrogateLabel,
           editor: {
             type: 'text',
           },
           valuePrepareFunction: (cell, row: ConsentRecordSigned) => row.payload.common_part.surrogate_id,
-        },
+        },*/
         purpose: {
           title: this.purposeLabel,
           editor: {
@@ -112,9 +112,9 @@ export class ConsentsComponent implements OnInit {
         status: {
           title: this.statusLabel,
           editor: {
-            type: 'text',
-            valuePrepareFunction: (cell, row: ConsentRecordSigned) => row.payload.common_part.consent_status,
+            type: 'text',            
           },
+          valuePrepareFunction: (cell, row: ConsentRecordSigned) => row.payload.common_part.consent_status,
         },
         viewInfo: {
           filter: false,

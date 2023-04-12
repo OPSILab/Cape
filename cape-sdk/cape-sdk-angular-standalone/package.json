@@ -15,6 +15,7 @@
   },
   "private": true,
   "dependencies": {
+    "bootstrap-italia": "1.6.2",
     "cape-sdk-angular": "1.0.38",
     "@akveo/ng2-completer": "^9.0.1",
     "@angular/animations": "11.2.12",

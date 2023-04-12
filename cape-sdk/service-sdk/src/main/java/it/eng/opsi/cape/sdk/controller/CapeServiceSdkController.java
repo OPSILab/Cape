@@ -16,6 +16,7 @@
  ******************************************************************************/
 package it.eng.opsi.cape.sdk.controller;
 
+import java.net.URI;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -35,8 +36,10 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -1007,13 +1010,14 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		return clientService.callChangeConsentStatus(surrogateId, slrId, crId, request);
 	}
 
-	@Operation(summary = "End point that initialises Data Transfer flow from Sink.", tags = {
+	@Operation(summary = "End point that initialises Data Transfer flow from Sink (For demo purposes)", tags = {
 			"Data Request" }, responses = {
 					@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<DataTransferResponse> startDataTransfer(@RequestBody @Valid DataTransferRequest dataRequest,
-			@RequestParam Boolean checkConsentAtOperator, @RequestParam(value = "dataset_id") String datasetId)
+			@RequestParam Boolean checkConsentAtOperator, @RequestParam(value = "dataset_id") String datasetId,
+			@RequestHeader("Authorization") String authorizationHeader)
 			throws ConsentRecordNotFoundException, JsonMappingException, JsonProcessingException, ParseException,
 			ConsentStatusNotValidException, CapeSdkManagerException, JOSEException, ServiceManagerException,
 			ServiceDescriptionNotFoundException {
@@ -1068,14 +1072,26 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		DataRequestAuthorizationPayload authPayload = new DataRequestAuthorizationPayload(tokenResponse.getAuthToken(),
 				now.toInstant().toEpochMilli());
 		dataRequest.setDatasetId(datasetId);
-
+       // RequestEntity requestEntity=sdkManager.prepareDataRequest(authPayload, dataRequest);
+       // requestEntity.getHeaders().add("Authorization", "authorizationHeader[0]");
+		String dataRequestSignature=sdkManager.getDataRequestSignatureFromPoPkey(authPayload, dataRequest);
+		String sourceLibraryDomain=sdkManager.getSourceLibraryDomain(dataRequest);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", authorizationHeader);
+		headers.add("Authorization", "PoP " + dataRequestSignature);
+		
+		RequestEntity<DataTransferRequest> requestEntity= RequestEntity
+				.post(URI.create(sourceLibraryDomain + "/api/v2/dc/send?dataset_id=" + dataRequest.getDatasetId())).
+				headers(headers).body(dataRequest);
+		
 		DataTransferResponse dataTransferResponse = clientService
-				.sendDataRequest(sdkManager.prepareDataRequest(authPayload, dataRequest));
+				.sendDataRequest(requestEntity);
 
 		return ResponseEntity.ok(dataTransferResponse);
 	}
 
-	@Operation(summary = "Final End point to perform Data Transfer from the Source Service.", tags = {
+	@Operation(summary = "Final End point to perform Data Transfer from the Source Service (fro demo purposes).", tags = {
 			"(Internal) Data Request" }, responses = {
 					@ApiResponse(description = "Returns 200 OK with the Data requested matching input Rs id.", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DataTransferResponse.class))) })
 	@PostMapping(value = "/dc/send", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1137,7 +1153,7 @@ public class CapeServiceSdkController implements ICapeServiceSdkController {
 		// ​made.
 
 		// Depending on serviceId, call the relative API to get the data matching with
-		// dataset
+		// dataset. Data Enforcement
 		String serviceId = serviceLink.getPayload().getServiceId();
 
 		// Mapping concepts with data????

@@ -121,7 +121,7 @@ export class ConsentsComponent implements OnInit, OnDestroy {
       (result[currentConsentPair.sink?.payload?.common_part?.subject_id] =
         result[currentConsentPair?.sink?.payload?.common_part.subject_id] || []).push({
         ...currentConsentPair,
-        consentIndex: consentIndex,
+        consentIndex: consentIndex,        
       });
 
       return result;

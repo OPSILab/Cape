@@ -1,59 +1,665 @@
-.filtro_servizi_online>span>a img:last-child {
-    display: none;
-}
-.filtro_servizi_online>span>a:hover img:last-child {
-    display:inline-block;
-    
-
-}
-.filtro_servizi_online>span>a:hover img:first-child {
-    display:none;
+html{
+	font-size: 12pt;
 }
 
-.filtro_servizi_online {
-    text-align: center;
+body.newlook{
+	background: none;
 }
 
-.view-servizi-online-amministrazione .views-field-name, .view-servizi-online-amministrazione .views-field-name a {
-    font-size: 17px;
-    color: #333;
-    text-decoration: none !important;
-    font-weight: 700;
+/* STYLE - HEADER */
+
+
+
+header .row{
+	-webkit-box-sizing: inherit;
+	box-sizing: inherit;
+	-webkit-box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	min-height: 2.2rem;
 }
 
-.view-servizi-online-amministrazione .views-field-name-1 {
-    font-size: 15px;
-    color: #333;
-    text-decoration: none;
+header .row:before, header .row:after{
+	display: table;
+	content: " ";
 }
 
-.div-title {
-    position: relative;
-    text-align: center;
+header a:hover{
+	background-color: transparent;
+	text-decoration: underline !important;
 }
 
-.div-title .div-title-h2 {
-    background: #f5f5f5;
-    display: inline-block;
-    margin-left: 16px;
-    margin-right: 16px;
-    padding-left: 1%;
-    padding-right: 1%;
-    position: relative;
+header #top-nav{
+	background-color: #FFF;
+	padding: 0.4rem 2.6rem;
 }
 
-.div-title h2 {
-    color: #152f52 !important;
-    font-size: 33px;
+header #top-nav a{
+	color: #152f52;
+	font-weight: 700;
+	font-size: 17px;
 }
 
-.div-title:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    border-top: 4px solid #152f52;
-    left: 0;
-    right: 0;
+#top-nav .top-nav-sx{
+	box-sizing: content-box;
+	width: 33.3%;
+	float: left;
+	text-align:left;
+	padding: 0px;
+	line-height:2.2rem;
+}
+
+#top-nav .top-nav-dx{
+	text-align: right;
+	box-sizing: content-box;
+	width: 66%;
+	float: right;
+	padding:0px;
+	line-height:2.2rem;
+}
+
+#top-nav .top-nav-sx a{
+	text-decoration: none !important;
+}
+
+#top-nav .top-nav-dx a{
+	font-weight: 400;
+	font-size: 1.3rem;
+	text-decoration: none !important;
+}
+
+#top-nav .top-nav-sx a:hover, #top-nav .top-nav-dx a:hover{
+	background-color: transparent;
+	text-decoration: underline !important;
+}
+
+header #main-nav{
+	font-family: "Titillium Web";
+	background-color: #152f52;
+	padding: 0.65rem 0;
+	transition: all .3s ease;
+	text-align: left;
+}
+
+header div.container{
+	margin: auto;
+}
+
+header div.container-fluid{ /* Adapt bootstrap std */
+	padding: 0px;
+}
+
+header #main-nav div.container{ /* Adapt bootstrap std */
+	padding: 8px 15px;
+}
+
+header div.container div.pull-left{
+	padding: 12px 0px;
+}
+
+header div.container .logo_container{
+	display: table;
+	transition: all .3s ease;
+	margin-top: 0;
+	padding: 0px 0.4rem;
+}
+
+header div.container .logo_container .logo_wrapper{
+	width: 100px;
+	display: table-cell;
+	position: unset;
+	top: 5px;
+	left: 0;
+	padding-bottom: 8px;
+}
+
+header div.container .logo_container .logo_wrapper a{
+	display: block;
+	transition: all .3s ease;
+	vertical-align: middle;
+	position: relative;
+}
+
+header div.container .logo_container .logo_text{
+	padding: 0 0 0 30px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+header div.container .logo_container .logo_text .h3{
+	font-size: 1.6rem;
+	font-weight: 700;
+	line-height: 1.2em;
+	color: #FFF;
+	display: block;
+	letter-spacing: -.5pt;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+header div.container .logo_container .logo_text .h3 a{
+	color: #FFF;
+	text-decoration: none !important;
+}
+
+header div.container .logo_container img{
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	margin: 0;
+	transition: all .3s ease;
+}
+
+/* STYLE - PAGE CONTENT */
+
+h2{
+	font-size: 40px !important;
+	line-height: 1.2;
+	
+}
+
+.idp-button-idp-logo{
+	line-height: 100%;
+}
+
+
+div.page-content{
+	padding-top:1.2rem;
+	padding-bottom: 4rem;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size:1.2rem;
+}
+
+div.page-content .description{
+	line-height: 1.42857143;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-variant-ligatures: common-ligatures;
+	letter-spacing: 0.1em !important;
+	margin-bottom: 1rem;
+}
+
+div.page-content a:hover{
+	color: #003366 !important;
+}
+
+div.page-content a:visited{
+	color: #551a8b !important;
+}
+
+#fg_membersite.newlook{
+	position: static;
+	border: none;
+}
+
+#fg_membersite.newlook div.page-title h1, #fg_membersite.newlook div.page-title h2{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	color: #152f52;
+}
+
+div.box-errore{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctitle%3Eerror%3C/title%3E%3Cpath d='M16 1.6C24 1.6 30.4 8 30.4 16S24 30.4 16 30.4 1.6 24 1.6 16 8 1.6 16 1.6zM16 0C7.2 0 0 7.2 0 16s7.2 16 16 16 16-7.2 16-16S24.8 0 16 0z'/%3E%3Cpath d='M14.4 24c0-.96.64-1.6 1.6-1.6s1.6.64 1.6 1.6c0 .96-.64 1.6-1.6 1.6s-1.6-.64-1.6-1.6zM15.04 20.8l-.32-14.4h2.56l-.32 14.4z'/%3E%3C/svg%3E") no-repeat 1em .5em !important;
+	border-radius: 0px !important;
+	text-align: left;
+	padding: 0.4rem 4.2rem;
+	border: none !important;
+	border-left: .5em solid red !important;
+	color: #1c2024;
+	box-sizing: border-box;
+	margin: 1.2rem 0px;
+	font-size: 1.2rem;
+}
+
+div.box-errore-titolo h1, div.box-errore-titolo h2, div.box-errore-titolo h3{
+	margin: auto;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+	line-height: 2rem;
+}
+
+div.box-warning{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctitle%3Ewarning%3C/title%3E%3Cpath d='M14.333 26c0-1 .667-1.667 1.667-1.667S17.667 25 17.667 26 17 27.667 16 27.667 14.333 27 14.333 26zM15 22.667l-.333-15h2.667l-.333 15z'/%3E%3Cpath d='M16 2.667c1 0 2 .5 2.5 1.333l10.333 20.833c.5.833.5 2 0 2.833s-1.5 1.5-2.5 1.5H5.666c-1 0-2-.5-2.5-1.5-.5-.833-.5-2 0-2.833L13.499 4c.5-.833 1.5-1.333 2.5-1.333zM16 1c-1.5 0-3 .833-4 2.333L1.667 24.166c-1.667 3 .5 6.833 4 6.833h20.667c3.5 0 5.667-3.833 4-6.833L20.001 3.333c-1-1.667-2.5-2.333-4-2.333z'/%3E%3C/svg%3E") no-repeat 1em .5em !important;
+	border-radius: 0px !important;
+	text-align: left;
+	padding: 0.4rem 4.2rem;
+	border: none !important;
+	border-left: .5em solid #d1ae00 !important;
+	color: #1c2024;
+	box-sizing: border-box;
+	margin: 1.2rem 0px;
+	font-size: 1.2rem;
+}
+
+div.box-warning-titolo h1, div.box-warning-titolo h2, div.box-warning-titolo h3{
+	margin: auto;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+	line-height: 2rem;
+}
+
+div.vspace-med{
+	padding-bottom: 4rem;
+}
+
+div.form-wrapper{
+	margin: 2rem auto;
+}
+
+div.form-wrapper form.newlook{
+	font-size: 1.2rem;
+    letter-spacing: .01em ;
+    margin-top: 0;
+    padding: 2.4rem;
+    max-width: 32em;
+    background-color: #f5f5f0;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+}
+
+form.newlook p{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+	font-size: 0.8rem;
+}
+
+#fg_membersite div.form-wrapper form.newlook legend{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+	font-size: 1.4em !important;
+	letter-spacing: .007em !important;
+	font-weight: normal !important;
+	color: #1c2024 !important;
+	border-bottom: 1px solid #1c2024;
+	padding-bottom: 0.4em;
+}
+
+#fg_membersite div.form-wrapper form.newlook div.form-field{
+	padding-bottom: 2rem !important;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+}
+
+#fg_membersite div.form-wrapper form.newlook div.form-field label, input[type="text"], input[type="password"]{
+	width: 100%;
+	display: block;
+	font-size: 1em !important;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+}
+
+#fg_membersite div.form-wrapper form.newlook div.form-field input[type="text"], input[type="password"]{
+	width: 100% !important;
+	height: auto !important;
+	border-radius: 0px;
+	font-size: 1em !important;
+}
+
+#fg_membersite input[type="text"]:focus, #fg_membersite textarea:focus {
+    color: #1c1d20;
+    border: 1px solid #474747;
+    background-color: #eaf4f9;
+    font-weight: normal;
+}
+
+#fg_membersite div.form-wrapper form.newlook input[type="checkbox"]{
+	display: inline-block;
+	width: auto;
+}
+
+#fg_membersite div.form-wrapper form.newlook .warning{
+	font-size: 1.2rem !important;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+}
+
+#fg_membersite input[type="submit"]{
+	font-weight: bold;
+	font-size: 1.2rem;
+	padding: .6em 1.2em;
+	text-transform: uppercase;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	vertical-align: middle;
+	white-space: nowrap;
+	height: auto;
+	width: auto;
+	display: inline-block;
+	background: #167bc1;
+	border: none;
+	color: white;
+	text-decoration: underline;
+}
+
+#fg_membersite input[type="submit"]:hover{
+	background: #004080;
+}
+
+#fg_membersite div.form-wrapper form.newlook input[type="submit"]{
+	font-weight: bold;
+	font-size: 1.2rem;
+	padding: .6em 1.2em;
+	text-transform: uppercase;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	vertical-align: middle;
+	white-space: nowrap;
+	height: auto;
+	width: auto;
+	display: inline-block;
+	background: #00C5CA;
+	border: none;
+	color: #1c2024;
+	text-decoration: none;
+}
+
+#fg_membersite div.form-wrapper form.newlook input[type="submit"]:hover{
+	background: #00c5ca;
+}
+
+#fg_membersite div.form-wrapper form.newlook input[type="submit"]:focus{
+	background:#004a4d
+}
+
+div.logout-row {
+	display: table-row;;
+}
+
+div.logout-row div{
+	display: table-cell !important;
+	vertical-align: middle;
+}
+
+div.logout-row div.logout-result-img{
+	float: none !important;
+}
+
+div.logout-row div.logout-service-descr{
+	padding-top: 0px !important;
+}
+/* STYLE - FOOTER */
+
+footer{
+	background: #30373d;
+	width: 100%;
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+	color: #c6cace;
+	text-align: left;
+	padding-bottom: 2.2rem;
+}
+
+footer p{
+	font-family: "Titillium Web",HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+}
+
+footer div.container{
+	margin: auto;
+	padding-top: 2.2rem;
+	/* bootstrap std */
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+footer div.container .row div{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+footer div.container .row div.logo img{
+	vertical-align: middle;
+}
+
+footer div.container .row div.logo_text{
+	padding-left: 2.6rem;
+	font-weight: bold;
+	font-size: 1.6rem;
+}
+
+footer #footer_inside div.region-footer-inside{
+	width: 100%;
+}
+
+footer #footer_inside section{
+	padding: 2rem 2.4rem;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	border: none;
+}
+
+footer #footer_inside section p.footer_title{
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 1.2rem;
+	padding-left: 0rem;
+}
+
+footer #footer_inside section p.footer_text{
+	color: #c6cace;
+	font-size: 1rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	word-break: break-all;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+footer #footer_inside section p.footer_text a{
+	color: #65dde0;
+	text-decoration: none;
+	font-weight: normal;
+	font-size: inherit;
+}
+
+footer #footer_inside section p.footer_text a:hover{
+	background: none;
+	text-decoration: underline;
+	color: #65dde0;
+}
+
+footer #block-menu-menu-footer-midi{
+	width: 100%;
+	padding: 0px 1.6rem;
+	box-sizing: border-box;
+	margin-top: 0.6rem;
+	border: none;
+	margin-bottom: auto;
+}
+
+footer ul.menu.nav{
+	border-top: 1px solid #444e57;
+	border-radius: 0px;
+	padding: 0px;
+}
+
+footer ul.menu.nav li{
+	display: inline-block;
+	padding: 1rem;
+}
+
+footer ul.menu.nav li a{
+	color: #65dde0 !important;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+footer ul.menu.nav li a:hover{
+	background: none;
+	text-decoration: underline;
+	color: #65dde0;
+}
+
+
+/* @MEDIA CALLS */
+
+@media screen and (max-width:420px){
+	#colonnadest form.form #main{
+		padding: 1.6rem !important;
+	}
+	
+}
+
+@media screen and (max-width:540px){
+	#top-nav .top-nav-sx{
+		box-sizing: content-box;
+		width: 100%;
+		float: none;
+		text-align: center;
+		vertical-align: top;
+	}
+	#top-nav .top-nav-dx{
+		box-sizing: content-box;
+		width: 100%;
+		float: none;
+		text-align: center;
+		vertical-align: top;
+	}
+
+}
+
+@media screen and (max-width:767px){
+	h2.int{
+		font-size: 2.2rem;
+	}
+	#corpocentrale .box{
+		font-size: 1.8rem !important;
+		letter-spacing: .01em !important;
+	}
+
+	.tbServN label{
+		font-size: 1.6em;
+	}
+
+	#FormTariffa .contenitore .sezione1, #FormTariffa .contenitore .sezione2, #FormTariffa .contenitore .sezione3{
+		width: 100%;
+		max-width: 560px;
+		margin-top: 1.6rem;
+	}
+
+	#colonnadest form.form #dettaglio .riga div.pageDesc{
+		width: 100%;
+	}
+
+	#colonnadest form.form #dettaglio .riga div.parOut.parSmall{
+		float: none;
+	}
+
+	#FormTariffa .contenitore .sezione3Wide, #FormTariffa .contenitore .sezione3{
+		width: 100%;
+		overflow-x: auto;
+	}
+
+	#form{
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+
+	div.contenitorepagamento{
+		overflow-x: auto;
+	}
+
+}
+
+@media screen and (max-width:1200px){
+	h2.int{
+		font-size: 2.6rem;
+	}
+
+}
+
+@media screen and (max-width:992px){
+	#colonnadest form.form #main .riga div.pageDesc, #colonnadest form.form #intestatario .riga div.pageDesc{
+		font-size: 1.8rem;
+	}
+}
+
+
+@media screen and (min-width:768px){
+	#corpocentrale{
+		width: 750px;
+	}
+
+	header div.container{
+		width: 750px;
+	}
+
+	header div.container .logo_container .logo_text .h3{
+		font-size: 2.6rem;
+	}
+}
+
+@media screen and (min-width:992px){
+
+	#corpocentrale{
+		width: 970px;
+	}
+
+	header div.container{
+		width: 970px;
+	}
+
+	footer div.container{
+		width: 970px;
+	}
+
+	footer #footer_inside section{
+		width: 33%;
+	}
+
+	footer #footer_inside section p.footer_text{
+		word-break: normal;
+		padding-right: 0px;
+	}
+
+	#colonnadest form.form #main .riga div.pageDesc{
+		width: 20%;
+	}
+}
+
+@media screen and (min-width:1200px){
+
+	#corpocentrale{
+		width: 1100px;
+	}
+
+	header div.container{
+		width: 1100px;
+	}
+
+	footer div.container{
+		width: 1100px;
+	}
+	
+	#colonnadest form.form #attestante .riga div.pageDesc, #colonnadest form.form #datiBeneficiario .riga div.pageDesc, #colonnadest form.form #soggettoPagatore .riga div.pageDesc, #colonnadest form.form #pagamento .riga div.pageDesc{
+		width: 25%;
+	}
+
+	#colonnadest form.form #attestante .riga div.parOut, #colonnadest form.form #datiBeneficiario .riga div.parOut, #colonnadest form.form #soggettoPagatore .riga div.parOut, #colonnadest form.form #pagamento .riga div.parOut{
+		width: 25%;
+	}
+
+	#colonnadest form.form #attestante .riga div.parOut.parSmall, #colonnadest form.form #datiBeneficiario .riga div.parOut.parSmall, #colonnadest form.form #soggettoPagatore .riga div.parOut.parSmall, #colonnadest form.form #pagamento .riga div.parOut.parSmall{
+		width: 22.5%;
+	}
+}
+
+@media screen and (min-width:1440px){
+	#corpocentrale{
+		width: 1440px;
+	}
+	header div.container{
+		width: 1440px;
+	}
+	footer div.container{
+		width: 1440px;
+	}
+	#colonnadest form.form #attestante .riga div.parOut.parSmall, #colonnadest form.form #datiBeneficiario .riga div.parOut.parSmall, #colonnadest form.form #soggettoPagatore .riga div.parOut.parSmall, #colonnadest form.form #pagamento .riga div.parOut.parSmall{
+		width: 23.5%;
+	}
+}
+
+
+@media screen and (min-width:1600px){
+	#corpocentrale{
+		width: 1570px;
+	}
+	header div.container{
+		width: 1570px;
+	}
+	footer div.container{
+		width: 1570px;
+	}
 }
