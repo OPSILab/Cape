@@ -5,12 +5,13 @@
     "cancelReturnUrl": "https://smart.comune.genova.it",
     "dashboardUrl": "https://www.cape-suite.eu/cape-dashboard",
     "auth": {
-      "idmHost": "https://idm.cape-suite.eu",
+      "idmHost": "https://idm.cape-suite.eu/auth",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",
       "authRealm": "Cape",
-      "defaultIdP": ""
+      "defaultIdP": "",
+      "oidcField": "preferred_username"
     }
   },
   "services": {

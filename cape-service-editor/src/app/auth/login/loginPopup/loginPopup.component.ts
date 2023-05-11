@@ -14,6 +14,7 @@ import { ErrorResponse } from '../../../model/errorResponse';
   templateUrl: './loginPopup.component.html',
 })
 export class LoginPopupComponent implements AfterViewInit, OnDestroy {
+  oidcField: string;
   serviceEditorUrl: string;
   locale: string;
 
@@ -31,6 +32,7 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private dialogService: NbDialogService
   ) {
+    this.oidcField = (this.configService.config as AppConfig).system.auth.oidcField;
     this.serviceEditorUrl = (this.configService.config as AppConfig).system.serviceEditorUrl;
     this.locale = (this.configService.config as AppConfig).i18n.locale;
     this.queryParams = this.activatedRoute.snapshot.queryParams;
@@ -60,7 +62,12 @@ export class LoginPopupComponent implements AfterViewInit, OnDestroy {
       // Get Idm User Details to create the associated Cape Account
       const tokenPayload = token.getAccessTokenPayload();
 
-      localStorage.setItem('accountId', tokenPayload.preferred_username);
+      let accountId=tokenPayload.preferred_username;
+      if(this.oidcField!=undefined && this.oidcField!='preferred_username'){
+        accountId=tokenPayload[this.oidcField];
+      }
+
+      localStorage.setItem('accountId', accountId);
       localStorage.setItem('accountEmail', tokenPayload.email);
 
       /*

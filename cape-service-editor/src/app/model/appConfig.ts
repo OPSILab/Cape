@@ -22,6 +22,7 @@ export interface Auth {
   authProfile: string;
   authRealm: string;
   defaultIdP: string;
+  oidcField?: string;
 }
 
 export interface I18n {

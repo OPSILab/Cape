@@ -21,11 +21,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'toggle-left-outline',
     link: '/pages/consents',
   },
-  {
-    title: 'general.menu.data_control_flow',
-    icon: 'swap-outline',
-    link: '/pages/consents/controlflow',
-  },
+ // {
+ //   title: 'general.menu.data_control_flow',
+ //   icon: 'swap-outline',
+ //   link: '/pages/consents/controlflow',
+ // },
   {
     title: 'general.menu.services',
     group: true,
