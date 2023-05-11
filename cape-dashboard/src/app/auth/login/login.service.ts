@@ -32,7 +32,7 @@ export class LoginService {
 
     const authResult = await this.authService.logout(this.authProfile).toPromise();
     if (authResult.isSuccess()) {
-      const redirectedHref = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashboardUrl}/login`;
+      const redirectedHref = `${this.idmHost}/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.dashboardUrl}/login`;
 
       if (redirectIntoOpener) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

@@ -32,7 +32,7 @@ export class LoginService {
 
     const authResult = await this.authService.logout(this.authProfile).toPromise();
     if (authResult.isSuccess()) {
-      window.location.href = `${this.idmHost}/auth/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.serviceEditorUrl}/login`;
+      window.location.href = `${this.idmHost}/realms/${this.authRealm}/protocol/openid-connect/logout?redirect_uri=${this.serviceEditorUrl}/login`;
     } else {
       window.alert(this.translateService.instant('login.logout_error'));
     }
