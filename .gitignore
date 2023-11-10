@@ -228,3 +228,5 @@ hs_err_pid*
 
 # Current Config...
 .env
+info
+cape-service-editor/src_sc/

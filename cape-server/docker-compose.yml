@@ -20,8 +20,8 @@ services:
   account-manager:
     image: capesuite/account-manager
     build: ./account-manager
-    ports:
-      - "8080:8080"
+    ports: 
+      - "8089:8080" #local
     environment:
      #- PROFILE=
       - APIDOCS_PATH=/api-docs
@@ -46,8 +46,8 @@ services:
   account-manager-mongo:
     image: mongo:4.4.6
     restart: always
-    ports:
-     - "27017:27017"
+    ports: 
+     - "27017:27017" 
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -90,7 +90,7 @@ services:
     image: mongo:4.4.6
     restart: always
     ports:
-     - "27018:27017"
+     - "27011:27017" #local
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -219,7 +219,7 @@ services:
     image: mongo:4.4.6
     restart: always
     ports:
-     - "27021:27017"
+     - "27026:27017" #local
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root

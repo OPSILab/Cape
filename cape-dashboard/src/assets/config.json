@@ -5,7 +5,8 @@
   "system": {
     "operatorId": "cape",
     "dashboardUrl": "http://localhost/cape-dashboard",
-    "accountUrl": "http://localhost:8080/account-manager",
+    "//COMMENTfollowing is only local" : "",
+    "accountUrl": "http://localhost:8089/account-manager",
     "serviceManagerUrl": "http://localhost:8082/service-manager",
     "auditLogUrl": "http://localhost:8081/auditlog-manager",
     "consentManagerUrl": "http://localhost:8083/consent-manager",
