@@ -17,6 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LoginService } from '../../../auth/login/login.service';
 import { TextualDescription } from '../../../model/service-linking/textualDescription';
 import { TextualDescription2 } from '../../../model/service-linking/textualDescription2';
+import { ServiceStatusComponent } from './service-status/service-status.component';
 
 export interface AvailableServiceRow extends ServiceEntry {
   locale?: string;
@@ -133,13 +134,13 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
         delete: false,
       },
       columns: {
-        serviceName: {
+        name: {
           title: this.serviceLabel,
           type: 'text',
           width: '25%',
           valuePrepareFunction: (cell, row: AvailableServiceRow) => row.name,
         },
-        humanReadableDescription: {
+        description: {
           title: this.descriptionLabel,
           editor: {
             type: 'textarea',
@@ -158,11 +159,12 @@ export class AvailableServicesComponent implements OnInit, OnDestroy {
         },
         status: {
           title: this.statusLabel,
-          filter: false,
           sort: false,
+          filter: false,
           width: '5%',
-          type: 'text',
+          type: 'custom',
           valuePrepareFunction: (cell, row: AvailableServiceRow) => row.status,
+          renderComponent: ServiceStatusComponent,
         },
         actions: {
           title: this.actionsLabel,

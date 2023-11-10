@@ -22,6 +22,7 @@ import {
   NbTabsetModule,
 } from '@nebular/theme';
 import { ActionsServiceMenuRenderComponent } from './availableServices/actionsServiceMenuRender.component';
+import { ServiceStatusComponent } from './availableServices/service-status/service-status.component';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { ActionsServiceMenuRenderComponent } from './availableServices/actionsSe
     DialogImportPromptComponent,
 
     ActionsServiceMenuRenderComponent,
+      ServiceStatusComponent,
   ],
   providers: [AvailableServicesService],
   entryComponents: [ActionsServiceMenuRenderComponent, ServiceInfoRenderComponent, DialogNamePromptComponent, DialogImportPromptComponent],
