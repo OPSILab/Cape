@@ -49,9 +49,9 @@ import { ServiceStatusComponent } from './availableServices/service-status/servi
     DialogImportPromptComponent,
 
     ActionsServiceMenuRenderComponent,
-      ServiceStatusComponent,
+    ServiceStatusComponent,
   ],
   providers: [AvailableServicesService],
   entryComponents: [ActionsServiceMenuRenderComponent, ServiceInfoRenderComponent, DialogNamePromptComponent, DialogImportPromptComponent],
 })
-export class ServicesModule {}
+export class ServicesModule { }

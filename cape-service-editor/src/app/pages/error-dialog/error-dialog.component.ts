@@ -2,29 +2,66 @@ import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Location } from '@angular/common';
 import { LoginService } from '../../auth/login/login.service';
+import { NgxConfigureService } from 'ngx-configure';
+import { AppConfig } from '../../model/appConfig';
 @Component({
   selector: 'error-dialog',
   template: `
-    <nb-card accent="danger" style=" max-width: 95vw; max-height: 95vh;">
-      <nb-card-header class="d-flex justify-content-between">
-        <h5 class="h5">Error</h5>
-        <button nbButton appearance="outline" shape="rectangle" size="tiny" status="info" class="close" (click)="closeModal(error)">
-          <i class="material-icons">close</i>
-        </button>
+<nb-reveal-card *ngIf="appConfig.system.detailedErrors">
+  <nb-card-front>
+    <nb-card>
+      <nb-card-header>
+        {{ 'general.error' | translate }}
+        <button nbButton outline status="info" class="close" (click)="closeModal(error)">{{ 'general.close' |
+          translate
+          }} </button>
       </nb-card-header>
-      <nb-card-body class="m-3">
-        <ng-container *ngIf="error.error && error.error !== 'EDITOR_VALIDATION_ERROR'; then genericError; else validationError"> </ng-container>
-
+      <nb-card-body>
+        <ng-container
+          *ngIf="!error.error || error.error !== 'EDITOR_VALIDATION_ERROR'; then genericError; else validationError">
+        </ng-container>
         <ng-template #genericError>
-          <div class="row p-1">{{ error.message }}</div>
-          <div class="row justify-content-center p-1">{{ error.error.message }}</div>
-          <div class="row p-1 mt-1 justify-content-center">
-            <strong>Status: {{ error.status }}</strong>
-          </div>
-        </ng-template>
+          {{ 'general.errors' | translate }}
+          <!--
+          {{error.statusText}}
+          {{error.header}}
+          {{error.message}}-->
 
+
+          <!--{{error.error.message}}-->
+        </ng-template>
         <ng-template #validationError>
           <div class="row p-1 justify-content-center">{{ 'general.editor.validationErrors' | translate }}</div>
+        </ng-template>
+      </nb-card-body>
+      <nb-card-footer *ngIf="appConfig.system.detailedErrors">
+        {{ 'general.editor.show_error_details' | translate }}
+      </nb-card-footer>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back *ngIf="appConfig.system.detailedErrors">
+    <nb-card>
+      <nb-card-header>
+        {{ 'general.error' | translate }} :
+        {{error.statusText}}
+        {{error.header}}
+        <!--{{error.error.message}}-->
+        <button nbButton outline status="info" class="close" (click)="closeModal(error)">{{ 'general.close' |
+          translate
+          }} </button>
+      </nb-card-header>
+      <nb-card-body>
+        <ng-container
+          *ngIf="!error.error || error.error !== 'EDITOR_VALIDATION_ERROR'; then genericErrorDetails; else validationErrorDetails">
+        </ng-container>
+        <ng-template #genericErrorDetails>
+          {{error?.status ? "Status : " + error?.status + "\n\n" : null }}
+          {{error?.statusText ? "Status text : " + error?.statusText + "\n\n" : null }}
+          {{error.header ? "Header : " + error.header + "\n" : null }}
+          {{error?.error?.message ? "Message : " + error?.error?.message + "\n\n" : error?.message ? "Message : " +
+          error?.message + "\n\n" : null }}
+        </ng-template>
+        <ng-template #validationErrorDetails>
           <div class="row p-3">
             <table class="table table-striped">
               <thead class="thead-light text-center">
@@ -45,13 +82,54 @@ import { LoginService } from '../../auth/login/login.service';
           </div>
         </ng-template>
       </nb-card-body>
+      <nb-card-footer>
+        {{ 'general.editor.hide_error_details' | translate }}
+      </nb-card-footer>
     </nb-card>
+  </nb-card-back>
+</nb-reveal-card>
+
+<nb-card *ngIf="!appConfig.system.detailedErrors" style="width:300px;height:300px">
+  <nb-card-header>
+    {{ 'general.error' | translate }}
+    <button nbButton outline status="info" class="close" (click)="closeModal(error)">{{ 'general.close' |
+      translate
+      }} </button>
+  </nb-card-header>
+  <nb-card-body>
+    <ng-container
+      *ngIf="error.error && error.error !== 'EDITOR_VALIDATION_ERROR'; then genericError; else validationError">
+    </ng-container>
+    <ng-template #genericError>
+      {{ 'general.errors' | translate }}
+      <!--
+        {{error.statusText}}
+        {{error.header}}
+        {{error.message}}-->
+
+
+      <!--{{error.error.message}}-->
+    </ng-template>
+    <ng-template #validationError>
+      <div class="row p-1 justify-content-center">{{ 'general.editor.validationErrors' | translate }}</div>
+    </ng-template>
+  </nb-card-body>
+  <nb-card-footer *ngIf="appConfig.system.detailedErrors">
+    {{ 'general.editor.show_error_details' | translate }}
+  </nb-card-footer>
+</nb-card>
+
   `,
+  styleUrls: ['./error-dialog.component.scss']
+
 })
 export class ErrorDialogComponent {
   public error;
+  appConfig: AppConfig;
 
-  constructor(public ref: NbDialogRef<unknown>, private _location: Location, private loginService: LoginService) {}
+  constructor(private configService: NgxConfigureService, public ref: NbDialogRef<unknown>, private _location: Location, private loginService: LoginService) {
+    this.appConfig = this.configService.config as AppConfig
+  }
 
   closeModal(error: { [key: string]: { cause?: string } }): void {
     if (error.error?.cause === 'it.eng.opsi.cape.exception.AuditLogNotFoundException' || error.status === 401)

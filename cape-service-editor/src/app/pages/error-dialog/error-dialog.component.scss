@@ -1,0 +1,39 @@
+@import '../../@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-reveal-card {
+    height: 300px;
+    width: 315px;
+  }
+
+  nb-card-front {
+    height: 300px;
+  }
+
+  nb-card-header {
+    //height: 100px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  nb-card {
+    height: 300px;
+  }
+
+  nb-card-body {
+    height: 180px;
+  }
+
+  nb-card-footer {
+    height: 50px;
+    //height: 100px;
+  }
+
+  nb-card-back {
+    height: 300px;
+  }
+
+  button {
+    font-size: 20px;
+  }
+}

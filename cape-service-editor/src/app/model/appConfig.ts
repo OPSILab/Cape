@@ -7,6 +7,7 @@ export interface AppConfig {
 }
 
 export interface System {
+  detailedErrors: boolean;
   sdkUrl: string;
   checkConsentAtOperator: boolean;
   serviceEditorUrl: string;
