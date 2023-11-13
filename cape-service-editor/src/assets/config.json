@@ -8,6 +8,7 @@
     "checkConsentAtOperator": false,
     "serviceEditorUrl": "http://localhost:81/cape-service-editor",
     "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
+    "editorSchemaName": "service-model.json",
     "auth": {
       "idmHost": "https://idm.cape-suite.eu/auth",
       "clientId": "cape-service-sdk",
@@ -17,10 +18,13 @@
       "defaultIdP": "",
       "oidcField": "preferred_username"
     },
+    "mailTo":"support@across.eu",
+    "docsUrl":"https://cape.readthedocs.io/en/latest/",
     "serviceProviderBusinessId": "ENG",
     "detailedErrors" : true
   },
   "i18n": {
-    "locale": "it"
+    "locale": "it",
+    "languages":["it", "en"]
   }
 }
