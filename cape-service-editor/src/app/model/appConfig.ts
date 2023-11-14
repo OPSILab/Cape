@@ -7,13 +7,18 @@ export interface AppConfig {
 }
 
 export interface System {
-  detailedErrors: boolean;
+  country: string;
   sdkUrl: string;
+  dataMapEnumUrl: string;
   checkConsentAtOperator: boolean;
   serviceEditorUrl: string;
   editorSchemaPath: string;
+  editorSchemaName: string;
   auth: Auth;
   serviceProviderBusinessId: string;
+  mailTo:string;
+  docsUrl:string;
+  detailedErrors: boolean;
 }
 
 export interface Auth {
@@ -27,6 +32,6 @@ export interface Auth {
 }
 
 export interface I18n {
-  languages: any;
   locale: string;
+  languages: string[];
 }

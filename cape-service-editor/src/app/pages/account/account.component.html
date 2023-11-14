@@ -1,0 +1,121 @@
+<!-- General Information -->
+
+  <nb-card>
+    <nb-card-header>{{ 'general.account.roles' | translate }}</nb-card-header>
+    <nb-card-body>
+      
+      <nb-user
+      [onlyPicture]="userPictureOnly"
+      [name]="user?.name"
+      [title]="user?.roles?.join(' | ')"
+      [picture]="'assets/images/app/default_user.png'"
+      
+    >
+    </nb-user>
+
+    </nb-card-body>
+    
+  </nb-card>
+
+
+
+
+<!-- Change Password -->
+<ng-template #changePassword let-data let-ref="dialogRef">
+  <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+    <nb-card>
+      <nb-card-header class="d-flex justify-content-between">
+        <h5>{{ 'general.account.change_password' | translate }}</h5>
+        <button nbButton ghost shape="rectangle" size="tiny" class="close" (click)="ref.close()">
+          <i class="material-icons">close</i>
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="m-3" for="password">{{ 'general.account.new_password' | translate }}</label>
+            <input nbInput type="password" formControlName="newPassword" name="newPassword" />
+          </div>
+          <div class="col-md-6">
+            <label class="m-3" for="confirmPassword">{{ 'general.account.confirm_password' | translate }}</label>
+            <input nbInput type="password" formControlName="confirmPassword" name="confirmPassword" />
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)" class="col-md-6 mt-2 text-danger">
+            <div *ngIf="newPassword.errors?.required">
+              {{ 'general.account.newpassword_errors_required' | translate }}
+            </div>
+            <div *ngIf="newPassword.errors?.minlength">
+              {{ 'general.account.newpassword_errors_minlength' | translate }}
+            </div>
+            <div *ngIf="newPassword.errors?.pattern">
+              {{ 'general.account.newpassword_errors_pattern' | translate }}
+            </div>
+          </div>
+          <div
+            *ngIf="passwordForm.errors?.passwordMismatch"
+            class="col-md-6 d-flex justify-content-center mt-2 text-danger d-flex justify-content-start"
+          >
+            {{ 'general.account.passwords_errors_dontmatch' | translate }}
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer class="d-flex justify-content-center">
+        <button
+          nbButton
+          class="mr-2"
+          shape="rectangle"
+          status="primary"
+          type="submit"
+          [disabled]="!passwordForm.valid"
+          (click)="onSubmitPassword(ref)"
+        >
+          {{ 'general.save' | translate }}
+        </button>
+        <button nbButton class="ml-2" ghost shape="rectangle" status="primary" (click)="ref.close()">
+          {{ 'general.close' | translate }}
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </form>
+</ng-template>
+
+
+
+<!-- Assistance and Support -->
+<nb-card>
+  <nb-card-header>{{ 'general.account.assistance_and_support' | translate }}</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="mb-1 col-sm-6 d-flex justify-content-center">
+        <button nbButton shape="rectangle" status="primary" (click)="openReportProblem()">
+          {{ 'general.account.report_the_problem' | translate }}
+        </button>
+      </div>
+      <div class="mb-1 col-sm-6 d-flex justify-content-center">
+        <a href={{docsUrl}} target="_blank">{{ 'general.account.tutorials_and_documentations' | translate }}</a>
+      </div>
+    </div>
+
+    <ng-template #reportProblemWindowTemplate let-data>
+      <form [formGroup]="reportProblemForm" (ngSubmit)="onSubmitReportProblem()">
+      
+        <nb-select name="topic" id="topic" formControlName="reportTopicText" placeholder="{{ 'general.account.report_subject' | translate }}" [(selected)]="selectedItem">
+          <nb-option value="General">General</nb-option>
+          <nb-option value="Other">Other</nb-option>
+        </nb-select>
+     
+        <div class="row align-items-center justify-content-center mb-3 flex-column">
+          <br> 
+          <textarea nbInput type="text" id="textarea" name="textarea" rows="4" cols="50" formControlName="reportProblemText" placeholder="{{ 'general.account.report_message' | translate }}"></textarea>
+        </div>
+        <div class="row justify-content-center">
+          <button nbButton type="submit" status="primary" size="medium">
+            {{ 'general.submit' | translate }}
+          </button>
+        </div>
+      </form>
+    </ng-template>
+  </nb-card-body>
+</nb-card>
