@@ -10,7 +10,7 @@ import * as $ from 'jquery';
 import { NbDialogService } from '@nebular/theme';
 import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prompt.component';
 import { DialogImportPromptComponent } from './dialog-import-prompt/dialog-import-prompt.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AvailableServicesService } from '../availableServices/availableServices.service';
 import { NgxConfigureService } from 'ngx-configure';
 import { ErrorDialogService } from '../../error-dialog/error-dialog.service';
@@ -33,6 +33,7 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
   public readOnly = false;
   private config: AppConfig;
   private systemConfig: System;
+  private locale: string;
   apiRoot: string;
   schemaDir: string;
   public isNew = false;
@@ -50,12 +51,18 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     private configService: NgxConfigureService,
     private errorDialogService: ErrorDialogService,
     private translateService: TranslateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     this.config = this.configService.config as AppConfig;
     this.systemConfig = this.config.system;
+    this.locale = this.translateService.currentLang;
     this.schemaDir =
-      (this.systemConfig.serviceEditorUrl.includes('localhost') ? '' : this.systemConfig.serviceEditorUrl) + this.systemConfig.editorSchemaPath;
+      (this.systemConfig.serviceEditorUrl.includes('localhost') ? '' : this.systemConfig.serviceEditorUrl) + this.systemConfig.editorSchemaPath+
+      '/' +
+      this.locale +
+      '/' +
+      this.systemConfig.editorSchemaName;
     this.loading = true;
   }
 
@@ -64,16 +71,26 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.serviceId = this.route.snapshot.params['serviceId'] as string;
-    this.readOnly = <boolean>this.route.snapshot.params['readOnly'];
-    sessionStorage.removeItem('isTouched');
-    if (this.serviceId) {
-      this.serviceData = await this.availablesServicesService.getService(this.serviceId);
-    } else {
-      this.isNew = true;
-    }
+    try {
+      this.serviceId = this.route.snapshot.params['serviceId'] as string;
+      this.readOnly = <boolean>this.route.snapshot.params['readOnly'];
+      sessionStorage.removeItem('isTouched');
+      if (this.serviceId) {
+        this.serviceData = await this.availablesServicesService.getService(this.serviceId);
+      } else {
+        this.isNew = true;
+      }
 
-    this.initializeEditor(this.serviceData);
+      this.initializeEditor(this.serviceData);
+      this.translateService.onLangChange.subscribe(() => this.reloadLocaleEditor());
+    }
+    catch (error) {
+
+      this.router.navigate(['/services']);
+      console.error(error.message)
+      this.errorDialogService.openErrorDialog(error);
+
+    }
     // this.loading = true;
   }
 
@@ -86,8 +103,74 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
     return sessionStorage.getItem(key);
   }
 
+  /*
+  getLocalizedDescription(availableServiceDescr: ServiceEntry): Description[] {
+    return availableServiceDescr.hasInfo.description.reduce((filtered: Description[], description: Description) => {
+      if (this.translateService.currentLang !== 'en' && description.locale === this.translateService.currentLang) filtered = [description, ...filtered];
+      else if (description.locale === 'en') filtered = [...filtered, description];
+      return filtered;
+    }, []);
+  }*/
+
   initializeEditor(serviceData: ServiceEntry): void {
     const elem = this.document.getElementById('editor');
+    var serviceService = this.availablesServicesService;
+    var locale = this.translateService.currentLang;
+
+    JSONEditor.defaults.callbacks = {
+      autocomplete: {
+        search_services: function search(editor, input) {
+          return new Promise(function (resolve) {
+            if (input.length < 0) {
+              return resolve([]);
+            }
+
+            serviceService
+              .findService(input)
+              .then(function (response) {
+                return response;
+              })
+              .then(function (data) {
+                resolve(data);
+              });
+          });
+        },
+        getResultValue_services: function getResultValue(editor, result) {
+          return result.title;
+        },
+        renderResult_services: function (editor, result, props) {
+          /*var description = result.hasInfo.description.reduce((filtered: Description[], description: Description) => {
+            if (locale !== 'en' && description.locale === locale) filtered = [description, ...filtered];
+            else if (description.locale === 'en') filtered = [...filtered, description];
+            return filtered;
+          }, []);*/
+          return [
+            '<li ' + props + '>',
+            '<div >' + result.title + '</div>',
+            '<div><small>[' + result.hasInfo.spatial + '] ' + result[0]?.description + '<small></div>',
+            '</li>',
+          ].join('');
+        },
+      },
+    };
+
+
+    // Custom validators must return an array of errors or an empty array if valid
+    JSONEditor.defaults.custom_validators.push((schema, value, path) => {
+      const errors = [];
+      if (path === "root.hasInfo.processingTime" && value.trim() !== "") {
+
+        if (!/^P(?=\d+[YMWD])(\d+Y)?(\d+M)?(\d+W)?(\d+D)?(T(?=\d+[HMS])(\d+H)?(\d+M)?(\d+S)?)?$/.test(value)) {
+          // Errors must be an object with `path`, `property`, and `message`
+          errors.push({
+            path: path,
+            property: 'format',
+            message: 'Duration must be in the ISO8601 syntax for durations: P(n)Y(n)M(n)W(n)DT(n)H(n)M(n)S'
+          });
+        }
+      }
+      return errors;
+    });
 
     const editor = new JSONEditor(elem, {
       ajax: true,
@@ -126,11 +209,27 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
           this.getEditor(path.substr(0, path.lastIndexOf('.') + 1) + 'name').setValue(nameValue);
         }
       };
+
+      const rootHasInfoWhatcher = function (path) {
+        const value = this.getEditor(path).getValue() as string;
+
+        if ((path as string) === 'root.identifier') this.getEditor('root.hasInfo.identifier').setValue(value);
+        if ((path as string) === 'root.hasInfo.identifier') this.getEditor('root.identifier').setValue(value);
+
+        if ((path as string) === 'root.title') this.getEditor('root.hasInfo.title').setValue(value);
+        if ((path as string) === 'root.hasInfo.title') this.getEditor('root.title').setValue(value);
+      };
+
       for (const key in editor.editors) {
         const regex = '.conceptId';
 
         if (Object.prototype.hasOwnProperty.call(editor.editors, key) && RegExp(regex).exec(key)) {
           editor.watch(key, watcherCallback.bind(editor, key));
+        } else if (
+          Object.prototype.hasOwnProperty.call(editor.editors, key) &&
+          (key == 'root.identifier' || key == 'root.title' || key == 'root.hasInfo.identifier' || key == 'root.hasInfo.title')
+        ) {
+          editor.watch(key, rootHasInfoWhatcher.bind(editor, key));
         }
       }
     });
@@ -150,6 +249,21 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
         editor.getEditor('root.hasInfo.identifier').disable();
       }
     });
+  }
+
+  reloadLocaleEditor(): void {
+
+    var currentData = this.editor.getValue();
+    this.editor.destroy();
+    this.schemaDir =
+      (this.systemConfig.serviceEditorUrl.includes('localhost') ? '' : this.systemConfig.serviceEditorUrl) +
+      this.systemConfig.editorSchemaPath +
+      '/' +
+      this.translateService.currentLang +
+      '/' +
+      this.systemConfig.editorSchemaName;
+    this.initializeEditor(currentData);
+
   }
 
   closeSpinner(): void {
@@ -181,8 +295,8 @@ export class EditorComponent implements OnInit, AfterContentInit, OnDestroy {
         type: 'application/json;charset=utf-8',
       });
 
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(blob, filename);
+    if (window.navigator && (window.navigator as any).msSaveOrOpenBlob) {
+      (window.navigator as any).msSaveOrOpenBlob(blob, filename);
     } else {
       const a = document.createElement('a');
       a.download = filename;

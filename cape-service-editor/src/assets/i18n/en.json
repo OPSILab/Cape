@@ -9,6 +9,7 @@
     "close": "Close",
     "cancel": "Cancel",
     "edit": "Edit",
+    "errors": "Some errors occurred.",
     "dashboard": {
       "pdataCategories": "Personal Data Categories",
       "services": "Service Available",
@@ -254,7 +255,9 @@
       "confirm_overwrite": "Service {{name}} is already existing, do you want to overwrite it?",
       "overwrite": "OVERWRITE",
       "validationErrors": "There are validation errors in the Service description.",
-      "path": "Path"
+      "path": "Path",
+      "show_error_details": "Show error details",
+      "hide_error_details": "Hide error details"
     },
     "connectors": {
       "connector": "Connector",

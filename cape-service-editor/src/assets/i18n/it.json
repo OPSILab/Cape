@@ -9,6 +9,7 @@
     "close": "Chiudi",
     "cancel": "Annulla",
     "edit": "Modifica",
+    "errors": "Si sono verificati degli errori.",
     "dashboard": {
       "pdataCategories": "Categorie di Dati Personali",
       "services": "Servizi",
@@ -256,7 +257,9 @@
       "confirm_overwrite": "Il Servizio {{name}} è già esistente, vuoi sovrascriverlo?",
       "overwrite": "SOVRASCRIVI",
       "validationErrors": "Ci sono degli errori di validazione nella descrizione del Servizio inserita.",
-      "path": "Posizione"
+      "path": "Posizione",
+      "show_error_details":"Mostra dettagli errore",
+      "hide_error_details":"Nascondi dettagli errore"
     },
     "connectors": {
       "connector": "Connector",

@@ -33,6 +33,10 @@ export class AvailableServicesService {
     return this.http.post<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services`, service).toPromise();
   }
 
+  findService(name: string): Promise<ServiceEntry> {
+    return this.http.get<ServiceEntry>(`${this.serviceRegistryUrl}/api/v2/services/specified/title?title=${name}`).toPromise();
+  }
+
   registerService(serviceId: string): Promise<ServiceEntry> {
     return this.http
       .post<ServiceEntry>(`${this.sdkUrl}/api/v2/services/${serviceId}`, '', { headers: { 'Content-Type': 'application/json' } })

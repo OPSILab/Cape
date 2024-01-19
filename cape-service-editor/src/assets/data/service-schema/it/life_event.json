@@ -1,0 +1,25 @@
+{
+  "type": "string",
+  "title": "Life Event",
+  "description": "If public Service, Business Event classification",
+  "format": "select2",
+  "enum": [
+    "",
+    "other",
+    "Having a child",
+    "Becoming a (social) caretaker",
+    "Starting education",
+    "Looking for a new job",
+    "Losing/quitting a job",
+    "Looking for a place to live",
+    "Changing relationship status",
+    "Driving a vehicle",
+    "Travelling abroad",
+    "Moving to/from the country",
+    "Going into military service",
+    "Facing an emergency / health problem",
+    "Facing a crime",
+    "Retirement",
+    "Death of a relative"
+  ]
+}

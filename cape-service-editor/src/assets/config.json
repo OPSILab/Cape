@@ -7,8 +7,8 @@
     "sdkUrl": "http://localhost:8085/cape-service-sdk",
     "checkConsentAtOperator": false,
     "serviceEditorUrl": "http://localhost:81/cape-service-editor",
-    "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
-    "editorSchemaName": "service-model.json",
+    "editorSchemaPath": "/assets/data/service-schema/",
+    "editorSchemaName": "service-entry.json",
     "auth": {
       "idmHost": "https://idm.cape-suite.eu/auth",
       "clientId": "cape-service-sdk",
