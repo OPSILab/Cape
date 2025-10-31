@@ -228,3 +228,4 @@ hs_err_pid*
 
 # Current Config...
 .env
+recity.pem

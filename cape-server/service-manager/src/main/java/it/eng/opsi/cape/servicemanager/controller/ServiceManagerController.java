@@ -251,6 +251,8 @@ public class ServiceManagerController implements IServiceManagerController {
 			throws ServiceManagerException, ServiceDescriptionNotFoundException, ConflictingSessionFoundException,
 			ServiceLinkingRedirectUriMismatchException, ServiceDescriptionStatusNotAllowedException {
 
+				System.out.println("Starting Service Linking for serviceId: " + serviceId);
+
 		/*
 		 * getServiceDescription
 		 */

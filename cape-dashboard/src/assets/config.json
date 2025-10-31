@@ -1,22 +1,22 @@
 {
   "serviceRegistry": {
-    "url": "http://localhost:8088/service-registry"
+    "url": "http://172.30.62.8/service-registry"
   },
   "system": {
     "operatorId": "cape",
-    "dashboardUrl": "http://localhost/cape-dashboard",
-    "accountUrl": "http://localhost:8080/account-manager",
-    "serviceManagerUrl": "http://localhost:8082/service-manager",
-    "auditLogUrl": "http://localhost:8081/auditlog-manager",
-    "consentManagerUrl": "http://localhost:8083/consent-manager",
+    "dashboardUrl": "http://172.30.62.8/cape-dashboard",
+    "accountUrl": "http://172.30.62.8/account-manager",
+    "serviceManagerUrl": "http://172.30.62.8/service-manager",
+    "auditLogUrl": "http://172.30.62.8/auditlog-manager",
+    "consentManagerUrl": "http://172.30.62.8/consent-manager",
     "auth": {
-      "idmHost": "https://idm.cape-suite.eu/auth",
+      "idmHost": "https://keycloak-avant.eng.it",
       "clientId": "cape-server",
       "disableAuth": "false",
       "authProfile": "oidc",
-      "authRealm": "Cape",
+      "authRealm": "WP6",
       "defaultIdP": "",
-      "oidcField":"preferred_username"
+      "oidcField": "preferred_username"
     }
   },
   "i18n": {

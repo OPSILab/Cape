@@ -83,10 +83,11 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 		Exception error = null;
 		ErrorResponse errorResponse = null;
 		try {
+			System.out.println("Response Body cape-server service: " + body);
 
 			if (httpResponse.getStatusCode().equals(HttpStatus.UNAUTHORIZED))
 				errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED,
-						new Exception("Invalid token: access token is invalid"));
+						new Exception("Invalid token: access token is invalid" + body));
 			else
 				errorResponse = mapper.readValue(body, ErrorResponse.class);
 

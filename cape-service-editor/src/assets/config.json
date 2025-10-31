@@ -1,23 +1,21 @@
 {
   "serviceRegistry": {
-    "url": "http://localhost:8088/service-registry"
+    "url": "http://172.30.62.8/service-registry"
   },
-
   "system": {
-    "sdkUrl": "http://localhost:8085/cape-service-sdk",
+    "sdkUrl": "http://172.30.62.8/cape-service-sdk",
     "checkConsentAtOperator": false,
-    "serviceEditorUrl": "http://localhost:81/cape-service-editor",
+    "serviceEditorUrl": "http://172.30.62.8/cape-service-editor",
     "editorSchemaPath": "/assets/data/service-schema/service-entry.json",
     "auth": {
-      "idmHost": "https://idm.cape-suite.eu/auth",
+      "idmHost": "https://keycloak-avant.eng.it",
       "clientId": "cape-service-sdk",
       "disableAuth": "false",
       "authProfile": "oidc",
-      "authRealm": "Cape",
+      "authRealm": "WP6",
       "defaultIdP": "",
       "oidcField": "preferred_username"
-    },
-    "serviceProviderBusinessId": "ENG"
+    }
   },
   "i18n": {
     "locale": "en"
