@@ -2,6 +2,13 @@ version: '3.8'
 services:
     dev-cape:
         image: dev-container-cape
+        ports:
+            - "8080:8080"   # Account Manager
+            - "8081:8081"   # Auditlog Manager
+            - "8082:8082"   # Service Manager
+            - "8083:8083"   # Consent Manager
+            - "8085:8085"   # service-sdk
+            - "8088:8088"   # Service Registry
         build:
             context: .
             dockerfile: Dockerfile-dev-container
