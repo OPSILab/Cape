@@ -1,4 +1,0 @@
-FROM openjdk:16-alpine
-WORKDIR /app
-COPY ./cape-server /app/cape-server
-COPY ./cape-sdk/service-sdk /app/cape-sdk/service-sdk

@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+    dev-cape:
+        image: dev-container-cape
+        build:
+            context: .
+            dockerfile: Dockerfile-dev-container
+        container_name: dev-cape
+        entrypoint: sleep infinity
