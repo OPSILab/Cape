@@ -229,3 +229,4 @@ hs_err_pid*
 # Current Config...
 .env
 recity.pem
+jdk-16.0.2_linux-x64_bin.tar.gz
